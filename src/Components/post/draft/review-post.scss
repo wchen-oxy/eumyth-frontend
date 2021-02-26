@@ -1,0 +1,10 @@
+@import "../../../partials";
+#reviewpost-small-window{
+    @include small-post-window;
+    @include flex-display-column;
+
+}
+
+.reviewpost-button-container{
+    @include centered-vertical-button-container;
+}

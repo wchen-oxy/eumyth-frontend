@@ -1,0 +1,23 @@
+@import "../../partials";
+
+#sort-by-date-button {
+    float: right;
+}
+
+#project-info-button {
+    float: right;
+}
+
+.projectcontroller-event-container {
+    display: inline-block;
+}
+
+#projectcontroller-submit-container{
+    @include flex-display-column;
+}
+
+#projectcontroller-sortable-list-container {
+    ul {
+        padding: 0;
+    }
+}
