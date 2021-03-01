@@ -96,6 +96,7 @@ class ReturningUserPage extends React.Component {
                             indexUser.user_profile_id;
                         pursuits =
                             result.data.pursuits;
+                        console.log(allPostsIdArray);
                         hasMore = (
                             !allPostsIdArray ||
                             allPostsIdArray.length === 0)
@@ -111,18 +112,28 @@ class ReturningUserPage extends React.Component {
                                 pursuitObjects.totalMin;
                         }
                         if (hasMore === false) {
-                            return AxiosHelper
-                                .returnMultiplePosts(
-                                    result.data.recent_posts,
-                                    false)
-                                .then((result) => {
-                                    return {
-                                        isRecentPostsOnly: true,
-                                        recentPosts: result.data.posts
-                                    }
-                                });
+                            console.log(result.data.recent_posts);
+                            if (result.data.recent_posts.length > 0) {
+                                return AxiosHelper
+                                    .returnMultiplePosts(
+                                        result.data.recent_posts,
+                                        false)
+                                    .then((result) => {
+                                        return {
+                                            isRecentPostsOnly: true,
+                                            recentPosts: result.data.posts
+                                        }
+                                    });
+                            }
+                            else {
+                                return ({
+                                    isRecentPostsOnly: true,
+                                    recentPosts: []
+                                })
+                            }
                         }
                         else {
+                            console.log("hasmore!");
                             return Promise.all([
                                 AxiosHelper
                                     .returnMultiplePosts(

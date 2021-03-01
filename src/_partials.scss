@@ -8,6 +8,7 @@ $primary-large-font-size: 22.5px;
 $primary-medium-font-size: 15px;
 
 $small-post-height: 74vh;
+$small-post-width: 76vw;
 $small-button-window: 19vh;
 
 @mixin flex-display-row {
@@ -43,13 +44,13 @@ $small-button-window: 19vh;
 @mixin small-post-window {
     background-color: grey;
     position: fixed;
-    margin-top: -38vh;
-    margin-left: -38vw;
+    margin-top: calc(#{$small-post-height / -2});
+    margin-left: calc(#{$small-post-width / -2});
     top: 50%;
     left: 50%;
     z-index: 22;
     height: $small-post-height;
-    width: 76vw;
+    width: $small-post-width;
     overflow: scroll;
 }
 

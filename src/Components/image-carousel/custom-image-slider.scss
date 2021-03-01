@@ -1,7 +1,9 @@
+@import "../../partials";
+
 .customimageslider-hero-container {
     img {
         // height: 400px;
-        max-height: 74vh;
+        max-height: calc(#{$small-post-height} - 24px);
         object-fit: contain;
     }
 }
