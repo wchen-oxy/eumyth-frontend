@@ -51,7 +51,7 @@ class ReturningUserPage extends React.Component {
         this.createFeed = this.createFeed.bind(this);
         this.renderModal = this.renderModal.bind(this);
         this.renderRecentPosts = this.renderRecentPosts.bind(this);
-        this.injectComment = this.injectComment.bind(this);
+        this.handleCommentIDInjection = this.handleCommentIDInjection.bind(this);
     }
 
     componentDidMount() {
@@ -112,7 +112,6 @@ class ReturningUserPage extends React.Component {
                                 pursuitObjects.totalMin;
                         }
                         if (hasMore === false) {
-                            console.log(result.data.recent_posts);
                             if (result.data.recent_posts.length > 0) {
                                 return AxiosHelper
                                     .returnMultiplePosts(
@@ -133,7 +132,6 @@ class ReturningUserPage extends React.Component {
                             }
                         }
                         else {
-                            console.log("hasmore!");
                             return Promise.all([
                                 AxiosHelper
                                     .returnMultiplePosts(
@@ -212,8 +210,8 @@ class ReturningUserPage extends React.Component {
         return array;
     }
 
-    injectComment(postIndex, rootCommentsArray, feedType) {
-        // console.log(postIndex);
+    handleCommentIDInjection(postIndex, rootCommentsArray, feedType) {
+     
         if (feedType === RECENT_POSTS) {
             let recentPosts = this.state.recentPosts;
             recentPosts[postIndex].comments = rootCommentsArray;
@@ -256,6 +254,7 @@ class ReturningUserPage extends React.Component {
                     onDeletePost={onDeletePost}
                     passDataToModal={this.passDataToModal}
                     largeViewMode={false}
+                    onCommentIDInjection={this.handleCommentIDInjection}
                 />);
         }
         return masterArray;
@@ -410,7 +409,7 @@ class ReturningUserPage extends React.Component {
                 selectedPostFeedType={this.state.selectedPostFeedType}
                 textData={this.state.textData}
                 onDeletePost={this.handleDeletePost}
-                handleCommentInjection={this.injectComment}
+                onCommentIDInjection={this.handleCommentIDInjection}
             />
         );
     }

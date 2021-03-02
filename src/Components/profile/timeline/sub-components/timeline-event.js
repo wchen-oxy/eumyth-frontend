@@ -26,7 +26,7 @@ const Event = (props) => {
 
     const handleRecentEventClick = () => {
         if (!props.disableModalPreview) {
-            props.onEventClick(post, props.index)
+            props.onEventClick(post, props.eventIndex)
         }
         else {
             console.log("Selected, but disabled")
@@ -76,12 +76,12 @@ const Event = (props) => {
         }
         else {
             return (
-                <div className={props.index !== null ?
-                    selectClassStyle(props.index) : "event-middle-container"}>
+                <div className={props.columnIndex !== null ?
+                    selectClassStyle(props.columnIndex) : "event-middle-container"}>
                     <div onClick={props.disableModalPreview ?
                         () => console.log("Selected")
                         :
-                        () => props.onEventClick(post, props.index)}
+                        () => props.onEventClick(post, props.eventIndex)}
                     >
                         {content}
                     </div>
@@ -93,8 +93,8 @@ const Event = (props) => {
     else if (props.mediaType === PROJECT) {
         content = <ProjectEvent post={post} />;
         return (
-            <div className={props.index !== null ?
-                selectClassStyle(props.index) : "event-middle-container"}>
+            <div className={props.columnIndex !== null ?
+                selectClassStyle(props.columnIndex) : "event-middle-container"}>
                 <div onClick={props.disableModalPreview ?
                     () => console.log("Selected")
                     :

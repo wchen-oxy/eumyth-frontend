@@ -49,8 +49,10 @@
     ]
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set PORT=3000 && react-scripts start",
+    "remove-and-build": "echo I run before the build script && rm -R ../backend/build && react-scripts build",
     "build": "react-scripts build",
+    "postbuild": "mv build ../backend/",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build-and-start": "yarn run build && (cd ../backend && yarn start)"
@@ -74,5 +76,5 @@
   "devDependencies": {
     "typescript": "^3.8.3"
   },
-  "proxy": "http://localhost:3000"
+  "proxy": "http://localhost:5000"
 }

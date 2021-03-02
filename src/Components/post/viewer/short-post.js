@@ -64,6 +64,7 @@ class ShortPostViewer extends React.Component {
         this.handleTextChange = this.handleTextChange.bind(this);
         this.handlePaginatedChange = this.handlePaginatedChange.bind(this);
         this.handleModalLaunch = this.handleModalLaunch.bind(this);
+        this.handleCommentDataInjection = this.handleCommentDataInjection.bind(this);
     }
 
     componentDidMount() {
@@ -105,7 +106,7 @@ class ShortPostViewer extends React.Component {
             }
         }
         this.setState({
-            fullCommentData: rawComments,
+            fullCommentData: rawComments ? rawComments : [],
             annotations: annotations,
             visitorProfilePreviewId: visitorProfilePreviewId
         })
@@ -123,6 +124,8 @@ class ShortPostViewer extends React.Component {
 
     renderComments(windowType) {
         if (windowType === EXPANDED) {
+            console.log(this.props.eventData.comments);
+            console.log(this.state.fullCommentData);
             return (
                 <Comments
                     postType={SHORT}
@@ -132,7 +135,8 @@ class ShortPostViewer extends React.Component {
                     visitorUsername={this.props.visitorUsername}
                     postId={this.props.postId}
                     postIndex={this.props.postIndex}
-                    handleCommentInjection={this.props.handleCommentInjection}
+                    onCommentIDInjection={this.props.onCommentIDInjection}
+                    onCommentDataInjection={this.handleCommentDataInjection}
                     selectedPostFeedType={this.props.selectedPostFeedType}
                     onPromptAnnotation={this.handlePromptAnnotation}
                     passAnnotationData={this.passAnnotationData}
@@ -203,6 +207,22 @@ class ShortPostViewer extends React.Component {
                     imageIndex: currentIndex, selectedAnnotationIndex: null
                 })));
         }
+    }
+
+    handleCommentDataInjection(postIndex, fullCommentData, feedType) {
+        let newCommentIdArray = this.props.eventData.comments;
+        const newCommentId = fullCommentData[fullCommentData.length - 1]._id;
+        console.log(newCommentId);
+        newCommentIdArray.push(newCommentId)
+        this.setState({ fullCommentData: fullCommentData }, () => {
+            if (this.props.postIndex)
+                this.props.onCommentIDInjection(
+                    postIndex,
+                    newCommentIdArray,
+                    feedType
+                )
+        }
+        )
     }
 
     handlePromptAnnotation() {
@@ -287,8 +307,8 @@ class ShortPostViewer extends React.Component {
 
                 fullAnnotationArray[this.state.imageIndex] =
                     currentAnnotationArray;
-                    console.log(newRootCommentData);
-                    console.log(fullCommentData);
+                console.log(newRootCommentData);
+                console.log(fullCommentData);
                 return this.setState({
                     annotations: fullAnnotationArray,
                     commentArray: rootCommentIdArray,

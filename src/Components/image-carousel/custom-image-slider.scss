@@ -1,6 +1,7 @@
 @import "../../partials";
 
 .customimageslider-hero-container {
+    background-color: black;
     img {
         // height: 400px;
         max-height: calc(#{$small-post-height} - 24px);

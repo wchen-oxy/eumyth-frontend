@@ -50,7 +50,7 @@ class Timeline extends React.Component {
                 }
                 masterArray[index].push(
                     <Event
-                        index={k}
+                        columnIndex={k}
                         mediaType={mediaType}
                         isSelected={isSelected}
                         newProjectView={this.props.newProjectView}

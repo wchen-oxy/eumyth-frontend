@@ -38,6 +38,10 @@ const LongPostViewer = (props) => {
             return props.passDataToModal(props.eventData, LONG, props.postIndex)
         }
     }
+
+    const handleCommentDataInjection = () => {
+
+    }
     const renderComments = (windowType) => {
         if (windowType === EXPANDED) {
             return (
@@ -48,8 +52,9 @@ const LongPostViewer = (props) => {
                     visitorUsername={props.visitorUsername}
                     postId={props.postId}
                     postIndex={props.postIndex}
-                    handleCommentInjection={props.handleCommentInjection}
+                    onCommentIDInjection={props.onCommentIDInjection}
                     selectedPostFeedType={props.selectedPostFeedType}
+                    onCommentDataInjection={handleCommentDataInjection}
                 />
             );
         }

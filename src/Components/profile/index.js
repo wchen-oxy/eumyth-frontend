@@ -51,9 +51,10 @@ class ProfilePage extends React.Component {
             feedData: null,
             mediaType: POST,
             selectedPursuitIndex: -1,
+            selectedPostIndex: null,
 
 
-            lastRetrievedPostIndex: 0,
+            // lastRetrievedPostIndex: 0,
             preferredPostType: null,
             isModalShowing: false,
             newProject: false,
@@ -302,14 +303,16 @@ class ProfilePage extends React.Component {
         );
     }
 
-    handleEventClick(selectedEvent) {
+    handleEventClick(selectedEvent, postIndex) {
         return AxiosHelper
             .retrievePost(selectedEvent._id, true)
             .then(
                 (result) => {
+                    console.log(postIndex);
                     if (this._isMounted) {
                         this.setState({
                             selectedEvent: selectedEvent,
+                            selectedPostIndex: postIndex,
                             textData: result.data,
                             postType: selectedEvent.post_format
                         }, this.openModal(selectedEvent._id));
@@ -340,7 +343,7 @@ class ProfilePage extends React.Component {
                 onEventClick={this.handleEventClick}
                 onNewBackProjectClick={this.handleNewBackProjectClick}
                 pursuitNames={this.state.pursuitNames}
-            />)
+             />)
     }
 
     handleNewBackProjectClick() {
@@ -393,6 +396,7 @@ class ProfilePage extends React.Component {
     }
 
     render() {
+        // console.log(this.state.allPosts);
         const shouldHideProfile = (
             this.state.visitorUsername === null && this.state.isPrivate)
             || (this.state.visitorUsername !== this.state.targetUsername
@@ -440,6 +444,7 @@ class ProfilePage extends React.Component {
                             JSON.parse(this.state.selectedEvent.text_data) :
                             this.state.selectedEvent.text_data
                     }
+
                     closeModal={this.closeModal}
                     onDeletePost={this.handleDeletePost}
                 />
@@ -528,6 +533,8 @@ class ProfilePage extends React.Component {
                                     isOwnProfile={this.state.visitorUsername === this.state.targetUsername}
                                     visitorUsername={this.state.visitorUsername}
                                     isPostOnlyView={false}
+                                    postIndex={this.state.selectedPostIndex}
+
                                     displayPhoto={this.state.smallCroppedDisplayPhoto}
                                     preferredPostType={this.state.preferredPostType}
                                     postType={this.state.postType}
@@ -538,7 +545,8 @@ class ProfilePage extends React.Component {
                                     textData={this.state.textData}
                                     onDeletePost={this.handleDeletePost}
                                     closeModal={this.closeModal}
-                                />
+
+                                    />
                                 :
                                 <></>
                         }

@@ -25,7 +25,7 @@ const PostViewerController = (props) => {
                     onDeletePost={props.onDeletePost}
                     closeModal={props.closeModal}
                     passDataToModal={props.passDataToModal}
-                    handleCommentInjection={props.handleCommentInjection}
+                    onCommentIDInjection={props.onCommentIDInjection}
                     selectedPostFeedType={props.selectedPostFeedType}
                 />
             );
@@ -47,7 +47,7 @@ const PostViewerController = (props) => {
                     onDeletePost={props.onDeletePost}
                     closeModal={props.closeModal}
                     passDataToModal={props.passDataToModal}
-                    handleCommentInjection={props.handleCommentInjection}
+                    onCommentIDInjection={props.onCommentIDInjection}
                     selectedPostFeedType={props.selectedPostFeedType}
                 />
             );

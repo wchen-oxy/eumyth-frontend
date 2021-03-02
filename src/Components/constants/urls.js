@@ -7,8 +7,12 @@ const returnUserImageURL = (key) => ("http://" + BUCKET_NAME + ".s3." + REGION +
 //Temporary Profile Photo
 const TEMP_PROFILE_PHOTO_URL = "https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd";
 
-// const ROOT_URL = "http://localhost:5000";
-const ROOT_URL = "";
+// const ROOT_URL = "//localhost:5000/api";
+// const apiUrl = process.env.NODE_ENV === 'production'
+//     ? process.env.REACT_APP_PROD_API_URL : process.env.REACT_APP_DEV_API_URL;
+// const ROOT_URL = "//localhost:5000:" + apiUrl;
+const ROOT_URL = "/api";
+
 const DRAFT_BASE_URL = ROOT_URL + "/draft";
 
 //image
@@ -52,7 +56,7 @@ const PROJECT_BASE_URL = ROOT_URL + "/project";
 const MULTIPLE_PROJECTS_URL = PROJECT_BASE_URL + "/multiple";
 
 //index
-const INDEX_BASE_URL = ROOT_URL + "/index";
+const INDEX_BASE_URL = ROOT_URL + "/index-user";
 const CHECK_USERNAME_URL = INDEX_BASE_URL + '/username';
 const INDEX_USER_PURSUITS_URL = INDEX_BASE_URL + '/pursuits';
 

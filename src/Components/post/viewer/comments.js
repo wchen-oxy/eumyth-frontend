@@ -12,7 +12,7 @@ class Comments extends React.Component {
         super(props);
         this.state = {
             windowType: this.props.windowType,
-            
+
             commentText: "",
             loadingComments: true,
 
@@ -27,7 +27,6 @@ class Comments extends React.Component {
 
     componentDidMount() {
         if (this.props.commentIDArray.length > 0) {
-
             return AxiosHelper.getComments({
                 params: {
                     visitorUsername: this.props.visitorUsername,
@@ -62,7 +61,7 @@ class Comments extends React.Component {
                     this.setState({
                         visitorProfilePreviewId: result.data.userPreviewId,
                         loadingComments: false,
-                        
+
                     }, () => {
                         if (this.props.postType === SHORT) {
                             this.props.passAnnotationData(
@@ -92,6 +91,7 @@ class Comments extends React.Component {
             .then(
                 (result) => {
                     const commentArray = result.data.rootCommentIdArray
+                    console.log(commentArray);
                     return AxiosHelper
                         .refreshComments({
                             params:
@@ -100,13 +100,13 @@ class Comments extends React.Component {
                             }
                         })
                         .then((result) => {
-                            this.props.handleCommentInjection(
+                            this.props.onCommentDataInjection(
                                 this.props.postIndex,
                                 result.data.rootComments,
                                 this.props.selectedPostFeedType);
-                            this.setState({
-                                currentComments: result.data.rootComments
-                            });
+                            // this.setState({
+                            //     currentComments: result.data.rootComments
+                            // });
                         })
                 })
             .then(() => alert("Success!"))
@@ -255,7 +255,7 @@ class Comments extends React.Component {
 
 
     render() {
-         if (this.state.windowType === COLLAPSED) {
+        if (this.state.windowType === COLLAPSED) {
             return (
                 <div className="comments-main-container">
                     {this.renderCommentSectionType(COLLAPSED)}

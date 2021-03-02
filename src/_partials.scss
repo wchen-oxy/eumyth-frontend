@@ -37,12 +37,12 @@ $small-button-window: 19vh;
 }
 
 @mixin tiny-profile-photo {
-    height: 20px;
-    width: 20px;
+    height: 35px;
+    width: 35px;
 }
 
 @mixin small-post-window {
-    background-color: grey;
+    background-color: white;
     position: fixed;
     margin-top: calc(#{$small-post-height / -2});
     margin-left: calc(#{$small-post-width / -2});
@@ -89,7 +89,8 @@ $small-button-window: 19vh;
     height: 100%;
     width: 65%;
     margin: auto;
-    text-align: center;
+    padding: 20px;
+    // text-align: center;
     justify-content: center;
 }
 
