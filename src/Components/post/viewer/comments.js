@@ -268,6 +268,8 @@ class Comments extends React.Component {
                 <div className="comments-main-container">
                     {this.renderCommentInput(EXPANDED)}
                     {this.renderCommentSectionType(EXPANDED)}
+                    <br/>
+                    <br/>
                 </div>
             )
         }

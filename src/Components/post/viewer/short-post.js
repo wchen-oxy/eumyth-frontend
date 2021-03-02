@@ -212,7 +212,6 @@ class ShortPostViewer extends React.Component {
     handleCommentDataInjection(postIndex, fullCommentData, feedType) {
         let newCommentIdArray = this.props.eventData.comments;
         const newCommentId = fullCommentData[fullCommentData.length - 1]._id;
-        console.log(newCommentId);
         newCommentIdArray.push(newCommentId)
         this.setState({ fullCommentData: fullCommentData }, () => {
             if (this.props.postIndex)
