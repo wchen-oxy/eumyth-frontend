@@ -5,7 +5,7 @@
     font-weight: 200;
 }
 
-#returninguser-profile-container{
+#returninguser-profile-container {
     @include flex-display-row;
 }
 
@@ -23,7 +23,7 @@
     background-color: transparent;
 }
 
-#returninguser-recent-work-title{
+#returninguser-recent-work-title {
     text-decoration: none;
     color: black;
 }
@@ -77,7 +77,7 @@
     @include flex-display-column;
 
     .returninguser-feed-object-container {
+        @include feed-or-event-container;
         margin: 100px;
-        background-color: grey;
     }
 }
