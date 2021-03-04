@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { returnUserImageURL } from "../../../constants/urls";
+import { returnFormattedDate } from "../../../constants/ui-text";
+
 import "./post-header.scss";
 
 
 const EDIT = "EDIT";
 const PostHeader = (props) => {
     const [isButtonShowing, setButtonShow] = useState(false);
+    const date = props.date ? returnFormattedDate(props.date) : null;
+
     const renderButtons = () => {
         const buttonPopUp = isButtonShowing ? (
             <div id="postheader-button-pop-up">
@@ -27,7 +31,10 @@ const PostHeader = (props) => {
                 <div className="postheader-display-photo-container">
                     <img src={returnUserImageURL(props.displayPhoto)} />
                 </div>
-                <h4>{props.username}</h4>
+                <div className="postheader-text-information-container">
+                    <h4>{props.username}</h4>
+                    {date ? <p>{date.month}, {date.day}, {date.year} </p> : <></>}
+                </div>
             </div>
             {props.isOwnProfile ? renderButtons() : null}
         </div>

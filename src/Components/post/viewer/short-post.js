@@ -367,6 +367,7 @@ class ShortPostViewer extends React.Component {
                                     <PostHeader
                                         isOwnProfile={this.props.isOwnProfile}
                                         username={this.props.username}
+                                        date={this.state.date}
                                         displayPhoto={this.props.eventData.display_photo_key}
                                         onEditClick={this.handleWindowChange}
                                         onDeletePost={this.props.onDeletePost}
@@ -375,7 +376,6 @@ class ShortPostViewer extends React.Component {
                                         index={this.state.imageIndex}
                                         isPaginated={this.state.isPaginated}
                                         isMilestone={this.state.isMilestone}
-                                        date={this.state.date}
                                         pursuit={this.state.pursuitCategory}
                                         min={this.state.min}
                                         textData={null}
@@ -395,6 +395,7 @@ class ShortPostViewer extends React.Component {
                                     <PostHeader
                                         isOwnProfile={this.props.isOwnProfile}
                                         username={this.props.username}
+                                        date={this.state.date}
                                         displayPhoto={this.props.eventData.display_photo_key}
                                     />
                                     <ShortHeroText
@@ -405,7 +406,6 @@ class ShortPostViewer extends React.Component {
                                         index={this.state.imageIndex}
                                         isPaginated={this.state.isPaginated}
                                         isMilestone={this.state.isMilestone}
-                                        date={this.state.date}
                                         pursuit={this.state.pursuitCategory}
                                         min={this.state.min}
                                         textData={null}
@@ -431,6 +431,7 @@ class ShortPostViewer extends React.Component {
                                     <PostHeader
                                         isOwnProfile={this.props.isOwnProfile}
                                         username={this.props.username}
+                                        date={this.state.date}
                                         displayPhoto={this.props.eventData.display_photo_key}
                                         onEditClick={this.handleWindowChange}
                                         onDeletePost={this.props.onDeletePost}
@@ -439,7 +440,6 @@ class ShortPostViewer extends React.Component {
                                         index={this.state.imageIndex}
                                         isPaginated={this.state.isPaginated}
                                         isMilestone={this.state.isMilestone}
-                                        date={this.state.date}
                                         pursuit={this.state.pursuitCategory}
                                         min={this.state.min}
                                         textData={this.props.textData}
@@ -460,6 +460,7 @@ class ShortPostViewer extends React.Component {
                                 <PostHeader
                                     isOwnProfile={this.props.isOwnProfile}
                                     username={this.props.username}
+                                    date={this.state.date}
                                     displayPhoto={this.props.eventData.display_photo_key}
                                 />
                                 {this.renderImageSlider(COLLAPSED)}
@@ -468,7 +469,6 @@ class ShortPostViewer extends React.Component {
                                         index={this.state.imageIndex}
                                         isPaginated={this.state.isPaginated}
                                         isMilestone={this.state.isMilestone}
-                                        date={this.state.date}
                                         pursuit={this.state.pursuitCategory}
                                         min={this.state.min}
                                         textData={this.props.textData}

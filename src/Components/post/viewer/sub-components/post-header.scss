@@ -12,13 +12,21 @@
 
 .postheader-main-container {
     @include flex-display-row;
+    margin: 10px 0;
+    justify-content: space-between;
     .postheader-author-information {
         @include flex-display-row;
         align-items: center;
+        .postheader-text-information-container {
+            padding-left: 5px;
+        }
         img,
         h4 {
-            padding-left: 5px;
-            padding-right: 5px;
+            margin: 0;
+        }
+        p {
+            font-size: 13px;
+            margin: 0;
         }
     }
 
@@ -29,7 +37,9 @@
 
 #postheader-main-button-container {
     margin: auto 0;
+    margin-right: 5px;
     #postheader-button-pop-up {
+        margin-left: -10%;
         @include small-button-window;
     }
 }

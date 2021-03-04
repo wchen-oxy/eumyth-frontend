@@ -1,13 +1,11 @@
 import React from "react";
-import { returnFormattedDate } from "../../../constants/ui-text";
+import "./short-post-meta.scss";
 
 const ShortPostMetaInfo = (props) => {
-    const date = props.date ? returnFormattedDate(props.date) : null;
     return (
         <div>
-            <div>
+            <div className="shortpostmetainfo-container">
                 {props.isMilestone ? <p>Milestone :)</p> : <></>}
-                {date ? <p>{date.month}, {date.day}, {date.year} </p> : <></>}
                 {props.pursuit ? <p>{props.pursuit}</p> : <></>}
                 {props.min ? <p>{props.min} minutes</p> : <></>}
             </div>

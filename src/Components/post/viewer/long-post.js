@@ -23,6 +23,8 @@ const LongPostViewer = (props) => {
     const [window, setWindow] = useState(INITIAL_STATE);
     const [localDraft, setLocalDraft] = useState(props.textData);
     const [workingDraft, setWorkingDraft] = useState(props.textData);
+    const [fullCommentData, setFullCommentData] = useState([]);
+    const [visitorProfilePreviewId, setVisitorProfilePreviewId] = useState('');
 
 
     const windowSwitch = (window) => {
@@ -42,11 +44,20 @@ const LongPostViewer = (props) => {
     const handleCommentDataInjection = () => {
 
     }
+
+    const passAnnotationData = (rawComments, visitorProfilePreviewId) => {
+        console.log(rawComments);
+        setFullCommentData(rawComments ? rawComments : []);
+        setVisitorProfilePreviewId(visitorProfilePreviewId);
+
+    }
     const renderComments = (windowType) => {
+        console.log(fullCommentData);
         if (windowType === EXPANDED) {
             return (
                 <Comments
                     postType={LONG}
+                    fullCommentData={fullCommentData}
                     commentIDArray={props.eventData.comments}
                     windowType={windowType}
                     visitorUsername={props.visitorUsername}
@@ -55,6 +66,7 @@ const LongPostViewer = (props) => {
                     onCommentIDInjection={props.onCommentIDInjection}
                     selectedPostFeedType={props.selectedPostFeedType}
                     onCommentDataInjection={handleCommentDataInjection}
+                    passAnnotationData={passAnnotationData}
                 />
             );
         }
@@ -163,7 +175,7 @@ const LongPostViewer = (props) => {
                             read_only={true}
                         />
                     </div>
-                    {renderComments("EXPANDED")}
+                    {renderComments(EXPANDED)}
                 </div>
             );
         }
@@ -216,6 +228,9 @@ const LongPostViewer = (props) => {
                             read_only={true}
                         />
                     </div>
+
+                    {renderComments(COLLAPSED)}
+
                 </div>
             )
         }
