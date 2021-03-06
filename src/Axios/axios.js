@@ -158,7 +158,7 @@ export default class AxiosHelper {
     }
 
     static returnAccountSettingsInfo(username) {
-        return axios.get(urls.USER_ACCOUNT_SETTINGS_INFO, {
+        return axios.get(urls.USER_ACCOUNT_SETTINGS_INFO_URL, {
             params: {
                 username: username
             }

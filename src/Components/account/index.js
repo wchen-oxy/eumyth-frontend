@@ -10,10 +10,11 @@ import { PUBLIC, PRIVATE, DISPLAY, COVER } from "../constants/flags";
 import "./index.scss";
 
 const AccountPage = (props) => {
-  const [userID, setUserID] = useState(null);
+  const [indexUserID, setIndexUserID] = useState(null);
   const [displayPhoto, setDisplayPhoto] = useState(null);
   const [coverPhoto, setCoverPhoto] = useState(null);
   const [bio, setBioText] = useState('');
+  const [previousTemplates, setPreviousTemplates] = useState(null);
   const [templateText, setTemplateText] = useState('');
   const [templateCategory, setTemplateCategory] = useState(null);
   const [pursuitNames, setPursuitNames] = useState(null);
@@ -24,16 +25,27 @@ const AccountPage = (props) => {
   const displayPhotoRef = React.createRef();
   const coverPhotoRef = React.createRef();
 
-  useEffect(
-    () => {
-      AxiosHelper
-        .returnAccountSettingsInfo(props.firebase.returnUsername())
-        .then((result) => {
-          setBioText(result.data.bio);
-          setIsPrivate(result.data.private);
-          setPursuitNames(result.data.pursuitNames)
-        });
-    }, [props.firebase])
+  useEffect(() => {
+    AxiosHelper
+      .returnAccountSettingsInfo(props.firebase.returnUsername())
+      .then((result) => {
+        const pursuits = result.data.pursuits;
+        let pursuitNameArray = [];
+        
+        if (pursuits) {
+          for (const pursuitName in pursuits) {
+            pursuitNameArray.push(pursuitName);
+          }
+        }
+         setBioText(result.data.bio);
+        setIsPrivate(result.data.private);
+        setPursuitNames(pursuitNameArray);
+        setPreviousTemplates(pursuits);
+        setTemplateText(pursuits[pursuitNameArray[[0]]]);
+        setTemplateCategory(pursuitNameArray[[0]]);
+         setIndexUserID(result.data._id);
+      });
+  }, [props.firebase])
 
   const handleImageDrop = (dropped) => {
     setDisplayPhoto(dropped);
@@ -126,10 +138,9 @@ const AccountPage = (props) => {
 
 
   const handleTemplateTextSubmit = () => {
-    console.log(templateText)
     return (
       AxiosHelper.updateTemplate({
-        userID: userID,
+        indexUserID: indexUserID,
         text: templateText,
         pursuit: templateCategory
       })
@@ -275,6 +286,12 @@ const AccountPage = (props) => {
     }
 
   }
+
+  const handleTemplateTextSet = (templateCategory) => {
+    console.log(previousTemplates[templateCategory]);
+     setTemplateText(previousTemplates[templateCategory]);
+     setTemplateCategory(templateCategory);
+  }
   return (
     <AuthUserContext.Consumer>
       {
@@ -340,7 +357,7 @@ const AccountPage = (props) => {
               <select
                 name="pursuit-category"
                 value={templateCategory}
-                onChange={(e) => setTemplateCategory(e.target.value)}>
+                onChange={(e) => handleTemplateTextSet(e.target.value)}>
                 {renderPursuitOptions()}
               </select>
               <textarea
