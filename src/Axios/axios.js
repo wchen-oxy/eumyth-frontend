@@ -211,6 +211,9 @@ export default class AxiosHelper {
     static updatePostDisplayPhotos(formData) {
         return axios.patch(urls.POST_DISPLAY_PHOTO_URL, formData);
     }
+    static updateTemplate(formData) {
+        return axios.put(urls.USER_TEMPLATE_URL, formData);
+    }
 
     static voteOnComment(payload) {
         return axios.put(urls.VOTE_ON_COMMENT_URL, payload);

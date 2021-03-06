@@ -10,9 +10,13 @@ import { PUBLIC, PRIVATE, DISPLAY, COVER } from "../constants/flags";
 import "./index.scss";
 
 const AccountPage = (props) => {
+  const [userID, setUserID] = useState(null);
   const [displayPhoto, setDisplayPhoto] = useState(null);
   const [coverPhoto, setCoverPhoto] = useState(null);
   const [bio, setBioText] = useState('');
+  const [templateText, setTemplateText] = useState('');
+  const [templateCategory, setTemplateCategory] = useState(null);
+  const [pursuitNames, setPursuitNames] = useState(null);
   const [displayPhotoScale, setDisplayPhotoScale] = useState(1);
   const [displayPhotoRotation, setDisplayPhotoRotation] = useState(0);
   const [AvatarEditorInstance, setAvatarEditorInstance] = useState(null);
@@ -27,6 +31,7 @@ const AccountPage = (props) => {
         .then((result) => {
           setBioText(result.data.bio);
           setIsPrivate(result.data.private);
+          setPursuitNames(result.data.pursuitNames)
         });
     }, [props.firebase])
 
@@ -112,12 +117,25 @@ const AccountPage = (props) => {
         username: props.firebase.returnUsername()
       })
         .then(() => {
-           alert("Successfully updated your bio!"); 
-           window.location.reload();
-          })
+          alert("Successfully updated your bio!");
+          window.location.reload();
+        })
         .catch((err) => console.log(err))
     );
   }
+
+
+  const handleTemplateTextSubmit = () => {
+    console.log(templateText)
+    return (
+      AxiosHelper.updateTemplate({
+        userID: userID,
+        text: templateText,
+        pursuit: templateCategory
+      })
+    )
+  }
+
 
   const handleProfilePrivacyChange = (privacySetting) => {
     const isPrivate = privacySetting === PRIVATE ? true : false;
@@ -242,6 +260,21 @@ const AccountPage = (props) => {
         onChange={(e) => setDisplayPhotoScale(parseFloat(e.target.value))} />
     </>
   );
+
+  const renderPursuitOptions = () => {
+    let pursuits = [];
+    if (pursuitNames !== null) {
+      for (const pursuit of pursuitNames) {
+        pursuits.push(
+          <option key={pursuit} value={pursuit}>
+            {pursuit}
+          </option >
+        )
+      }
+      return pursuits;
+    }
+
+  }
   return (
     <AuthUserContext.Consumer>
       {
@@ -251,7 +284,6 @@ const AccountPage = (props) => {
               <h1>Account: {authUser.email}</h1>
               <PasswordChangeForm />
               <select
-                name="pursuit-category"
                 value={isPrivate ? PRIVATE : PUBLIC}
                 onChange={(e) => handleProfilePrivacyChange(e.target.value)}>
                 <option key="private" value={PRIVATE}>Private</option>
@@ -301,6 +333,23 @@ const AccountPage = (props) => {
               />
               <button onClick={handleBioSubmit}>
                 Submit Bio
+              </button>
+
+              <label>Add Template for Pursuit</label>
+              <p>Add a predefined text you can add to a post for ease of access</p>
+              <select
+                name="pursuit-category"
+                value={templateCategory}
+                onChange={(e) => setTemplateCategory(e.target.value)}>
+                {renderPursuitOptions()}
+              </select>
+              <textarea
+                type="text"
+                onChange={e => setTemplateText(e.target.value)}
+                value={templateText}
+              />
+              <button onClick={handleTemplateTextSubmit}>
+                Submit Template
               </button>
             </div>
           );

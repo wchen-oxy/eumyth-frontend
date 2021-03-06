@@ -78,13 +78,16 @@ class ShortPostViewer extends React.Component {
     toggleAnnotations() {
         if (this.state.areAnnotationsHidden) {
             this.setState(({
-                areAnnotationsHidden: false
+                areAnnotationsHidden: false,
+                 annotateButtonPressed: false
             }));
         }
         else {
             this.setState(({
                 areAnnotationsHidden: true,
-                selectedAnnotationIndex: null
+                selectedAnnotationIndex: null,
+                annotateButtonPressed: false
+
             }));
         }
     }
@@ -177,6 +180,7 @@ class ShortPostViewer extends React.Component {
                     activeAnnotations={this.state.activeAnnotations}
                     imageIndex={this.state.imageIndex}
                     showPromptOverlay={this.state.showPromptOverlay}
+                    annotateButtonPressed={this.state.annotateButtonPressed}
                     areAnnotationsHidden={this.state.areAnnotationsHidden}
                     onAnnotationSubmit={this.handleAnnotationSubmit}
                     toggleAnnotations={this.toggleAnnotations}
@@ -226,7 +230,11 @@ class ShortPostViewer extends React.Component {
 
     handlePromptAnnotation() {
         this.heroRef.current.scrollIntoView({ block: "center" });
-        this.setState({ showPromptOverlay: true });
+        this.setState({
+            showPromptOverlay: true,
+            areAnnotationsHidden: false,
+            annotateButtonPressed : true,
+        });
         setTimeout(() => {
             this.setState({ showPromptOverlay: false });
         }, 3000);
@@ -311,7 +319,9 @@ class ShortPostViewer extends React.Component {
                 return this.setState({
                     annotations: fullAnnotationArray,
                     commentArray: rootCommentIdArray,
-                    fullCommentData: fullCommentData
+                    fullCommentData: fullCommentData,
+                    annotateButtonPressed: false
+
                 })
             })
             .catch((err) => {

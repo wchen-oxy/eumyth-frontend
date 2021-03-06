@@ -24,8 +24,9 @@ const TINY_DISPLAY_PHOTO_URL = IMAGE_BASE_URL + "/navbar-display-photo";
 //user
 const USER_BASE_URL = ROOT_URL + "/user";
 const USER_BIO_URL = USER_BASE_URL + "/bio";
-const USER_ACCOUNT_SETTINGS_INFO = USER_BASE_URL + "/account-settings-info";
-const USER_PRIVACY = USER_BASE_URL + "/private";
+const USER_ACCOUNT_SETTINGS_INFO_URL = USER_BASE_URL + "/account-settings-info";
+const USER_PRIVACY_URL = USER_BASE_URL + "/private";
+const USER_TEMPLATE_URL = USER_BASE_URL + "/template";
 
 //UserPreview
 const USER_PREVIEW_BASE_URL = ROOT_URL + "/user-preview";
@@ -78,10 +79,11 @@ module.exports = {
     TINY_DISPLAY_PHOTO_URL,
     USER_BASE_URL,
     USER_BIO_URL,
-    USER_ACCOUNT_SETTINGS_INFO,
-    USER_PRIVACY,
+    USER_ACCOUNT_SETTINGS_INFO_URL,
+    USER_PRIVACY_URL,
     USER_PREVIEW_BASE_URL,
     USER_PREVIEW_ID_URL,
+    USER_TEMPLATE_URL,
     RELATION_BASE_URL,
     RELATION_STATUS_URL,
     RELATION_INFO_URL,
