@@ -8,8 +8,19 @@ const Arrow = (props) => {
             style=
             {
                 props.direction === 'left' ?
-                    { ...style, display: "block", background: "red", left: '5%', zIndex: '1' } :
-                    { ...style, display: "block", background: "red", right: '5%', zIndex: '1' }
+                    {
+                        ...style,
+                        display: "block",
+                        left: '5%',
+                        zIndex: '1',
+                        color: 'brown'
+                    } :
+                    {
+                        ...style,
+                        display: "block",
+                        right: '5%',
+                        zIndex: '1'
+                    }
             }
             onClick={onClick}
         />
