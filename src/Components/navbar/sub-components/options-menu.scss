@@ -1,8 +1,18 @@
 @import "../../../partials";
 
+#optionsmenu-pre-click-container {
+    @include flex-display-row;
+    padding: 5px;
+    border-radius: 25px;
+}
+#optionsmenu-pre-click-container:hover,
+.optionsmenu-button-container:hover {
+    background-color: rgba($color: #ffffff, $alpha: 0.3);
+}
 #optionsmenu-main-container {
     padding: 10px;
-    h4, a {
+    h4,
+    a {
         color: white;
     }
 }
@@ -19,6 +29,4 @@
     height: 20px;
     width: 200px;
     padding: 5px;
-
-
 }

@@ -15,19 +15,19 @@ const NewPost = (props) => {
         <div id="newpost-window">
             <div className="newpost-button-container">
                 <h3>Document Your Progress</h3>
-                <h4>Begin a New Check-In!</h4>
+                <h4>Make a Short Post</h4>
                 <button
                     value={SHORT}
                     onClick={(e) => props.onPostTypeSet(e.target.value, null)}
                 >
-                    New Short
+                    New Post
                 </button>
-                <h4> Begin a New Post! (Will Delete Saved data)</h4>
+                <h4>Make a Long Post</h4>
                 <button
                     value={NEW_LONG}
                     onClick={(e) => handleClick(e)}
                 >
-                    New Entry
+                    New Draft
                 </button>
                 <button
                     value={OLD_LONG}

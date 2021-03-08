@@ -126,9 +126,13 @@ class NavigationAuth extends React.Component {
                 <h3>Everfire</h3>
               </div>
             </Link>
-            <button onClick={() => this.openModal(POST)}>
-              <h4>New Entry</h4>
-            </button>
+            <div
+              className="navbar-main-action-buttons-container"
+            >
+              <button onClick={() => this.openModal(POST)}>
+                <h4>New Entry</h4>
+              </button>
+            </div>
           </div>
           <div id="navbar-right-container">
             {
@@ -136,14 +140,19 @@ class NavigationAuth extends React.Component {
                 (<></>) :
                 (
                   <>
-                    <div id="navbar-profile-home">
-                      <div id="navbar-display-photo-container">
-                        <img src={this.state.tinyDisplayPhoto} />
+                    <Link
+                      to={"/" + this.state.username}
+                    >
+                      <div
+                        className="navbar-main-action-buttons-container"
+                      >
+                        <div id="navbar-display-photo-container">
+                          <img src={this.state.tinyDisplayPhoto} />
+                        </div>
+                        <p>{this.state.username}</p>
                       </div>
-                      <p>{this.state.username}</p>
-                    </div>
-                    <div id="navbar-main-action-buttons-container">
-
+                    </Link>
+                    <div className="navbar-main-action-buttons-container">
                       <button onClick={() => this.openModal(REQUEST_ACTION)}>
                         <h4>Friends</h4>
                       </button>

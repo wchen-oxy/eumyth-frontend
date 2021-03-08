@@ -5,13 +5,22 @@
     color: white;
 }
 
-#navbar-profile-home {
+
+.navbar-main-action-buttons-container 
+{
     @include flex-display-row;
+    padding: 5px;
+    border-radius: 25px;
+}
+
+#navbar-profile-home:hover,
+.navbar-main-action-buttons-container:hover {
+    background-color: rgba($color: #ffffff, $alpha: 0.3);
 }
 
 #navbar-display-photo-container {
-   @include flex-display-row;
-   align-items: center;
+    @include flex-display-row;
+    align-items: center;
     img {
         @include tiny-profile-photo;
         border-radius: 50%;
@@ -37,12 +46,10 @@ nav {
     #navbar-right-container {
         @include flex-display-row;
 
-        #navbar-main-action-buttons-container{
-            @include flex-display-row;
-            align-items: center;
-        }
+   
 
-        p, h4 {
+        p,
+        h4 {
             @extend %navbar-text;
         }
     }
@@ -72,5 +79,6 @@ nav {
 
     a {
         text-decoration: none;
+        margin: auto 0;
     }
 }

@@ -32,9 +32,11 @@ class OptionsMenu extends React.Component {
     render() {
         return (
             <div id="optionsmenu-main-container">
-                <button onClick={this.showMenu}>
-                    <h4>...</h4>
-                </button>
+                <div id="optionsmenu-pre-click-container">
+                    <button onClick={this.showMenu}>
+                        <h4>...</h4>
+                    </button>
+                </div>
                 {
                     this.state.showMenu
                         ? (
