@@ -31,19 +31,19 @@ const AccountPage = (props) => {
       .then((result) => {
         const pursuits = result.data.pursuits;
         let pursuitNameArray = [];
-        
+
         if (pursuits) {
           for (const pursuitName in pursuits) {
             pursuitNameArray.push(pursuitName);
           }
         }
-         setBioText(result.data.bio);
+        setBioText(result.data.bio);
         setIsPrivate(result.data.private);
         setPursuitNames(pursuitNameArray);
         setPreviousTemplates(pursuits);
         setTemplateText(pursuits[pursuitNameArray[[0]]]);
         setTemplateCategory(pursuitNameArray[[0]]);
-         setIndexUserID(result.data._id);
+        setIndexUserID(result.data._id);
       });
   }, [props.firebase])
 
@@ -289,8 +289,8 @@ const AccountPage = (props) => {
 
   const handleTemplateTextSet = (templateCategory) => {
     console.log(previousTemplates[templateCategory]);
-     setTemplateText(previousTemplates[templateCategory]);
-     setTemplateCategory(templateCategory);
+    setTemplateText(previousTemplates[templateCategory]);
+    setTemplateCategory(templateCategory);
   }
   return (
     <AuthUserContext.Consumer>
@@ -319,7 +319,9 @@ const AccountPage = (props) => {
                   onChange={(e) => setDisplayPhoto(e.target.files[0])}
                 />
                 {displayPhoto ? renderProfilePhotoEditor() : <div></div>}
-                <button onClick={() => submitPhoto(DISPLAY)}>
+                <button
+                  disabled={!displayPhoto}
+                  onClick={() => submitPhoto(DISPLAY)}>
                   Submit your display photo!
                 </button>
                 <button onClick={() => removePhoto(DISPLAY)}>
@@ -334,7 +336,9 @@ const AccountPage = (props) => {
                 <input type="file" onChange={(e) => {
                   setCoverPhoto(e.target.files[0]);
                 }} />
-                <button onClick={() => submitPhoto(COVER)}>
+                <button
+                  disabled={!coverPhoto}
+                  onClick={() => submitPhoto(COVER)}>
                   Submit your cover photo!
                 </button>
                 <button onClick={() => removePhoto(COVER)}>

@@ -5,9 +5,14 @@
     padding: 5px;
     border-radius: 25px;
 }
+
+.optionsmenu-button-container {
+    @include button-rounding;
+}
+
 #optionsmenu-pre-click-container:hover,
 .optionsmenu-button-container:hover {
-    background-color: rgba($color: #ffffff, $alpha: 0.3);
+    background-color: $button-hover-color;
 }
 #optionsmenu-main-container {
     padding: 10px;

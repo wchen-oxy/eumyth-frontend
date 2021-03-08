@@ -20,10 +20,6 @@ class CustomImageSlider extends React.Component {
         this.renderImageControls = this.renderImageControls.bind(this);
     }
 
-    componentWillUnmount() {
-        console.log("Image Slider unmount");
-    }
-
     onAnnotationChange(annotation) {
         this.setState({ annotation })
     }

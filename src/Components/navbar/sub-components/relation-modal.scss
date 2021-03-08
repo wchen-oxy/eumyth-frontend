@@ -23,11 +23,15 @@
 
                 .relationmodal-profile-info-container {
                     @include flex-display-row;
-
+                    a {
+                        @include link-decoration;
+                        margin: auto;
+                    }
                 }
 
                 img {
                     @include tiny-profile-photo;
+                    border-radius: 50%;
                 }
             }
         }

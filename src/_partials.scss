@@ -10,6 +10,15 @@ $primary-medium-font-size: 15px;
 $small-post-height: 74vh;
 $small-post-width: 76vw;
 $small-button-window: 19vh;
+$button-hover-color: rgba(
+    $color: #ffffff,
+    $alpha: 0.3,
+);
+
+@mixin button-rounding {
+    padding: 5px;
+    border-radius: 25px;
+}
 
 @mixin flex-display-row {
     display: flex;
@@ -19,6 +28,10 @@ $small-button-window: 19vh;
 @mixin flex-display-column {
     display: flex;
     flex-direction: column;
+}
+@mixin link-decoration {
+    color: black;
+    text-decoration: none;
 }
 
 @mixin main-profile-photo-container {

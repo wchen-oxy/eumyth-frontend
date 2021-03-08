@@ -9,13 +9,13 @@
 .navbar-main-action-buttons-container 
 {
     @include flex-display-row;
-    padding: 5px;
-    border-radius: 25px;
+    @include button-rounding
+
 }
 
 #navbar-profile-home:hover,
 .navbar-main-action-buttons-container:hover {
-    background-color: rgba($color: #ffffff, $alpha: 0.3);
+    background-color: $button-hover-color;
 }
 
 #navbar-display-photo-container {

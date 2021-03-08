@@ -96,7 +96,6 @@ class ReturningUserPage extends React.Component {
                             indexUser.user_profile_id;
                         pursuits =
                             result.data.pursuits;
-                        console.log(allPostsIdArray);
                         hasMore = (
                             !allPostsIdArray ||
                             allPostsIdArray.length === 0)
@@ -211,7 +210,7 @@ class ReturningUserPage extends React.Component {
     }
 
     handleCommentIDInjection(postIndex, rootCommentsArray, feedType) {
-     
+
         if (feedType === RECENT_POSTS) {
             let recentPosts = this.state.recentPosts;
             recentPosts[postIndex].comments = rootCommentsArray;
@@ -431,16 +430,24 @@ class ReturningUserPage extends React.Component {
                     id="returninguser-profile-container"
                     className="returninguser-main-row"
                 >
-                    <div className="returninguser-profile-column">
-                        <img
-                            alt=""
-                            id="returninguser-profile-photo"
-                            src={imageURL}>
-                        </img>
-                        <div className="returninguser-profile-text-container">
-                            <p>{this.state.username}</p>
-                            <p>{this.state.firstName}</p>
-                        </div>
+
+                    <div
+                        id="returninguser-hero-profile-column"
+                        className="returninguser-profile-column"
+                    >
+                        <Link
+                            to={"/" + this.state.username}
+                        >
+                            <img
+                                alt=""
+                                id="returninguser-profile-photo"
+                                src={imageURL}>
+                            </img>
+                            <div className="returninguser-profile-text-container">
+                                <p>{this.state.username}</p>
+                                <p>{this.state.firstName}</p>
+                            </div>
+                        </Link>
                     </div>
                     <div className="returninguser-profile-column">
                         <div className="returninguser-profile-text-container">
