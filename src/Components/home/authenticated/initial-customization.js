@@ -208,7 +208,7 @@ class InitialCustomizationPage extends React.Component {
     }
 
     testForSpecialCharacter(string) {
-        return /[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(string);
+        return /[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(string) || /\s/.test(string);
     }
 
     handleProfilePhotoChange(photo) {

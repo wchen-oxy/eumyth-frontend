@@ -182,27 +182,26 @@ class ShortPost extends React.Component {
     if (this.state.window === INITIAL_STATE) {
       return (
         <div id="shortpost-window">
+          <h2>Placeholder for short</h2>
+
           <div className="shortpost-button-container">
-            <h2>Placeholder for short</h2>
-            <div>
-              <span >
-                <button
-                  value={NONE}
-                  onClick={e => this.props.onPostTypeSet(e.target.value, false)}
-                >
-                  Return
+            <span >
+              <button
+                value={NONE}
+                onClick={e => this.props.onPostTypeSet(e.target.value, false)}
+              >
+                Return
                   </button>
-              </span>
-              <span >
-                <button
-                  value={REVIEW_STATE}
-                  disabled={this.state.postDisabled}
-                  onClick={e => this.handleClick(e.target.value)}
-                >
-                  Review Post
+            </span>
+            <span >
+              <button
+                value={REVIEW_STATE}
+                disabled={this.state.postDisabled}
+                onClick={e => this.handleClick(e.target.value)}
+              >
+                Review Post
                   </button>
-              </span>
-            </div>
+            </span>
           </div>
           <ShortEditor
             username={this.props.username}

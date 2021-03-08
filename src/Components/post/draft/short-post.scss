@@ -5,5 +5,7 @@
 }
 
 .shortpost-button-container {
-    @include centered-vertical-button-container;
+    @include flex-display-row;
+    justify-content: space-between;
+    padding: 0 5px;
 }

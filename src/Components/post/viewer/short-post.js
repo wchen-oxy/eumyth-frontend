@@ -79,7 +79,7 @@ class ShortPostViewer extends React.Component {
         if (this.state.areAnnotationsHidden) {
             this.setState(({
                 areAnnotationsHidden: false,
-                 annotateButtonPressed: false
+                annotateButtonPressed: false
             }));
         }
         else {
@@ -127,13 +127,13 @@ class ShortPostViewer extends React.Component {
 
     renderComments(windowType) {
         if (windowType === EXPANDED) {
-            console.log(this.props.eventData.comments);
-            console.log(this.state.fullCommentData);
+            const isImageOnly = this.props.eventData.image_data.length ? true : false;
             return (
                 <Comments
                     postType={SHORT}
                     commentIDArray={this.props.eventData.comments}
                     fullCommentData={this.state.fullCommentData}
+                    isImageOnly={isImageOnly}
                     windowType={windowType}
                     visitorUsername={this.props.visitorUsername}
                     postId={this.props.postId}
@@ -231,13 +231,13 @@ class ShortPostViewer extends React.Component {
     handlePromptAnnotation() {
         this.heroRef.current.scrollIntoView({ block: "center" });
         this.setState({
-            showPromptOverlay: true,
+            // showPromptOverlay: true,
             areAnnotationsHidden: false,
-            annotateButtonPressed : true,
+            annotateButtonPressed: true,
         });
-        setTimeout(() => {
-            this.setState({ showPromptOverlay: false });
-        }, 3000);
+        // setTimeout(() => {
+        //     this.setState({ showPromptOverlay: false });
+        // }, 3000);
     }
 
     handleMouseOver(id) {

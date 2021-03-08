@@ -98,9 +98,16 @@ const ReviewPost = (props) => {
 
 
     const postTypeTitle = props.postType === SHORT ? (
-        <h2>Placeholder for Short</h2>)
+        <div>
+            <h2>Add your metadata!</h2>
+            <p>Optional of course</p>
+        </div>
+    )
         :
-        (<h2>Placeholder for Long</h2>);
+        (<div>
+            <h2>Add your metadata!</h2>
+            <p>Optional of course</p>
+        </div>);
 
     const optionalLongPostDescription = props.postType === LONG ? (
         <TextareaAutosize

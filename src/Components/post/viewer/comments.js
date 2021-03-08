@@ -211,7 +211,6 @@ class Comments extends React.Component {
 
     renderCommentThreads(rawComments) {
         let renderedCommentArray = [];
-        console.log(rawComments);
         for (const rootComment of rawComments) {
             renderedCommentArray.push(
                 this.recursiveRenderComments(rootComment, 0)
@@ -236,8 +235,19 @@ class Comments extends React.Component {
                         commentText={this.state.commentText}
                     />
                     <div>
-                        <button onClick={this.handleCommentPost}>Add Comment</button>
-                        <button onClick={this.props.onPromptAnnotation}>Annotate</button>
+                        <button
+                            disabled={this.state.commentText.trim().length === 0}
+                            onClick={this.handleCommentPost}
+                        >
+                            Add Comment
+                                </button>
+                        {this.props.isImageOnly ?
+                            <button
+                                onClick={this.props.onPromptAnnotation}
+                            >
+                                Annotate
+                            </button>
+                            : null}
                     </div>
 
                 </div>
@@ -268,8 +278,8 @@ class Comments extends React.Component {
                 <div className="comments-main-container">
                     {this.renderCommentInput(EXPANDED)}
                     {this.renderCommentSectionType(EXPANDED)}
-                    <br/>
-                    <br/>
+                    <br />
+                    <br />
                 </div>
             )
         }
