@@ -17,6 +17,7 @@ class PostDraftController extends React.Component {
       updatingOnlineDraft: true,
       postType: NONE,
       pursuitNames: null,
+      pursuitTemplates: null,
       indexUserData: null,
       errorRetrievingDraft: false,
       errorSaving: false,
@@ -89,13 +90,19 @@ class PostDraftController extends React.Component {
       .then(
         (result) => {
           let pursuitArray = [];
+          let pursuitTemplates = {};
           for (const pursuit of result.data.pursuits) {
+            console.log(pursuit.name);
+            pursuitTemplates[pursuit.name] = pursuit.meta_template ?
+              pursuit.meta_template : "";
             pursuitArray.push(pursuit.name);
           }
+          console.log(pursuitTemplates);
           this.setState({
             updatingOnlineDraft: false,
             onlineDraftRetrieved: true,
             pursuitNames: pursuitArray,
+            pursuitTemplates: pursuitTemplates,
             indexUserData: result.data,
             displayPhoto: result.data.small_cropped_display_photo_key,
             onlineDraft: JSON.parse(result.data.draft.text),
@@ -196,6 +203,7 @@ class PostDraftController extends React.Component {
             username={this.props.username}
             closeModal={this.props.closeModal}
             pursuitNames={this.state.pursuitNames}
+            pursuitTemplates={this.state.pursuitTemplates}
             disablePost={this.handleDisablePost}
             setImageArray={this.setImageArray}
             onPostTypeSet={this.handlePostTypeSet}

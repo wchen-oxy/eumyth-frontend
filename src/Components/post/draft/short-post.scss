@@ -4,6 +4,10 @@
     @include small-post-window;
 }
 
+#shortpost-special-button-container{
+    margin: 0 auto;
+}
+
 .shortpost-button-container {
     @include flex-display-row;
     justify-content: space-between;

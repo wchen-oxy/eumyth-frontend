@@ -19,10 +19,13 @@ class ShortPost extends React.Component {
       isPaginated: false,
       postDisabled: true,
       window: INITIAL_STATE,
-      previewTitle: null
+      previewTitle: null,
+      selectedTemplate: null
     };
-
+    this.handleTemplateInjection = this.handleTemplateInjection.bind(this);
     this.handleIndexChange = this.handleIndexChange.bind(this);
+    this.handleTemplateSelect = this.handleTemplateSelect.bind(this);
+    this.returnOptions = this.returnOptions.bind(this);
     this.setSelectedFiles = this.setSelectedFiles.bind(this);
     this.setValidFiles = this.setValidFiles.bind(this);
     this.setUnsupportedFiles = this.setUnsupportedFiles.bind(this);
@@ -64,8 +67,35 @@ class ShortPost extends React.Component {
     });
   }
 
+  returnOptions() {
+    let pursuitOptions = [<option key={"0"} value={null}></option>];
+    for (const pursuit of this.props.pursuitNames) {
+      if (this.props.pursuitTemplates && this.props.pursuitTemplates[pursuit])
+        pursuitOptions.push(
+          <option key={pursuit} value={pursuit}>{pursuit}</option>
+        );
+    }
+    return pursuitOptions;
+  }
+
   handleIndexChange(value) {
     this.setState({ imageIndex: value });
+  }
+
+  handleTemplateSelect(pursuit) {
+    this.setState({
+      selectedTemplate: pursuit ? pursuit : null
+    });
+  }
+
+
+  handleTemplateInjection() {
+    this.setState((state) => ({
+      textData:
+        this.props.pursuitTemplates[state.selectedTemplate]
+        + "\n"
+        + state.textData
+    }))
   }
 
   handlePaginatedChange() {
@@ -174,16 +204,15 @@ class ShortPost extends React.Component {
     const [reorderedItem] = items.splice(oldIndex, 1);
     items.splice(newIndex, 0, reorderedItem);
     this.transformImageProp(items);
-    // this.setState({ validFiles: items });
   }
 
 
   render() {
     if (this.state.window === INITIAL_STATE) {
+      const pursuitOptions = this.returnOptions();
       return (
         <div id="shortpost-window">
-          <h2>Placeholder for short</h2>
-
+          <h2>Short Post</h2>
           <div className="shortpost-button-container">
             <span >
               <button
@@ -193,7 +222,7 @@ class ShortPost extends React.Component {
                 Return
                   </button>
             </span>
-            <span >
+            <span>
               <button
                 value={REVIEW_STATE}
                 disabled={this.state.postDisabled}
@@ -202,6 +231,22 @@ class ShortPost extends React.Component {
                 Review Post
                   </button>
             </span>
+          </div>
+          <div id="shortpost-special-button-container">
+            <select
+              onChange={(e) => {
+                return this.handleTemplateSelect(e.target.value)
+              }}
+              value={this.state.selectedTemplate}
+            >
+              {pursuitOptions}
+            </select>
+            <button
+              disabled={this.state.selectedTemplate === null}
+              onClick={this.handleTemplateInjection}
+            >
+              Inject Template
+            </button>
           </div>
           <ShortEditor
             username={this.props.username}
