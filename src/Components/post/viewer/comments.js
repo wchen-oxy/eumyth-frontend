@@ -104,9 +104,6 @@ class Comments extends React.Component {
                                 this.props.postIndex,
                                 result.data.rootComments,
                                 this.props.selectedPostFeedType);
-                            // this.setState({
-                            //     currentComments: result.data.rootComments
-                            // });
                         })
                 })
             .then(() => alert("Success!"))
@@ -265,6 +262,7 @@ class Comments extends React.Component {
 
 
     render() {
+        console.log(this.props.fullCommentData);
         if (this.state.windowType === COLLAPSED) {
             return (
                 <div className="comments-main-container">

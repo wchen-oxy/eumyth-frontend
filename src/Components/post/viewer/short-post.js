@@ -297,7 +297,7 @@ class ShortPostViewer extends React.Component {
             .postComment(annotationPayload)
             .then((result) => {
                 const rootCommentIdArray = result.data.rootCommentIdArray;
-                const newRootCommentData = result.data.newRootComment;
+                let newRootCommentData = result.data.newRootComment;
                 const currentAnnotationArray =
                     this.state
                         .annotations[this.state.imageIndex]
