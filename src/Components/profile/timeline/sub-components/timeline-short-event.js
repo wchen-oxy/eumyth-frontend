@@ -12,7 +12,7 @@ const ShortEvent = (props) => {
         return (
             <div>
                 <div className="shortevent-no-cover-photo-container">
-                    <p className="shortevent-cover">{intitialText}</p>
+                    <p>{intitialText}</p>
                 </div>
                 <div className="shortevent-text-container">
                     {post.title ? <h4>{post.title}</h4> : <></>}
@@ -23,7 +23,9 @@ const ShortEvent = (props) => {
                     {date ? <p>{date.month}, {date.day}, {date.year} </p>
                         : <></>
                     }
-                    <p>{props.commentCount} Comments</p>
+                    <div className="shortevent-comment-text-container">
+                        <p className="shortevent-comment-text">{props.commentCount} Comments</p>
+                    </div>
                 </div>
 
 

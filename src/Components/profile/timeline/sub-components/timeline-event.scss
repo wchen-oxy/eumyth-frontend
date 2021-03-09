@@ -9,9 +9,7 @@
     height: 110px;
     padding: 5px;
     overflow: hidden;
-    p {
-        height: fit-content;
-    }
+    
 }
 
 @mixin cover-photo-size {
@@ -35,15 +33,6 @@
     background-color: white;
     word-wrap: break-word;
     border-radius: 5px;
-
-    h4,
-    p {
-        margin: 0;
-    }
-
-    h4{ 
-        font-size: 18px;
-    }
 }
 
 .event-first-container {
