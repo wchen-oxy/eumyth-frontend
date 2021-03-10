@@ -1,24 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TextContainer from "./sub-components/text-container";
-import Arrow from '../../image-carousel/sub-components/arrow';
-import Slider from "react-slick";
+import ImageSlider from '../../image-carousel';
 import { returnUserImageURL } from "../../constants/urls";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./short-re-editor.scss";
 
+const adjustURLS = (inputArray) => (
+    inputArray.map((url) => returnUserImageURL(url))
+)
+
 const ShortReEditor = (props) => {
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        nextArrow: <Arrow direction="right" />,
-        prevArrow: <Arrow direction="left" />
-
-    };
-
     const renderTextContainer = () => (
         <TextContainer
             validFilesLength={props.eventData.image_data.length}
@@ -36,22 +28,23 @@ const ShortReEditor = (props) => {
         );
     }
     else {
-        console.log(props
-            .eventData
-            .image_data);
-        const images = props
-            .eventData
-            .image_data
-            .map((url, index) => <img alt="Image for Slider" src={returnUserImageURL(url)} />);
+        let images = props.eventData.image_data;
+        let newArray = [];
+        if (props.eventData.image_data.length > 0) {
+            newArray = images;
+            newArray = adjustURLS(newArray);
+            console.log(newArray);
+        }
+
         return (
             <div className="shortreeditor-main-container">
                 <div className="shortreeditor-hero-container">
-                    <Slider
-                        afterChange={index => (props.onIndexChange(index))}
-                        {...settings}
-                    >
-                        {images}
-                    </Slider>
+                    <ImageSlider
+                        disableAnnotations={true}
+                        onIndexChange={props.onIndexChange}
+                        imageArray={newArray}
+                    />
+
                 </div>
                 <div className="shortreeditor-side-container">
                     {renderTextContainer()}

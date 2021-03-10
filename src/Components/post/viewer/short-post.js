@@ -558,7 +558,7 @@ class ShortPostViewer extends React.Component {
                     pursuitNames={this.props.pursuitNames}
                     closeModal={this.props.closeModal}
                     postType={SHORT}
-                    textData={this.props.textData}
+                    textData={this.state.tempTextForEdit}
                     username={this.props.username}
                     preferredPostType={this.props.preferredPostType}
                     handlePreferredPostTypeChange={this.handlePreferredPostTypeChange}
