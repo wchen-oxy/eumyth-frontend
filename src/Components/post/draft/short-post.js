@@ -136,9 +136,8 @@ class ShortPost extends React.Component {
     this.setState({ unsupportedFiles: value })
   }
 
-  handleTextChange(e) {
-    const text = e.target.value;
-    if (e.target.name === TITLE) {
+  handleTextChange(text, isPostText) {
+    if (isPostText) {
       this.setState({ previewTitle: text });
     }
     else {

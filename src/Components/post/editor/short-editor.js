@@ -160,7 +160,6 @@ class ShortEditor extends React.Component {
     }
 
     renderTextContainer() {
-        console.log(this.props.imageIndex);
         return (
             <TextContainer
                 validFilesLength={this.props.validFiles.length}

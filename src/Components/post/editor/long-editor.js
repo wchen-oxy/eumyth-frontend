@@ -58,61 +58,104 @@ class LongEditor extends React.Component {
                 onChange={
                     (editor) => {
                         const editorState = editor.emitSerializedOutput();
-                        if (this.props.hasContent === false) {
-                            for (let block of editorState.blocks) {
-                                if (block.text !== '') {
-                                    this.props.setHasContent(true);
-                                    break;
-                                }
-                            }
-                        }
-                        else {
-                            if (this.state.isInitial) {
-                                this.setState({ isInitial: false });
-                                this.props.setLocalDraft(editorState);
-                            }
-                            else {
-                                if (this.state.needOnlineSync) {
-                                    this.props.onSavePending(true);
-                                    this.props.syncChanges();
-                                    this.setState({ needOnlineSync: false });
-                                    return;
-                                }
-                                const draftsIdentical =
-                                    _.isEqual(
-                                        editorState,
-                                        this.props.localDraft);
-                                if (!draftsIdentical) {
-                                    const lastEditorBlock =
-                                        editorState
-                                            .blocks[editorState
-                                                .blocks
-                                                .length - 1]
-                                            .text;
-                                    const secondLastEditorBlock =
-                                        editorState
-                                            .blocks[editorState
-                                                .blocks
-                                                .length - 2]
-                                            .text;
-                                    if (editorState.blocks.length >= 2) {
-                                        this.props.setLastTwoBlockIdentical(
-                                            lastEditorBlock
-                                            ===
-                                            secondLastEditorBlock
-                                        );
-                                    }
-                                    this.props.setLastBlockChanged(
-                                        this.state.lastBlockText
-                                        ===
-                                        lastEditorBlock);
-                                    this.props.setLastBlockText(lastEditorBlock);
-                                    this.props.onSavePending(true);
-                                    this.props.setLocalDraft(editorState);
-                                }
-                            }
-                        }
-                    }}
+                        this.props.onSavePending(true);
+                        // const editorState = editor.emitSerializedOutput();
+                        // console.log("onChange");
+                        // console.log(this.props.hasContent);
+                        // if (this.props.hasContent === false) {
+                        //     console.log("has content is false")
+                        //     for (let block of editorState.blocks) {
+                        //         if (block.text !== '') {
+                        //             this.props.setHasContent(true);
+                        //             break;
+                        //         }
+                        //     }
+                        // }
+                        // else {
+                        //     if (this.state.isInitial) {
+                        //         console.log("Initial Hit");
+                        //         this.setState({ isInitial: false });
+                        //         this.props.setLocalDraft(editorState);
+                        //     }
+                        //     else {
+                        //         if (this.state.needOnlineSync) {
+                        //             this.props.onSavePending(true);
+                        //             this.props.syncChanges();
+                        //             this.setState({ needOnlineSync: false });
+                        //             return;
+                        //         }
+                        //         const draftsIdentical =
+                        //             _.isEqual(
+                        //                 editorState,
+                        //                 this.props.localDraft);
+                        //         if (!draftsIdentical) {
+                        //             const lastEditorBlock =
+                        //                 editorState
+                        //                     .blocks[editorState
+                        //                         .blocks
+                        //                         .length - 1]
+                        //                     .text;
+                        //             const secondLastEditorBlock =
+                        //                 editorState
+                        //                     .blocks[editorState
+                        //                         .blocks
+                        //                         .length - 2]
+                        //                     .text;
+                        //             if (editorState.blocks.length >= 2) {
+                        //                 this.props.setLastTwoBlockIdentical(
+                        //                     lastEditorBlock
+                        //                     ===
+                        //                     secondLastEditorBlock
+                        //                 );
+                        //             }
+                        //             this.props.setLastBlockChanged(
+                        //                 this.state.lastBlockText
+                        //                 ===
+                        //                 lastEditorBlock);
+                        //             this.props.setLastBlockText(lastEditorBlock);
+                        //             this.props.onSavePending(true);
+                        //             this.props.setLocalDraft(editorState);
+                        //         }
+                        //     }
+                        // }
+                        // const draftsIdentical =
+                        //             _.isEqual(
+                        //                 editorState,
+                        //                 this.props.localDraft);
+                        //         if (!draftsIdentical && 
+                        //             editorState
+                        //                         .blocks
+                        //                         .length >= 2
+                        //             ) {
+                        //             const lastEditorBlock =
+                        //                 editorState
+                        //                     .blocks[editorState
+                        //                         .blocks
+                        //                         .length - 1]
+                        //                     .text;
+                        //             const secondLastEditorBlock =
+                        //                 editorState
+                        //                     .blocks[editorState
+                        //                         .blocks
+                        //                         .length - 2]
+                        //                     .text;
+                        //             if (editorState.blocks.length >= 2) {
+                        //                 this.props.setLastTwoBlockIdentical(
+                        //                     lastEditorBlock
+                        //                     ===
+                        //                     secondLastEditorBlock
+                        //                 );
+                        //             }
+                        //             this.props.setLastBlockChanged(
+                        //                 this.state.lastBlockText
+                        //                 ===
+                        //                 lastEditorBlock);
+                        //             this.props.setLastBlockText(lastEditorBlock);
+                        //         }
+                        this.props.setLocalDraft(editorState);
+
+                    }
+                }
                 content={this.props.onlineDraft}
                 default_wrappers={[
                     { className: 'my-custom-h1', block: 'header-one' },
