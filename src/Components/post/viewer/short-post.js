@@ -37,7 +37,6 @@ class ShortPostViewer extends React.Component {
             validFiles: [],
             unsupportedFiles: [],
             showPromptOverlay: false,
-            textData: this.props.textData,
             date: this.props.eventData.date,
             min: this.props.eventData.min_duration,
             pursuitCategory: this.props.eventData.pursuit_category,
@@ -45,6 +44,7 @@ class ShortPostViewer extends React.Component {
             isMilestone: this.props.eventData.is_milestone,
             postDisabled: true,
             window: INITIAL_STATE,
+            tempTextForEdit: this.props.textData
         };
 
         this.heroRef = React.createRef();
@@ -314,8 +314,6 @@ class ShortPostViewer extends React.Component {
 
                 fullAnnotationArray[this.state.imageIndex] =
                     currentAnnotationArray;
-                console.log(newRootCommentData);
-                console.log(fullCommentData);
                 return this.setState({
                     annotations: fullAnnotationArray,
                     commentArray: rootCommentIdArray,
@@ -339,18 +337,35 @@ class ShortPostViewer extends React.Component {
     }
 
     handleTextChange(text) {
-        let newText = "";
+        let prevText = this.state.tempTextForEdit;
         if (this.state.isPaginated) {
-            newText[this.state.imageIndex] = text;
+            prevText[this.state.imageIndex] = text;
         }
         else {
-            newText = text;
+            prevText = text;
         }
-        this.setState({ textData: newText });
+        console.log(prevText);
+        this.setState({ tempTextForEdit: prevText });
     }
 
     handlePaginatedChange() {
-        this.setState((state) => ({ isPaginated: !state.isPaginated }));
+        if (this.state.isPaginated === false) {
+            const imageCount = this.props.eventData.image_data.length;
+            let postArray = [];
+            postArray.push(this.state.tempTextForEdit);
+            for (let i = 1; i < imageCount; i++) {
+                postArray.push([]);
+            }
+            this.setState({ tempTextForEdit: postArray, isPaginated: true });
+        }
+        else {
+            if (window.confirm(`Switching back will remove all your captions except 
+                                for the first one. Keep going?`
+            )) {
+                const textData = this.state.tempTextForEdit[0];
+                this.setState({ tempTextForEdit: textData, isPaginated: false });
+            }
+        }
     }
 
     handleModalLaunch() {
@@ -384,7 +399,6 @@ class ShortPostViewer extends React.Component {
                                     />
                                     <ShortPostMetaInfo
                                         index={this.state.imageIndex}
-                                        isPaginated={this.state.isPaginated}
                                         isMilestone={this.state.isMilestone}
                                         pursuit={this.state.pursuitCategory}
                                         min={this.state.min}
@@ -432,7 +446,7 @@ class ShortPostViewer extends React.Component {
                 if (this.props.largeViewMode) {
                     return (
                         <div className="shortpostviewer-window">
-                            <div id="shortpostviewer-large-main-container">
+                            <div id="shortpostviewer-large-main-container" className="with-image">
                                 {this.renderImageSlider(EXPANDED)}
                                 <div
                                     className="shortpostviewer-large-side-container"
@@ -465,6 +479,7 @@ class ShortPostViewer extends React.Component {
                         <>
                             <div
                                 id="shortpostviewer-inline-main-container"
+                                className="with-image"
                                 onClick={this.handleModalLaunch}
                             >
                                 <PostHeader
@@ -494,6 +509,7 @@ class ShortPostViewer extends React.Component {
         else if (this.state.window === EDIT_STATE) {
             return (
                 <div className="shortpostviewer-window" >
+                    <h4>Edit your Post!</h4>
                     <div className="shortpostviewer-button-container">
                         <button
                             onClick={() => (this.handleWindowChange(INITIAL_STATE))}>
@@ -508,7 +524,7 @@ class ShortPostViewer extends React.Component {
                     <ShortReEditor
                         imageIndex={this.state.imageIndex}
                         eventData={this.props.eventData}
-                        textData={this.props.textData}
+                        textData={this.state.tempTextForEdit}
                         isPaginated={this.state.isPaginated}
                         onIndexChange={this.handleIndexChange}
                         onTextChange={this.handleTextChange}
@@ -517,7 +533,7 @@ class ShortPostViewer extends React.Component {
                 </div>
             )
         }
-        else {
+        else if (this.state.window === REVIEW_STATE) {
             let formattedDate = null;
             if (this.props.eventData.date) {
                 formattedDate =
@@ -549,6 +565,9 @@ class ShortPostViewer extends React.Component {
                     onClick={this.handleWindowChange}
                 />
             );
+        }
+        else {
+            throw new Error("No stage matched");
         }
     }
 

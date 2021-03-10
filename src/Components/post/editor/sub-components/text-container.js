@@ -24,7 +24,7 @@ const TextContainer = (props) => (
         <TextareaAutosize
             id='textcontainer-text-input'
             placeholder='Write something here.'
-            onChange={props.onTextChange}
+            onChange={(e) => props.onTextChange(e.target.value)}
             minRows={10}
             value={
                 props.isPaginated ?

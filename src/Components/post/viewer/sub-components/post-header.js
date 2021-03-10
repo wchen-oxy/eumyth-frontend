@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { returnUserImageURL } from "../../../constants/urls";
 import { returnFormattedDate } from "../../../constants/ui-text";
-
+import {
+    EDIT_STATE,
+} from "../../../constants/flags";
 import "./post-header.scss";
 
 
-const EDIT = "EDIT";
 const PostHeader = (props) => {
     const [isButtonShowing, setButtonShow] = useState(false);
     const date = props.date ? returnFormattedDate(props.date) : null;
@@ -14,7 +15,7 @@ const PostHeader = (props) => {
         const buttonPopUp = isButtonShowing ? (
             <div id="postheader-button-pop-up">
                 <button onClick={props.onDeletePost}>Remove</button>
-                <button onClick={() => props.onEditClick(EDIT)}>Edit</button>
+                <button onClick={() => props.onEditClick(EDIT_STATE)}>Edit</button>
             </div>
         ) : <></>;
 

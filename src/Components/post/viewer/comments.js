@@ -12,7 +12,6 @@ class Comments extends React.Component {
         super(props);
         this.state = {
             windowType: this.props.windowType,
-
             commentText: "",
             loadingComments: true,
 
@@ -91,7 +90,6 @@ class Comments extends React.Component {
             .then(
                 (result) => {
                     const commentArray = result.data.rootCommentIdArray
-                    console.log(commentArray);
                     return AxiosHelper
                         .refreshComments({
                             params:

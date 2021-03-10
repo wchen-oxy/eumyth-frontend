@@ -35,6 +35,23 @@ export default class WelcomePage extends React.Component {
     this.renderLoginRegister = this.renderLoginRegister.bind(this);
   }
 
+  componentDidMount() {
+    this._isMounted = true;
+    if (this._isMounted) {
+      this.props.firebase.auth.onAuthStateChanged(
+        (user) => {
+          console.log(user.emailVerified);
+          if (user) {
+            this.setState({
+              verified: user.emailVerified
+            })
+          }
+        }
+      )
+    }
+  }
+
+
   handleTextChange(e) {
     e.preventDefault();
     this.setState({ [e.target.name]: e.target.value });
@@ -56,6 +73,7 @@ export default class WelcomePage extends React.Component {
 
   handleSendEmailVerication(e) {
     e.preventDefault();
+    console.log("sent");
     this.props.firebase.doSendEmailVerification();
   }
 
@@ -116,6 +134,7 @@ export default class WelcomePage extends React.Component {
 
   renderLoginRegister(isLogin) {
     if (isLogin) {
+      console.log(this.state.verified);
       return (this.props.firebase.auth.currentUser && !this.state.verified ?
         <VerifyForm
           current_user={this.state.currentUser}

@@ -121,11 +121,10 @@ class SingleComment extends React.Component {
                     visitorProfilePreviewId: this.props.visitorProfilePreviewId,
                     ancestors: JSON.stringify(ancestorArray),
                     comment: this.state.replyText
-
                 }
             )
                 .then((result) => {
-                    alert(result);
+                    alert("Comment added! Refresh the page to see!");
                     this.toggleReplyBox(false);
                 })
         }

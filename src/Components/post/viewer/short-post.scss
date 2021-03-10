@@ -6,6 +6,11 @@
 #shortpostviewer-large-main-container {
     @include flex-display-row;
     height: $small-post-height;
+   
+}
+
+.with-image {
+    background-color: black;
 }
 
 .shortpostviewer-large-hero-image-container {
@@ -19,6 +24,7 @@
 }
 
 .shortpostviewer-large-side-container {
+    background-color: white;
     @include short-post-side-container;
 }
 
@@ -35,5 +41,6 @@
 }
 
 .shortpostviewer-button-container {
-    @include centered-vertical-button-container;
+    @include flex-display-row;
+    justify-content: space-between;
 }

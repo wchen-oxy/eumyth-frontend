@@ -1,6 +1,6 @@
 @import "../../../../partials";
 
-.singlecomment-multiple-thread-style{
+.singlecomment-multiple-thread-style {
     @include flex-display-row;
 }
 .singlecomment-main-container {
@@ -24,17 +24,25 @@
     }
 }
 
+.singlecomment-management-container {
+    @include flex-display-row;
+    p {
+        margin: 0 5px;
+    }
+    button {
+        height: fit-content;
+    }
+}
 .singlecomment-thread-indicator-container {
     @include flex-display-row;
     .singlecomment-thread-indicator {
-        background: green;
-        width: 5px;
+        background: grey;
+        width: 3px;
         height: 100%;
-        margin-left: 5px;
+        margin-left: 16px;
         margin-right: 5px;
     }
 }
 .singlecomment-multiple-threads-container {
     width: auto;
-    
 }

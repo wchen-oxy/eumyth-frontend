@@ -1,18 +1,15 @@
 @import "../../../partials";
-.shortreeditor-main-container, .shortreeditor-hero-container {
-  @include flex-display-column;
+.shortreeditor-main-container {
+  @include flex-display-row;
+  height: $small-post-height;
 }
 
-.shortreeditor-hero-container{
-    height: 100%;
-    width: 65%;
-    margin: auto;
-    text-align: center;
-    justify-content: center;
+.shortreeditor-hero-container {
+  @include short-post-hero-image-container;
+  height: auto;
 }
 
-.shortreeditor-side-container{
-    width: 35%;
+.shortreeditor-side-container {
+  background-color: white;
+  @include short-post-side-container;
 }
-
-

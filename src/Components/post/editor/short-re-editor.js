@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TextContainer from "./sub-components/text-container";
 import Arrow from '../../image-carousel/sub-components/arrow';
 import Slider from "react-slick";
+import { returnUserImageURL } from "../../constants/urls";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./short-re-editor.scss";
@@ -35,12 +36,15 @@ const ShortReEditor = (props) => {
         );
     }
     else {
+        console.log(props
+            .eventData
+            .image_data);
         const images = props
             .eventData
             .image_data
-            .map((url, index) => <img alt="Image for Slider" src={url} />);
+            .map((url, index) => <img alt="Image for Slider" src={returnUserImageURL(url)} />);
         return (
-            <div id="shortreeditor-main-container">
+            <div className="shortreeditor-main-container">
                 <div className="shortreeditor-hero-container">
                     <Slider
                         afterChange={index => (props.onIndexChange(index))}
