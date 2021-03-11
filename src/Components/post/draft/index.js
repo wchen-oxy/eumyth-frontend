@@ -12,8 +12,10 @@ class PostDraftController extends React.Component {
     super(props);
     this.state = {
       onlineDraftRetrieved: false,
+      localDraft: null,
       onlineDraft: null,
       displayPhoto: null,
+      isSavePending: false,
       updatingOnlineDraft: true,
       postType: NONE,
       pursuitNames: null,
@@ -25,11 +27,14 @@ class PostDraftController extends React.Component {
 
     this.handleDisablePost = this.handleDisablePost.bind(this);
     this.handleSubmitPost = this.handleSubmitPost.bind(this);
+    this.setLocalDraft = this.setLocalDraft.bind(this);
+    this.setSavePending = this.setSavePending.bind(this);
     this.handleLocalSync = this.handleLocalSync.bind(this);
     this.handleLocalOnlineSync = this.handleLocalOnlineSync.bind(this);
     this.handlePostTypeSet = this.handlePostTypeSet.bind(this);
     this.handleDraftRetrieval = this.handleDraftRetrieval.bind(this);
     this.handleIndexUserDataSet = this.handleIndexUserDataSet.bind(this);
+    this.handleModalClose = this.handleModalClose.bind(this);
     this.onPreferredPostTypeChange = this.onPreferredPostTypeChange.bind(this);
     this.renderWindow = this.renderWindow.bind(this);
   }
@@ -43,7 +48,39 @@ class PostDraftController extends React.Component {
   componentWillUnmount() {
     this._isMounted = false;
   }
+  setSavePending(isSavePending) {
+    this.setState({ isSavePending: isSavePending });
+  }
 
+  handleModalClose() {
+    if (this.state.postType === LONG
+      && this.state.isSavePending) {
+      if (!window.confirm("Do you want to leave while changes are being saved?")) {
+        this.handleLocalOnlineSync(this.state.localDraft)
+          .then((result) => {
+            if (result) {
+              console.log("SAVING SIDE WAY");
+              this.setSavePending(false);
+            }
+            else {
+              alert("Save unsucessful");
+            }
+          }
+          );
+      }
+    }
+    else if (this.state.postType === SHORT) {
+      if (window.confirm("Do you want to discard this post?")) {
+        this.props.closeModal();
+      }
+    }
+    else {
+      this.props.closeModal();
+    }
+  }
+  setLocalDraft(draft) {
+    this.setState({ localDraft: draft });
+  }
   onPreferredPostTypeChange(type) {
     this.setState({ preferredPostType: type });
   }
@@ -89,6 +126,7 @@ class PostDraftController extends React.Component {
     AxiosHelper.returnIndexUser(this.props.username)
       .then(
         (result) => {
+          const draft = JSON.parse(result.data.draft.text);
           let pursuitArray = [];
           let pursuitTemplates = {};
           for (const pursuit of result.data.pursuits) {
@@ -105,7 +143,8 @@ class PostDraftController extends React.Component {
             pursuitTemplates: pursuitTemplates,
             indexUserData: result.data,
             displayPhoto: result.data.small_cropped_display_photo_key,
-            onlineDraft: JSON.parse(result.data.draft.text),
+            onlineDraft: draft,
+            localDraft: draft
           });
         }).catch(
           (result) => {
@@ -222,9 +261,13 @@ class PostDraftController extends React.Component {
             preferredPostType={this.state.indexUserData.preferredPostType}
             updatingOnlineDraft={this.state.updatingOnlineDraft}
             onLocalDraftChange={this.handleLocalDraftChange}
+            localDraft={this.state.localDraft}
+            setLocalDraft={this.setLocalDraft}
             onLocalOnlineSync={this.handleLocalOnlineSync}
             onLocalSync={this.handleLocalSync}
             onPostTypeSet={this.handlePostTypeSet}
+            setSavePending={this.setSavePending}
+            isSavePending={this.state.isSavePending}
             disablePost={this.handleDisablePost}
             handlePreferredPostTypeChange={this.onPreferredPostTypeChange}
             closeModal={this.props.closeModal}
@@ -240,7 +283,7 @@ class PostDraftController extends React.Component {
       <>
         <span
           className="close"
-          onClick={(() => this.props.closeModal())}>
+          onClick={this.handleModalClose}>
           X
           </span>
         {this.renderWindow(this.state.postType)}

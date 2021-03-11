@@ -3,6 +3,7 @@
 #longpost-container {
     @include long-post-editor-container;
     width: 700px;
+    position: relative;
     input {
         color: black;
     }
@@ -14,4 +15,6 @@
 
 .longpost-button-container {
     @include long-post-button-container;
+    display: flex;
+    justify-content: space-between;
 }

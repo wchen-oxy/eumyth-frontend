@@ -19,4 +19,21 @@
 
 .longevent-text-container {
     @include lower-text-container;
+    position: relative;
+
+    .longevent-comment-container {
+        position: absolute;
+        bottom: 0;
+
+        h4,
+        p {
+            margin: 0 auto;
+        }
+        h4 {
+            font-size: 18px;
+        }
+        p {
+            font-size: 14px;
+        }
+    }
 }

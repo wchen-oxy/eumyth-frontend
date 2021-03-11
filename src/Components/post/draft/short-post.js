@@ -90,11 +90,24 @@ class ShortPost extends React.Component {
 
 
   handleTemplateInjection() {
-    this.setState((state) => ({
-      textData:
-        this.props.pursuitTemplates[state.selectedTemplate]
+    let newState;
+    if (!this.state.isPaginated) {
+      newState = (this.props.pursuitTemplates[this.state.selectedTemplate]
         + "\n"
-        + state.textData
+        + this.state.textData);
+    }
+    else {
+      if (this.state.isPaginated) {
+        let updatedArray = this.state.textData;
+        console.log(updatedArray);
+        updatedArray[this.state.imageIndex] = (this.props.pursuitTemplates[this.state.selectedTemplate]
+          + "\n"
+          + updatedArray[this.state.imageIndex]);
+        newState = updatedArray;
+      }
+    }
+    this.setState(({
+      textData: newState
     }))
   }
 

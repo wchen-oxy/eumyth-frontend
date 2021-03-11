@@ -36,7 +36,9 @@ const LongEvent = (props) => {
                     : <></>
                 }
                 {date ? <p>{date.month}, {date.day}, {date.year} </p> : <></>}
-                <p>{props.commentCount} Comments</p>
+                <div className="longevent-comment-container">
+                    <p>{props.commentCount} Comments</p>
+                </div>
             </div>
         </div>
     );
