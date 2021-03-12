@@ -66,8 +66,10 @@ class NavigationAuth extends React.Component {
   }
 
   openModal(postType) {
-    this.modalRef.current.style.display = "block";
     document.body.style.overflow = "hidden";
+    if (this.modalRef.current) {
+      this.modalRef.current.style.display = "block";
+    }
     if (postType === POST) {
       this.setState({ isPostModalShowing: true });
 

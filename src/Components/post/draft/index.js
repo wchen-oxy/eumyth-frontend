@@ -54,13 +54,14 @@ class PostDraftController extends React.Component {
 
   handleModalClose() {
     if (this.state.postType === LONG
-      && this.state.isSavePending) {
-      if (!window.confirm("Do you want to leave while changes are being saved?")) {
+    ) {
+      if (this.state.isSavePending && !window.confirm("Do you want to leave while changes are being saved?")) {
         this.handleLocalOnlineSync(this.state.localDraft)
           .then((result) => {
             if (result) {
               console.log("SAVING SIDE WAY");
               this.setSavePending(false);
+              this.props.closeModal();
             }
             else {
               alert("Save unsucessful");
@@ -68,15 +69,14 @@ class PostDraftController extends React.Component {
           }
           );
       }
+      else if (!this.state.isSavePending) this.props.closeModal();
     }
     else if (this.state.postType === SHORT) {
       if (window.confirm("Do you want to discard this post?")) {
         this.props.closeModal();
       }
     }
-    else {
-      this.props.closeModal();
-    }
+
   }
   setLocalDraft(draft) {
     this.setState({ localDraft: draft });

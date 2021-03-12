@@ -23,12 +23,20 @@ class LongEditor extends React.Component {
         this.handleSaveError = this.handleSaveError.bind(this);
     }
     handleSave(editorContext, content) {
-        if (!this.props.isSavePending) {
+        if (this.state.isInitial) {
+            if (_.isEqual(
+                JSON.stringify(this.props.localDraft),
+                JSON.stringify(this.props.onlineDraft))) {
+                this.setState({ isInitial: false },
+                    this.props.onSavePending(false));
+                console.log("Catch uneccessary first save");
+            }
+        }
+        else if (!this.props.isSavePending) {
             console.log("Catch uneccessary save");
         }
         else {
             console.log("Saving");
-            this.props.onSavePending(true);
             AxiosHelper.saveDraft(this.props.username, content)
                 .then(
                     (result) => this.handleSaveSuccess(result)
@@ -58,11 +66,8 @@ class LongEditor extends React.Component {
                 onChange={
                     (editor) => {
                         const editorState = editor.emitSerializedOutput();
-                        if (!_.isEqual(
-                            editorState,
-                            this.props.localDraft)) {
-                            this.props.onSavePending(true);
-                        };
+                        this.props.onSavePending(true);
+                        console.log("onChange");
                         this.props.setLocalDraft(editorState);
 
                     }

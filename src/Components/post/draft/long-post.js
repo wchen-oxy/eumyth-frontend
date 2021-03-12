@@ -8,6 +8,7 @@ import {
   LONG
 } from "../../constants/flags";
 import "./long-post.scss";
+import _ from 'lodash';
 
 const LongPost = (props) => {
   const [windowState, setWindowState] = useState(INITIAL_STATE);
@@ -21,14 +22,19 @@ const LongPost = (props) => {
   useEffect(() => {
     const container = editorContainerRef.current;
     if (container) {
-      if (firstTime) { setFirstime(false); }
-      else if (container.scrollTop + container.clientHeight
+      if (firstTime) {
+        if (!_.isEqual(props.onlineDraft, props.localDraft)) {
+          setFirstime(false);
+        }
+      }
+      if (container.scrollTop + container.clientHeight
         === prevScrollPosition) {
         console.log(container.clientHeight);
         container.scrollTop = container.scrollHeight;
       }
-      setPrevScrollPosition(container.scrollHeight);
-
+      if (container.scrollHeight !== prevScrollPosition) {
+        setPrevScrollPosition(container.scrollHeight);
+      }
     }
   })
 
@@ -79,9 +85,10 @@ const LongPost = (props) => {
   }
   if (windowState === INITIAL_STATE)
     return (
-      <div className="longpost-window" ref={editorContainerRef}>
+      <div
+        className="longpost-window"
+        ref={editorContainerRef}>
         <div ref={postHeaderRef}>
-          <h2>Long Entry</h2>
           {props.isSavePending ? (<p>Saving</p>) : (<p>Saved</p>)}
           <div className="longpost-button-container">
             <span  >
@@ -102,6 +109,10 @@ const LongPost = (props) => {
               </button>
             </span>
           </div>
+        </div>
+
+        <div id="longpost-title-editor">
+          {/* <textarea /> */}
         </div>
         {props.onlineDraftRetrieved && !props.loading ?
           (

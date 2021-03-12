@@ -14,6 +14,7 @@ const TEMP_PROFILE_PHOTO_URL = "https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05
 const ROOT_URL = "/api";
 
 const DRAFT_BASE_URL = ROOT_URL + "/draft";
+const DRAFT_TITLE_URL = DRAFT_BASE_URL + "/title";
 
 //image
 const IMAGE_BASE_URL = ROOT_URL + "/image";
@@ -76,6 +77,7 @@ module.exports = {
     DISPLAY_PHOTO_URL,
     COVER_PHOTO_URL,
     DRAFT_BASE_URL,
+    DRAFT_TITLE_URL,
     TINY_DISPLAY_PHOTO_URL,
     USER_BASE_URL,
     USER_BIO_URL,
