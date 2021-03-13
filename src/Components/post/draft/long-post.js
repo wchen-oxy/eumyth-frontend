@@ -13,6 +13,7 @@ import _ from 'lodash';
 const LongPost = (props) => {
   const [windowState, setWindowState] = useState(INITIAL_STATE);
   const [hasContent, setHasContent] = useState(props.onlineDraft !== null);
+  const [previewTitle, setPreviewTitle] = useState(null);
   const editorContainerRef = useRef(null);
   const postHeaderRef = useRef(null);
   const dummyScrollRef = useRef(null);
@@ -54,7 +55,9 @@ const LongPost = (props) => {
           setWindowState(windowType);
           break;
         case (REVIEW_STATE):
+          const possibleTitle = props.localDraft.blocks[0].text;
           setWindowState(windowType);
+          setPreviewTitle(possibleTitle);
           props.onLocalSync(props.localDraft);
           break;
         default:
@@ -76,6 +79,14 @@ const LongPost = (props) => {
                 onClick={e => setPostStage(e.target.value, props.isSavePending)}
               >
                 Return
+                </button>
+            </span>
+            <span  >
+              <button
+                value={NONE}
+                onClick={syncChanges}
+              >
+                Save Now
                 </button>
             </span>
             <span  >
@@ -138,7 +149,7 @@ const LongPost = (props) => {
         preferredPostType={props.preferredPostType}
         pursuitNames={props.pursuitNames}
         handlePreferredPostTypeChange={props.handlePreferredPostTypeChange}
-        previewTitle={null}
+        previewTitle={previewTitle}
       />
     )
   }

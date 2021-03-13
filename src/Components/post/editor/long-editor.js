@@ -23,17 +23,15 @@ class LongEditor extends React.Component {
         this.handleSaveError = this.handleSaveError.bind(this);
     }
     handleSave(editorContext, content) {
-        console.log("Save Triggered");
         if (this.state.isInitial) {
             if (_.isEqual(
                 JSON.stringify(this.props.localDraft),
                 JSON.stringify(this.props.onlineDraft))) {
-                    console.log("Catch uneccessary first save");
+                console.log("Catch uneccessary first save");
 
                 this.setState({ isInitial: false },
                     this.props.onSavePending(false));
             }
-            console.log("fae");
             this.setState({ isInitial: false });
             return AxiosHelper.saveDraft(this.props.username, content)
                 .then(
@@ -79,8 +77,6 @@ class LongEditor extends React.Component {
                         const editorState = editor.emitSerializedOutput();
                         this.props.onSavePending(true);
                         this.props.setLocalDraft(editorState);
-                        console.log(JSON.stringify(editorState));
-                        console.log("onChange");
                     }
                 }
                 content={this.props.onlineDraft}

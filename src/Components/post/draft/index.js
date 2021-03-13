@@ -5,6 +5,7 @@ import LongPost from './long-post';
 import AxiosHelper from '../../../Axios/axios';
 import { withFirebase } from '../../../Firebase';
 import { NONE, SHORT, LONG, NEW_LONG, OLD_LONG } from "../../constants/flags";
+import _ from 'lodash';
 
 class PostDraftController extends React.Component {
   _isMounted = false;
@@ -48,8 +49,28 @@ class PostDraftController extends React.Component {
   componentWillUnmount() {
     this._isMounted = false;
   }
+
   setSavePending(isSavePending) {
+    console.log("isSavePending");
     this.setState({ isSavePending: isSavePending });
+    // _.throttle(async () => {
+    //   if (this.state.isSavePending) {
+    //     console.log("inner");
+    //     try {
+    //       const result = await AxiosHelper.saveDraft(this.props.username, this.state.localDraft);
+    //       if (result.status !== 200) {
+    //         console.log("Error");
+    //         this.setState({ errorSaving: true, isSavePending: false });
+    //       }
+    //     } catch (err) {
+    //       console.log(err);
+    //       this.setState({ isSavePending: false });
+    //       alert("Error during save.");
+    //     }
+    //   }
+    // }, 7000)
+
+
   }
 
   handleModalClose() {
