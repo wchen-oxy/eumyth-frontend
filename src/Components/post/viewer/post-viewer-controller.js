@@ -3,6 +3,27 @@ import ShortPostViewer from "./short-post";
 import LongPostViewer from "./long-post";
 import { SHORT, LONG } from "../../constants/flags";
 import { withFirebase } from "../../../Firebase/index";
+const parseTitle = (data) => {
+    const titleBlock = data.blocks[0];
+    console.log(titleBlock);
+    const isTitle = titleBlock.type === "header-one"
+        || titleBlock.type === "header-two"
+        || titleBlock.type === "header-three";
+    console.log(isTitle);
+    if (titleBlock
+        && isTitle) {
+        return data.blocks[0].text;
+    }
+    else {
+        return null;
+    }
+
+}
+
+const removeTitleFromBody = (data) => {
+    data.blocks = data.blocks.splice(1);
+    return data;
+}
 
 const PostViewerController = (props) => {
     const isOwnProfile = (props.eventData.username === props.firebase.returnUsername());
@@ -30,6 +51,8 @@ const PostViewerController = (props) => {
                 />
             );
         case (LONG):
+            const title = parseTitle(props.textData);
+            const textContent = title ? removeTitleFromBody(props.textData) : props.textData;
             return (
                 <LongPostViewer
                     postId={props.eventData._id}
@@ -40,7 +63,8 @@ const PostViewerController = (props) => {
                     pursuitNames={props.pursuitNames}
                     preferredPostType={props.preferredPostType}
                     largeViewMode={props.largeViewMode}
-                    textData={props.textData}
+                    title={title}
+                    textData={textContent}
                     isOwnProfile={isOwnProfile}
                     isPostOnlyView={props.isPostOnlyView}
                     eventData={props.eventData}

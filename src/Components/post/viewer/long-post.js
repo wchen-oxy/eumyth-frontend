@@ -77,24 +77,28 @@ const LongPostViewer = (props) => {
         }
     }
 
+   
+
+   
+
     if (window === INITIAL_STATE) {
 
         const monthNames = ["January", "February", "March", "April", "May",
             "June", "July", "August", "September", "October", "November",
             "December"];
-
+        const title = props.title;
         const date = props.eventData.date ? new Date(props.eventData.date) : null;
-
         const coverPhotoURL = returnUserImageURL(props.eventData.cover_photo_key);
+        console.log(title);
         if (props.largeViewMode) {
             return (
                 <div className={props.isPostOnlyView ? "" : "longpostviewer-window"}>
                     <div className="longpostviewer-meta-info-container">
                         <div>
-                            {props.eventData.title ?
+                            {title ?
                                 (<div id="longpostviewer-top-title-bar">
                                     <h1 id="longpostviewer-title">
-                                        {props.eventData.title}
+                                        {title}
                                     </h1>
                                     {props.isOwnProfile ? (
                                         <div
@@ -188,8 +192,8 @@ const LongPostViewer = (props) => {
                         displayPhoto={props.eventData.display_photo_key}
                     />
                     <div>
-                        {props.eventData.title ?
-                            <h2>{props.eventData.title}</h2> : <></>}
+                        {title ?
+                            <h2>{title}</h2> : <></>}
                         {props.eventData.subtitle ?
                             <h4>{props.eventData.subtitle}</h4> : <></>}
                     </div>
