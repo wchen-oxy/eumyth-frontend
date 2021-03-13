@@ -6,7 +6,7 @@ import { AuthUserContext } from '../../Components/session/'
 import { withFirebase } from '../../Firebase';
 import { Link } from 'react-router-dom';
 import { POST, REQUEST_ACTION } from "../constants/flags";
-import { returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../constants/urls";
+import { returnUserImageURL, returnUsernameURL, TEMP_PROFILE_PHOTO_URL } from "../constants/urls";
 import AxiosHelper from '../../Axios/axios';
 import './index.scss';
 
@@ -143,7 +143,7 @@ class NavigationAuth extends React.Component {
                 (
                   <>
                     <Link
-                      to={"/" + this.state.username}
+                      to={returnUsernameURL(this.state.username)}
                     >
                       <div
                         className="navbar-main-action-buttons-container"

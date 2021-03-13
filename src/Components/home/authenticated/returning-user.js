@@ -6,7 +6,7 @@ import { withFirebase } from '../../../Firebase';
 import AxiosHelper from '../../../Axios/axios';
 import PostViewerController from "../../post/viewer/post-viewer-controller";
 import Event from "../../profile/timeline/sub-components/timeline-event";
-import { returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../../constants/urls";
+import { returnUsernameURL, returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../../constants/urls";
 import { POST, SHORT, RECENT_POSTS, FRIEND_POSTS } from "../../constants/flags";
 import './returning-user.scss';
 
@@ -436,7 +436,7 @@ class ReturningUserPage extends React.Component {
                         className="returninguser-profile-column"
                     >
                         <Link
-                            to={"/" + this.state.username}
+                            to={returnUsernameURL(this.state.username)}
                         >
                             <img
                                 alt=""
@@ -480,7 +480,7 @@ class ReturningUserPage extends React.Component {
                         <Link
                             id="returninguser-recent-work-title"
                             className="returninguser-title"
-                            to={"/" + this.state.username}
+                            to={returnUsernameURL(this.state.username)}
                         >
                             Your Recent Work
                         </Link>

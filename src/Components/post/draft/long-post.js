@@ -13,30 +13,9 @@ import _ from 'lodash';
 const LongPost = (props) => {
   const [windowState, setWindowState] = useState(INITIAL_STATE);
   const [hasContent, setHasContent] = useState(props.onlineDraft !== null);
-  const [firstTime, setFirstime] = useState(true);
-  const [prevScrollPosition, setPrevScrollPosition] = useState(0);
   const editorContainerRef = useRef(null);
   const postHeaderRef = useRef(null);
   const dummyScrollRef = useRef(null);
-
-  useEffect(() => {
-    const container = editorContainerRef.current;
-    if (container) {
-      if (firstTime) {
-        if (!_.isEqual(props.onlineDraft, props.localDraft)) {
-          setFirstime(false);
-        }
-      }
-      if (container.scrollTop + container.clientHeight
-        === prevScrollPosition) {
-        console.log(container.clientHeight);
-        container.scrollTop = container.scrollHeight;
-      }
-      if (container.scrollHeight !== prevScrollPosition) {
-        setPrevScrollPosition(container.scrollHeight);
-      }
-    }
-  })
 
   const syncChanges = () => {
     props.onLocalOnlineSync(props.localDraft)
@@ -116,7 +95,7 @@ const LongPost = (props) => {
         </div>
         {props.onlineDraftRetrieved && !props.loading ?
           (
-            <div id="longpost-container" >
+            <div id="longpost-container">
               <LongEditor
                 username={props.username}
                 isSavePending={props.isSavePending}

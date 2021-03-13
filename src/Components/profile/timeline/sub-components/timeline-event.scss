@@ -9,7 +9,6 @@
     height: 110px;
     padding: 5px;
     overflow: hidden;
-    
 }
 
 @mixin cover-photo-size {
@@ -17,7 +16,7 @@
     width: 100%;
 }
 
-@mixin lower-text-container{
+@mixin lower-text-container {
     padding: 5px;
     height: 110px;
     overflow: hidden;
@@ -33,6 +32,7 @@
     background-color: white;
     word-wrap: break-word;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .event-first-container {

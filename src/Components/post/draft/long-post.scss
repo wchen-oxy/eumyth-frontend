@@ -2,6 +2,7 @@
 
 #longpost-container {
     @include long-post-editor-container;
+    height: 100%;
     width: 700px;
     position: relative;
     input {
@@ -19,6 +20,5 @@
     justify-content: space-between;
 }
 
-#longpost-title-editor{
-    
+#longpost-title-editor {
 }

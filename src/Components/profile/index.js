@@ -7,7 +7,7 @@ import NoMatch from '../no-match';
 import PostViewerController from "../post/viewer/post-viewer-controller";
 import FollowButton from "./sub-components/follow-buttons";
 import ProjectController from "../project/index";
-import { returnUserImageURL } from "../constants/urls";
+import { returnPostURL, returnUserImageURL, returnUsernameURL } from "../constants/urls";
 import {
     ALL,
     POST,
@@ -289,7 +289,7 @@ class ProfilePage extends React.Component {
 
         this.modalRef.current.style.display = "block";
         document.body.style.overflow = "hidden";
-        this.setState({ isModalShowing: true }, this.props.history.replace("/p/" + postId));
+        this.setState({ isModalShowing: true }, this.props.history.replace(returnPostURL(postId)));
 
     }
 
@@ -299,7 +299,7 @@ class ProfilePage extends React.Component {
         this.setState(
             {
                 isModalShowing: false
-            }, this.props.history.replace("/" + this.state.targetUsername)
+            }, this.props.history.replace(returnUsernameURL(this.state.targetUsername))
         );
     }
 
@@ -343,7 +343,7 @@ class ProfilePage extends React.Component {
                 onEventClick={this.handleEventClick}
                 onNewBackProjectClick={this.handleNewBackProjectClick}
                 pursuitNames={this.state.pursuitNames}
-             />)
+            />)
     }
 
     handleNewBackProjectClick() {
@@ -476,8 +476,8 @@ class ProfilePage extends React.Component {
                                             this.state.croppedDisplayPhoto)}
                                     ></img>
                                 ) : (
-                                        <></>
-                                    )
+                                    <></>
+                                )
                                 }
                                 <div id="profile-name-container">
                                     <h4>{this.state.targetUsername}</h4>
@@ -546,7 +546,7 @@ class ProfilePage extends React.Component {
                                     onDeletePost={this.handleDeletePost}
                                     closeModal={this.closeModal}
 
-                                    />
+                                />
                                 :
                                 <></>
                         }
@@ -561,4 +561,4 @@ class ProfilePage extends React.Component {
     }
 }
 
-export default withFirebase(ProfilePage); 
+export default withFirebase(ProfilePage);

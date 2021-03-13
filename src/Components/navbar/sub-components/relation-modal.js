@@ -1,6 +1,6 @@
 import React from 'react';
 import AxiosHelper from '../../../Axios/axios';
-import { returnUserImageURL } from "../../constants/urls";
+import { returnUserImageURL, returnUsernameURL } from "../../constants/urls";
 import {
     UNFOLLOW_ACTION,
     REQUEST_ACTION,
@@ -8,7 +8,6 @@ import {
     DECLINE_ACTION
 } from "../../constants/flags";
 import "./relation-modal.scss";
-import { Link } from 'react-router-dom';
 
 class RelationModal extends React.Component {
     _isMounted = false;
@@ -80,11 +79,10 @@ class RelationModal extends React.Component {
                 <div className="relationmodal-profile-row">
                     <div className="relationmodal-profile-info-container">
                         <img src={returnUserImageURL(user.display_photo)} />
-                        <Link
-                            to={"/" + user.username}
+                        <a href={returnUsernameURL(user.username)}
                         >
                             {user.username}
-                        </Link>
+                        </a>
                     </div>
                     {!isRequest ? <button
                         onClick={() => (

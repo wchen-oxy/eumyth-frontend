@@ -1,7 +1,8 @@
 //AWS
 const BUCKET_NAME = 'eumyth-bucket-1';
 const REGION = 'us-west-1';
-
+const returnPostURL = (post) => ("/p/" + post);
+const returnUsernameURL = (username) => ("/u/" + username);
 const returnUserImageURL = (key) => ("http://" + BUCKET_NAME + ".s3." + REGION + ".amazonaws.com/" + key);
 
 //Temporary Profile Photo
@@ -71,7 +72,9 @@ const VOTE_ON_COMMENT_URL = COMMENT_BASE_URL + "/vote";
 
 module.exports = {
     TEMP_PROFILE_PHOTO_URL: TEMP_PROFILE_PHOTO_URL,
+    returnUsernameURL: returnUsernameURL,
     returnUserImageURL: returnUserImageURL,
+    returnPostURL: returnPostURL,
     ROOT_URL,
     IMAGE_BASE_URL,
     DISPLAY_PHOTO_URL,
