@@ -17,6 +17,7 @@ const ReviewPost = (props) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [coverPhoto, setCover] = useState(null);
+    const [useImageForThumbnail, setUseImageForThumbnail] = useState(false);
     let pursuitSelects = [];
 
     const handlePostSubmit = () => {
@@ -28,10 +29,13 @@ const ReviewPost = (props) => {
         formData.append("isMilestone", milestone ? milestone : false)
         if (title) formData.append("title", _.trim(title));
         if (postPrivacyType) formData.append("postPrivacyType", postPrivacyType);
-        if (pursuitCategory) formData.append("pursuitCategory", pursuitCategory)
+        if (pursuitCategory) formData.append("pursuitCategory", pursuitCategory);
         if (date) formData.append("date", date);
         if (minDuration) formData.append("minDuration", minDuration);
         if (coverPhoto) formData.append("coverPhoto", coverPhoto);
+        if (useImageForThumbnail) {
+            formData.append("useImageForThumbnail", useImageForThumbnail);
+        }
         if (subtitle) {
             formData.append("subtitle", _.trim(subtitle));
         }
@@ -70,6 +74,36 @@ const ReviewPost = (props) => {
                     console.log(result.error);
                     alert(result);
                 });
+        }
+    }
+
+    const renderCoverPhotoControl = () => {
+        if (props.postType === SHORT && props.imageArray.length > 0) {
+            return (
+                <div>
+                    <label>Use First Image For Thumbnail</label>
+                    <input
+                        type="checkbox"
+                        onChange={(e) => setUseImageForThumbnail(e.target.value)}
+                    />
+                </div>
+            )
+        }
+
+
+        else if (props.postType === LONG) {
+            return (<div>
+                {props.coverPhoto ?
+                    (<label>Upload New Cover Photo?</label>)
+                    :
+                    (<label>Upload a Cover Photo</label>)
+                }
+                <input
+                    type="file"
+                    onChange={(e) => setCover(e.target.files[0])}></input>
+            </div>)
+
+
         }
     }
 
@@ -119,10 +153,7 @@ const ReviewPost = (props) => {
         :
         (null);
 
-    const coverPhotoUploadText = props.coverPhoto ?
-        (<label>Upload New Cover Photo?</label>)
-        :
-        (<label>Upload a Cover Photo</label>);
+
 
     pursuitSelects.push(
         <option value={null}></option>
@@ -158,10 +189,7 @@ const ReviewPost = (props) => {
                         onChange={(e) => setTitle(e.target.value)} maxLength={100}
                     />
                     {optionalLongPostDescription}
-                    {coverPhotoUploadText}
-                    <input
-                        type="file"
-                        onChange={(e) => setCover(e.target.files[0])}></input>
+                    {renderCoverPhotoControl()}
                     <label>Date</label>
                     <input
                         type="date"
