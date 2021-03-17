@@ -37,6 +37,13 @@ export default class AxiosHelper {
             }
         })
     }
+    static deletePhotoByKey(key) {
+        return axios.delete(urls.IMAGE_BASE_URL, {
+            data: {
+                key: key,
+            }
+        })
+    }
 
     static deletePost(userDataId, indexUserId, postId) {
         return axios.delete(urls.POST_BASE_URL, {
@@ -192,6 +199,11 @@ export default class AxiosHelper {
         return axios.get(urls.DRAFT_BASE_URL,
             { params: { username: username } }
         )
+    }
+
+    static returnImage(imageKey) {
+        return axios
+            .get(urls.IMAGE_BASE_URL, { params: { imageKey: imageKey } })
     }
 
     static refreshComments(query) {

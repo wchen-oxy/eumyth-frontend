@@ -25,13 +25,11 @@ class ReturningUserPage extends React.Component {
             indexUserDataId: null,
             fullUserDataId: null,
             preferredPostType: null,
-
             allPostsIdArray: [],
             hasMore: true,
             fixedDataLoadLength: 4,
             nextOpenPostIndex: 0,
             feedData: [],
-
             isModalShowing: false,
             selectedEvent: null,
             textData: '',

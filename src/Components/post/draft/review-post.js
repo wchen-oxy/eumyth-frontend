@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AxiosHelper from '../../../Axios/axios';
 import _ from 'lodash';
 import TextareaAutosize from 'react-textarea-autosize';
 import { PUBLIC_FEED, PERSONAL_PAGE, PRIVATE, SHORT, LONG } from "../../constants/flags";
+import imageCompression from 'browser-image-compression';
 import "./review-post.scss";
 
 const ReviewPost = (props) => {
@@ -17,10 +18,59 @@ const ReviewPost = (props) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [coverPhoto, setCover] = useState(null);
+    const [smallPhotos, setSmallPhotos] = useState(null);
     const [useImageForThumbnail, setUseImageForThumbnail] = useState(false);
     let pursuitSelects = [];
 
-    const handlePostSubmit = () => {
+    useEffect(() => {
+        if (props.imageArray) {
+            Promise.all(props.imageArray.map((file) => imageCompression(file, { maxSizeMB: 1 })))
+                .then((results) => {
+                    let compressedImages = [];
+                    let index = 1;
+                    console.log(results);
+                    for (const image of results) {
+                        console.log("image");
+                        compressedImages.push(new File([image], "image" + index++));
+                    }
+                    console.log(compressedImages);
+                    setSmallPhotos(compressedImages);
+                });
+        }
+    }, [])
+
+    const handleResultProcessing = (result, formData) => {
+        result.blob()
+            .then((result) => {
+                const file = new File([result], "Thumbnail", {
+                    type: result.type
+                });
+                return imageCompression(file, {
+                    maxSizeMB: 0.5,
+                    maxWidthOrHeight: 250
+                })
+
+            })
+            .then((result) => {
+                formData.append("coverPhoto", result);
+                return handleSubmit(formData);
+            })
+    }
+
+    const handleSubmit = (formData) => {
+        for (var value of formData.entries()) {
+            console.log(value[0], ",", value[1]);
+        }
+        return AxiosHelper.updatePost(formData)
+            .then((result) => {
+                console.log(result);
+                //     result.status === 200 ? handleSuccess() : handleError();
+            }).catch((result) => {
+                console.log(result.error);
+                alert(result);
+            });
+    }
+    const handleFormAppend = () => {
         let formData = new FormData();
         formData.append("displayPhoto", props.displayPhoto);
         formData.append("postType", props.postType);
@@ -32,40 +82,57 @@ const ReviewPost = (props) => {
         if (pursuitCategory) formData.append("pursuitCategory", pursuitCategory);
         if (date) formData.append("date", date);
         if (minDuration) formData.append("minDuration", minDuration);
-        if (coverPhoto) formData.append("coverPhoto", coverPhoto);
-        if (useImageForThumbnail) {
-            formData.append("useImageForThumbnail", useImageForThumbnail);
-        }
         if (subtitle) {
             formData.append("subtitle", _.trim(subtitle));
         }
         if (props.textData) {
             formData.append(
                 "textData",
-                props.postType === SHORT ?
-                    props.textData :
+                props.postType === SHORT && !props.isPaginated?
+                     props.textData :
                     JSON.stringify(props.textData)
             );
         }
         if (props.imageArray && props.imageArray.length > 0) {
-            console.log("image array");
-            for (const image of props.imageArray) {
+            if (smallPhotos === null) return
+            alert("Give me one second to finish compressing your photos : )");
+
+            for (const image of smallPhotos) {
                 formData.append("images", image);
             }
         }
+
         if (props.isUpdateToPost) {
-            console.log(JSON.stringify(props.textData));
             if (props.postId) formData.append("postId", props.postId);
-            return AxiosHelper.updatePost(formData)
-                .then((result) => {
-                    result.status === 200 ? handleSuccess() : handleError();
-                }).catch((result) => {
-                    console.log(result.error);
-                    alert(result);
-                });
+            if (useImageForThumbnail) {
+                if (props.coverPhotoKey) {
+                    return Promise.all([
+                        AxiosHelper.returnImage(props.firstImageKey),
+                        AxiosHelper.deletePhotoByKey(props.coverPhotoKey)
+                    ])
+                        .then((result) => fetch(result[0].data.image))
+                        .then((res) => handleResultProcessing(res, formData))
+                }
+                else {
+                    if (props.firstImageKey) {
+                        console.log(props.firstImageKey);
+                        AxiosHelper.returnImage(props.firstImageKey)
+                            .then((result) => fetch(result.data.image))
+                            .then((res) => handleResultProcessing(res, formData))
+                    }
+                    else if (smallPhotos) {
+                        formData.append("coverPhoto", smallPhotos[0]);
+                        return handleSubmit(formData);
+                    }
+                }
+
+            }
+            else {
+                return handleSubmit(formData)
+            }
         }
         else {
-            console.log("Posting");
+            if (coverPhoto) formData.append("coverPhoto", coverPhoto);
             return AxiosHelper.createPost(formData)
                 .then((result) => {
                     result.status === 201 ? handleSuccess() : handleError();
@@ -78,16 +145,20 @@ const ReviewPost = (props) => {
     }
 
     const renderCoverPhotoControl = () => {
-        if (props.postType === SHORT && props.imageArray.length > 0) {
-            return (
-                <div>
-                    <label>Use First Image For Thumbnail</label>
-                    <input
-                        type="checkbox"
-                        onChange={(e) => setUseImageForThumbnail(e.target.value)}
-                    />
-                </div>
-            )
+        if (props.postType === SHORT) {
+            if (props.isUpdateToPost && props.firstImageKey || !props.isUpdateToPost && props.imageArray)
+                return (
+                    <div>
+                        <label>Use First Image For Thumbnail</label>
+                        <input
+                            type="checkbox"
+                            onChange={() => setUseImageForThumbnail(!useImageForThumbnail)}
+                        />
+                    </div>
+                )
+            else {
+                return null;
+            }
         }
 
 
@@ -100,10 +171,21 @@ const ReviewPost = (props) => {
                 }
                 <input
                     type="file"
-                    onChange={(e) => setCover(e.target.files[0])}></input>
+                    onChange={(e) => {
+                        console.log(e.target.files[0]);
+                        imageCompression(e.target.files[0], {
+                            maxSizeMB: 0.5,
+                            maxWidthOrHeight: 250
+                        }).then((result) => {
+                            setCover(new File([result], "Cover"))
+                        })
+                    }}></input>
             </div>)
 
 
+        }
+        else {
+            throw new Error("No Post Types Matched for Cover Photo Controls");
         }
     }
 
@@ -164,6 +246,9 @@ const ReviewPost = (props) => {
         );
     }
 
+    console.log(props.imageArray);
+    console.log(props.firstImageKey);
+    console.log(props.isPaginated);
     return (
         <div id="reviewpost-small-window">
             <div>
@@ -238,7 +323,7 @@ const ReviewPost = (props) => {
                             </option>
                         </select>
                     </div>
-                    <button onClick={(e) => handlePostSubmit(e)}>
+                    <button onClick={(e) => handleFormAppend(e)}>
                         {props.isUpdateToPost ? "Update!" : "Post!"}
                     </button>
                 </div>

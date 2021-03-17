@@ -46,13 +46,11 @@ const LongPostViewer = (props) => {
     }
 
     const passAnnotationData = (rawComments, visitorProfilePreviewId) => {
-        console.log(rawComments);
         setFullCommentData(rawComments ? rawComments : []);
         setVisitorProfilePreviewId(visitorProfilePreviewId);
 
     }
     const renderComments = (windowType) => {
-        console.log(fullCommentData);
         if (windowType === EXPANDED) {
             return (
                 <Comments
@@ -77,9 +75,9 @@ const LongPostViewer = (props) => {
         }
     }
 
-   
 
-   
+
+
 
     if (window === INITIAL_STATE) {
 
@@ -89,7 +87,6 @@ const LongPostViewer = (props) => {
         const title = props.title;
         const date = props.eventData.date ? new Date(props.eventData.date) : null;
         const coverPhotoURL = returnUserImageURL(props.eventData.cover_photo_key);
-        console.log(title);
         if (props.largeViewMode) {
             return (
                 <div className={props.isPostOnlyView ? "" : "longpostviewer-window"}>
@@ -241,7 +238,6 @@ const LongPostViewer = (props) => {
     }
 
     else if (window === EDIT_STATE) {
-        console.log("EDIT STATE");
         return (
             <div className="longpostviewer-window">
                 <div className="longpostviewer-button-container">
@@ -273,14 +269,11 @@ const LongPostViewer = (props) => {
                                 options: {
                                     upload_url: IMAGE_BASE_URL,
                                     upload_callback: (ctx, img) => {
-                                        console.log(ctx);
-                                        console.log(img);
                                         alert('file uploaded: ' +
                                             ctx.data.url);
                                     },
                                     upload_error_callback: (ctx, img) => {
-                                        console.log(ctx);
-                                        alert("Failed to Upload Image");
+                                         alert("Failed to Upload Image");
                                     },
                                 },
                             }),
@@ -295,7 +288,6 @@ const LongPostViewer = (props) => {
     else {
         let formattedDate = null;
         if (props.eventData.date) {
-            console.log(props.eventData.date);
             formattedDate = new Date(props.eventData.date).toISOString().substring(0, 10);
         }
         return (
@@ -303,6 +295,9 @@ const LongPostViewer = (props) => {
                 isUpdateToPost
                 previousState={EDIT_STATE}
                 displayPhoto={props.displayPhoto}
+                coverPhotoKey={props.eventData.cover_photo_key ?
+                    props.eventData.cover_photo_key : null
+                }
                 isPaginated={false}
                 textData={workingDraft}
                 closeModal={props.closeModal}

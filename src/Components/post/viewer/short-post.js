@@ -344,7 +344,6 @@ class ShortPostViewer extends React.Component {
         else {
             prevText = text;
         }
-        console.log(prevText);
         this.setState({ tempTextForEdit: prevText });
     }
 
@@ -543,10 +542,19 @@ class ShortPostViewer extends React.Component {
             }
             return (
                 <ReviewPost
-                    isUpdateToPost
                     previousState={EDIT_STATE}
+                    setPostStage={this.handleWindowChange}
+                    isUpdateToPost
                     postId={this.props.eventData._id}
                     displayPhoto={this.props.displayPhoto}
+                    coverPhotoKey={this.props.eventData.cover_photo_key ?
+                        this.props.eventData.cover_photo_key : null
+                    }
+                    firstImageKey={this.props.eventData.image_data ?
+                        (this.props.eventData.image_data[0])
+                        :
+                        null
+                    }
                     isPaginated={this.state.isPaginated}
                     isMilestone={this.props.eventData.is_milestone}
                     previewTitle={this.props.eventData.title}

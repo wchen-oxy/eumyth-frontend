@@ -198,12 +198,12 @@ class ShortPost extends React.Component {
 
   generateValidFiles() {
     let selectedFiles = this.state.selectedFiles;
-    let filteredArr = selectedFiles.reduce((acc, current) => {
-      const x = acc.find(item => item.name === current.name);
+    let filteredArr = selectedFiles.reduce((accumulator, current) => {
+      const x = accumulator.find(item => item.name === current.name);
       if (!x) {
-        return acc.concat([current]);
+        return accumulator.concat([current]);
       } else {
-        return acc;
+        return accumulator;
       }
     }, []);
     this.setValidFiles(filteredArr);
@@ -220,6 +220,7 @@ class ShortPost extends React.Component {
 
 
   render() {
+    console.log(this.state.isPaginated);
     if (this.state.window === INITIAL_STATE) {
       const pursuitOptions = this.returnOptions();
       return (
