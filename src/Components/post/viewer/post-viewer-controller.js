@@ -3,7 +3,7 @@ import ShortPostViewer from "./short-post";
 import LongPostViewer from "./long-post";
 import { SHORT, LONG } from "../../constants/flags";
 import { withFirebase } from "../../../Firebase/index";
-const parseTitle = (data) => {
+const parsePossibleTitle = (data) => {
     const titleBlock = data.blocks[0];
     const isTitle = titleBlock.type === "header-one"
         || titleBlock.type === "header-two"
@@ -25,6 +25,7 @@ const removeTitleFromBody = (data) => {
 
 const PostViewerController = (props) => {
     const isOwnProfile = (props.eventData.username === props.firebase.returnUsername());
+    console.log(isOwnProfile);
     const textData = props.textData && props.eventData.isPaginated ? JSON.parse(props.textData) : props.textData;
     switch (props.eventData.post_format) {
         case (SHORT):
@@ -50,8 +51,11 @@ const PostViewerController = (props) => {
                 />
             );
         case (LONG):
-            const title = parseTitle(props.textData);
+            const title = parsePossibleTitle(props.textData) === props.title ?
+                props.title : null;
             const textContent = title ? removeTitleFromBody(props.textData) : props.textData;
+            console.log(title);
+            console.log(textContent);
             return (
                 <LongPostViewer
                     postId={props.eventData._id}

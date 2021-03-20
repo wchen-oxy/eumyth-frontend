@@ -1,4 +1,5 @@
 import React from 'react';
+import imageCompression from "browser-image-compression";
 import Comments from "./comments";
 import PostHeader from './sub-components/post-header';
 import ShortHeroText from './sub-components/short-text';
@@ -51,6 +52,7 @@ class ShortPostViewer extends React.Component {
         this.toggleAnnotations = this.toggleAnnotations.bind(this);
         this.passAnnotationData = this.passAnnotationData.bind(this);
         this.returnValidAnnotations = this.returnValidAnnotations.bind(this);
+        this.retrieveThumbnail = this.retrieveThumbnail.bind(this);
         this.renderComments = this.renderComments.bind(this);
         this.renderImageSlider = this.renderImageSlider.bind(this);
         this.handleArrowPress = this.handleArrowPress.bind(this);
@@ -329,6 +331,10 @@ class ShortPostViewer extends React.Component {
     }
 
     handleWindowChange(newWindow) {
+        if (newWindow === EDIT_STATE && !this.props.eventData.cover_photo_key) {
+            this.retrieveThumbnail();
+        }
+
         this.setState({ window: newWindow });
     }
 
@@ -373,6 +379,28 @@ class ShortPostViewer extends React.Component {
                 this.props.eventData,
                 SHORT,
                 this.props.postIndex));
+        }
+    }
+
+
+    retrieveThumbnail() {
+        if (this.props.eventData.image_data) {
+            console.log(this.props.eventData.image_data)
+            return AxiosHelper.returnImage(this.props.eventData.image_data[0])
+                .then((result) => {
+                    console.log(result)
+                    return fetch(result.data.image)})
+                .then((result) => result.blob())
+                .then((result) => {
+                    const file = new File([result], "Thumbnail", {
+                        type: result.type
+                    });
+                    return imageCompression(file, {
+                        maxSizeMB: 0.5,
+                        maxWidthOrHeight: 250
+                    })
+                })
+                .then((result) => this.setState({ coverPhoto: result }));
         }
     }
 
@@ -542,24 +570,18 @@ class ShortPostViewer extends React.Component {
             }
             return (
                 <ReviewPost
-                    previousState={EDIT_STATE}
-                    setPostStage={this.handleWindowChange}
                     isUpdateToPost
+                    previousState={EDIT_STATE}
                     postId={this.props.eventData._id}
                     displayPhoto={this.props.displayPhoto}
+                    coverPhoto={this.state.coverPhoto}
                     coverPhotoKey={this.props.eventData.cover_photo_key ?
                         this.props.eventData.cover_photo_key : null
-                    }
-                    firstImageKey={this.props.eventData.image_data ?
-                        (this.props.eventData.image_data[0])
-                        :
-                        null
                     }
                     isPaginated={this.state.isPaginated}
                     isMilestone={this.props.eventData.is_milestone}
                     previewTitle={this.props.eventData.title}
                     previewSubtitle={this.props.eventData.subtitle}
-                    coverPhoto={this.props.eventData.cover_photo_key}
                     date={formattedDate}
                     min={this.props.eventData.min_duration}
                     selectedPursuit={this.props.eventData.pursuit_category}
@@ -570,7 +592,7 @@ class ShortPostViewer extends React.Component {
                     username={this.props.username}
                     preferredPostType={this.props.preferredPostType}
                     handlePreferredPostTypeChange={this.handlePreferredPostTypeChange}
-                    onClick={this.handleWindowChange}
+                    setPostStage={this.handleWindowChange}
                 />
             );
         }

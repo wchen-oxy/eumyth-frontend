@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import AxiosHelper from '../../../Axios/axios';
 import _ from 'lodash';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -17,47 +17,132 @@ const ReviewPost = (props) => {
         props.selectedPursuit ? props.selectedPursuit : null)
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const [coverPhoto, setCover] = useState(null);
-    const [smallPhotos, setSmallPhotos] = useState(null);
-    const [useImageForThumbnail, setUseImageForThumbnail] = useState(false);
+    const [coverPhoto, setCoverPhoto] = useState(null);
+    const [useCoverPhoto, setUseCoverPhoto] = useState(props.coverPhotoKey !== null);
+    const [useImageForThumbnail, setUseImageForThumbnail] = useState(props.coverPhotoKey);
+    const [shouldRemoveSavedCoverPhoto, setShouldRemoveSavedCoverPhoto] = useState(false);
+    const [randomKey, setRandomKey] = useState(0);
     let pursuitSelects = [];
 
-    useEffect(() => {
-        if (props.imageArray) {
-            Promise.all(props.imageArray.map((file) => imageCompression(file, { maxSizeMB: 1 })))
-                .then((results) => {
-                    let compressedImages = [];
-                    let index = 1;
-                    console.log(results);
-                    for (const image of results) {
-                        console.log("image");
-                        compressedImages.push(new File([image], "image" + index++));
-                    }
-                    console.log(compressedImages);
-                    setSmallPhotos(compressedImages);
-                });
+    const clearFile = () => {
+        setUseCoverPhoto(false);
+        if (!shouldRemoveSavedCoverPhoto && coverPhoto !== null &&
+            window.confirm("Are you sure you want to remove your current cover photo?")) {
+            setCoverPhoto(null);
+            setRandomKey(randomKey + 1);
         }
-    }, [])
-
-    const handleResultProcessing = (result, formData) => {
-        result.blob()
+        else if (!shouldRemoveSavedCoverPhoto &&
+            window.confirm("Are you sure you want to remove your saved cover photo?"
+            )) {
+            setShouldRemoveSavedCoverPhoto(true);
+        }
+        else if (shouldRemoveSavedCoverPhoto) {
+            setShouldRemoveSavedCoverPhoto(false);
+        }
+    }
+    const setFile = (file) => {
+        if (!file) return;
+        setUseCoverPhoto(true);
+        console.log(file);
+        return imageCompression(file, {
+            maxSizeMB: 0.5,
+            maxWidthOrHeight: 250
+        })
             .then((result) => {
-                const file = new File([result], "Thumbnail", {
-                    type: result.type
-                });
-                return imageCompression(file, {
-                    maxSizeMB: 0.5,
-                    maxWidthOrHeight: 250
-                })
+                setCoverPhoto(new File([result], "Cover"))
+            })
 
-            })
+    }
+    const handleNewSubmit = (formData) => {
+        return AxiosHelper.createPost(formData)
             .then((result) => {
-                formData.append("coverPhoto", result);
-                return handleSubmit(formData);
+                result.status === 201 ? handleSuccess() : handleError();
             })
+            .catch((result) => {
+                console.log(result.error);
+                alert(result);
+            });
+    }
+    const handlePostSpecificForm = (formData, type) => {
+        if (type === SHORT) {
+            if (props.isUpdateToPost) {
+                formData.append("postId", props.postId);
+                if (useImageForThumbnail) {
+                    if (!props.coverPhoto && !props.coverPhotoKey) {
+                        return alert(`One moment friend, I'm almost done compressing
+                        your photo`);
+                    }
+                    else {
+                        formData.append("coverPhoto", props.coverPhoto);
+                        return handleUpdateSubmit(formData);
+                    }
+                }
+                else if (!useImageForThumbnail && props.coverPhotoKey) {
+                    return AxiosHelper.deletePhotoByKey(props.coverPhotoKey)
+                        .then(() => {
+                            formData.append("removeCoverPhoto", true);
+                            return handleUpdateSubmit(formData)
+                        });
+                }
+                else {
+                    return handleUpdateSubmit(formData)
+                }
+            }
+            else {
+                if (useImageForThumbnail) {
+                    if (!props.coverPhoto) {
+                        return alert(`One moment friend, I'm almost
+                                     done compressing your photo`);
+                    }
+                    formData.append("coverPhoto", props.coverPhoto);
+                }
+                return handleNewSubmit(formData);
+            }
+        }
+        else if (type === LONG) {
+            if (props.isUpdateToPost) {
+                formData.append("postId", props.postId);
+                if (useCoverPhoto) {
+                    if (!coverPhoto && !props.coverPhotoKey) {
+                        return alert(`One moment friend, I'm almost 
+                                    done compressing your photo`)
+                    }
+                    else {
+                        formData.append("coverPhoto", coverPhoto);
+                        return handleUpdateSubmit(formData)
+                    }
+                }
+                else if (props.coverPhotoKey) {
+                    if (shouldRemoveSavedCoverPhoto) {
+                        return AxiosHelper.deletePhotoByKey(props.coverPhotoKey)
+                            .then(() => {
+                                formData.append('removeCoverPhoto', true);
+                                return handleUpdateSubmit(formData)
+                            });
+                    }
+                    else {
+                        return handleUpdateSubmit(formData);
+                    }
+                }
+                else {
+                    return handleUpdateSubmit(formData);
+                }
+            }
+            else {
+                if (useCoverPhoto) {
+                    if (!coverPhoto) {
+                        return alert(`One moment friend, I'm almost 
+                                    done compressing your photo`)
+                    };
+                    formData.append("coverPhoto", coverPhoto);
+                }
+                return handleNewSubmit(formData);
+            }
+        }
+
     }
 
-    const handleSubmit = (formData) => {
+    const handleUpdateSubmit = (formData) => {
         for (var value of formData.entries()) {
             console.log(value[0], ",", value[1]);
         }
@@ -70,6 +155,7 @@ const ReviewPost = (props) => {
                 alert(result);
             });
     }
+
     const handleFormAppend = () => {
         let formData = new FormData();
         formData.append("displayPhoto", props.displayPhoto);
@@ -88,71 +174,33 @@ const ReviewPost = (props) => {
         if (props.textData) {
             formData.append(
                 "textData",
-                props.postType === SHORT && !props.isPaginated?
-                     props.textData :
+                props.postType === SHORT && !props.isPaginated ?
+                    props.textData :
                     JSON.stringify(props.textData)
             );
         }
-        if (props.imageArray && props.imageArray.length > 0) {
-            if (smallPhotos === null) return
-            alert("Give me one second to finish compressing your photos : )");
 
-            for (const image of smallPhotos) {
+        if (props.imageArray && props.imageArray.length > 0) {
+            for (const image of props.imageArray) {
                 formData.append("images", image);
             }
         }
-
-        if (props.isUpdateToPost) {
-            if (props.postId) formData.append("postId", props.postId);
-            if (useImageForThumbnail) {
-                if (props.coverPhotoKey) {
-                    return Promise.all([
-                        AxiosHelper.returnImage(props.firstImageKey),
-                        AxiosHelper.deletePhotoByKey(props.coverPhotoKey)
-                    ])
-                        .then((result) => fetch(result[0].data.image))
-                        .then((res) => handleResultProcessing(res, formData))
-                }
-                else {
-                    if (props.firstImageKey) {
-                        console.log(props.firstImageKey);
-                        AxiosHelper.returnImage(props.firstImageKey)
-                            .then((result) => fetch(result.data.image))
-                            .then((res) => handleResultProcessing(res, formData))
-                    }
-                    else if (smallPhotos) {
-                        formData.append("coverPhoto", smallPhotos[0]);
-                        return handleSubmit(formData);
-                    }
-                }
-
-            }
-            else {
-                return handleSubmit(formData)
-            }
-        }
-        else {
-            if (coverPhoto) formData.append("coverPhoto", coverPhoto);
-            return AxiosHelper.createPost(formData)
-                .then((result) => {
-                    result.status === 201 ? handleSuccess() : handleError();
-                })
-                .catch((result) => {
-                    console.log(result.error);
-                    alert(result);
-                });
-        }
+        handlePostSpecificForm(formData, props.postType);
     }
 
     const renderCoverPhotoControl = () => {
         if (props.postType === SHORT) {
-            if (props.isUpdateToPost && props.firstImageKey || !props.isUpdateToPost && props.imageArray)
+            if (props.isUpdateToPost || !props.isUpdateToPost && props.imageArray)
                 return (
                     <div>
                         <label>Use First Image For Thumbnail</label>
                         <input
                             type="checkbox"
-                            onChange={() => setUseImageForThumbnail(!useImageForThumbnail)}
+                            defaultChecked={useImageForThumbnail}
+                            onChange={() => {
+                                setUseImageForThumbnail(!useImageForThumbnail)
+                            }
+                            }
                         />
                     </div>
                 )
@@ -164,22 +212,24 @@ const ReviewPost = (props) => {
 
         else if (props.postType === LONG) {
             return (<div>
-                {props.coverPhoto ?
+                {props.coverPhotoKey ?
                     (<label>Upload New Cover Photo?</label>)
                     :
                     (<label>Upload a Cover Photo</label>)
                 }
                 <input
                     type="file"
-                    onChange={(e) => {
-                        console.log(e.target.files[0]);
-                        imageCompression(e.target.files[0], {
-                            maxSizeMB: 0.5,
-                            maxWidthOrHeight: 250
-                        }).then((result) => {
-                            setCover(new File([result], "Cover"))
-                        })
-                    }}></input>
+                    key={randomKey}
+                    onChange={(e) => setFile(e.target.files[0])}>
+                </input>
+                {props.coverPhotoKey || useCoverPhoto ? (
+                    <button onClick={clearFile}>
+                        {shouldRemoveSavedCoverPhoto ?
+                            "Keep Saved Cover Photo" :
+                            "Remove Existing Cover Photo"
+                        }
+                    </button>)
+                    : null}
             </div>)
 
 
@@ -235,8 +285,6 @@ const ReviewPost = (props) => {
         :
         (null);
 
-
-
     pursuitSelects.push(
         <option value={null}></option>
     )
@@ -245,10 +293,7 @@ const ReviewPost = (props) => {
             <option key={pursuit} value={pursuit}>{pursuit}</option>
         );
     }
-
-    console.log(props.imageArray);
-    console.log(props.firstImageKey);
-    console.log(props.isPaginated);
+    console.log(randomKey);
     return (
         <div id="reviewpost-small-window">
             <div>

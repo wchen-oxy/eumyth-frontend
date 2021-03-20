@@ -92,29 +92,26 @@ const LongPostViewer = (props) => {
                 <div className={props.isPostOnlyView ? "" : "longpostviewer-window"}>
                     <div className="longpostviewer-meta-info-container">
                         <div>
-                            {title ?
-                                (<div id="longpostviewer-top-title-bar">
-                                    <h1 id="longpostviewer-title">
-                                        {title}
-                                    </h1>
-                                    {props.isOwnProfile ? (
-                                        <div
-                                            className="longpostviewer-button-container">
-                                            <button
-                                                onClick={() => windowSwitch(EDIT_STATE)}
-                                            >
-                                                Edit
+                            <div id="longpostviewer-top-title-bar">
+                                <h1 id="longpostviewer-title">
+                                    {title ? title : ""}
+                                </h1>
+                                {props.isOwnProfile ? (
+                                    <div
+                                        className="longpostviewer-button-container">
+                                        <button
+                                            onClick={() => windowSwitch(EDIT_STATE)}
+                                        >
+                                            Edit
                                             </button>
-                                            <button onClick={props.onDeletePost}>
-                                                Remove
+                                        <button onClick={props.onDeletePost}>
+                                            Remove
                                             </button>
-                                        </div>)
-                                        :
-                                        (<></>)
-                                    }
-                                </div>
-                                )
-                                : <></>}
+                                    </div>)
+                                    :
+                                    (<></>)
+                                }
+                            </div>
                             {props.eventData.subtitle ? (
                                 <h4 id="longpostviewer-subtitle">
                                     {props.eventData.subtitle}
@@ -155,7 +152,7 @@ const LongPostViewer = (props) => {
                                         <></>}
                                 </div>
                             </div>
-                            <div className="longpostviewer-cover-photo-container">
+                            {/* <div className="longpostviewer-cover-photo-container">
                                 {props.eventData.cover_photo_key ?
                                     <img
                                         alt="cover photo"
@@ -165,7 +162,7 @@ const LongPostViewer = (props) => {
                                     :
                                     <></>
                                 }
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className="longpostviewer-editor-container">
@@ -273,7 +270,7 @@ const LongPostViewer = (props) => {
                                             ctx.data.url);
                                     },
                                     upload_error_callback: (ctx, img) => {
-                                         alert("Failed to Upload Image");
+                                        alert("Failed to Upload Image");
                                     },
                                 },
                             }),

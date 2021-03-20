@@ -3,6 +3,7 @@ import ShortEditor from '../editor/short-editor';
 import ReviewPost from './review-post';
 import { INITIAL_STATE, REVIEW_STATE, SHORT, NONE } from "../../constants/flags";
 import "./short-post.scss";
+import imageCompression from 'browser-image-compression';
 
 const TITLE = "TITLE";
 
@@ -20,7 +21,8 @@ class ShortPost extends React.Component {
       postDisabled: true,
       window: INITIAL_STATE,
       previewTitle: null,
-      selectedTemplate: null
+      selectedTemplate: null,
+      tinyPhotos: null
     };
     this.handleTemplateInjection = this.handleTemplateInjection.bind(this);
     this.handleIndexChange = this.handleIndexChange.bind(this);
@@ -40,6 +42,7 @@ class ShortPost extends React.Component {
     this.handleSortEnd = this.handleSortEnd.bind(this);
     this.loadImage = this.loadImage.bind(this);
     this.transformImageProp = this.transformImageProp.bind(this);
+    this.createTinyFiles = this.createTinyFiles.bind(this);
   }
 
   transformImageProp(validFiles) {
@@ -49,9 +52,39 @@ class ShortPost extends React.Component {
         this.setState({
           imageArray: result,
           displayedItemCount: result.length,
-          validFiles: validFiles
-        })
+          validFiles: validFiles,
+          isCompressing: true
+        },
+          this.createTinyFiles(validFiles)
+        )
       });
+  }
+
+  createTinyFiles(files) {
+    let promisedCompression = [];
+    for (const file of files) {
+      promisedCompression.push(imageCompression(file, { maxSizeMB: 1 }));
+    }
+    promisedCompression.push(
+      imageCompression(files[0], { maxSizeMB: 0.5, maxWidthOrHeight: 250 })
+    );
+    Promise.all(promisedCompression)
+      .then((results) => {
+        const thumbnail = new File([results[results.length - 1]], "Thumbnail");
+        let files = [];
+        for (let i = 0; i < results.length - 1; i++) {
+          files.push(new File([results[i]], "file"))
+        }
+        console.log("Created Compressed Files");
+        console.log(files);
+        console.log(thumbnail);
+
+        this.setState({
+          tinyPhotos: files,
+          coverPhoto: thumbnail,
+          isCompressing: false
+        });
+      })
   }
 
   loadImage(file) {
@@ -220,7 +253,6 @@ class ShortPost extends React.Component {
 
 
   render() {
-    console.log(this.state.isPaginated);
     if (this.state.window === INITIAL_STATE) {
       const pursuitOptions = this.returnOptions();
       return (
@@ -235,6 +267,7 @@ class ShortPost extends React.Component {
                 Return
                   </button>
             </span>
+            {this.state.isCompressing ? <p>Compressing Photos</p> : null}
             <span>
               <button
                 value={REVIEW_STATE}
@@ -246,6 +279,7 @@ class ShortPost extends React.Component {
             </span>
           </div>
           <div id="shortpost-special-button-container">
+
             <select
               onChange={(e) => {
                 return this.handleTemplateSelect(e.target.value)
@@ -294,13 +328,14 @@ class ShortPost extends React.Component {
           previewTitle={this.state.previewTitle}
           closeModal={this.props.closeModal}
           postType={SHORT}
-          setPostStage={this.handleClick}
-          imageArray={this.state.validFiles}
+          imageArray={this.state.tinyPhotos}
+          coverPhoto={this.state.coverPhoto}
           textData={this.state.textData}
           username={this.props.username}
           preferredPostType={this.props.preferredPostType}
           pursuitNames={this.props.pursuitNames}
           handlePreferredPostTypeChange={this.props.handlePreferredPostTypeChange}
+          setPostStage={this.handleClick}
         />
       );
     }

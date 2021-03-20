@@ -12,4 +12,7 @@
     @include flex-display-row;
     justify-content: space-between;
     padding: 0 5px;
+    p{
+        margin: 0;
+    }
 }
