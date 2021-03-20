@@ -42,7 +42,7 @@ class OptionsMenu extends React.Component {
                         ? (
                             <div id="optionsmenu-inner-menu-container">
                                 <div className="optionsmenu-button-container">
-                                    <Link to={"/account"}> Settings </Link>
+                                    <Link to={"/account"}>Edit Your Profile</Link>
                                 </div>
                                 <div className="optionsmenu-button-container">
                                     <button onClick={this.props.firebase.doSignOut}>

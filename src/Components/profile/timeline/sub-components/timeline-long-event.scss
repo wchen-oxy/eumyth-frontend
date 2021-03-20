@@ -6,6 +6,9 @@
 
 .longevent-no-cover-photo-container {
     @include no-cover-photo-container-size;
+    p{
+        font-size: 14px;
+    }
 }
 
 .longevent-cover-photo {
@@ -24,16 +27,15 @@
     .longevent-comment-container {
         position: absolute;
         bottom: 0;
-
-        h4,
-        p {
-            margin: 0 auto;
-        }
-        h4 {
-            font-size: 18px;
-        }
-        p {
-            font-size: 14px;
-        }
+    }
+    h4,
+    p {
+        margin: 0 auto;
+    }
+    h4 {
+        font-size: 18px;
+    }
+    p {
+        font-size: 14px;
     }
 }

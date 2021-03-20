@@ -11,7 +11,7 @@ const ShortEvent = (props) => {
         {post.pursuit_category ?
             <p>
                 {post.pursuit_category}
-                {post.is_milestone ? "MileStone" : "Progress"}
+                {post.is_milestone ? " " + "MileStone" : " " + "Progress"}
             </p>
             : <></>
         }

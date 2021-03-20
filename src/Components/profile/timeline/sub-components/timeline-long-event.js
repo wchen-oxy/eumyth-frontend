@@ -27,8 +27,15 @@ const LongEvent = (props) => {
             </div>
             <div className="longevent-text-container">
                 <h4 className="longevent-title-container">
-                    {post.title ? post.title : post.pursuit_category}
+                    {post.title ? post.title : null}
                 </h4>
+                {post.pursuit_category ?
+                    <p>
+                        {post.pursuit_category}
+                        {post.is_milestone ? " " + "MileStone" : " " + "Progress"}
+                    </p>
+                    : <></>
+                }
                 {post.subtitle ? (
                     <p className="longevent-subtitle-container">
                         {post.subtitle}

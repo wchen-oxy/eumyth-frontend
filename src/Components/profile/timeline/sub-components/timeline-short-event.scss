@@ -7,6 +7,9 @@
 .shortevent-no-cover-photo-container {
     @include flex-display-row;
     @include no-cover-photo-container-size;
+    p{
+        font-size: 14px;
+    }
 
 }
 
