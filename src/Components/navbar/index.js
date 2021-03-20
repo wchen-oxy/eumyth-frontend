@@ -80,6 +80,7 @@ class NavigationAuth extends React.Component {
   }
 
   closeModal(postType) {
+    console.log("Clicked");
     this.modalRef.current.style.display = "none";
     document.body.style.overflow = "visible";
     if (postType) this.setState({ isRequestModalShowing: false });
@@ -103,9 +104,12 @@ class NavigationAuth extends React.Component {
     }
     else if (this.state.isRequestModalShowing) {
       modal = (
-        <RelationModal
-          username={this.state.username}
-          closeModal={this.closeModal} />
+        <>
+          <div className="overlay" onClick={(() => this.closeModal())}></div>
+          <RelationModal
+            username={this.state.username}
+            closeModal={this.closeModal} />
+        </>
       )
     }
     return (

@@ -302,7 +302,7 @@ class PostDraftController extends React.Component {
       <>
         <span
           className="close"
-          onClick={this.handleModalClose}>
+          onClick={this.props.closeModal}>
           X
           </span>
         {this.renderWindow(this.state.postType)}

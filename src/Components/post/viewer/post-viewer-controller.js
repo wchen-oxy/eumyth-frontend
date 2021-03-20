@@ -51,10 +51,8 @@ const PostViewerController = (props) => {
                 />
             );
         case (LONG):
-            const title = parsePossibleTitle(props.textData) === props.title ?
-                props.title : null;
-            const textContent = title ? removeTitleFromBody(props.textData) : props.textData;
-            console.log(title);
+            const title = props.eventData.title;
+            const textContent = title && title === parsePossibleTitle(props.textData) ? removeTitleFromBody(props.textData) : props.textData;
             console.log(textContent);
             return (
                 <LongPostViewer
