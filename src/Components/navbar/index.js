@@ -34,9 +34,8 @@ class NavigationAuth extends React.Component {
       username: this.props.firebase.returnUsername(),
       tinyDisplayPhoto: null,
       previousLongDraft: null,
-      isInitialUser: true,
       existingUserLoading: true,
-
+      isExistingUser: false,
       isPostModalShowing: false,
       isRequestModalShowing: false,
     };
@@ -48,16 +47,22 @@ class NavigationAuth extends React.Component {
   }
   componentDidMount() {
     let isUserStillLoading = true;
+    let isExistingUser = false;
     this.props.firebase.checkIsExistingUser().then(
       (result) => {
+        isUserStillLoading = false;
         if (result) {
-          isUserStillLoading = false;
+          console.log("isExisting");
+          isExistingUser = true;
         }
         return AxiosHelper.returnTinyDisplayPhoto(this.state.username);
       }
     )
       .then((result) => {
+        console.log(isUserStillLoading);
+        console.log(isExistingUser);
         this.setState({
+          isExistingUser: isExistingUser,
           existingUserLoading: isUserStillLoading,
           tinyDisplayPhoto: result.data ? returnUserImageURL(result.data) : TEMP_PROFILE_PHOTO_URL
         });
@@ -142,7 +147,9 @@ class NavigationAuth extends React.Component {
           </div>
           <div id="navbar-right-container">
             {
-              this.state.existingUserLoading ?
+              this.state.existingUserLoading
+                || !this.state.existingUserLoading
+                && !this.state.isExistingUser ?
                 (<></>) :
                 (
                   <>
@@ -166,7 +173,8 @@ class NavigationAuth extends React.Component {
                   </>
                 )
             }
-            <OptionsMenu />
+            <OptionsMenu shouldHideFriendsTab={!this.state.existingUserLoading
+              && !this.state.isExistingUser} />
           </div>
         </nav>
         {this.state.existingUserLoading ? <></> : this.renderModal()}

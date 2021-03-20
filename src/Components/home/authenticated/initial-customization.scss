@@ -15,7 +15,9 @@
         @include flex-display-column;
         padding: 2vh;
     }
-
+    p {
+        margin: 0 auto;
+    }
     input,
     label,
     span {

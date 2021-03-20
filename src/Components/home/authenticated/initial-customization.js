@@ -229,12 +229,12 @@ class InitialCustomizationPage extends React.Component {
                 "Taken";
         const upperCase =
             this.state.isUpperCase ?
-                "But Please Choose Only Lower Case Characters" :
+                ", But Please Choose Only Lower Case Characters" :
                 "";
         const specialCharacters = this.testForSpecialCharacter(this.state.username);
         const specialCharMessage =
             specialCharacters ?
-                " But No Special Characters" :
+                ", But No Special Characters Please" :
                 "";
         const { username, firstName, lastName, pursuits } = this.state;
         let isInvalid =
@@ -281,13 +281,17 @@ class InitialCustomizationPage extends React.Component {
                     type="range"
                     id="points"
                     name="points"
-                    min="-20"
-                    max="20"
+                    min="-180"
+                    max="180"
                     value={this.state.imageRotation}
                     onChange={(e) => (
                         this.setState({
                             imageRotation: parseFloat(e.target.value)
                         }))} />
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    this.setState({ imageRotation: 0 })
+                }}>Reset</button>
                 <label>Scale</label>
                 <input
                     type="range"
@@ -301,6 +305,10 @@ class InitialCustomizationPage extends React.Component {
                         this.setState({ imageScale: parseFloat(e.target.value) })
                     )}
                 />
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    this.setState({ imageScale: 1 })
+                }}>Reset</button>
             </>
         );
 
@@ -309,7 +317,7 @@ class InitialCustomizationPage extends React.Component {
                 <form onSubmit={this.handleProfileSubmit}>
                     <h2>Let us know about you!</h2>
                     <label>
-                        Don't worry this won't be public if you don't want it to.
+                        Don't worry this information won't be public if you don't want it to.
                     </label>
                     <div className="initialcustomization-content-container">
                         <label>Choose a display profile!</label>
@@ -328,10 +336,10 @@ class InitialCustomizationPage extends React.Component {
                     </div>
                     <div className="initialcustomization-content-container">
                         <label>
-                            Choose a username!
-                            {available}
-                            {upperCase}
-                            {specialCharMessage}
+                            <p>Choose a username!</p>
+                            {this.state.username === '' ? "Invalid" : available}
+                            <p>{upperCase}</p>
+                            <p>{specialCharMessage}</p>
                         </label>
                         <input
                             type="text"

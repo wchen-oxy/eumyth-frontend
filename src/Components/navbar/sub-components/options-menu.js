@@ -41,9 +41,14 @@ class OptionsMenu extends React.Component {
                     this.state.showMenu
                         ? (
                             <div id="optionsmenu-inner-menu-container">
-                                <div className="optionsmenu-button-container">
-                                    <Link to={"/account"}>Edit Your Profile</Link>
-                                </div>
+                                {this.props.shouldHideFriendsTab ?
+                                    null
+                                    :
+                                    <div className="optionsmenu-button-container">
+                                        <Link to={"/account"}>Edit Your Profile</Link>
+                                    </div>
+                                }
+
                                 <div className="optionsmenu-button-container">
                                     <button onClick={this.props.firebase.doSignOut}>
                                         <h4>Sign Out</h4>
