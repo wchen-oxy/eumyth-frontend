@@ -24,6 +24,7 @@
     img {
         @include tiny-profile-photo;
         border-radius: 50%;
+        object-fit: cover;
     }
 }
 

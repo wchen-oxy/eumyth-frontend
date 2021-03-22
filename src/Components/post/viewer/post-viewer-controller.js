@@ -3,6 +3,7 @@ import ShortPostViewer from "./short-post";
 import LongPostViewer from "./long-post";
 import { SHORT, LONG } from "../../constants/flags";
 import { withFirebase } from "../../../Firebase/index";
+import { returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from '../../constants/urls';
 const parsePossibleTitle = (data) => {
     const titleBlock = data.blocks[0];
     const isTitle = titleBlock.type === "header-one"
@@ -33,7 +34,7 @@ const PostViewerController = (props) => {
                 <ShortPostViewer
                     postId={props.eventData._id}
                     postIndex={props.postIndex}
-                    displayPhoto={props.displayPhoto}
+                    displayPhoto={props.visitorDisplayPhoto}
                     username={props.username}
                     visitorUsername={props.visitorUsername}
                     pursuitNames={props.pursuitNames}
@@ -58,7 +59,7 @@ const PostViewerController = (props) => {
                 <LongPostViewer
                     postId={props.eventData._id}
                     postIndex={props.postIndex}
-                    displayPhoto={props.displayPhoto}
+                    displayPhoto={props.visitorDisplayPhoto}
                     username={props.username}
                     visitorUsername={props.visitorUsername}
                     pursuitNames={props.pursuitNames}

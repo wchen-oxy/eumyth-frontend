@@ -4,6 +4,7 @@ import Dropzone from 'react-dropzone';
 import imageCompression from 'browser-image-compression';
 import CustomMultiSelect from "../../custom-clickables/createable-single";
 import AxiosHelper from '../../../Axios/axios';
+import _ from 'lodash';
 import { withFirebase } from '../../../Firebase';
 import './initial-customization.scss';
 
@@ -20,45 +21,53 @@ const INITIAL_STATE = {
     imageScale: 1,
     imageRotation: 0,
 }
+
 class InitialCustomizationPage extends React.Component {
     constructor(props) {
         super(props);
         this.handleTextChange = this.handleTextChange.bind(this);
+        this.handleUsernameChange = _.debounce((username) => this.checkUsernameAvailable(username), 1500);
         this.handleExperienceSelect = this.handleExperienceSelect.bind(this);
         this.handleProfileSubmit = this.handleProfileSubmit.bind(this);
         this.handlePursuitExperienceChange = this.handlePursuitExperienceChange.bind(this);
         this.handleProfilePhotoChange = this.handleProfilePhotoChange.bind(this);
         this.handleImageDrop = this.handleImageDrop.bind(this);
         this.testForSpecialCharacter = this.testForSpecialCharacter.bind(this);
+        this.checkUsernameAvailable = this.checkUsernameAvailable.bind(this);
         this.state = {
             ...INITIAL_STATE
         }
+    }
+
+    checkUsernameAvailable(username) {
+        return AxiosHelper.checkUsernameAvailable(username)
+            .then(
+                (response) => {
+                    let isTaken = null;
+                    if (response.status === 200) {
+                        isTaken = true;
+                    }
+                    else if (response.state === 204) {
+                        isTaken = false;
+                    }
+                    this.setState({
+                        isTaken: isTaken,
+                        isUpperCase: false
+                    });
+                }
+            )
+            .catch((err) => {
+                console.log(err);
+            })
     }
 
     handleTextChange(e) {
         e.preventDefault();
         this.setState({ [e.target.name]: e.target.value });
         if (e.target.name === "username") {
-            if (e.target.value === e.target.value.toLowerCase()) {
-                AxiosHelper.checkUsernameAvailable(e.target.value)
-                    .then(
-                        (response) => {
-                            let isTaken = null;
-                            if (response.status === 200) {
-                                isTaken = true;
-                            }
-                            else if (response.state === 204) {
-                                isTaken = false;
-                            }
-                            this.setState({
-                                isTaken: isTaken,
-                                isUpperCase: false
-                            });
-                        }
-                    )
-                    .catch((err) => {
-                        console.log(err);
-                    });
+            const username = e.target.value;
+            if (username === username.toLowerCase()) {
+                this.handleUsernameChange(username);
             }
             else {
                 this.setState({ isUpperCase: true });
@@ -71,7 +80,7 @@ class InitialCustomizationPage extends React.Component {
         let experienceSelects = [];
         if (newValue) {
             for (const pursuit of newValue) {
-                pursuitArray.push({ name: pursuit.value, experience: "" });
+                pursuitArray.push({ name: pursuit.value, experience: "Beginner" });
                 experienceSelects.push(
                     <span key={pursuit.value}>
                         <label>{pursuit.value}</label>
@@ -80,7 +89,6 @@ class InitialCustomizationPage extends React.Component {
                             name={pursuit.value}
                             onChange={this.handlePursuitExperienceChange}
                         >
-                            <option value=""></option>
                             <option value="Beginner">Beginner</option>
                             <option value="Familiar">Familiar</option>
                             <option value="Experienced">Experienced</option>
@@ -276,6 +284,12 @@ class InitialCustomizationPage extends React.Component {
                         </div>
                     )}
                 </Dropzone>
+                <button onClick={() =>
+                    this.setState((state) => ({
+                        imageKey: state.imageKey + 1,
+                        profilePhoto: null
+                    }))}
+                >Clear file</button>
                 <label>Rotation</label>
                 <input
                     type="range"
@@ -322,6 +336,7 @@ class InitialCustomizationPage extends React.Component {
                     <div className="initialcustomization-content-container">
                         <label>Choose a display profile!</label>
                         <input
+                            key={this.state.imageKey}
                             type="file"
                             name="displayPhoto"
                             onChange={(e) => (

@@ -1,12 +1,10 @@
 @import "../../../../partials";
 
 .postheader-display-photo-container {
-    @include tiny-profile-photo;
-    border-radius: 50%;
     img {
-        max-width: 100%;
-        max-height: 100%;
+        @include tiny-profile-photo;
         border-radius: 50%;
+        object-fit: cover;
     }
 }
 

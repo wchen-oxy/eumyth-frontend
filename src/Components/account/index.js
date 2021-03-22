@@ -12,6 +12,7 @@ import "./index.scss";
 const AccountPage = (props) => {
   const [indexUserID, setIndexUserID] = useState(null);
   const [displayPhoto, setDisplayPhoto] = useState(null);
+  const [hasDisplayPhoto, setHasDisplayPhoto] = useState(true);
   const [coverPhoto, setCoverPhoto] = useState(null);
   const [bio, setBioText] = useState('');
   const [previousTemplates, setPreviousTemplates] = useState(null);
@@ -31,12 +32,13 @@ const AccountPage = (props) => {
       .then((result) => {
         const pursuits = result.data.pursuits;
         let pursuitNameArray = [];
-
         if (pursuits) {
           for (const pursuitName in pursuits) {
             pursuitNameArray.push(pursuitName);
           }
         }
+        console.log(result.data);
+        setHasDisplayPhoto(result.data.cropped_display_photo_key !== null);
         setBioText(result.data.bio);
         setIsPrivate(result.data.private);
         setPursuitNames(pursuitNameArray);

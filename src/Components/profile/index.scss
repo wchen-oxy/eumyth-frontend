@@ -10,12 +10,12 @@
     #profile-temp-cover {
         height: 100%;
         width: 100%;
-        background-color:  rgba(197, 197, 197, 0.363);
+        background-color: rgba(197, 197, 197, 0.363);
     }
 
     #profile-cover-photo-container {
         height: 345px;
-        background-color:rgba(197, 197, 197, 0.171);
+        background-color: rgba(197, 197, 197, 0.171);
         overflow: hidden;
 
         img {
@@ -37,11 +37,13 @@
             width: 175px;
             height: 175px;
             border-radius: 50%;
+           
 
             img {
                 height: 170px;
                 width: 170px;
                 border-radius: 50%;
+                object-fit: cover;
             }
 
             #profile-name-container {

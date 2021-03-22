@@ -5,7 +5,6 @@ import Comments from "./comments";
 import DanteEditor from 'Dante2';
 import { ImageBlockConfig } from 'Dante2/package/es/components/blocks/image.js';
 import { PlaceholderBlockConfig } from 'Dante2/package/es/components/blocks/placeholder';
-import _ from 'lodash';
 import { IMAGE_BASE_URL, returnUserImageURL } from '../../constants/urls';
 import { LONG, INITIAL_STATE, EDIT_STATE, REVIEW_STATE, EXPANDED, COLLAPSED } from '../../constants/flags';
 
@@ -291,7 +290,7 @@ const LongPostViewer = (props) => {
             <ReviewPost
                 isUpdateToPost
                 previousState={EDIT_STATE}
-                displayPhoto={props.displayPhoto}
+                displayPhoto={props.visitorDisplayPhoto}
                 coverPhotoKey={props.eventData.cover_photo_key ?
                     props.eventData.cover_photo_key : null
                 }

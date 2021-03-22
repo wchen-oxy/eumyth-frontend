@@ -7,7 +7,7 @@ import NoMatch from '../no-match';
 import PostViewerController from "../post/viewer/post-viewer-controller";
 import FollowButton from "./sub-components/follow-buttons";
 import ProjectController from "../project/index";
-import { returnPostURL, returnUserImageURL, returnUsernameURL } from "../constants/urls";
+import { returnPostURL, returnUserImageURL, returnUsernameURL, TEMP_PROFILE_PHOTO_URL } from "../constants/urls";
 import {
     ALL,
     POST,
@@ -34,7 +34,7 @@ class ProfilePage extends React.Component {
             targetUsername: this.props.match.params.username,
             isPrivate: true,
             croppedDisplayPhoto: null,
-            tinyCroppedcroppedDisplayPhoto: null,
+            smallCroppedDisplayPhoto: null,
             coverPhoto: "",
             bio: "",
             pursuits: null,
@@ -433,7 +433,7 @@ class ProfilePage extends React.Component {
                     visitorUsername={this.state.visitorUsername}
                     largeViewMode={true}
                     isPostOnlyView={true}
-                    displayPhoto={this.state.selectedEvent.display_photo_key}
+                    visitorDisplayPhoto={this.state.smallCroppedDisplayPhoto}
                     preferredPostType={this.state.preferredPostType}
                     postType={this.state.postType}
                     pursuitNames={this.state.pursuitNames}
@@ -469,16 +469,18 @@ class ProfilePage extends React.Component {
                         </div>
                         <div id="profile-intro-container">
                             <div id="profile-display-photo-container">
-                                {this.state.croppedDisplayPhoto ? (
-                                    <img
-                                        alt="user profile photo"
-                                        src={returnUserImageURL(
-                                            this.state.croppedDisplayPhoto)}
-                                    ></img>
-                                ) : (
-                                    <></>
-                                )
-                                }
+
+                                <img
+                                    alt="user profile photo"
+                                    src={
+                                        this.state.croppedDisplayPhoto ?
+                                            returnUserImageURL(
+                                                this.state.croppedDisplayPhoto)
+                                            :
+                                            TEMP_PROFILE_PHOTO_URL
+                                    }
+                                ></img>
+
                                 <div id="profile-name-container">
                                     <h4>{this.state.targetUsername}</h4>
                                 </div>
@@ -535,7 +537,7 @@ class ProfilePage extends React.Component {
                                     isPostOnlyView={false}
                                     postIndex={this.state.selectedPostIndex}
 
-                                    displayPhoto={this.state.smallCroppedDisplayPhoto}
+                                    visitorDisplayPhoto={this.state.smallCroppedDisplayPhoto}
                                     preferredPostType={this.state.preferredPostType}
                                     postType={this.state.postType}
                                     largeViewMode={true}

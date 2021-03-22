@@ -573,7 +573,7 @@ class ShortPostViewer extends React.Component {
                     isUpdateToPost
                     previousState={EDIT_STATE}
                     postId={this.props.eventData._id}
-                    displayPhoto={this.props.displayPhoto}
+                    displayPhoto={this.props.visitorDisplayPhoto}
                     coverPhoto={this.state.coverPhoto}
                     coverPhotoKey={this.props.eventData.cover_photo_key ?
                         this.props.eventData.cover_photo_key : null

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { returnUserImageURL } from "../../../constants/urls";
+import { returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../../../constants/urls";
 import { returnFormattedDate } from "../../../constants/ui-text";
 import {
     EDIT_STATE,
@@ -30,7 +30,12 @@ const PostHeader = (props) => {
         <div className="postheader-main-container">
             <div className="postheader-author-information">
                 <div className="postheader-display-photo-container">
-                    <img src={returnUserImageURL(props.displayPhoto)} />
+                    <img src={
+                        props.displayPhoto !== "null" ?
+                            returnUserImageURL(props.displayPhoto)
+                            :
+                            TEMP_PROFILE_PHOTO_URL
+                    } />
                 </div>
                 <div className="postheader-text-information-container">
                     <h4>{props.username}</h4>
