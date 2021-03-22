@@ -96,32 +96,41 @@ const AccountPage = (props) => {
     }
   }
 
+  const handlePhotoSubmitCallback = (formData, photoType, username) => {
+    return AxiosHelper.updateAccountImage(formData, photoType)
+      .then((results) => {
+        const form = {
+          username: username,
+          imageKey: results.data.imageKey
+        };
+        return AxiosHelper.updatePostDisplayPhotos(form)
+      })
+      .then((results) => {
+        console.log(results);
+        alert("Successfully updated!");
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Something has gone wrong while updating :(")
+      })
+  }
+
   const handlePhotoSubmit = (formData, photoType) => {
     const username = props.firebase.returnUsername();
-    return (
-      AxiosHelper
-        .deleteAccountPhoto(username, photoType)
-        .then((result) => {
-          console.log(result);
-          return AxiosHelper.updateAccountImage(formData, photoType);
-        })
-        .then((results) => {
-          const form = {
-            username: username,
-            imageKey: results.data.imageKey
-          };
-          return AxiosHelper.updatePostDisplayPhotos(form)
-        })
-        .then((results) => {
-          console.log(results);
-          alert("Successfully updated!");
-          window.location.reload();
-        })
-        .catch((err) => {
-          console.log(err);
-          alert("Something has gone wrong while updating :(")
-        })
-    );
+    if (hasDisplayPhoto) {
+      return (
+        AxiosHelper
+          .deleteAccountPhoto(username, photoType)
+          .then((result) => {
+            console.log(result);
+            return handlePhotoSubmitCallback(formData, photoType, username);
+          }));
+    }
+
+    else {
+      return handlePhotoSubmitCallback(formData, photoType, username);
+    }
   }
 
   const handleBioSubmit = () => {

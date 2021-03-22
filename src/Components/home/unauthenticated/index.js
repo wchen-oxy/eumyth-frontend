@@ -188,7 +188,7 @@ export default class WelcomePage extends React.Component {
           <br></br>
           <p>(to try out this without signing up, use this test account)</p>
           <br></br>
-          <p>(email: williamshengchen8@gmail.com, password: 123123)</p>
+          <p>(email: williamchen@oxy.edu, password: 123123)</p>
         </div>
         {this.renderLoginRegister(this.state.isLoginMode)}
       </section>
