@@ -26,15 +26,58 @@ class Comments extends React.Component {
 
     componentDidMount() {
         if (this.props.commentIDArray.length > 0) {
-            return AxiosHelper.getComments({
-                params: {
-                    visitorUsername: this.props.visitorUsername,
-                    rootCommentIdArray: JSON.stringify(this.props.commentIDArray),
-                    viewingMode: this.state.windowType
-                }
-            })
-                .then(
-                    (result) => {
+            if (this.props.visitorUsername) {
+                return Promise.all([
+                    AxiosHelper.getComments({
+                        params: {
+                            rootCommentIdArray: JSON.stringify(this.props.commentIDArray),
+                            viewingMode: this.state.windowType
+                        }
+                    }),
+                    AxiosHelper.getUserPreviewId({ params: { username: this.props.visitorUsername } })
+                ])
+                    .then(
+                        (result) => {
+                            this.setState({
+                                visitorProfilePreviewId: result[1].data.userPreviewId,
+                                loadingComments: false,
+
+                            }, () => {
+                                if (this.props.postType === SHORT) {
+                                    this.props.passAnnotationData(
+                                        result[0].data.rootComments,
+                                        result[1].data.userPreviewId)
+                                }
+                            });
+                        }
+                    );
+            }
+            else {
+                AxiosHelper.getComments({
+                    params: {
+                        rootCommentIdArray: JSON.stringify(this.props.commentIDArray),
+                        viewingMode: this.state.windowType
+                    }
+                })
+                    .then(
+                        (result) => {
+                            this.setState({
+                                loadingComments: false,
+                            }, () => {
+                                if (this.props.postType === SHORT) {
+                                    this.props.passAnnotationData(
+                                        result.data.rootComments,
+                                        null)
+                                }
+                            });
+                        }
+                    );
+            }
+        }
+        else {
+            if (this.props.visitorUsername) {
+                return AxiosHelper.getUserPreviewId({ params: { username: this.props.visitorUsername } })
+                    .then((result) => {
                         this.setState({
                             visitorProfilePreviewId: result.data.userPreviewId,
                             loadingComments: false,
@@ -42,34 +85,27 @@ class Comments extends React.Component {
                         }, () => {
                             if (this.props.postType === SHORT) {
                                 this.props.passAnnotationData(
-                                    result.data.rootComments,
-                                    result.data.userPreviewId)
+                                    null,
+                                    result.data.userPreviewId
+                                );
                             }
                         });
+                    })
+            }
+            else {
+                this.setState({
+                    loadingComments: false,
 
-
+                }, () => {
+                    if (this.props.postType === SHORT) {
+                        this.props.passAnnotationData(
+                            null,
+                            null
+                        );
                     }
-                )
-        }
-        else {
-            return AxiosHelper
-                .getUserPreviewId({
-                    params: { username: this.props.visitorUsername }
-                })
-                .then((result) => {
-                    this.setState({
-                        visitorProfilePreviewId: result.data.userPreviewId,
-                        loadingComments: false,
+                });
+            }
 
-                    }, () => {
-                        if (this.props.postType === SHORT) {
-                            this.props.passAnnotationData(
-                                null,
-                                result.data.userPreviewId
-                            );
-                        }
-                    });
-                })
         }
     }
 
@@ -260,7 +296,6 @@ class Comments extends React.Component {
 
 
     render() {
-        console.log(this.props.fullCommentData);
         if (this.state.windowType === COLLAPSED) {
             return (
                 <div className="comments-main-container">

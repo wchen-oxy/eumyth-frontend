@@ -122,10 +122,16 @@ class CustomImageSlider extends React.Component {
                         alt='Image Display Goes Here'
                         activeAnnotations={this.props.activeAnnotations}
                         annotations={annotations}
-                        disableOverlay={this.props.hideAnnotations}
-                        disableAnnotation={this.props.windowType === COLLAPSED}
+                        disableOverlay={this.props.hideAnnotations
+                            ||
+                            !this.props.visitorProfilePreviewId
+                        }
+                        disableAnnotation={this.props.windowType === COLLAPSED
+                            || !this.props.visitorProfilePreviewId
+                        }
                         value={this.state.annotation}
                         renderEditor={this.renderEditor}
+
                         activeAnnotationComparator={this.activeAnnotationComparator}
                         onChange={this.onAnnotationChange}
                         onSubmit={this.onAnnotationSubmit}

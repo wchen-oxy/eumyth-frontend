@@ -40,7 +40,6 @@ export default class WelcomePage extends React.Component {
     if (this._isMounted) {
       this.props.firebase.auth.onAuthStateChanged(
         (user) => {
-          console.log(user.emailVerified);
           if (user) {
             this.setState({
               verified: user.emailVerified

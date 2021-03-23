@@ -187,6 +187,8 @@ class ShortPostViewer extends React.Component {
                     onAnnotationSubmit={this.handleAnnotationSubmit}
                     toggleAnnotations={this.toggleAnnotations}
                     handleArrowPress={this.handleArrowPress}
+                    visitorProfilePreviewId={this.state.visitorProfilePreviewId}
+
                 />
             </div>)
     }
@@ -385,11 +387,10 @@ class ShortPostViewer extends React.Component {
 
     retrieveThumbnail() {
         if (this.props.eventData.image_data) {
-            console.log(this.props.eventData.image_data)
             return AxiosHelper.returnImage(this.props.eventData.image_data[0])
                 .then((result) => {
-                    console.log(result)
-                    return fetch(result.data.image)})
+                    return fetch(result.data.image)
+                })
                 .then((result) => result.blob())
                 .then((result) => {
                     const file = new File([result], "Thumbnail", {

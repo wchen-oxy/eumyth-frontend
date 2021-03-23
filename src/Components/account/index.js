@@ -37,7 +37,6 @@ const AccountPage = (props) => {
             pursuitNameArray.push(pursuitName);
           }
         }
-        console.log(result.data);
         setHasDisplayPhoto(result.data.cropped_display_photo_key !== null);
         setBioText(result.data.bio);
         setIsPrivate(result.data.private);
@@ -311,6 +310,9 @@ const AccountPage = (props) => {
             <div id="account-container">
               <h1>Account: {authUser.email}</h1>
               <PasswordChangeForm />
+              <label>
+                Choose the privacy of your profile!
+              </label>
               <select
                 value={isPrivate ? PRIVATE : PUBLIC}
                 onChange={(e) => handleProfilePrivacyChange(e.target.value)}>

@@ -116,30 +116,49 @@ class ProfilePage extends React.Component {
         }
         else if (this._isMounted && this.props.match.params.postId) {
             this.props.firebase.auth.onAuthStateChanged(
-                (user) =>
-                    Promise.all([
-                        AxiosHelper
-                            .retrievePost(this.props.match.params.postId, false),
-                        AxiosHelper
-                            .returnUser(user.displayName)
-                    ])
-                        .then(
-                            (result => {
-                                let pursuitNameArray = [];
-                                for (const pursuit of result[1].data.pursuits) {
-                                    pursuitNameArray.push(pursuit.name);
+                (user) => {
+                    if (user) {
+                        return Promise.all([
+                            AxiosHelper
+                                .retrievePost(this.props.match.params.postId, false),
+                            AxiosHelper
+                                .returnUser(user.displayName)
+                        ])
+                            .then(
+                                (result => {
+                                    let pursuitNameArray = [];
+                                    for (const pursuit of result[1].data.pursuits) {
+                                        pursuitNameArray.push(pursuit.name);
 
-                                }
-                                if (this._isMounted) this.setState({
-                                    selectedEvent: result[0].data,
-                                    postOnlyView: true,
-                                    postType: result[0].data.post_format,
-                                    visitorUsername: user ? user.displayName : null,
-                                    targetUsername: result[0].data.username,
-                                    pursuitNames: pursuitNameArray,
+                                    }
+                                    if (this._isMounted) this.setState({
+                                        selectedEvent: result[0].data,
+                                        postOnlyView: true,
+                                        postType: result[0].data.post_format,
+                                        visitorUsername: user.displayName,
+                                        targetUsername: result[0].data.username,
+                                        pursuitNames: pursuitNameArray,
+                                    })
                                 })
-                            })
-                        )
+                            )
+                    }
+                    else {
+                        return AxiosHelper
+                            .retrievePost(this.props.match.params.postId, false)
+                            .then(
+                                (result => {
+                                    if (this._isMounted) this.setState({
+                                        selectedEvent: result.data,
+                                        postOnlyView: true,
+                                        postType: result.data.post_format,
+                                        visitorUsername: null,
+                                        targetUsername: result.data.username,
+                                        pursuitNames: [],
+                                    })
+                                })
+                            )
+                    }
+                }
             )
         }
         else {
@@ -246,7 +265,7 @@ class ProfilePage extends React.Component {
     handleResponseData(user, targetUserInfo, followerStatusResponse) {
         let pursuitNameArray = [];
         let projectArray = [];
-        const postsArray = user.displayName === targetUserInfo.username ?
+        const postsArray = user && user.displayName === targetUserInfo.username ?
             targetUserInfo.all_posts : this.returnPublicPosts(targetUserInfo.all_posts);
         const followerStatus = followerStatusResponse ?
             this.handleFollowerStatusResponse(followerStatusResponse) : null;
@@ -392,14 +411,14 @@ class ProfilePage extends React.Component {
     }
 
     handleOptionsClick() {
-        // this.openModal(this.miniModalRef);
     }
 
     render() {
-        // console.log(this.state.allPosts);
+        console.log(this.state.visitorUsername === null && this.state.isPrivate);
         const shouldHideProfile = (
             this.state.visitorUsername === null && this.state.isPrivate)
-            || (this.state.visitorUsername !== this.state.targetUsername
+            ||
+            (this.state.visitorUsername !== this.state.targetUsername
                 && this.state.isPrivate
             )
             && (this.state.followerStatus !== "FOLLOWING" &&

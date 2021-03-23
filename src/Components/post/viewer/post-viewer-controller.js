@@ -4,6 +4,7 @@ import LongPostViewer from "./long-post";
 import { SHORT, LONG } from "../../constants/flags";
 import { withFirebase } from "../../../Firebase/index";
 import { returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from '../../constants/urls';
+
 const parsePossibleTitle = (data) => {
     const titleBlock = data.blocks[0];
     const isTitle = titleBlock.type === "header-one"
@@ -16,7 +17,6 @@ const parsePossibleTitle = (data) => {
     else {
         return null;
     }
-
 }
 
 const removeTitleFromBody = (data) => {
@@ -25,7 +25,7 @@ const removeTitleFromBody = (data) => {
 }
 
 const PostViewerController = (props) => {
-    const isOwnProfile = (props.eventData.username === props.firebase.returnUsername());
+    const isOwnProfile = (props.eventData.username === props.visitorUsername);
     console.log(isOwnProfile);
     const textData = props.textData && props.eventData.isPaginated ? JSON.parse(props.textData) : props.textData;
     switch (props.eventData.post_format) {

@@ -26,7 +26,7 @@ class InitialCustomizationPage extends React.Component {
     constructor(props) {
         super(props);
         this.handleTextChange = this.handleTextChange.bind(this);
-        this.handleUsernameChange = _.debounce((username) => this.checkUsernameAvailable(username), 1500);
+        this.handleUsernameChange = _.debounce((username) => this.checkUsernameAvailable(username), 1000);
         this.handleExperienceSelect = this.handleExperienceSelect.bind(this);
         this.handleProfileSubmit = this.handleProfileSubmit.bind(this);
         this.handlePursuitExperienceChange = this.handlePursuitExperienceChange.bind(this);
