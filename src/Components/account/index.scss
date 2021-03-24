@@ -1,8 +1,26 @@
-@import '../../partials';
+@import "../../partials";
 
 #account-container {
     width: fit-content;
+    margin: 0 auto;
     @include flex-display-column;
+}
+#account-bio-container {
+    @include flex-display-column;
+}
+
+#account-template-container {
+    @include flex-display-column;
+    p {
+        font-size: 14px;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+
+.account-section-container {
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 .account-photo-edit-container {

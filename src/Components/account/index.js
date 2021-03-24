@@ -64,7 +64,7 @@ const AccountPage = (props) => {
     if (window.confirm("Are you sure you want to remove your photo?")) {
       AxiosHelper
         .deleteAccountPhoto(username, photoType)
-        .then((results) => {
+        .then(() => {
           let formData = new FormData();
           formData.append("username", username);
           formData.append("imageKey", "");
@@ -266,96 +266,109 @@ const AccountPage = (props) => {
             <div id="account-container">
               <h1>Account: {authUser.email}</h1>
               <PasswordChangeForm />
-              <label>
-                Choose the privacy of your profile!
+              <div className="account-section-container">
+                <label>
+                  Choose the privacy of your profile!
               </label>
-              <select
-                value={isPrivate ? PRIVATE : PUBLIC}
-                onChange={(e) => handleProfilePrivacyChange(e.target.value)}>
-                <option key="private" value={PRIVATE}>Private</option>
-                <option key="public" value={PUBLIC}>Public</option>
-              </select>
-              <button onClick={() => showPhotoEditor(displayPhotoRef)}>
-                Edit your Display Photo
+                <select
+                  value={isPrivate ? PRIVATE : PUBLIC}
+                  onChange={(e) => handleProfilePrivacyChange(e.target.value)}>
+                  <option key="private" value={PRIVATE}>Private</option>
+                  <option key="public" value={PUBLIC}>Public</option>
+                </select>
+              </div>
+              <div className="account-section-container">
+                <button onClick={() => showPhotoEditor(displayPhotoRef)}>
+                  Edit your Display Photo
               </button>
-              <div
-                ref={displayPhotoRef}
-                className="account-photo-edit-container"
-              >
-                <label>Change your display photo!</label>
-                <input
-                  name="displayPhoto"
-                  type="file"
-                  key={imageKey}
-                  onChange={(e) => setDisplayPhoto(e.target.files[0])}
-                />
-                {displayPhoto ?
-
-                  <ProfilePhotoEditor
-                    clearFile={clearFile}
-                    profilePhoto={displayPhoto}
-                    handleImageDrop={handleImageDrop}
-                    imageScale={displayPhotoScale}
-                    imageRotation={displayPhotoRotation}
-                    scaleImage={setDisplayPhotoScale}
-                    rotateImage={setDisplayPhotoRotation}
-                    setEditorRef={setAvatarEditorInstance}
+                <div
+                  ref={displayPhotoRef}
+                  className="account-photo-edit-container"
+                >
+                  <label>Change your display photo!</label>
+                  <input
+                    name="displayPhoto"
+                    type="file"
+                    key={imageKey}
+                    onChange={(e) => setDisplayPhoto(e.target.files[0])}
                   />
-                  // renderProfilePhotoEditor()
-                  : <div></div>}
-                <button
-                  disabled={!displayPhoto}
-                  onClick={() => submitPhoto(DISPLAY)}>
-                  Submit your display photo!
-                </button>
-                <button onClick={() => removePhoto(DISPLAY)}>
-                  Remove display Photo?
-                </button>
-              </div>
-              <button onClick={() => showPhotoEditor(coverPhotoRef)}>
-                Edit your Cover Photo
-              </button>
-              <div ref={coverPhotoRef} className="account-photo-edit-container">
-                <label>Change your cover photo!</label>
-                <input type="file" onChange={(e) => {
-                  setCoverPhoto(e.target.files[0]);
-                }} />
-                <button
-                  disabled={!coverPhoto}
-                  onClick={() => submitPhoto(COVER)}>
-                  Submit your cover photo!
-                </button>
-                <button onClick={() => removePhoto(COVER)}>
-                  Remove your cover photo
-                </button>
-              </div>
-              <label>Edit your bio</label>
-              <textarea
-                type="text"
-                onChange={e => setBioText(e.target.value)}
-                value={bio}
-                maxLength={500}
-              />
-              <button onClick={handleBioSubmit}>
-                Submit Bio
-              </button>
+                  {displayPhoto ?
 
-              <label>Add Template for Pursuit</label>
-              <p>Add a predefined text you can add to a post for ease of access</p>
-              <select
-                name="pursuit-category"
-                value={templateCategory}
-                onChange={(e) => handleTemplateTextSet(e.target.value)}>
-                {renderPursuitOptions()}
-              </select>
-              <textarea
-                type="text"
-                onChange={e => setTemplateText(e.target.value)}
-                value={templateText}
-              />
-              <button onClick={handleTemplateTextSubmit}>
-                Submit Template
+                    <ProfilePhotoEditor
+                      clearFile={clearFile}
+                      profilePhoto={displayPhoto}
+                      handleImageDrop={handleImageDrop}
+                      imageScale={displayPhotoScale}
+                      imageRotation={displayPhotoRotation}
+                      scaleImage={setDisplayPhotoScale}
+                      rotateImage={setDisplayPhotoRotation}
+                      setEditorRef={setAvatarEditorInstance}
+                    />
+                    // renderProfilePhotoEditor()
+                    : <div></div>}
+                  <button
+                    disabled={!displayPhoto}
+                    onClick={() => submitPhoto(DISPLAY)}>
+                    Submit your display photo!
+                </button>
+                  <button onClick={() => removePhoto(DISPLAY)}>
+                    Remove display Photo?
+                </button>
+                </div>
+              </div>
+              <div className="account-section-container">
+
+                <button onClick={() => showPhotoEditor(coverPhotoRef)}>
+                  Edit your Cover Photo
               </button>
+                <div ref={coverPhotoRef} className="account-photo-edit-container">
+                  <label>Change your cover photo!</label>
+                  <input type="file" onChange={(e) => {
+                    setCoverPhoto(e.target.files[0]);
+                  }} />
+                  <button
+                    disabled={!coverPhoto}
+                    onClick={() => submitPhoto(COVER)}>
+                    Submit your cover photo!
+                </button>
+                  <button onClick={() => removePhoto(COVER)}>
+                    Remove your cover photo
+                </button>
+                </div>
+              </div>
+
+              <div id="account-bio-container" className="account-section-container">
+                <label>Edit your bio</label>
+                <textarea
+                  type="text"
+                  onChange={e => setBioText(e.target.value)}
+                  value={bio}
+                  maxLength={500}
+                />
+                <button onClick={handleBioSubmit}>
+                  Submit Bio
+              </button>
+              </div>
+              <div
+                id="account-template-container"
+                className="account-section-container">
+                <label>Add Template for Pursuit</label>
+                <p>Add a predefined text you can add to a post for ease of access</p>
+                <select
+                  name="pursuit-category"
+                  value={templateCategory}
+                  onChange={(e) => handleTemplateTextSet(e.target.value)}>
+                  {renderPursuitOptions()}
+                </select>
+                <textarea
+                  type="text"
+                  onChange={e => setTemplateText(e.target.value)}
+                  value={templateText}
+                />
+                <button onClick={handleTemplateTextSubmit}>
+                  Submit Template
+              </button>
+              </div>
             </div>
           );
         }
