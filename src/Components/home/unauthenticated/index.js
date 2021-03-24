@@ -84,9 +84,11 @@ export default class WelcomePage extends React.Component {
   }
 
   handleVerifiedState(isVerified) {
-    this.setState({
-      verified: isVerified
-    })
+    if (this.state.currentUser) {
+      this.setState({
+        verified: isVerified
+      })
+    }
   }
 
   handleLongRegisterToggle(e) {
@@ -170,7 +172,7 @@ export default class WelcomePage extends React.Component {
           <div>
             Please check your email for a verification link.
               <span>Didn't see the link?
-                <button onClick={this.props.firebase.doSendEmailVerification}>
+                <button onClick={this.handleSendEmailVerication}>
                 Resend!
                 </button>
             </span>

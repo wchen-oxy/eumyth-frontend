@@ -7,7 +7,6 @@ import { PlaceholderBlockConfig } from 'Dante2/package/es/components/blocks/plac
 import { withFirebase } from '../../../Firebase';
 import { IMAGE_BASE_URL } from '../../constants/urls';
 
-
 const SAVE_INTERVAL = 4000;
 class LongEditor extends React.Component {
     constructor(props) {
@@ -21,15 +20,25 @@ class LongEditor extends React.Component {
         this.handleSave = this.handleSave.bind(this);
         this.handleSaveSuccess = this.handleSaveSuccess.bind(this);
         this.handleSaveError = this.handleSaveError.bind(this);
+        this.handleTextChange = _.debounce(() => {
+            console.log(this.props.isSavePending);
+            if (this.props.isSavePending) this.props.onSavePending(false)
+        }, 4200);
+        this.checkIsEqual = this.checkIsEqual.bind(this);
     }
+
+    checkIsEqual() {
+        return _.isEqual(
+            JSON.stringify(this.props.localDraft),
+            JSON.stringify(this.props.onlineDraft));
+    }
+
     handleSave(editorContext, content) {
         if (this.state.isInitial) {
-            if (_.isEqual(
-                JSON.stringify(this.props.localDraft),
-                JSON.stringify(this.props.onlineDraft))) {
+            if (this.checkIsEqual()) {
                 console.log("Catch uneccessary first save");
 
-                this.setState({ isInitial: false },
+                return this.setState({ isInitial: false },
                     this.props.onSavePending(false));
             }
             this.setState({ isInitial: false });
@@ -77,6 +86,7 @@ class LongEditor extends React.Component {
                         const editorState = editor.emitSerializedOutput();
                         this.props.onSavePending(true);
                         this.props.setLocalDraft(editorState);
+                        this.handleTextChange();
                     }
                 }
                 content={this.props.onlineDraft}

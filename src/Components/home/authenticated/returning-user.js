@@ -25,8 +25,8 @@ class ReturningUserPage extends React.Component {
             indexUserDataId: null,
             fullUserDataId: null,
             preferredPostType: null,
-            allPostsIdArray: [],
-            hasMore: true,
+            followedUserPostIDs: [],
+            isMoreFollowedUserPosts: true,
             fixedDataLoadLength: 4,
             nextOpenPostIndex: 0,
             feedData: [],
@@ -58,7 +58,7 @@ class ReturningUserPage extends React.Component {
             const firebaseName = this.props.firebase.returnName();
             let firstName = firebaseName ? firebaseName.firstName : null;
             let lastName = firebaseName.lastName ? firebaseName.lastName : null;
-            let allPostsIdArray = null;
+            let followedUserPostIDs = null;
             let preferredPostType = null;
             let croppedDisplayPhoto = "";
             let smallCroppedDisplayPhoto = "";
@@ -66,69 +66,73 @@ class ReturningUserPage extends React.Component {
             let fullUserDataId = null;
             let pursuits = null;
             let pursuitNames = [];
-            let hasMore = null;
+            let isMoreFollowedUserPosts = null;
             let totalMin = 0;
             let pursuitInfoArray = [];
+
             return (AxiosHelper
                 .returnIndexUser(this.state.username)
-                .then(
-                    (result) => {
-                        const indexUser = result.data;
-                        const slicedFeed =
-                            result.data.following_feed.slice(
-                                this.state.nextOpenPostIndex,
-                                this.state.nextOpenPostIndex +
-                                this.state.fixedDataLoadLength
-                            );
-                        allPostsIdArray =
-                            indexUser.following_feed;
-                        preferredPostType =
-                            indexUser.preferred_post_type
-                        croppedDisplayPhoto =
-                            indexUser.cropped_display_photo_key;
-                        smallCroppedDisplayPhoto =
-                            indexUser.small_cropped_display_photo_key;
-                        indexUserDataId =
-                            indexUser._id;
-                        fullUserDataId =
-                            indexUser.user_profile_id;
-                        pursuits =
-                            result.data.pursuits;
-                        hasMore = (
-                            !allPostsIdArray ||
-                            allPostsIdArray.length === 0)
-                            ? false : true;
-                        if (result.data.pursuits) {
-                            const pursuitObjects =
-                                this.createPursuits(result.data.pursuits);
-                            pursuitNames =
-                                pursuitObjects.pursuitNames;
-                            pursuitInfoArray =
-                                pursuitObjects.pursuitInfoArray;
-                            totalMin =
-                                pursuitObjects.totalMin;
-                        }
-                        if (hasMore === false) {
-                            if (result.data.recent_posts.length > 0) {
-                                return AxiosHelper
-                                    .returnMultiplePosts(
-                                        result.data.recent_posts,
-                                        false)
-                                    .then((result) => {
-                                        return {
-                                            isRecentPostsOnly: true,
-                                            recentPosts: result.data.posts
-                                        }
-                                    });
-                            }
-                            else {
-                                return ({
-                                    isRecentPostsOnly: true,
-                                    recentPosts: []
-                                })
-                            }
+                .then((result) => {
+                    const indexUser = result.data;
+                    const slicedFeed =
+                        result.data.following_feed.slice(
+                            this.state.nextOpenPostIndex,
+                            this.state.nextOpenPostIndex +
+                            this.state.fixedDataLoadLength
+                        );
+                    followedUserPostIDs =
+                        indexUser.following_feed;
+                    preferredPostType =
+                        indexUser.preferred_post_type
+                    croppedDisplayPhoto =
+                        indexUser.cropped_display_photo_key;
+                    smallCroppedDisplayPhoto =
+                        indexUser.small_cropped_display_photo_key;
+                    indexUserDataId =
+                        indexUser._id;
+                    fullUserDataId =
+                        indexUser.user_profile_id;
+                    pursuits =
+                        result.data.pursuits;
+                    isMoreFollowedUserPosts = (
+                        !followedUserPostIDs ||
+                        followedUserPostIDs.length === 0)
+                        ? false : true;
+
+                    if (result.data.pursuits) {
+                        const pursuitObjects =
+                            this.createPursuits(result.data.pursuits);
+                        pursuitNames =
+                            pursuitObjects.pursuitNames;
+                        pursuitInfoArray =
+                            pursuitObjects.pursuitInfoArray;
+                        totalMin =
+                            pursuitObjects.totalMin;
+                    }
+
+                    if (isMoreFollowedUserPosts === false) {
+                        if (result.data.recent_posts.length > 0) {
+                            return AxiosHelper
+                                .returnMultiplePosts(
+                                    result.data.recent_posts,
+                                    false)
+                                .then((result) => {
+                                    return {
+                                        isRecentPostsOnly: true,
+                                        recentPosts: result.data.posts
+                                    }
+                                });
                         }
                         else {
+                            return ({
+                                isRecentPostsOnly: true,
+                                recentPosts: []
+                            })
+                        }
+                    }
+                    else {
+                        console.log("HITS");
+                        if (result.data.recent_posts.length > 0) {
                             return Promise.all([
                                 AxiosHelper
                                     .returnMultiplePosts(
@@ -147,12 +151,27 @@ class ReturningUserPage extends React.Component {
                                     }
                                 });
                         }
-
-                    })
+                        else {
+                            return AxiosHelper
+                                .returnMultiplePosts(
+                                    slicedFeed,
+                                    true)
+                                .then((result) => {
+                                    if (result.data.posts.length <= this.state.fixedDataLoadLength) {
+                                        isMoreFollowedUserPosts = false;
+                                    }
+                                    return {
+                                        isRecentPostsOnly: false,
+                                        feedData: result.data.posts
+                                    }
+                                });
+                        }
+                    }
+                })
                 .then((result) => {
-                    const recentPosts = result.recentPosts.length > 0 ?
+                    const recentPosts = result && result.recentPosts ?
                         result.recentPosts : [];
-                    const feedData = !result.isRecentPostsOnly ?
+                    const feedData = result && !result.isRecentPostsOnly ?
                         result.feedData : [];
                     const nextOpenPostIndex =
                         this.state.nextOpenPostIndex +
@@ -162,7 +181,7 @@ class ReturningUserPage extends React.Component {
                         ({
                             firstName: firstName,
                             lastName: lastName,
-                            allPostsIdArray: allPostsIdArray,
+                            followedUserPostIDs: followedUserPostIDs,
                             preferredPostType: preferredPostType,
                             indexUserDataId: indexUserDataId,
                             fullUserDataId: fullUserDataId,
@@ -175,7 +194,7 @@ class ReturningUserPage extends React.Component {
                             recentPosts: recentPosts,
                             feedData: feedData,
                             nextOpenPostIndex: nextOpenPostIndex,
-                            hasMore: hasMore
+                            isMoreFollowedUserPosts: isMoreFollowedUserPosts
                         }));
                 })
                 .catch((err) => {
@@ -261,12 +280,12 @@ class ReturningUserPage extends React.Component {
     fetchNextPosts() {
         const newEndIndex = this.state.nextOpenPostIndex +
             this.state.fixedDataLoadLength;
-        const slicedPostsArray = this.state.allPostsIdArray.slice(
+        const slicedPostsArray = this.state.followedUserPostIDs.slice(
             this.state.nextOpenPostIndex,
             newEndIndex)
-        let hasMore = true;
-        if (newEndIndex >= this.state.allPostsIdArray.length) {
-            hasMore = false;
+        let isMoreFollowedUserPosts = true;
+        if (newEndIndex >= this.state.followedUserPostIDs.length) {
+            isMoreFollowedUserPosts = false;
         }
         return (AxiosHelper
             .returnMultiplePosts(
@@ -277,11 +296,11 @@ class ReturningUserPage extends React.Component {
                     this.setState((state) => ({
                         feedData: state.feedData.concat(result.data.posts),
                         nextOpenPostIndex: newEndIndex,
-                        hasMore: hasMore
+                        isMoreFollowedUserPosts: isMoreFollowedUserPosts
                     }))
                 }
                 else {
-                    this.setState({ hasMore: false })
+                    this.setState({ isMoreFollowedUserPosts: false })
                 }
             })
             .catch((error) => {
@@ -498,7 +517,7 @@ class ReturningUserPage extends React.Component {
                         <InfiniteScroll
                             dataLength={this.state.nextOpenPostIndex}
                             next={this.fetchNextPosts}
-                            hasMore={this.state.hasMore}
+                            hasMore={this.state.isMoreFollowedUserPosts}
                             loader={<h4>Loading...</h4>}
                             endMessage={
                                 <p style={{ textAlign: 'center' }}>

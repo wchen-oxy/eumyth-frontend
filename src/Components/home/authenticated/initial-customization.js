@@ -7,6 +7,7 @@ import AxiosHelper from '../../../Axios/axios';
 import _ from 'lodash';
 import { withFirebase } from '../../../Firebase';
 import './initial-customization.scss';
+import ProfilePhotoEditor from '../../profile-photo-editor.js';
 
 const INITIAL_STATE = {
     firstName: '',
@@ -25,6 +26,7 @@ const INITIAL_STATE = {
 class InitialCustomizationPage extends React.Component {
     constructor(props) {
         super(props);
+        this.editor = React.createRef(null);
         this.handleTextChange = this.handleTextChange.bind(this);
         this.handleUsernameChange = _.debounce((username) => this.checkUsernameAvailable(username), 1000);
         this.handleExperienceSelect = this.handleExperienceSelect.bind(this);
@@ -34,9 +36,33 @@ class InitialCustomizationPage extends React.Component {
         this.handleImageDrop = this.handleImageDrop.bind(this);
         this.testForSpecialCharacter = this.testForSpecialCharacter.bind(this);
         this.checkUsernameAvailable = this.checkUsernameAvailable.bind(this);
+        this.clearFile = this.clearFile.bind(this);
+        this.setEditorRef = this.setEditorRef.bind(this);
+        this.rotateImage = this.rotateImage.bind(this);
+        this.scaleImage = this.scaleImage.bind(this);
         this.state = {
             ...INITIAL_STATE
         }
+    }
+
+    clearFile() {
+        this.setState((state) => ({
+            imageKey: state.imageKey + 1,
+            profilePhoto: null
+        }))
+    }
+
+    rotateImage(value) {
+        this.setState({
+            imageRotation: parseFloat(value)
+        })
+    }
+
+    scaleImage(value) {
+        this.setState({
+            imageScale: parseFloat(value)
+        })
+
     }
 
     checkUsernameAvailable(username) {
@@ -51,8 +77,7 @@ class InitialCustomizationPage extends React.Component {
                         isTaken = false;
                     }
                     this.setState({
-                        isTaken: isTaken,
-                        isUpperCase: false
+                        isTaken: isTaken
                     });
                 }
             )
@@ -68,6 +93,7 @@ class InitialCustomizationPage extends React.Component {
             const username = e.target.value;
             if (username === username.toLowerCase()) {
                 this.handleUsernameChange(username);
+                this.setState({ isUpperCase: false });
             }
             else {
                 this.setState({ isUpperCase: true });
@@ -227,7 +253,9 @@ class InitialCustomizationPage extends React.Component {
         this.setState({ profilePhoto: dropped[0] })
     }
 
-    setEditorRef = (editor) => this.editor = editor;
+    setEditorRef(editor) {
+        this.editor = editor
+    };
 
     render() {
         const available =
@@ -259,72 +287,6 @@ class InitialCustomizationPage extends React.Component {
             this.state.pursuits.length !== 0 ? (
                 this.state.experienceSelects) :
                 (<></>);
-        const photoArea = (
-            <>
-                <Dropzone
-                    onDrop={this.handleImageDrop}
-                    noClick
-                    noKeyboard
-                    style={{ width: '200px', height: '200px' }}
-                >
-                    {({ getRootProps, getInputProps }) => (
-                        <div {...getRootProps()}>
-                            <AvatarEditor
-                                ref={this.setEditorRef}
-                                image={this.state.profilePhoto}
-                                width={170}
-                                height={170}
-                                borderRadius={200}
-                                border={50}
-                                color={[215, 215, 215, 0.8]} // RGBA
-                                scale={this.state.imageScale}
-                                rotate={this.state.imageRotation}
-                            />
-                            <input {...getInputProps()} />
-                        </div>
-                    )}
-                </Dropzone>
-                <button onClick={() =>
-                    this.setState((state) => ({
-                        imageKey: state.imageKey + 1,
-                        profilePhoto: null
-                    }))}
-                >Clear file</button>
-                <label>Rotation</label>
-                <input
-                    type="range"
-                    id="points"
-                    name="points"
-                    min="-180"
-                    max="180"
-                    value={this.state.imageRotation}
-                    onChange={(e) => (
-                        this.setState({
-                            imageRotation: parseFloat(e.target.value)
-                        }))} />
-                <button onClick={(e) => {
-                    e.preventDefault();
-                    this.setState({ imageRotation: 0 })
-                }}>Reset</button>
-                <label>Scale</label>
-                <input
-                    type="range"
-                    id="points"
-                    name="points"
-                    step="0.1"
-                    min="1"
-                    max="10"
-                    value={this.state.imageScale}
-                    onChange={(e) => (
-                        this.setState({ imageScale: parseFloat(e.target.value) })
-                    )}
-                />
-                <button onClick={(e) => {
-                    e.preventDefault();
-                    this.setState({ imageScale: 1 })
-                }}>Reset</button>
-            </>
-        );
 
         return (
             <div className="initialcustomization-container">
@@ -344,7 +306,17 @@ class InitialCustomizationPage extends React.Component {
                             )}
                         />
                         {this.state.profilePhoto ?
-                            (photoArea) : (
+                            <ProfilePhotoEditor
+                                clearFile={this.clearFile}
+                                profilePhoto={this.state.profilePhoto}
+                                handleImageDrop={this.handleImageDrop}
+                                imageScale={this.state.imageScale}
+                                imageRotation={this.state.imageRotation}
+                                rotateImage={this.rotateImage}
+                                scaleImage={this.scaleImage}
+                                setEditorRef={this.setEditorRef}
+                            />
+                            : (
                                 <div id="initialcustomization-display-photo-container">
                                 </div>
                             )}

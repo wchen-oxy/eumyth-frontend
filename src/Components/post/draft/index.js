@@ -51,7 +51,6 @@ class PostDraftController extends React.Component {
   }
 
   setSavePending(isSavePending) {
-    console.log("isSavePending");
     this.setState({ isSavePending: isSavePending });
     // _.throttle(async () => {
     //   if (this.state.isSavePending) {
