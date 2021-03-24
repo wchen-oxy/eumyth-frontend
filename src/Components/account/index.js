@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PasswordChangeForm from '../password/change';
-import AvatarEditor from 'react-avatar-editor';
-import Dropzone from 'react-dropzone';
 import imageCompression from 'browser-image-compression';
 import AxiosHelper from "../../Axios/axios";
 import { AuthUserContext, withAuthorization } from '../session';
 import { withFirebase } from '../../Firebase';
 import { PUBLIC, PRIVATE, DISPLAY, COVER } from "../constants/flags";
 import "./index.scss";
+import ProfilePhotoEditor from '../profile-photo-editor.js';
 
 const AccountPage = (props) => {
   const [indexUserID, setIndexUserID] = useState(null);
@@ -23,6 +22,7 @@ const AccountPage = (props) => {
   const [displayPhotoRotation, setDisplayPhotoRotation] = useState(0);
   const [AvatarEditorInstance, setAvatarEditorInstance] = useState(null);
   const [isPrivate, setIsPrivate] = useState(null);
+  const [imageKey, setImageKey] = useState(0);
   const displayPhotoRef = React.createRef();
   const coverPhotoRef = React.createRef();
 
@@ -233,55 +233,6 @@ const AccountPage = (props) => {
     }
   }
 
-  const renderProfilePhotoEditor = () => (
-    <>
-      <Dropzone
-        onDrop={handleImageDrop}
-        noClick
-        noKeyboard
-        style={{ width: '200px', height: '200px' }}
-      >
-        {({ getRootProps, getInputProps }) => {
-          return (
-            <div {...getRootProps()}>
-              <AvatarEditor
-                ref={(editor) => setAvatarEditorInstance(editor)}
-                image={displayPhoto}
-                width={170}
-                height={170}
-                borderRadius={200}
-                border={50}
-                color={[215, 215, 215, 0.8]} // RGBA
-                scale={displayPhotoScale}
-                rotate={displayPhotoRotation}
-              />
-              <input {...getInputProps()} />
-            </div>
-          )
-        }}
-      </Dropzone>
-      <label>Rotation</label>
-      <input
-        type="range"
-        id="points"
-        name="points"
-        min="-20"
-        max="20"
-        value={displayPhotoRotation}
-        onChange={(e) => setDisplayPhotoRotation(parseFloat(e.target.value))} />
-      <label>Scale</label>
-      <input
-        type="range"
-        id="points"
-        name="points"
-        step="0.1"
-        min="1"
-        max="10"
-        value={displayPhotoScale}
-        onChange={(e) => setDisplayPhotoScale(parseFloat(e.target.value))} />
-    </>
-  );
-
   const renderPursuitOptions = () => {
     let pursuits = [];
     if (pursuitNames !== null) {
@@ -301,6 +252,11 @@ const AccountPage = (props) => {
     console.log(previousTemplates[templateCategory]);
     setTemplateText(previousTemplates[templateCategory]);
     setTemplateCategory(templateCategory);
+  }
+
+  const clearFile = () => {
+    setImageKey(imageKey + 1);
+    setDisplayPhoto(null);
   }
   return (
     <AuthUserContext.Consumer>
@@ -328,10 +284,25 @@ const AccountPage = (props) => {
               >
                 <label>Change your display photo!</label>
                 <input
+                  name="displayPhoto"
                   type="file"
+                  key={imageKey}
                   onChange={(e) => setDisplayPhoto(e.target.files[0])}
                 />
-                {displayPhoto ? renderProfilePhotoEditor() : <div></div>}
+                {displayPhoto ?
+
+                  <ProfilePhotoEditor
+                    clearFile={clearFile}
+                    profilePhoto={displayPhoto}
+                    handleImageDrop={handleImageDrop}
+                    imageScale={displayPhotoScale}
+                    imageRotation={displayPhotoRotation}
+                    scaleImage={setDisplayPhotoScale}
+                    rotateImage={setDisplayPhotoRotation}
+                    setEditorRef={setAvatarEditorInstance}
+                  />
+                  // renderProfilePhotoEditor()
+                  : <div></div>}
                 <button
                   disabled={!displayPhoto}
                   onClick={() => submitPhoto(DISPLAY)}>

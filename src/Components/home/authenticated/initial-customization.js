@@ -1,6 +1,4 @@
 import React from 'react';
-import AvatarEditor from 'react-avatar-editor';
-import Dropzone from 'react-dropzone';
 import imageCompression from 'browser-image-compression';
 import CustomMultiSelect from "../../custom-clickables/createable-single";
 import AxiosHelper from '../../../Axios/axios';
