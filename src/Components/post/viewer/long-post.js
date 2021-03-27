@@ -23,7 +23,6 @@ const LongPostViewer = (props) => {
     const [localDraft, setLocalDraft] = useState(props.textData);
     const [workingDraft, setWorkingDraft] = useState(props.textData);
     const [fullCommentData, setFullCommentData] = useState([]);
-    const [visitorProfilePreviewId, setVisitorProfilePreviewId] = useState('');
 
 
     const windowSwitch = (window) => {
@@ -40,14 +39,21 @@ const LongPostViewer = (props) => {
         }
     }
 
-    const handleCommentDataInjection = () => {
-
+    const handleCommentDataInjection = (postIndex, fullCommentData, feedType) => {
+        let newCommentIdArray = props.eventData.comments;
+        const newCommentId = fullCommentData[fullCommentData.length - 1]._id;
+        newCommentIdArray.push(newCommentId)
+        setFullCommentData(fullCommentData)
+        if (props.postIndex !== null)
+            props.onCommentIDInjection(
+                postIndex,
+                newCommentIdArray,
+                feedType
+            )
     }
 
-    const passAnnotationData = (rawComments, visitorProfilePreviewId) => {
+    const passAnnotationData = (rawComments) => {
         setFullCommentData(rawComments ? rawComments : []);
-        setVisitorProfilePreviewId(visitorProfilePreviewId);
-
     }
     const renderComments = (windowType) => {
         if (windowType === EXPANDED) {
@@ -121,7 +127,7 @@ const LongPostViewer = (props) => {
                             <div className="longpostviewer-author-info-container">
                                 <div>
                                     <img className="longpostviewer-display-photo"
-                                        src={returnUserImageURL(props.displayPhoto)} />
+                                        src={returnUserImageURL(props.eventData.display_photo_key)} />
                                     {props.eventData.date ? (
                                         <p>{monthNames[date.getMonth()]}
                                             {date.getDate() + 1},
@@ -177,6 +183,7 @@ const LongPostViewer = (props) => {
             );
         }
         else {
+
             return (
                 <div onClick={handleModalLaunch}>
                     <PostHeader
@@ -299,7 +306,7 @@ const LongPostViewer = (props) => {
                 closeModal={props.closeModal}
                 postType={LONG}
                 setPostStage={setWindow}
-                username={props.username}
+                username={props.visitorUsername}
                 preferredPostType={props.preferredPostType}
                 pursuitNames={props.pursuitNames}
                 handlePreferredPostTypeChange={props.handlePreferredPostTypeChange}

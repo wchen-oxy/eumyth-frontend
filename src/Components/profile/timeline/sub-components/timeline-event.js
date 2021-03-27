@@ -26,7 +26,7 @@ const Event = (props) => {
 
     const handleRecentEventClick = () => {
         if (!props.disableModalPreview) {
-            props.onEventClick(post, props.eventIndex)
+            props.onEventClick(post, props.index)
         }
         else {
             console.log("Selected, but disabled")
@@ -81,7 +81,7 @@ const Event = (props) => {
                     <div onClick={props.disableModalPreview ?
                         () => console.log("Selected")
                         :
-                        () => props.onEventClick(post, props.eventIndex)}
+                        () => props.onEventClick(post, props.eventIndex, props.columnIndex)}
                     >
                         {content}
                     </div>

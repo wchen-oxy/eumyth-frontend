@@ -18,7 +18,7 @@ const ReviewPost = (props) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [coverPhoto, setCoverPhoto] = useState(null);
-    const [useCoverPhoto, setUseCoverPhoto] = useState(props.coverPhotoKey !== null);
+    const [useCoverPhoto, setUseCoverPhoto] = useState(props.coverPhotoKey !== null && props.isUpdateToPost);
     const [useImageForThumbnail, setUseImageForThumbnail] = useState(props.coverPhotoKey);
     const [shouldRemoveSavedCoverPhoto, setShouldRemoveSavedCoverPhoto] = useState(false);
     const [randomKey, setRandomKey] = useState(0);
@@ -293,7 +293,6 @@ const ReviewPost = (props) => {
             <option key={pursuit} value={pursuit}>{pursuit}</option>
         );
     }
-    console.log(randomKey);
     return (
         <div id="reviewpost-small-window">
             <div>

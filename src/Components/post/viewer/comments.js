@@ -1,5 +1,4 @@
 import React from 'react';
-import TextareaAutosize from 'react-textarea-autosize';
 import AxiosHelper from '../../../Axios/axios';
 import SingleComment from "./sub-components/single-comment";
 import CommentInput from "./sub-components/comment-input";
@@ -14,7 +13,6 @@ class Comments extends React.Component {
             windowType: this.props.windowType,
             commentText: "",
             loadingComments: true,
-
         }
         this.renderCommentSectionType = this.renderCommentSectionType.bind(this);
         this.renderCommentInput = this.renderCommentInput.bind(this);
@@ -27,6 +25,7 @@ class Comments extends React.Component {
     componentDidMount() {
         if (this.props.commentIDArray.length > 0) {
             if (this.props.visitorUsername) {
+                console.log(this.props.visitorUsername);
                 return Promise.all([
                     AxiosHelper.getComments({
                         params: {
@@ -48,6 +47,11 @@ class Comments extends React.Component {
                                         result[0].data.rootComments,
                                         result[1].data.userPreviewId)
                                 }
+                                else {
+                                    this.props.passAnnotationData(
+                                        result[0].data.rootComments,
+                                        null)
+                                }
                             });
                         }
                     );
@@ -67,6 +71,11 @@ class Comments extends React.Component {
                                 if (this.props.postType === SHORT) {
                                     this.props.passAnnotationData(
                                         result.data.rootComments,
+                                        null)
+                                }
+                                else {
+                                    this.props.passAnnotationData(
+                                        result[0].data.rootComments,
                                         null)
                                 }
                             });
@@ -157,6 +166,7 @@ class Comments extends React.Component {
             )
         }
         else if (viewingMode === EXPANDED) {
+            console.log(this.props.fullCommentData);
             return (
                 this.renderCommentThreads(this.props.fullCommentData)
             )

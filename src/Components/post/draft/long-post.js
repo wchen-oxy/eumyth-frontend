@@ -138,7 +138,7 @@ const LongPost = (props) => {
   else {
     return (
       <ReviewPost
-        previousState={INITIAL_STATE}
+         previousState={INITIAL_STATE}
         displayPhoto={props.displayPhoto}
         isPaginated={false}
         textData={props.onlineDraft}

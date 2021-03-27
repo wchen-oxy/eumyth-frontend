@@ -31,7 +31,7 @@ class Timeline extends React.Component {
     }
 
     createTimelineRow(inputArray, mediaType) {
-        let masterArray = this.state.feedData;
+        let masterArray = this.props.feedData;
         let index = masterArray.length - 1; //index position of array in masterArray
         let nextOpenPostIndex = this.state.nextOpenPostIndex;
 
@@ -73,9 +73,11 @@ class Timeline extends React.Component {
             k = 0;
         }
         this.setState({
-            feedData: masterArray,
+            // feedData: masterArray,
             nextOpenPostIndex: nextOpenPostIndex
-        });
+        },
+            () => this.props.updateFeedData(masterArray)
+        );
     }
 
     fetchNextPosts() {
@@ -134,7 +136,9 @@ class Timeline extends React.Component {
             </div>
         );
         return (
-            <div>
+            <div
+                key={this.props.feedKey}
+            >
                 {this.props.allPosts && this.props.allPosts.length > 0 ?
                     (<InfiniteScroll
                         dataLength={this.state.nextOpenPostIndex}
@@ -142,7 +146,7 @@ class Timeline extends React.Component {
                         hasMore={this.state.hasMore}
                         loader={<h4>Loading...</h4>}
                         endMessage={endMessage}>
-                        {this.state.feedData.map((item, index) => (
+                        {this.props.feedData.map((item, index) => (
                             <div
                                 className="timeline-infinite-scroll-row"
                                 key={index}

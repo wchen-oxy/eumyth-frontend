@@ -3,7 +3,7 @@ import ShortPostViewer from "./short-post";
 import LongPostViewer from "./long-post";
 import { SHORT, LONG } from "../../constants/flags";
 import { withFirebase } from "../../../Firebase/index";
-import { returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from '../../constants/urls';
+import AxiosHelper from "../../../Axios/axios";
 
 const parsePossibleTitle = (data) => {
     const titleBlock = data.blocks[0];
@@ -25,8 +25,21 @@ const removeTitleFromBody = (data) => {
 }
 
 const PostViewerController = (props) => {
+    const handleDeletePost = () => {
+        console.log(  props.targetProfileId);
+        console.log(  props.targetIndexUserId);
+
+        console.log(  props.eventData._id);
+
+        // return AxiosHelper
+        //     .deletePost(
+        //         props.targetProfileId,
+        //         props.targetIndexUserId,
+        //         props.eventData._id)
+        //     .then((result) => console.log(result));
+    }
+
     const isOwnProfile = (props.eventData.username === props.visitorUsername);
-    console.log(isOwnProfile);
     const textData = props.textData && props.eventData.isPaginated ? JSON.parse(props.textData) : props.textData;
     switch (props.eventData.post_format) {
         case (SHORT):
@@ -35,7 +48,6 @@ const PostViewerController = (props) => {
                     postId={props.eventData._id}
                     postIndex={props.postIndex}
                     displayPhoto={props.visitorDisplayPhoto}
-                    username={props.username}
                     visitorUsername={props.visitorUsername}
                     pursuitNames={props.pursuitNames}
                     preferredPostType={props.preferredPostType}
@@ -44,7 +56,7 @@ const PostViewerController = (props) => {
                     isOwnProfile={isOwnProfile}
                     isPostOnlyView={props.isPostOnlyView}
                     eventData={props.eventData}
-                    onDeletePost={props.onDeletePost}
+                    onDeletePost={handleDeletePost}
                     closeModal={props.closeModal}
                     passDataToModal={props.passDataToModal}
                     onCommentIDInjection={props.onCommentIDInjection}
@@ -54,13 +66,11 @@ const PostViewerController = (props) => {
         case (LONG):
             const title = props.eventData.title;
             const textContent = title && title === parsePossibleTitle(props.textData) ? removeTitleFromBody(props.textData) : props.textData;
-            console.log(textContent);
             return (
                 <LongPostViewer
                     postId={props.eventData._id}
                     postIndex={props.postIndex}
                     displayPhoto={props.visitorDisplayPhoto}
-                    username={props.username}
                     visitorUsername={props.visitorUsername}
                     pursuitNames={props.pursuitNames}
                     preferredPostType={props.preferredPostType}
@@ -70,7 +80,7 @@ const PostViewerController = (props) => {
                     isOwnProfile={isOwnProfile}
                     isPostOnlyView={props.isPostOnlyView}
                     eventData={props.eventData}
-                    onDeletePost={props.onDeletePost}
+                    onDeletePost={handleDeletePost}
                     closeModal={props.closeModal}
                     passDataToModal={props.passDataToModal}
                     onCommentIDInjection={props.onCommentIDInjection}

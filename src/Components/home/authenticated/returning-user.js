@@ -33,7 +33,9 @@ class ReturningUserPage extends React.Component {
             isModalShowing: false,
             selectedEvent: null,
             textData: '',
-            recentPosts: null
+            recentPosts: null,
+
+            recentPostsKey: 0
         }
 
         this.modalRef = React.createRef();
@@ -227,11 +229,16 @@ class ReturningUserPage extends React.Component {
     }
 
     handleCommentIDInjection(postIndex, rootCommentsArray, feedType) {
-
         if (feedType === RECENT_POSTS) {
             let recentPosts = this.state.recentPosts;
             recentPosts[postIndex].comments = rootCommentsArray;
-            this.setState({ recentPosts: recentPosts });
+            recentPosts[postIndex].comment_count = recentPosts[postIndex].comment_count + 1;
+            this.setState(
+                (state) =>
+                ({
+                    recentPosts: recentPosts,
+                    recentPostsKey: state.recentPostsKey + 1
+                }));
         }
         else if (feedType === FRIEND_POSTS) {
             let friendPosts = this.state.feedData;
@@ -251,10 +258,11 @@ class ReturningUserPage extends React.Component {
                 this.state.preferredPostType) : (null);
             const textData = feedItem.post_format === SHORT ?
                 feedItem.text_data : JSON.parse(feedItem.text_data);
-            const onDeletePost = feedItem.username === this.state.username ?
-                this.handleDeletePost : null;
+
             masterArray.push(
                 <PostViewerController
+                    targetProfileId={this.state.fullUserDataId}
+                    targetIndexUserId={this.state.indexUserDataId}
                     key={nextOpenPostIndex++}
                     postIndex={index++}
                     postId={feedItem._id}
@@ -262,12 +270,9 @@ class ReturningUserPage extends React.Component {
                     isOwnProfile={feedItem.username === this.state.username}
                     displayPhoto={feedItem.display_photo_key}
                     preferredPostType={preferredPostType}
-                    closeModal={null}
                     pursuitNames={this.state.pursuitNames}
-                    username={feedItem.username}
                     eventData={feedItem}
                     textData={textData}
-                    onDeletePost={onDeletePost}
                     passDataToModal={this.passDataToModal}
                     largeViewMode={false}
                     onCommentIDInjection={this.handleCommentIDInjection}
@@ -356,6 +361,7 @@ class ReturningUserPage extends React.Component {
     }
 
     handleEventClick(selectedEvent, postIndex) {
+        console.log(postIndex)
         return (AxiosHelper
             .retrievePost(selectedEvent._id, true)
             .then(
@@ -410,6 +416,9 @@ class ReturningUserPage extends React.Component {
     renderModal() {
         return (
             <PostViewerController
+                targetProfileId={this.state.fullUserDataId}
+                targetIndexUserId={this.state.indexUserDataId}
+
                 largeViewMode={true}
                 visitorUsername={this.state.username}
                 key={this.state.selectedEvent._id}
@@ -418,13 +427,12 @@ class ReturningUserPage extends React.Component {
                 isPostOnlyView={false}
                 displayPhoto={this.state.smallCroppedDisplayPhoto}
                 preferredPostType={this.state.preferredPostType}
-                closeModal={this.closeModal}
                 pursuitNames={this.state.pursuitNames}
-                username={this.state.selectedEvent.username}
                 eventData={this.state.selectedEvent}
                 selectedPostFeedType={this.state.selectedPostFeedType}
                 textData={this.state.textData}
-                onDeletePost={this.handleDeletePost}
+                
+                closeModal={this.closeModal}
                 onCommentIDInjection={this.handleCommentIDInjection}
             />
         );
@@ -441,6 +449,7 @@ class ReturningUserPage extends React.Component {
             this.renderRecentPosts(this.state.recentPosts) : null;
         const renderedModal = this.state.isModalShowing &&
             this.state.selectedEvent ? this.renderModal() : null;
+        console.log(this.state.recentPostsKey);
         return (
             <div>
                 <div
@@ -503,6 +512,7 @@ class ReturningUserPage extends React.Component {
                         </Link>
                     </div>
                     <div
+                        key={this.state.recentPostsKey}
                         id="returninguser-recent-posts-container"
                         className="returninguser-row">
                         {renderedRecentPosts}

@@ -1,13 +1,12 @@
 import React from 'react';
 import { withFirebase } from '../../Firebase';
 import PursuitHolder from './sub-components/pursuit-holder';
-import Timeline from "./timeline/index";
 import AxiosHelper from '../../Axios/axios';
 import NoMatch from '../no-match';
 import PostViewerController from "../post/viewer/post-viewer-controller";
 import FollowButton from "./sub-components/follow-buttons";
 import ProjectController from "../project/index";
-import { returnPostURL, returnUserImageURL, returnUsernameURL, TEMP_PROFILE_PHOTO_URL } from "../constants/urls";
+import { returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../constants/urls";
 import {
     ALL,
     POST,
@@ -22,6 +21,7 @@ import {
     FOLLOWED_STATE
 } from "../constants/flags";
 import './index.scss';
+import PostController from './post-controller';
 
 class ProfilePage extends React.Component {
     _isMounted = false;
@@ -42,36 +42,28 @@ class ProfilePage extends React.Component {
             allPosts: null,
             allProjects: null,
             fail: false,
-            selectedEvent: null,
             textData: null,
             userRelationId: null,
             followerStatus: null,
 
             feedId: null,
-            feedData: null,
+            feedIDList: null,
             mediaType: POST,
             selectedPursuitIndex: -1,
-            selectedPostIndex: null,
-
 
             // lastRetrievedPostIndex: 0,
             preferredPostType: null,
-            isModalShowing: false,
             newProject: false,
 
             postOnlyView: null,
         }
         this.modalRef = React.createRef();
         this.miniModalRef = React.createRef();
-        this.handleEventClick = this.handleEventClick.bind(this);
         this.renderHeroContent = this.renderHeroContent.bind(this);
-        this.closeModal = this.closeModal.bind(this);
-        this.openModal = this.openModal.bind(this);
         this.returnPublicPosts = this.returnPublicPosts.bind(this);
         this.handleFollowClick = this.handleFollowClick.bind(this);
         this.handleFollowerStatusChange = this.handleFollowerStatusChange.bind(this);
         this.handleOptionsClick = this.handleOptionsClick.bind(this);
-        this.handleDeletePost = this.handleDeletePost.bind(this);
         this.handleFeedSwitch = this.handleFeedSwitch.bind(this);
         this.handleMediaTypeSwitch = this.handleMediaTypeSwitch.bind(this);
         this.handleNewBackProjectClick = this.handleNewBackProjectClick.bind(this);
@@ -180,14 +172,14 @@ class ProfilePage extends React.Component {
             this.setState((state) => ({
                 feedId: ALL + mediaType,
                 mediaType: mediaType,
-                feedData: mediaType === POST ? state.allPosts : state.allProjects
+                feedIDList: mediaType === POST ? state.allPosts : state.allProjects
             }));
         }
         else {
             this.setState((state) => ({
                 feedId: state.pursuits[state.selectedPursuitIndex].name + mediaType,
                 mediaType: mediaType,
-                feedData: mediaType === POST ?
+                feedIDList: mediaType === POST ?
                     (state.pursuits[state.selectedPursuitIndex].all_posts ?
                         state.pursuits[state.selectedPursuitIndex].all_posts : [])
                     :
@@ -206,14 +198,14 @@ class ProfilePage extends React.Component {
             this.setState((state) => ({
                 selectedPursuitIndex: -1,
                 feedId: ALL + state.mediaType,
-                feedData: state.mediaType === POST ? state.allPosts : state.allProjects,
+                feedIDList: state.mediaType === POST ? state.allPosts : state.allProjects,
             }));
         }
         else {
             this.setState((state) => ({
                 selectedPursuitIndex: index,
                 feedId: state.pursuits[index].name + state.mediaType,
-                feedData: state.mediaType === POST ?
+                feedIDList: state.mediaType === POST ?
                     state.pursuits[index].all_posts ? state.pursuits[index].all_posts : []
                     :
                     state.pursuits[index].all_projects ? state.pursuits[index].all_projects : [],
@@ -221,14 +213,6 @@ class ProfilePage extends React.Component {
         }
     }
 
-    handleDeletePost() {
-        return AxiosHelper
-            .deletePost(
-                this.state.targetProfileId,
-                this.state.targetIndexUserId,
-                this.state.selectedEvent._id)
-            .then((result) => console.log(result));
-    }
 
     handleFollowerStatusResponse(followerStatusResponse) {
         if (followerStatusResponse.status === 200) {
@@ -295,7 +279,7 @@ class ProfilePage extends React.Component {
             pursuitNames: pursuitNameArray,
             allPosts: postsArray,
             allProjects: projectArray,
-            feedData: postsArray,
+            feedIDList: postsArray,
             mediaType: POST,
             feedId: ALL + POST,
             userRelationId: targetUserInfo.user_relation_id,
@@ -304,51 +288,27 @@ class ProfilePage extends React.Component {
         });
     }
 
-    openModal(postId) {
 
-        this.modalRef.current.style.display = "block";
-        document.body.style.overflow = "hidden";
-        this.setState({ isModalShowing: true }, this.props.history.replace(returnPostURL(postId)));
-
-    }
-
-    closeModal() {
-        this.modalRef.current.style.display = "none";
-        document.body.style.overflow = "visible";
-        this.setState(
-            {
-                isModalShowing: false
-            }, this.props.history.replace(returnUsernameURL(this.state.targetUsername))
-        );
-    }
-
-    handleEventClick(selectedEvent, postIndex) {
-        return AxiosHelper
-            .retrievePost(selectedEvent._id, true)
-            .then(
-                (result) => {
-                    console.log(postIndex);
-                    if (this._isMounted) {
-                        this.setState({
-                            selectedEvent: selectedEvent,
-                            selectedPostIndex: postIndex,
-                            textData: result.data,
-                            postType: selectedEvent.post_format
-                        }, this.openModal(selectedEvent._id));
-                    }
-                }
-            )
-            .catch(error => console.log(error));
-    }
 
     renderHeroContent() {
-        return this.state.mediaType === POST ? (
-            < Timeline
-                mediaType={this.state.mediaType}
-                key={this.state.feedId}
-                allPosts={this.state.feedData}
-                onEventClick={this.handleEventClick}
-                targetProfileId={this.state.targetProfileId} />)
+
+        return this.state.mediaType === POST ?
+            (<PostController
+                targetProfileId={this.state.targetProfileId}
+                targetIndexUserId={this.state.targetIndexUserId}
+                feedIDList={this.state.feedIDList}
+                isOwnProfile={this.state.visitorUsername === this.state.targetUsername}
+                visitorUsername={this.state.visitorUsername}
+                targetUsername={this.state.targetUsername}
+                postIndex={this.state.selectedPostIndex}
+                visitorDisplayPhoto={this.state.smallCroppedDisplayPhoto}
+                preferredPostType={this.state.preferredPostType}
+                postType={this.state.postType}
+
+                pursuitNames={this.state.pursuitNames}
+                eventData={this.state.selectedEvent}
+                textData={this.state.textData}
+            />)
             :
             (<ProjectController
                 username={this.state.targetUsername}
@@ -357,9 +317,8 @@ class ProfilePage extends React.Component {
                 targetIndexUserId={this.state.targetIndexUserId}
                 mediaType={this.state.mediaType}
                 newProject={this.state.newProject}
-                key={this.state.feedId}
-                allPosts={this.state.feedData}
-                onEventClick={this.handleEventClick}
+                feedId={this.state.feedId}
+                allPosts={this.state.feedIDList}
                 onNewBackProjectClick={this.handleNewBackProjectClick}
                 pursuitNames={this.state.pursuitNames}
             />)
@@ -370,7 +329,7 @@ class ProfilePage extends React.Component {
             this.setState((state) => ({
                 newProject: !state.newProject,
                 feedId: NEW_PROJECT,
-                feedData: state.allPosts
+                feedIDList: state.allPosts
             }));
         }
         else {
@@ -413,8 +372,8 @@ class ProfilePage extends React.Component {
     handleOptionsClick() {
     }
 
+
     render() {
-        console.log(this.state.visitorUsername === null && this.state.isPrivate);
         const shouldHideProfile = (
             this.state.visitorUsername === null && this.state.isPrivate)
             ||
@@ -447,25 +406,24 @@ class ProfilePage extends React.Component {
         if (this.state.postOnlyView) {
             return (
                 <PostViewerController
+                    targetProfileId={this.state.targetProfileId}
+                    targetIndexUserId={this.state.targetIndexUserId}
+
                     key={this.state.selectedEvent._id}
                     isOwnProfile={this.state.visitorUsername === this.state.selectedEvent.username}
                     visitorUsername={this.state.visitorUsername}
                     largeViewMode={true}
-                    isPostOnlyView={true}
+                    isPostOnlyView={this.state.postOnlyView}
                     visitorDisplayPhoto={this.state.smallCroppedDisplayPhoto}
                     preferredPostType={this.state.preferredPostType}
                     postType={this.state.postType}
                     pursuitNames={this.state.pursuitNames}
-                    username={this.state.selectedEvent.username}
                     eventData={this.state.selectedEvent}
                     textData={
                         this.state.selectedEvent.post_format === LONG ?
                             JSON.parse(this.state.selectedEvent.text_data) :
                             this.state.selectedEvent.text_data
                     }
-
-                    closeModal={this.closeModal}
-                    onDeletePost={this.handleDeletePost}
                 />
             )
         }
@@ -544,34 +502,7 @@ class ProfilePage extends React.Component {
 
                         }
                     </div>
-                    <div className="modal" ref={this.modalRef}>
-                        <div className="overlay" onClick={(() => this.closeModal())}></div>
-                        <span className="close" onClick={(() => this.closeModal())}>X</span>
-                        {
-                            this.state.isModalShowing && this.state.selectedEvent ?
-                                <PostViewerController
-                                    key={this.state.selectedEvent._id}
-                                    isOwnProfile={this.state.visitorUsername === this.state.targetUsername}
-                                    visitorUsername={this.state.visitorUsername}
-                                    isPostOnlyView={false}
-                                    postIndex={this.state.selectedPostIndex}
 
-                                    visitorDisplayPhoto={this.state.smallCroppedDisplayPhoto}
-                                    preferredPostType={this.state.preferredPostType}
-                                    postType={this.state.postType}
-                                    largeViewMode={true}
-                                    pursuitNames={this.state.pursuitNames}
-                                    username={this.state.targetUsername}
-                                    eventData={this.state.selectedEvent}
-                                    textData={this.state.textData}
-                                    onDeletePost={this.handleDeletePost}
-                                    closeModal={this.closeModal}
-
-                                />
-                                :
-                                <></>
-                        }
-                    </div>
                 </div>
             );
         }

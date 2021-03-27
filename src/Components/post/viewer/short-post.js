@@ -222,7 +222,9 @@ class ShortPostViewer extends React.Component {
         const newCommentId = fullCommentData[fullCommentData.length - 1]._id;
         newCommentIdArray.push(newCommentId)
         this.setState({ fullCommentData: fullCommentData }, () => {
-            if (this.props.postIndex)
+            console.log("line225");
+            console.log(this.props.postIndex);
+            if (this.props.postIndex !== null)
                 this.props.onCommentIDInjection(
                     postIndex,
                     newCommentIdArray,
@@ -590,7 +592,7 @@ class ShortPostViewer extends React.Component {
                     closeModal={this.props.closeModal}
                     postType={SHORT}
                     textData={this.state.tempTextForEdit}
-                    username={this.props.username}
+                    username={this.props.visitorUsername}
                     preferredPostType={this.props.preferredPostType}
                     handlePreferredPostTypeChange={this.handlePreferredPostTypeChange}
                     setPostStage={this.handleWindowChange}

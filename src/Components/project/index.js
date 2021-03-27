@@ -75,6 +75,8 @@ class ProjectController extends React.Component {
             coverPhoto: null,
             newProject: false,
             projectSelected: null,
+            feedData: [[]],
+
         }
 
         this.handleBackClick = this.handleBackClick.bind(this);
@@ -84,7 +86,12 @@ class ProjectController extends React.Component {
         this.handleSortEnd = this.handleSortEnd.bind(this);
         this.handlePost = this.handlePost.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.updateFeedData = this.updateFeedData.bind(this);
 
+    }
+
+    updateFeedData(masterArray) {
+        this.setState({ feedData: masterArray })
     }
 
     handleBackClick() {
@@ -277,15 +284,13 @@ class ProjectController extends React.Component {
                                 newProjectView={this.props.newProject}
                                 onProjectEventSelect={this.handleProjectEventSelect}
                                 onProjectClick={this.handleProjectClick}
-                                key={this.state.projectSelected ? (
-                                    this.state.projectSelected._id)
-                                    : (
-                                        this.props.feedId)}
                                 allPosts={this.state.projectSelected ? (
                                     this.state.projectSelected.post_ids
                                 ) : (
-                                        this.props.allPosts)}
+                                    this.props.allPosts)}
                                 onEventClick={this.props.onEventClick}
+                                feedData={this.state.feedData}
+                                updateFeedData={this.updateFeedData}
                                 targetProfileId={this.props.targetProfileId} />
                         </div>
                     </>
