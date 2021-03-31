@@ -2,7 +2,9 @@ import React from 'react';
 import Isemail from 'isemail';
 import WelcomeLoginForm from './sub-components/login';
 import WelcomeRegisterForm from './sub-components/register';
+import PasswordForgetPage from "../../password/forget/index";
 import VerifyForm from './sub-components/verify';
+import { LOGIN_STATE, PASSWORD_STATE, REGISTER_STATE } from '../../constants/flags';
 import './index.scss';
 
 const INITIAL_STATE = {
@@ -11,20 +13,20 @@ const INITIAL_STATE = {
   password: '',
   test: '',
   error: null,
+  window: LOGIN_STATE,
+  loggedIn: false,
+  verified: null,
+  showRegisterSuccess: false,
 }
 
 export default class WelcomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: false,
-      verified: null,
-      isLoginMode: true,
-      showRegisterSuccess: false,
       ...INITIAL_STATE
     }
 
-    this.handleLongRegisterToggle = this.handleLongRegisterToggle.bind(this);
+    this.handleWindowToggle = this.handleWindowToggle.bind(this);
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
     this.handleRegisterSubmit = this.handleRegisterSubmit.bind(this);
     this.handleSendEmailVerication = this.handleSendEmailVerication.bind(this);
@@ -42,7 +44,14 @@ export default class WelcomePage extends React.Component {
         (user) => {
           if (user) {
             this.setState({
+              currentUser: user,
               verified: user.emailVerified
+            })
+          }
+          else {
+            this.setState({
+              currentUser: null,
+              verified: false
             })
           }
         }
@@ -74,13 +83,9 @@ export default class WelcomePage extends React.Component {
     e.preventDefault();
     console.log("sent");
     this.props.firebase.doSendEmailVerification();
-  }
-
-  handleCurrentUser(user, e) {
-    e.preventDefault();
-    this.setState({
-      currentUser: user
-    });
+    alert(
+      `Email has been sent! Once you verify 
+      your email, try refreshing the page.`);
   }
 
   handleVerifiedState(isVerified) {
@@ -91,12 +96,12 @@ export default class WelcomePage extends React.Component {
     }
   }
 
-  handleLongRegisterToggle(e) {
+  handleWindowToggle(e) {
     e.preventDefault();
-    this.setState(state => ({
-      isLoginMode: !state.isLoginMode
-    })
-    );
+    console.log(e.target.value)
+    this.setState({
+      window: e.target.value
+    });
   }
 
   handleLoginSubmit(e) {
@@ -133,56 +138,74 @@ export default class WelcomePage extends React.Component {
     }
   }
 
-  renderLoginRegister(isLogin) {
-    if (isLogin) {
-      console.log(this.state.verified);
-      return (this.props.firebase.auth.currentUser && !this.state.verified ?
+  renderLoginRegister(state) {
+    if (this.state.currentUser && !this.state.verified) {
+      return (
         <VerifyForm
-          current_user={this.state.currentUser}
-          onToggleLoginRegisterWindow={this.handleLongRegisterToggle}
+          onToggleLoginRegisterWindow={this.handleWindowToggle}
           onSendEmailVerification={this.handleSendEmailVerication}
           onSignOut={this.handleSignOut}
         />
-        :
-        <WelcomeLoginForm
-          onToggleLoginRegisterWindow={this.handleLongRegisterToggle}
-          onLoginEmailChange={this.handleTextChange}
-          onLoginPasswordChange={this.handleTextChange}
-          onLoginSubmit={this.handleLoginSubmit}
-        />);
-    }
-    else
-      return (
-        <WelcomeRegisterForm
-          onToggleLoginRegisterWindow={this.handleLongRegisterToggle}
-          onRegisterEmailChange={this.handleTextChange}
-          onRegisterPasswordChange={this.handleTextChange}
-          onRegisterSubmit={this.handleRegisterSubmit}
-        />
       )
+    }
+
+    if (state === REGISTER_STATE)
+      return (
+        <div className="welcome-hero-side-container">
+          <WelcomeRegisterForm
+            onToggleLoginRegisterWindow={this.handleWindowToggle}
+            onRegisterEmailChange={this.handleTextChange}
+            onRegisterPasswordChange={this.handleTextChange}
+            onRegisterSubmit={this.handleRegisterSubmit}
+          />
+        </div>
+      );
+
+    else if (state === LOGIN_STATE) {
+      return (
+        <div className="welcome-hero-side-container">
+          <WelcomeLoginForm
+            onToggleLoginRegisterWindow={this.handleWindowToggle}
+            onLoginEmailChange={this.handleTextChange}
+            onLoginPasswordChange={this.handleTextChange}
+            onLoginSubmit={this.handleLoginSubmit}
+          />
+        </div>);
+
+    }
+    else if (state === PASSWORD_STATE) {
+      return (
+        <div className="welcome-hero-side-container">
+          <PasswordForgetPage
+            onToggleLoginRegisterWindow={this.handleWindowToggle}
+          />
+        </div>
+      );
+
+
+    }
   }
 
   render() {
-    if (this.state.showRegisterSuccess) {
-      return (
-        <section className="welcome-login-register-section">
-          <div className="welcome-hero-hero-container">
-            <p>Welcome to interestHub! Login or sign up to get started!</p>
-          </div>
-          <div>
-            Please check your email for a verification link.
-              <span>Didn't see the link?
-                <button onClick={this.handleSendEmailVerication}>
-                Resend!
-                </button>
-            </span>
-            <button onClick={this.handleRegisterSuccess}>Return</button>
-          </div>
-        </section>
-      );
-    }
+    // if (this.state.showRegisterSuccess) {
+    //   return (
+    //     <section className="welcome-login-register-section">
+    //       <div className="welcome-hero-hero-container">
+    //         <p>Welcome to interestHub! Login or sign up to get started!</p>
+    //       </div>
+    //       <div>
+    //         Please check your email for a verification link.
+    //           <span>Didn't see the link?
+    //             <button onClick={this.handleSendEmailVerication}>
+    //             Resend!
+    //             </button>
+    //         </span>
+    //         <button onClick={this.handleRegisterSuccess}>Return</button>
+    //       </div>
+    //     </section>
+    //   );
+    // }
     return (
-
       <section className="welcome-login-register-section">
         <div className="welcome-hero-hero-container">
           <p>Welcome to interestHub! Login or sign up to get started!</p>
@@ -191,7 +214,7 @@ export default class WelcomePage extends React.Component {
           <br></br>
           <p>(email: williamchen@oxy.edu, password: 123123)</p>
         </div>
-        {this.renderLoginRegister(this.state.isLoginMode)}
+        {this.renderLoginRegister(this.state.window)}
       </section>
 
     )

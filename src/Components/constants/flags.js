@@ -6,6 +6,9 @@ export const UNFOLLOWED_STATE = "UNFOLLOWED";
 export const INITIAL_STATE = "INITIAL_STATE";
 export const EDIT_STATE = "EDIT_STATE";
 export const REVIEW_STATE = "REVIEW_STATE";
+export const LOGIN_STATE = "LOGIN_STATE";
+export const REGISTER_STATE = "REGISTER_STATE";
+export const PASSWORD_STATE = "PASSWORD_STATE";
 
 // ACTIONS
 export const FOLLOW_ACTION = "FOLLOW";

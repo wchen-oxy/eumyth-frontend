@@ -1,6 +1,18 @@
 @import "../../../partials";
 @import "../../../App.scss";
 
+@mixin text-input {
+    height: 30px;
+    font-size: 20px;
+    box-sizing:border-box
+}
+
+@mixin content-switch-button {
+    height: 25px;
+}
+
+
+
 .welcome-login-register-section {
     @include flex-display-row;
     height: calc(100vh - 50px);
@@ -14,7 +26,6 @@
     @include flex-display-column;
     margin: auto;
     justify-content: center;
- 
 }
 
 .welcome-hero-hero-container {
@@ -27,7 +38,9 @@
 .welcome-hero-side-container {
     height: 100%;
     width: 35%;
-    button{
-        width:fit-content;   
+    margin-left: 25px;
+    margin-right: 25px;
+    button {
+        width: fit-content;
     }
 }

@@ -25,18 +25,34 @@ const removeTitleFromBody = (data) => {
 }
 
 const PostViewerController = (props) => {
+    const deletePostCallback = () => {
+        console.log(props.targetProfileId);
+        console.log(props.targetIndexUserId);
+        console.log(props.eventData._id);
+        return AxiosHelper
+            .deletePost(
+                props.targetProfileId,
+                props.targetIndexUserId,
+                props.eventData._id)
+            .then((result) => console.log(result))
+            .catch((err) => {
+                console.log(err);
+                alert("Something went wrong during deletion");
+            });
+    }
+
     const handleDeletePost = () => {
-        console.log(  props.targetProfileId);
-        console.log(  props.targetIndexUserId);
-
-        console.log(  props.eventData._id);
-
-        // return AxiosHelper
-        //     .deletePost(
-        //         props.targetProfileId,
-        //         props.targetIndexUserId,
-        //         props.eventData._id)
-        //     .then((result) => console.log(result));
+        if (props.eventData.image_data.length) {
+            let imageArray = props.eventData.image_data;
+            if (props.eventData.cover_photo_key) {
+                imageArray.push(props.eventData.cover_photo_key)
+            }
+            return AxiosHelper.deleteManyPhotosByKey(imageArray)
+                .then((results) => deletePostCallback());
+        }
+        else {
+            return deletePostCallback();
+        }
     }
 
     const isOwnProfile = (props.eventData.username === props.visitorUsername);

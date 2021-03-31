@@ -19,6 +19,7 @@ const DRAFT_TITLE_URL = DRAFT_BASE_URL + "/title";
 
 //image
 const IMAGE_BASE_URL = ROOT_URL + "/image";
+const MULTIPLE_IMAGES_URL = IMAGE_BASE_URL + "/multiple";
 const DISPLAY_PHOTO_URL = IMAGE_BASE_URL + "/display-photo";
 const COVER_PHOTO_URL = IMAGE_BASE_URL + "/cover";
 const TINY_DISPLAY_PHOTO_URL = IMAGE_BASE_URL + "/navbar-display-photo";
@@ -77,6 +78,7 @@ module.exports = {
     returnPostURL: returnPostURL,
     ROOT_URL,
     IMAGE_BASE_URL,
+    MULTIPLE_IMAGES_URL,
     DISPLAY_PHOTO_URL,
     COVER_PHOTO_URL,
     DRAFT_BASE_URL,

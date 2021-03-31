@@ -1,19 +1,23 @@
 import React from 'react';
+import { LOGIN_STATE, } from "../../../constants/flags";
+import "./register.scss";
 
 const WelcomeRegisterForm = (props) => (
-  <div className="welcome-hero-side-container">
-    <h4>Sign Up</h4>
-    <button onClick={props.onToggleLoginRegisterWindow}>Sign In</button>
-    <form onSubmit={props.onRegisterSubmit}>
-      <div>
-        <input type="text" placeholder="Email" name="email" autoComplete="off" onChange={props.onRegisterEmailChange} />
-      </div>
-      <div>
-        <input type="password" placeholder="Password" name="password" autoComplete="off" onChange={props.onRegisterPasswordChange} />
-      </div>
-      <input type="submit" value="Submit" />
-    </form>
-  </div>
+  <section>
+    <div id="welcomeregisterform-form-container">
+      <form onSubmit={props.onRegisterSubmit}>
+        <div className="welcomeregisterform-text-input-container">
+          <input type="text" placeholder="Email" name="email" autoComplete="off" onChange={props.onRegisterEmailChange} />
+        </div>
+        <div className="welcomeregisterform-text-input-container">
+          <input type="password" placeholder="Password" name="password" autoComplete="off" onChange={props.onRegisterPasswordChange} />
+        </div>
+        <input id="welcomeregisterform-button" type="submit" value="Sign Up" />
+      </form>
+    </div>
+    <button id="welcomeregisterform-login" value={LOGIN_STATE} onClick={props.onToggleLoginRegisterWindow}>Sign In</button>
+  </section>
+
 )
 
 

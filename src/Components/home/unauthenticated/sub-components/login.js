@@ -1,25 +1,26 @@
 import React from 'react';
-import PasswordForgetPage from '../../../password/forget/index'
+import { PASSWORD_STATE, REGISTER_STATE } from "../../../constants/flags";
+import "./login.scss";
 
 const WelcomeLoginForm = (props) =>
-  (
-    <div className="welcome-hero-side-container">
-      <section >
-        <h4>Sign In</h4>
-          <button onClick={props.onToggleLoginRegisterWindow}>Create Account</button>
-        <form onSubmit={props.onLoginSubmit}>
-          <div>
-            <input type="text" placeholder="Email" name="email" autoComplete="off" onChange={props.onLoginEmailChange} />
-          </div>
-          <div>
-            <input type="password" placeholder="Password" name="password" autoComplete="off" onChange={props.onLoginPasswordChange} />
-          </div>
-          <input type="submit" value="Log in" />
-        </form>
-        <PasswordForgetPage />
-      </section>
+(
+  <section>
+    <div id="welcomeloginform-form-container">
+      <form onSubmit={props.onLoginSubmit}>
+        <div className="welcomeloginform-text-input-container">
+          <input type="text" placeholder="Email" name="email" autoComplete="off" onChange={props.onLoginEmailChange} />
+        </div>
+        <div className="welcomeloginform-text-input-container">
+          <input type="password" placeholder="Password" name="password" autoComplete="off" onChange={props.onLoginPasswordChange} />
+        </div>
+        <input id="welcomeloginform-login-button" className="welcomeloginform-button" type="submit" value="Log in" />
+      </form>
+      <button id="welcomelogin-forgot-button" value={PASSWORD_STATE} onClick={props.onToggleLoginRegisterWindow}>Forget Password?</button>
+
     </div>
-  )
+    <button id="welcomeloginform-switch-button" value={REGISTER_STATE} onClick={props.onToggleLoginRegisterWindow}>Create Account</button>
+  </section>
+)
 
 
 

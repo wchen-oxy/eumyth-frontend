@@ -37,12 +37,20 @@ export default class AxiosHelper {
             }
         })
     }
+
     static deletePhotoByKey(key) {
         return axios.delete(urls.IMAGE_BASE_URL, {
             data: {
                 key: key,
             }
         })
+    }
+
+    static deleteManyPhotosByKey(keysArray) {
+        console.log(keysArray);
+        return axios.delete(urls.MULTIPLE_IMAGES_URL, {
+            data: { keys: keysArray }
+        });
     }
 
     static deletePost(userDataId, indexUserId, postId) {

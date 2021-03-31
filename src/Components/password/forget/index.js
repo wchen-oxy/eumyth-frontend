@@ -1,11 +1,12 @@
 import React from 'react';
 import { withFirebase } from '../../../Firebase';
 import { Link } from 'react-router-dom';
+import { LOGIN_STATE } from '../../constants/flags';
 
-const PasswordForgetPage = () => (
+const PasswordForgetPage = (props) => (
   <div>
     <h4>PasswordForget</h4>
-    <PasswordForgetForm />
+    <PasswordForgetForm onToggleLoginRegisterWindow={props.onToggleLoginRegisterWindow} />
   </div>
 )
 
@@ -45,19 +46,23 @@ class PasswordForgetFormBase extends React.Component {
     const isInvalid = email === '';
 
     return (
-      <form onSubmit={this.handleSubmit}>
-        <input
-          name="email"
-          value={this.state.email}
-          onChange={this.handleTextUpdate}
-          type="text"
-          placeholder="Email Address"
-        />
-        <button disabled={isInvalid} type="submit">
-          Reset My Password
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <input
+            name="email"
+            value={this.state.email}
+            onChange={this.handleTextUpdate}
+            type="text"
+            placeholder="Email Address"
+          />
+          <button disabled={isInvalid} type="submit">
+            Reset My Password
         </button>
-        {error && <p>{error.message}</p>}
-      </form>
+          {error && <p>{error.message}</p>}
+        </form>
+        <button onClick={this.props.onToggleLoginRegisterWindow} value={LOGIN_STATE} >Return</button>
+      </div>
+
     );
   }
 }

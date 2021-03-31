@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { REGISTER_STATE } from '../../../constants/flags';
 
 const VerifyForm = (props) => {
     const [sentIndicator, setSentIndicator] = useState("");
@@ -16,6 +17,7 @@ const VerifyForm = (props) => {
                 </button>
             <div>
                 <button
+                    value={REGISTER_STATE}
                     onClick={props.onLoginRegisterToggle}
                 >
                     Register
@@ -23,7 +25,7 @@ const VerifyForm = (props) => {
                 <button
                     onClick={props.onSignOut}
                 >
-                    Login as someone else
+                    Return to Login
                     </button>
             </div>
         </div>

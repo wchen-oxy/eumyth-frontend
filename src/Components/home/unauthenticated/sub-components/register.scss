@@ -1,0 +1,21 @@
+@import "../index.scss";
+
+#welcomeregisterform-form-container {
+    margin-bottom: 25px;
+}
+
+.welcomeregisterform-text-input-container {
+    input {
+        @include text-input;
+        width: 100%;
+    }
+}
+
+#welcomeregisterform-button {
+    height: 50px;
+    width: 100%;
+}
+
+#welcomeregisterform-login {
+    @include content-switch-button;
+}

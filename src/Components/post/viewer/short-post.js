@@ -421,7 +421,7 @@ class ShortPostViewer extends React.Component {
                                 <div className="shortpostviewer-large-side-container">
                                     <PostHeader
                                         isOwnProfile={this.props.isOwnProfile}
-                                        username={this.props.username}
+                                        username={this.props.eventData.username}
                                         date={this.state.date}
                                         displayPhoto={this.props.eventData.display_photo_key}
                                         onEditClick={this.handleWindowChange}
@@ -448,7 +448,7 @@ class ShortPostViewer extends React.Component {
                                 <div className="shortpostviewer-inline-hero-container">
                                     <PostHeader
                                         isOwnProfile={this.props.isOwnProfile}
-                                        username={this.props.username}
+                                        username={this.props.eventData.username}
                                         date={this.state.date}
                                         displayPhoto={this.props.eventData.display_photo_key}
                                     />
@@ -484,7 +484,7 @@ class ShortPostViewer extends React.Component {
                                 >
                                     <PostHeader
                                         isOwnProfile={this.props.isOwnProfile}
-                                        username={this.props.username}
+                                        username={this.props.eventData.username}
                                         date={this.state.date}
                                         displayPhoto={this.props.eventData.display_photo_key}
                                         onEditClick={this.handleWindowChange}
@@ -514,7 +514,7 @@ class ShortPostViewer extends React.Component {
                             >
                                 <PostHeader
                                     isOwnProfile={this.props.isOwnProfile}
-                                    username={this.props.username}
+                                    username={this.props.eventData.username}
                                     date={this.state.date}
                                     displayPhoto={this.props.eventData.display_photo_key}
                                 />

@@ -12,7 +12,7 @@ import _ from 'lodash';
 
 const LongPost = (props) => {
   const [windowState, setWindowState] = useState(INITIAL_STATE);
-  const [hasContent, setHasContent] = useState(props.onlineDraft !== null);
+  const [hasContent, setHasContent] = useState(props.onlineDraft !== null || props.localDraft);
   const [previewTitle, setPreviewTitle] = useState(null);
   const editorContainerRef = useRef(null);
   const postHeaderRef = useRef(null);
@@ -65,6 +65,7 @@ const LongPost = (props) => {
       }
     }
   }
+  console.log(props.localDraft);
   if (windowState === INITIAL_STATE)
     return (
       <div
