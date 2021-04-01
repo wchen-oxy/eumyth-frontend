@@ -23,6 +23,7 @@ const MULTIPLE_IMAGES_URL = IMAGE_BASE_URL + "/multiple";
 const DISPLAY_PHOTO_URL = IMAGE_BASE_URL + "/display-photo";
 const COVER_PHOTO_URL = IMAGE_BASE_URL + "/cover";
 const TINY_DISPLAY_PHOTO_URL = IMAGE_BASE_URL + "/navbar-display-photo";
+const COMPRESS_PHOTO_URL = IMAGE_BASE_URL + "/compress";
 
 //user
 const USER_BASE_URL = ROOT_URL + "/user";
@@ -84,6 +85,7 @@ module.exports = {
     DRAFT_BASE_URL,
     DRAFT_TITLE_URL,
     TINY_DISPLAY_PHOTO_URL,
+    COMPRESS_PHOTO_URL,
     USER_BASE_URL,
     USER_BIO_URL,
     USER_ACCOUNT_SETTINGS_INFO_URL,

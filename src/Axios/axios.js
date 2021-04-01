@@ -47,7 +47,6 @@ export default class AxiosHelper {
     }
 
     static deleteManyPhotosByKey(keysArray) {
-        console.log(keysArray);
         return axios.delete(urls.MULTIPLE_IMAGES_URL, {
             data: { keys: keysArray }
         });

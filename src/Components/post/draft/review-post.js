@@ -22,6 +22,7 @@ const ReviewPost = (props) => {
     const [useImageForThumbnail, setUseImageForThumbnail] = useState(props.coverPhotoKey);
     const [shouldRemoveSavedCoverPhoto, setShouldRemoveSavedCoverPhoto] = useState(false);
     const [randomKey, setRandomKey] = useState(0);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     let pursuitSelects = [];
 
     const clearFile = () => {
@@ -56,9 +57,11 @@ const ReviewPost = (props) => {
     const handleNewSubmit = (formData) => {
         return AxiosHelper.createPost(formData)
             .then((result) => {
+                setIsSubmitting(false);
                 result.status === 201 ? handleSuccess() : handleError();
             })
             .catch((result) => {
+                setIsSubmitting(false);
                 console.log(result.error);
                 alert(result);
             });
@@ -149,14 +152,17 @@ const ReviewPost = (props) => {
         return AxiosHelper.updatePost(formData)
             .then((result) => {
                 console.log(result);
+                setIsSubmitting(false);
                 //     result.status === 200 ? handleSuccess() : handleError();
             }).catch((result) => {
                 console.log(result.error);
+                setIsSubmitting(false);
                 alert(result);
             });
     }
 
     const handleFormAppend = () => {
+        setIsSubmitting(true);
         let formData = new FormData();
         formData.append("displayPhoto", props.displayPhoto);
         formData.append("postType", props.postType);
@@ -367,8 +373,10 @@ const ReviewPost = (props) => {
                             </option>
                         </select>
                     </div>
-                    <button onClick={(e) => handleFormAppend(e)}>
-                        {props.isUpdateToPost ? "Update!" : "Post!"}
+                    <button onClick={(e) => handleFormAppend(e)} disabled={isSubmitting}>
+                        {props.isUpdateToPost ?
+                            isSubmitting ? "Updating!" : "Update!" :
+                            isSubmitting ? "Posting!" : "Post!"}
                     </button>
                 </div>
                 {error ? <p>An Error Occured. Please try again. </p> : <></>}

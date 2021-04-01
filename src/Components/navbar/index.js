@@ -84,14 +84,15 @@ class NavigationAuth extends React.Component {
     }
   }
 
-  closeModal(postType) {
+  closeModal() {
     console.log("Clicked");
     this.modalRef.current.style.display = "none";
     document.body.style.overflow = "visible";
-    if (postType) this.setState({ isRequestModalShowing: false });
-    else {
-      this.setState({ isPostModalShowing: false });
-    }
+    this.setState({
+      isRequestModalShowing: false,
+      isPostModalShowing: false
+    });
+
   }
 
   renderModal() {
@@ -126,6 +127,11 @@ class NavigationAuth extends React.Component {
   }
 
   render() {
+    console.log(this.state.isPostModalShowing);
+    console.log(this.state.isRequestModalShowing);
+    const shouldHideFeatures =
+      this.state.existingUserLoading
+      || !this.state.existingUserLoading && !this.state.isExistingUser;
     return (
       <>
         <nav>
@@ -137,41 +143,39 @@ class NavigationAuth extends React.Component {
                 <h3>Everfire</h3>
               </div>
             </Link>
-            <div
-              className="navbar-main-action-buttons-container"
-            >
-              <button onClick={() => this.openModal(POST)}>
-                <h4>New Entry</h4>
-              </button>
-            </div>
+            {shouldHideFeatures ? (<></>) :
+              <div className="navbar-main-action-buttons-container" >
+                <button onClick={() => this.openModal(POST)}>
+                  <h4>New Entry</h4>
+                </button>
+              </div>
+            }
+
           </div>
           <div id="navbar-right-container">
-            {
-              this.state.existingUserLoading
-                || !this.state.existingUserLoading
-                && !this.state.isExistingUser ?
-                (<></>) :
-                (
-                  <>
-                    <Link
-                      to={returnUsernameURL(this.state.username)}
+            {shouldHideFeatures ?
+              (<></>) :
+              (
+                <>
+                  <Link
+                    to={returnUsernameURL(this.state.username)}
+                  >
+                    <div
+                      className="navbar-main-action-buttons-container"
                     >
-                      <div
-                        className="navbar-main-action-buttons-container"
-                      >
-                        <div id="navbar-display-photo-container">
-                          <img src={this.state.tinyDisplayPhoto} />
-                        </div>
-                        <p>{this.state.username}</p>
+                      <div id="navbar-display-photo-container">
+                        <img src={this.state.tinyDisplayPhoto} />
                       </div>
-                    </Link>
-                    <div className="navbar-main-action-buttons-container">
-                      <button onClick={() => this.openModal(REQUEST_ACTION)}>
-                        <h4>Friends</h4>
-                      </button>
+                      <p>{this.state.username}</p>
                     </div>
-                  </>
-                )
+                  </Link>
+                  <div className="navbar-main-action-buttons-container">
+                    <button onClick={() => this.openModal(REQUEST_ACTION)}>
+                      <h4>Friends</h4>
+                    </button>
+                  </div>
+                </>
+              )
             }
             <OptionsMenu shouldHideFriendsTab={!this.state.existingUserLoading
               && !this.state.isExistingUser} />

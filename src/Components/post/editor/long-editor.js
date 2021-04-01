@@ -5,7 +5,7 @@ import AxiosHelper from '../../../Axios/axios';
 import { ImageBlockConfig } from 'Dante2/package/es/components/blocks/image.js';
 import { PlaceholderBlockConfig } from 'Dante2/package/es/components/blocks/placeholder';
 import { withFirebase } from '../../../Firebase';
-import { IMAGE_BASE_URL } from '../../constants/urls';
+import { IMAGE_BASE_URL, COMPRESS_PHOTO_URL } from '../../constants/urls';
 
 const SAVE_INTERVAL = 4000;
 class LongEditor extends React.Component {

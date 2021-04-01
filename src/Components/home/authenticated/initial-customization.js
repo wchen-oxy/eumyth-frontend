@@ -19,6 +19,7 @@ const INITIAL_STATE = {
     fullImage: null,
     imageScale: 1,
     imageRotation: 0,
+    isSubmitting: false
 }
 
 class InitialCustomizationPage extends React.Component {
@@ -84,18 +85,16 @@ class InitialCustomizationPage extends React.Component {
             })
     }
 
-    handleTextChange(e) {
+    handleTextChange(e, isInvalid) {
         e.preventDefault();
         this.setState({ [e.target.name]: e.target.value });
         if (e.target.name === "username") {
             const username = e.target.value;
-            if (username === username.toLowerCase()) {
+            if (!isInvalid) {
                 this.handleUsernameChange(username);
-                this.setState({ isUpperCase: false });
+
             }
-            else {
-                this.setState({ isUpperCase: true });
-            }
+
         }
     }
 
@@ -127,7 +126,8 @@ class InitialCustomizationPage extends React.Component {
 
     handleProfileSubmit(e) {
         e.preventDefault();
-        if (this.editor) {
+        this.setState({ isSubmitting: true });
+        if (this.state.profilePhoto) {
             const canvasScaled = this.editor.getImage();
             Promise.all(
                 [this.props.firebase.writeBasicUserData(
@@ -195,10 +195,14 @@ class InitialCustomizationPage extends React.Component {
                 )
                 .then(
                     (result) => {
+                        this.setState({ isSubmitting: false });
                         if (result.status === 201) window.location.reload();
                     }
                 )
-                .catch((error) => console.log(error));
+                .catch((error) => {
+                    this.setState({ isSubmitting: false });
+                    console.log(error);
+                });
         }
         else {
             Promise.all(
@@ -257,19 +261,20 @@ class InitialCustomizationPage extends React.Component {
     };
 
     render() {
-        const available =
+        const isAvailable =
             this.state.username !== ''
                 && !this.state.isTaken ?
                 "Available" :
                 "Taken";
-        const upperCase =
-            this.state.isUpperCase ?
-                ", But Please Choose Only Lower Case Characters" :
-                "";
+        const isUpperCase =
+            this.state.username !== this.state.username.toLowerCase() ? true : false;
+        const upperCaseMessage = isUpperCase ? ", But Please Choose Only Lower Case Characters" : "";
         const specialCharacters = this.testForSpecialCharacter(this.state.username);
         const specialCharMessage =
             specialCharacters ?
-                ", But No Special Characters Please" :
+                isUpperCase ? " and No Special Characters Please"
+                    :
+                    ", But No Special Characters Please" :
                 "";
         const { username, firstName, lastName, pursuits } = this.state;
         let isInvalid =
@@ -279,13 +284,14 @@ class InitialCustomizationPage extends React.Component {
             pursuits === null ||
             pursuits.length === 0 ||
             this.state.isTaken ||
-            this.state.isUpperCase ||
+            isUpperCase ||
             specialCharacters;
 
         const pursuitDetails =
             this.state.pursuits.length !== 0 ? (
                 this.state.experienceSelects) :
                 (<></>);
+        console.log(this.state.profilePhoto);
 
         return (
             <div className="initialcustomization-container">
@@ -323,15 +329,13 @@ class InitialCustomizationPage extends React.Component {
                     <div className="initialcustomization-content-container">
                         <label>
                             <p>Choose a username!</p>
-                            {this.state.username === '' ? "Invalid" : available}
-                            <p>{upperCase}</p>
-                            <p>{specialCharMessage}</p>
+                            <p>{this.state.username === '' ? "Invalid" : isAvailable + upperCaseMessage + specialCharMessage}</p>
                         </label>
                         <input
                             type="text"
                             name="username"
                             placeholder="Username"
-                            onChange={this.handleTextChange}
+                            onChange={(e) => this.handleTextChange(e, isInvalid)}
                         />
                         <label>First Name</label>
                         <input
@@ -359,7 +363,7 @@ class InitialCustomizationPage extends React.Component {
                         />
                         {pursuitDetails}
                         <button
-                            disabled={isInvalid}
+                            disabled={isInvalid || this.state.isSubmitting}
                             type="submit"
                         >
                             Submit
