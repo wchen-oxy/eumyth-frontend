@@ -133,20 +133,23 @@ export default class WelcomePage extends React.Component {
     else {
       this.props.firebase.doCreateUser(this.state.email, this.state.password)
         .then(
+          () => 
           this.setState({ showRegisterSuccess: true })
-        );
+        )
+        .catch((err) => console.log(err));
     }
   }
 
   renderLoginRegister(state) {
     if (this.state.currentUser && !this.state.verified) {
       return (
-        <VerifyForm
-          onToggleLoginRegisterWindow={this.handleWindowToggle}
-          onSendEmailVerification={this.handleSendEmailVerication}
-          onSignOut={this.handleSignOut}
-        />
-      )
+        <div className="welcome-hero-side-container">
+          <VerifyForm
+            onToggleLoginRegisterWindow={this.handleWindowToggle}
+            onSendEmailVerification={this.handleSendEmailVerication}
+            onSignOut={this.handleSignOut}
+          />
+        </div>);
     }
 
     if (state === REGISTER_STATE)
@@ -187,24 +190,7 @@ export default class WelcomePage extends React.Component {
   }
 
   render() {
-    // if (this.state.showRegisterSuccess) {
-    //   return (
-    //     <section className="welcome-login-register-section">
-    //       <div className="welcome-hero-hero-container">
-    //         <p>Welcome to interestHub! Login or sign up to get started!</p>
-    //       </div>
-    //       <div>
-    //         Please check your email for a verification link.
-    //           <span>Didn't see the link?
-    //             <button onClick={this.handleSendEmailVerication}>
-    //             Resend!
-    //             </button>
-    //         </span>
-    //         <button onClick={this.handleRegisterSuccess}>Return</button>
-    //       </div>
-    //     </section>
-    //   );
-    // }
+
     return (
       <section className="welcome-login-register-section">
         <div className="welcome-hero-hero-container">

@@ -43,12 +43,12 @@ class Firebase {
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
+        console.log(error);
         if (errorCode === 'auth/weak-password') {
           alert('The password is too weak.');
         } else {
-          return (errorMessage);
+          alert (errorMessage);
         }
-        console.log(error);
       });
   }
 
@@ -94,15 +94,15 @@ class Firebase {
   }
 
   //yes
- returnUsername() {
-      return this.auth.currentUser.displayName;
-  } 
+  returnUsername() {
+    return this.auth.currentUser.displayName;
+  }
 
   //yes
   doUsernameUpdate(username) {
-    return this.auth.currentUser.updateProfile({displayName: username})
-    .then(() => 200)
-    ;
+    return this.auth.currentUser.updateProfile({ displayName: username })
+      .then(() => 200)
+      ;
   }
 
   //yes
@@ -124,7 +124,7 @@ class Firebase {
   }
 
   //yes
-  returnName(){
+  returnName() {
     const uid = this.auth.currentUser.uid;
     //read from API
     return this.db.ref('users/' + uid).once('value').then(

@@ -2,6 +2,11 @@
 
 #welcomeregisterform-form-container {
     margin-bottom: 25px;
+    p {
+        margin-top: 12px;
+        margin-bottom: 36px;
+        font-size: 14px;
+    }
 }
 
 .welcomeregisterform-text-input-container {
@@ -12,8 +17,11 @@
 }
 
 #welcomeregisterform-button {
-    height: 50px;
-    width: 100%;
+    @include hero-button;
+}
+#welcomeregisterform-button:disabled {
+    @include hero-button;
+    background-color: rgb(197, 197, 197);
 }
 
 #welcomeregisterform-login {

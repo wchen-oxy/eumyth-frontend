@@ -69,6 +69,7 @@ class InitialCustomizationPage extends React.Component {
             .then(
                 (response) => {
                     let isTaken = null;
+                    console.log(response.data);
                     if (response.status === 200) {
                         isTaken = true;
                     }
