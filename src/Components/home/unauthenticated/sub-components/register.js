@@ -7,7 +7,7 @@ const WelcomeRegisterForm = (props) => {
 
   const checkPasswordValid = (e) => {
 
-    if (e.target.value.length > 6) {
+    if (e.target.value.length >= 6) {
       setDisableSubmit(false)
       props.onRegisterPasswordChange(e)
     }
@@ -25,7 +25,7 @@ const WelcomeRegisterForm = (props) => {
           <div className="welcomeregisterform-text-input-container">
             <input type="password" placeholder="Password" name="password" autoComplete="off" onChange={checkPasswordValid} />
           </div>
-          <p>{disableSubmit ? "Password must be longer than 6 characters" : null }</p>
+          <p>{disableSubmit ? "Password must be at least 6 characters" : null }</p>
           <input id="welcomeregisterform-button" type="submit" value="Sign Up" disabled={disableSubmit} />
         </form>
       </div>

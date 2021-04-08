@@ -22,11 +22,16 @@ const INITIAL_STATE = {
     isSubmitting: false
 }
 
+// const debouncer = (func) => (
+//     _.debounce(func, 100)
+// )
+
 class InitialCustomizationPage extends React.Component {
     constructor(props) {
         super(props);
         this.editor = React.createRef(null);
         this.handleTextChange = this.handleTextChange.bind(this);
+        // this.handleUsernameChange = (username) => debouncer(this.checkUsernameAvailable(username));
         this.handleUsernameChange = _.debounce((username) => this.checkUsernameAvailable(username), 1000);
         this.handleExperienceSelect = this.handleExperienceSelect.bind(this);
         this.handleProfileSubmit = this.handleProfileSubmit.bind(this);
@@ -69,7 +74,6 @@ class InitialCustomizationPage extends React.Component {
             .then(
                 (response) => {
                     let isTaken = null;
-                    console.log(response.data);
                     if (response.status === 200) {
                         isTaken = true;
                     }
@@ -292,7 +296,6 @@ class InitialCustomizationPage extends React.Component {
             this.state.pursuits.length !== 0 ? (
                 this.state.experienceSelects) :
                 (<></>);
-        console.log(this.state.profilePhoto);
 
         return (
             <div className="initialcustomization-container">
