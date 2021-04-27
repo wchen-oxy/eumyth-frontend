@@ -4,7 +4,13 @@ const REGION = 'us-west-1';
 const returnPostURL = (post) => ("/p/" + post);
 const returnUsernameURL = (username) => ("/u/" + username);
 const returnUserImageURL = (key) => ("http://" + BUCKET_NAME + ".s3." + REGION + ".amazonaws.com/" + key);
-
+const returnUsernameObject = (username) => {
+    return {
+        params: {
+            username: username
+        }
+    }
+};
 //Temporary Profile Photo
 const TEMP_PROFILE_PHOTO_URL = "https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05c757fe30231fac65b504dd";
 
@@ -73,10 +79,11 @@ const REFRESH_COMMENTS_URL = COMMENT_BASE_URL + "/refresh";
 const VOTE_ON_COMMENT_URL = COMMENT_BASE_URL + "/vote";
 
 module.exports = {
-    TEMP_PROFILE_PHOTO_URL: TEMP_PROFILE_PHOTO_URL,
-    returnUsernameURL: returnUsernameURL,
-    returnUserImageURL: returnUserImageURL,
-    returnPostURL: returnPostURL,
+    TEMP_PROFILE_PHOTO_URL,
+    returnUsernameObject,
+    returnUsernameURL,
+    returnUserImageURL,
+    returnPostURL,
     ROOT_URL,
     IMAGE_BASE_URL,
     MULTIPLE_IMAGES_URL,

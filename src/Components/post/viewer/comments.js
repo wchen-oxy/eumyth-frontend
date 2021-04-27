@@ -27,13 +27,11 @@ class Comments extends React.Component {
             if (this.props.visitorUsername) {
                 console.log(this.props.visitorUsername);
                 return Promise.all([
-                    AxiosHelper.getComments({
-                        params: {
-                            rootCommentIdArray: JSON.stringify(this.props.commentIDArray),
-                            viewingMode: this.state.windowType
-                        }
-                    }),
-                    AxiosHelper.getUserPreviewId({ params: { username: this.props.visitorUsername } })
+                    AxiosHelper.getComments(
+                        JSON.stringify(this.props.commentIDArray),
+                        this.state.windowType
+                    ),
+                    AxiosHelper.getUserPreviewId(this.props.visitorUsername)
                 ])
                     .then(
                         (result) => {
@@ -136,12 +134,7 @@ class Comments extends React.Component {
                 (result) => {
                     const commentArray = result.data.rootCommentIdArray
                     return AxiosHelper
-                        .refreshComments({
-                            params:
-                            {
-                                rootCommentIdArray: JSON.stringify(commentArray)
-                            }
-                        })
+                        .refreshComments(JSON.stringify(commentArray))
                         .then((result) => {
                             this.props.onCommentDataInjection(
                                 this.props.postIndex,

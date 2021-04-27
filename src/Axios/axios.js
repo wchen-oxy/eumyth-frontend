@@ -13,8 +13,7 @@ export default class AxiosHelper {
     }
 
     static checkUsernameAvailable(username) {
-        console.log(urls.CHECK_USERNAME_URL);
-        return axios.get(urls.CHECK_USERNAME_URL, { params: { username: username } });
+        return axios.get(urls.CHECK_USERNAME_URL, urls.returnUsernameObject(username));
     }
 
     static createPost(postInfoForm) {
@@ -62,24 +61,16 @@ export default class AxiosHelper {
         });
     }
 
-    static getUserPreviewId(query) {
-        return axios.get(urls.USER_PREVIEW_ID_URL, query);
+    static getUserPreviewId(username) {
+        return axios.get(urls.USER_PREVIEW_ID_URL, urls.returnUsernameObject(username));
     }
 
     static returnUserRelationInfo(username) {
-        return axios.get(urls.RELATION_INFO_URL, {
-            params: {
-                username: username
-            }
-        });
+        return axios.get(urls.RELATION_INFO_URL, urls.returnUsernameObject(username));
     }
 
     static returnTinyDisplayPhoto(username) {
-        return axios.get(urls.TINY_DISPLAY_PHOTO_URL, {
-            params: {
-                username: username
-            }
-        })
+        return axios.get(urls.TINY_DISPLAY_PHOTO_URL, urls.returnUsernameObject(username))
     }
 
     static setProfilePrivacy(username, isPrivate) {
@@ -98,23 +89,15 @@ export default class AxiosHelper {
     }
 
     static returnPursuitNames(username) {
-        return axios.get(urls.INDEX_USER_PURSUITS_URL, {
-            params: {
-                username: username
-            }
-        });
+        return axios.get(urls.INDEX_USER_PURSUITS_URL, urls.returnUsernameObject(username));
     }
 
     static returnIndexUser(username) {
-        return axios.get(urls.INDEX_BASE_URL, {
-            params: {
-                username: username
-            }
-        })
+        return axios.get(urls.INDEX_BASE_URL, urls.returnUsernameObject(username))
     }
 
     static returnUser(username) {
-        return axios.get(urls.USER_BASE_URL, { params: { username: username } });
+        return axios.get(urls.USER_BASE_URL, urls.returnUsernameObject(username));
     }
 
     static returnFollowerStatus(visitorUsername, userRelationArrayId) {
@@ -172,11 +155,7 @@ export default class AxiosHelper {
     }
 
     static returnAccountSettingsInfo(username) {
-        return axios.get(urls.USER_ACCOUNT_SETTINGS_INFO_URL, {
-            params: {
-                username: username
-            }
-        })
+        return axios.get(urls.USER_ACCOUNT_SETTINGS_INFO_URL, urls.returnUsernameObject(username))
     }
 
     static updateBio(formData) {
@@ -191,8 +170,13 @@ export default class AxiosHelper {
         return axios.post(photoType === "COVER" ? urls.COVER_PHOTO_URL : urls.DISPLAY_PHOTO_URL, formData)
     }
 
-    static getComments(query) {
-        return axios.get(urls.COMMENT_BASE_URL, query)
+    static getComments(rootCommentIdArray, viewingMode) {
+        return axios.get(urls.COMMENT_BASE_URL, {
+            params: {
+                rootCommentIdArray: rootCommentIdArray,
+                viewingMode: viewingMode
+            }
+        })
     }
     static postComment(payload) {
         return axios.post(urls.ROOT_COMMENT_URL, payload);
@@ -203,9 +187,7 @@ export default class AxiosHelper {
     }
 
     static retrieveNewPostInfo(username) {
-        return axios.get(urls.DRAFT_BASE_URL,
-            { params: { username: username } }
-        )
+        return axios.get(urls.DRAFT_BASE_URL, urls.returnUsernameObject(username))
     }
 
     static returnImage(imageKey) {
@@ -213,8 +195,12 @@ export default class AxiosHelper {
             .get(urls.IMAGE_BASE_URL, { params: { imageKey: imageKey } })
     }
 
-    static refreshComments(query) {
-        return axios.get(urls.REFRESH_COMMENTS_URL, query);
+    static refreshComments(rootCommentIdArray) {
+        return axios.get(urls.REFRESH_COMMENTS_URL, {
+            params: {
+                rootCommentIdArray: rootCommentIdArray
+            }
+        });
     }
 
     static saveDraft(username, draft) {
