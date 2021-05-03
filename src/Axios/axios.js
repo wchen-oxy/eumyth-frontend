@@ -13,7 +13,7 @@ export default class AxiosHelper {
     }
 
     static checkUsernameAvailable(username) {
-        return axios.get(urls.CHECK_USERNAME_URL, urls.returnUsernameObject(username));
+        return axios.get(urls.CHECK_USERNAME_URL, { username: urls.returnUsernameObject(username) });
     }
 
     static createPost(postInfoForm) {
@@ -84,13 +84,13 @@ export default class AxiosHelper {
         return axios.put(urls.RELATION_STATUS_URL, payload);
     }
 
-    static setDraftPreviewTitle(previewTitle) {
-        return axios.post(urls.DRAFT_BASE_URL, { previewTitle: previewTitle });
-    }
+    // static setDraftPreviewTitle(previewTitle) {
+    //     return axios.post(urls.DRAFT_BASE_URL, { previewTitle: previewTitle });
+    // }
 
-    static returnPursuitNames(username) {
-        return axios.get(urls.INDEX_USER_PURSUITS_URL, urls.returnUsernameObject(username));
-    }
+    // static returnPursuitNames(username) {
+    //     return axios.get(urls.INDEX_USER_PURSUITS_URL, urls.returnUsernameObject(username));
+    // }
 
     static returnIndexUser(username) {
         return axios.get(urls.INDEX_BASE_URL, urls.returnUsernameObject(username))

@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { withFirebase } from '../../../Firebase';
 import './initial-customization.scss';
 import ProfilePhotoEditor from '../../profile-photo-editor.js';
+import { CROPPED_IMAGE_FIELD, DISPLAY_PHOTO_FIELD, FIRST_NAME_FIELD, LAST_NAME_FIELD, PURSUITS_FIELD, SMALL_CROPPED_IMAGE_FIELD, TINY_CROPPED_IMAGE_FIELD, USERNAME_FIELD } from "../../constants/form-data";
 
 const INITIAL_STATE = {
     firstName: '',
@@ -189,11 +190,11 @@ class InitialCustomizationPage extends React.Component {
                 .then(
                     (results) => {
                         let formData = new FormData();
-                        formData.append("username", this.state.username);
-                        formData.append("pursuits", JSON.stringify(this.state.pursuits));
-                        formData.append("croppedImage", results[0]);
-                        formData.append("smallCroppedImage", results[1]);
-                        formData.append("tinyCroppedImage", results[2]);
+                        formData.append(USERNAME_FIELD, this.state.username);
+                        formData.append(PURSUITS_FIELD, JSON.stringify(this.state.pursuits));
+                        formData.append(CROPPED_IMAGE_FIELD, results[0]);
+                        formData.append(SMALL_CROPPED_IMAGE_FIELD, results[1]);
+                        formData.append(TINY_CROPPED_IMAGE_FIELD, results[2]);
 
                         return AxiosHelper.createUserProfile(formData)
                     }
@@ -222,10 +223,10 @@ class InitialCustomizationPage extends React.Component {
                 .then(
                     (results) => {
                         let formData = new FormData();
-                        formData.append("username", this.state.username);
-                        formData.append("firstName", this.state.firstName);
-                        formData.append("lastName", this.state.lastName);
-                        formData.append("pursuits", JSON.stringify(this.state.pursuits));
+                        formData.append(USERNAME_FIELD, this.state.username);
+                        formData.append(FIRST_NAME_FIELD, this.state.firstName);
+                        formData.append(LAST_NAME_FIELD, this.state.lastName);
+                        formData.append(PURSUITS_FIELD, JSON.stringify(this.state.pursuits));
                         return AxiosHelper.createUserProfile(formData);
                     }
                 )
@@ -309,7 +310,7 @@ class InitialCustomizationPage extends React.Component {
                         <input
                             key={this.state.imageKey}
                             type="file"
-                            name="displayPhoto"
+                            name={DISPLAY_PHOTO_FIELD}
                             onChange={(e) => (
                                 this.handleProfilePhotoChange(e.target.files[0])
                             )}
@@ -337,21 +338,21 @@ class InitialCustomizationPage extends React.Component {
                         </label>
                         <input
                             type="text"
-                            name="username"
+                            name={USERNAME_FIELD}
                             placeholder="Username"
                             onChange={(e) => this.handleTextChange(e, isInvalid)}
                         />
                         <label>First Name</label>
                         <input
                             type="text"
-                            name="firstName"
+                            name={FIRST_NAME_FIELD}
                             placeholder="First Name"
                             onChange={this.handleTextChange}
                         />
                         <label>Last Name</label>
                         <input
                             type="text"
-                            name="lastName"
+                            name={LAST_NAME_FIELD}
                             placeholder="Last Name"
                             onChange={this.handleTextChange}
                         />
@@ -362,7 +363,7 @@ class InitialCustomizationPage extends React.Component {
                             pursue or choose one from the list!
                         </label>
                         <CustomMultiSelect
-                            name="pursuits"
+                            name={PURSUITS_FIELD}
                             onSelect={this.handleExperienceSelect}
                         />
                         {pursuitDetails}

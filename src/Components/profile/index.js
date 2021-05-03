@@ -340,7 +340,7 @@ class ProfilePage extends React.Component {
         AxiosHelper.setFollowerStatus(
             {
                 visitorUsername: this.state.visitorUsername,
-                targetUserRelationId: this.state.userRelationId,
+                userRelationArrayId: this.state.userRelationId,
                 targetProfilePreviewId: this.state.targetProfilePreviewId,
                 isPrivate: this.state.isPrivate,
                 action: action

@@ -7,6 +7,7 @@ import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import AxiosHelper from '../../Axios/axios';
 import { POST } from "../constants/flags";
 import "./index.scss";
+import { COVER_PHOTO_FIELD, DISPLAY_PHOTO_FIELD, END_DATE_FIELD, INDEX_USER_ID_FIELD, IS_COMPLETE_FIELD, MIN_DURATION_FIELD, OVERVIEW_FIELD, PURSUIT_CATEGORY_FIELD, SELECTED_POSTS_FIELD, START_DATE_FIELD, TITLE_FIELD, USERNAME_FIELD, USER_ID_FIELD } from '../constants/form-data';
 
 const MAIN = "MAIN";
 const EDIT = "EDIT";
@@ -190,35 +191,35 @@ class ProjectController extends React.Component {
 
     handlePost() {
         let formData = new FormData();
-        formData.append("username", this.props.username);
-        formData.append("displayPhoto", this.props.displayPhoto)
-        formData.append("userId", this.props.targetProfileId);
-        formData.append("indexUserId", this.props.targetIndexUserId);
-        formData.append("title", this.state.title);
+        formData.append(USERNAME_FIELD, this.props.username);
+        formData.append(DISPLAY_PHOTO_FIELD, this.props.displayPhoto)
+        formData.append(USER_ID_FIELD, this.props.targetProfileId);
+        formData.append(INDEX_USER_ID_FIELD, this.props.targetIndexUserId);
+        formData.append(TITLE_FIELD, this.state.title);
         if (this.state.overview) {
-            formData.append("overview", this.state.overview);
+            formData.append(OVERVIEW_FIELD, this.state.overview);
         }
         if (this.state.pursuitCategory) {
-            formData.append("pursuitCategory", this.state.pursuitCategory);
+            formData.append(PURSUIT_CATEGORY_FIELD, this.state.pursuitCategory);
         }
         if (this.state.startDate) {
-            formData.append("startDate", this.state.startDate);
+            formData.append(START_DATE_FIELD, this.state.startDate);
         }
         if (this.state.endDate) {
-            formData.append("endDate", this.state.endDate);
+            formData.append(END_DATE_FIELD, this.state.endDate);
         }
         if (this.state.isComplete) {
-            formData.append("isComplete", this.state.isComplete);
+            formData.append(IS_COMPLETE_FIELD, this.state.isComplete);
         }
         if (this.state.minDuration) {
-            formData.append("minDuration", this.state.minDuration);
+            formData.append(MIN_DURATION_FIELD, this.state.minDuration);
         }
         if (this.state.coverPhoto) {
-            formData.append("coverPhoto", this.state.coverPhoto);
+            formData.append(COVER_PHOTO_FIELD, this.state.coverPhoto);
         }
         if (this.state.selectedPosts) {
             const stringArray = JSON.stringify(this.state.selectedPosts);
-            formData.append("selectedPosts", stringArray);
+            formData.append(SELECTED_POSTS_FIELD, stringArray);
         }
 
         return AxiosHelper.createProject(formData)

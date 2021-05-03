@@ -1,10 +1,28 @@
-import React, { useState, useRef } from 'react';
-import AxiosHelper from '../../../Axios/axios';
+import React, { useState } from 'react';
 import _ from 'lodash';
 import TextareaAutosize from 'react-textarea-autosize';
 import { PUBLIC_FEED, PERSONAL_PAGE, PRIVATE, SHORT, LONG } from "../../constants/flags";
 import imageCompression from 'browser-image-compression';
 import "./review-post.scss";
+import AxiosHelper from '../../../Axios/axios';
+import {
+    COVER_PHOTO_FIELD,
+    DATE_FIELD,
+    DISPLAY_PHOTO_FIELD,
+    IMAGES_FIELD,
+    IS_MILESTONE_FIELD,
+    IS_PAGINATED_FIELD,
+    MIN_DURATION_FIELD,
+    POST_ID_FIELD,
+    POST_PRIVACY_TYPE_FIELD,
+    POST_TYPE_FIELD,
+    PURSUIT_CATEGORY_FIELD,
+    REMOVE_COVER_PHOTO,
+    SUBTITLE_FIELD,
+    TEXT_DATA_FIELD,
+    TITLE_FIELD,
+    USERNAME_FIELD
+} from "../../constants/form-data";
 
 const ReviewPost = (props) => {
     const [date, setDate] = useState(props.date);
@@ -69,21 +87,21 @@ const ReviewPost = (props) => {
     const handlePostSpecificForm = (formData, type) => {
         if (type === SHORT) {
             if (props.isUpdateToPost) {
-                formData.append("postId", props.postId);
+                formData.append(POST_ID_FIELD, props.postId);
                 if (useImageForThumbnail) {
                     if (!props.coverPhoto && !props.coverPhotoKey) {
                         return alert(`One moment friend, I'm almost done compressing
                         your photo`);
                     }
                     else {
-                        formData.append("coverPhoto", props.coverPhoto);
+                        formData.append(COVER_PHOTO_FIELD, props.coverPhoto);
                         return handleUpdateSubmit(formData);
                     }
                 }
                 else if (!useImageForThumbnail && props.coverPhotoKey) {
                     return AxiosHelper.deletePhotoByKey(props.coverPhotoKey)
                         .then(() => {
-                            formData.append("removeCoverPhoto", true);
+                            formData.append(REMOVE_COVER_PHOTO, true);
                             return handleUpdateSubmit(formData)
                         });
                 }
@@ -97,21 +115,21 @@ const ReviewPost = (props) => {
                         return alert(`One moment friend, I'm almost
                                      done compressing your photo`);
                     }
-                    formData.append("coverPhoto", props.coverPhoto);
+                    formData.append(COVER_PHOTO_FIELD, props.coverPhoto);
                 }
                 return handleNewSubmit(formData);
             }
         }
         else if (type === LONG) {
             if (props.isUpdateToPost) {
-                formData.append("postId", props.postId);
+                formData.append(POST_ID_FIELD, props.postId);
                 if (useCoverPhoto) {
                     if (!coverPhoto && !props.coverPhotoKey) {
                         return alert(`One moment friend, I'm almost 
                                     done compressing your photo`)
                     }
                     else {
-                        formData.append("coverPhoto", coverPhoto);
+                        formData.append(COVER_PHOTO_FIELD, coverPhoto);
                         return handleUpdateSubmit(formData)
                     }
                 }
@@ -119,7 +137,7 @@ const ReviewPost = (props) => {
                     if (shouldRemoveSavedCoverPhoto) {
                         return AxiosHelper.deletePhotoByKey(props.coverPhotoKey)
                             .then(() => {
-                                formData.append('removeCoverPhoto', true);
+                                formData.append(REMOVE_COVER_PHOTO, true);
                                 return handleUpdateSubmit(formData)
                             });
                     }
@@ -137,7 +155,7 @@ const ReviewPost = (props) => {
                         return alert(`One moment friend, I'm almost 
                                     done compressing your photo`)
                     };
-                    formData.append("coverPhoto", coverPhoto);
+                    formData.append(COVER_PHOTO_FIELD, coverPhoto);
                 }
                 return handleNewSubmit(formData);
             }
@@ -164,22 +182,22 @@ const ReviewPost = (props) => {
     const handleFormAppend = () => {
         setIsSubmitting(true);
         let formData = new FormData();
-        formData.append("displayPhoto", props.displayPhoto);
-        formData.append("postType", props.postType);
-        formData.append("username", props.username);
-        formData.append("isPaginated", props.isPaginated);
-        formData.append("isMilestone", milestone ? milestone : false)
-        if (title) formData.append("title", _.trim(title));
-        if (postPrivacyType) formData.append("postPrivacyType", postPrivacyType);
-        if (pursuitCategory) formData.append("pursuitCategory", pursuitCategory);
-        if (date) formData.append("date", date);
-        if (minDuration) formData.append("minDuration", minDuration);
+        formData.append(DISPLAY_PHOTO_FIELD, props.displayPhoto);
+        formData.append(POST_TYPE_FIELD, props.postType);
+        formData.append(USERNAME_FIELD, props.username);
+        formData.append(IS_PAGINATED_FIELD, props.isPaginated);
+        formData.append(IS_MILESTONE_FIELD, milestone ? milestone : false)
+        if (title) formData.append(TITLE_FIELD, _.trim(title));
+        if (postPrivacyType) formData.append(POST_PRIVACY_TYPE_FIELD, postPrivacyType);
+        if (pursuitCategory) formData.append(PURSUIT_CATEGORY_FIELD, pursuitCategory);
+        if (date) formData.append(DATE_FIELD, date);
+        if (minDuration) formData.append(MIN_DURATION_FIELD, minDuration);
         if (subtitle) {
-            formData.append("subtitle", _.trim(subtitle));
+            formData.append(SUBTITLE_FIELD, _.trim(subtitle));
         }
         if (props.textData) {
             formData.append(
-                "textData",
+                TEXT_DATA_FIELD,
                 props.postType === SHORT && !props.isPaginated ?
                     props.textData :
                     JSON.stringify(props.textData)
@@ -188,7 +206,7 @@ const ReviewPost = (props) => {
 
         if (props.imageArray && props.imageArray.length > 0) {
             for (const image of props.imageArray) {
-                formData.append("images", image);
+                formData.append(IMAGES_FIELD, image);
             }
         }
         handlePostSpecificForm(formData, props.postType);
