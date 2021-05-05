@@ -31,7 +31,7 @@ class Comments extends React.Component {
                         JSON.stringify(this.props.commentIDArray),
                         this.state.windowType
                     ),
-                    AxiosHelper.getUserPreviewId(this.props.visitorUsername)
+                    AxiosHelper.getUserPreviewID(this.props.visitorUsername)
                 ])
                     .then(
                         (result) => {
@@ -55,12 +55,10 @@ class Comments extends React.Component {
                     );
             }
             else {
-                AxiosHelper.getComments({
-                    params: {
-                        rootCommentIdArray: JSON.stringify(this.props.commentIDArray),
-                        viewingMode: this.state.windowType
-                    }
-                })
+                AxiosHelper.getComments(
+                    JSON.stringify(this.props.commentIDArray),
+                    this.state.windowType
+                )
                     .then(
                         (result) => {
                             this.setState({
@@ -83,7 +81,7 @@ class Comments extends React.Component {
         }
         else {
             if (this.props.visitorUsername) {
-                return AxiosHelper.getUserPreviewId({ params: { username: this.props.visitorUsername } })
+                return AxiosHelper.getUserPreviewID({ params: { username: this.props.visitorUsername } })
                     .then((result) => {
                         this.setState({
                             visitorProfilePreviewId: result.data.userPreviewId,
@@ -121,15 +119,12 @@ class Comments extends React.Component {
     }
 
     handleCommentPost() {
-        let payload = {
-            visitorProfilePreviewId: this.state.visitorProfilePreviewId,
-            comment: this.state.commentText,
-            postId: this.props.postId,
-            imagePageNumber: 0
-        };
-
         return AxiosHelper
-            .postComment(payload)
+            .postComment(
+                this.state.visitorProfilePreviewID,
+                this.state.commentText,
+                this.props.postId,
+                0)
             .then(
                 (result) => {
                     const commentArray = result.data.rootCommentIdArray

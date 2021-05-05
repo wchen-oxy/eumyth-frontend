@@ -1,8 +1,16 @@
 import React from 'react';
+import _ from "lodash";
 import { returnUserImageURL } from "../../../constants/urls";
 import { returnFormattedDate } from "../../../constants/ui-text";
 import "./timeline-short-event.scss";
-
+const isJSON = (text) => {
+    try {
+        JSON.parse(text);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
 const ShortEvent = (props) => {
     const post = props.post;
     const date = post.date ? returnFormattedDate(post.date) : null;
@@ -25,8 +33,9 @@ const ShortEvent = (props) => {
         </div>
     </div>);
     if (!post.cover_photo_key) {
+        console.log(post.text_snippet);
         const intitialText = (
-            post.is_paginated ?
+            post.is_paginated && isJSON(post.text_snippet) ?
                 JSON.parse(post.text_snippet)[0] : post.text_snippet);
         return (
             <div>

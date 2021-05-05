@@ -338,24 +338,22 @@ class ProfilePage extends React.Component {
     }
     handleFollowerStatusChange(action) {
         AxiosHelper.setFollowerStatus(
-            {
-                visitorUsername: this.state.visitorUsername,
-                userRelationArrayId: this.state.userRelationId,
-                targetProfilePreviewId: this.state.targetProfilePreviewId,
-                isPrivate: this.state.isPrivate,
-                action: action
-            }
-        ).then(
-            (result) => {
-                if (result.status === 200) {
-                    if (result.data.success) {
-                        this.setState({ followerStatus: result.data.success });
+            this.state.visitorUsername,
+            this.state.userRelationId,
+            this.state.targetProfilePreviewId,
+            this.state.isPrivate,
+            action)
+            .then(
+                (result) => {
+                    if (result.status === 200) {
+                        if (result.data.success) {
+                            this.setState({ followerStatus: result.data.success });
+                        }
+                        else {
+                            this.setState({ followerStatus: result.data.error });
+                        }
                     }
-                    else {
-                        this.setState({ followerStatus: result.data.error });
-                    }
-                }
-            })
+                })
             .catch((error) => {
                 console.log(error);
             });

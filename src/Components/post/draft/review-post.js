@@ -160,6 +160,9 @@ const ReviewPost = (props) => {
                 return handleNewSubmit(formData);
             }
         }
+        else{
+            throw new Error("No Content Type matched in reviewpost")
+        }
 
     }
 

@@ -3,17 +3,19 @@ import urls from "../Components/constants/urls";
 
 export default class AxiosHelper {
 
-    static changeRelationStatus(action, targetUsername, currentUsername, id) {
+    static changeRelationStatus(action, targetUsername, currentUsername, ID) {
         return axios.put(urls.RELATION_SET_FOLLOWER_URL, {
             action: action,
             targetUsername: targetUsername,
             currentUsername: currentUsername,
-            id: id
+            ID: ID
         })
     }
 
     static checkUsernameAvailable(username) {
-        return axios.get(urls.CHECK_USERNAME_URL, { username: urls.returnUsernameObject(username) });
+        return axios.get(urls.CHECK_USERNAME_URL, {
+            username: urls.returnUsernameObject(username)
+        });
     }
 
     static createPost(postInfoForm) {
@@ -40,7 +42,7 @@ export default class AxiosHelper {
     static deletePhotoByKey(key) {
         return axios.delete(urls.IMAGE_BASE_URL, {
             data: {
-                key: key,
+                key: key
             }
         })
     }
@@ -51,17 +53,17 @@ export default class AxiosHelper {
         });
     }
 
-    static deletePost(userDataId, indexUserId, postId) {
+    static deletePost(userID, indexUserID, postID) {
         return axios.delete(urls.POST_BASE_URL, {
             data: {
-                userId: userDataId,
-                indexUserId: indexUserId,
-                postId: postId
+                userID: userID,
+                indexUserID: indexUserID,
+                postID: postID
             }
         });
     }
 
-    static getUserPreviewId(username) {
+    static getUserPreviewID(username) {
         return axios.get(urls.USER_PREVIEW_ID_URL, urls.returnUsernameObject(username));
     }
 
@@ -80,8 +82,21 @@ export default class AxiosHelper {
         });
     }
 
-    static setFollowerStatus(payload) {
-        return axios.put(urls.RELATION_STATUS_URL, payload);
+    static setFollowerStatus(
+        visitorUsername,
+        userRelationArrayID,
+        targetProfilePreviewID,
+        isPrivate,
+        action) {
+        return axios.put(urls.RELATION_STATUS_URL,
+            {
+                visitorUsername: visitorUsername,
+                userRelationArrayID: userRelationArrayID,
+                targetProfilePreviewID: targetProfilePreviewID,
+                isPrivate: isPrivate,
+                action: action
+            }
+        );
     }
 
     // static setDraftPreviewTitle(previewTitle) {
@@ -100,55 +115,55 @@ export default class AxiosHelper {
         return axios.get(urls.USER_BASE_URL, urls.returnUsernameObject(username));
     }
 
-    static returnFollowerStatus(visitorUsername, userRelationArrayId) {
+    static returnFollowerStatus(visitorUsername, userRelationArrayID) {
         return axios.get(urls.RELATION_BASE_URL, {
             params: {
                 visitorUsername: visitorUsername,
-                userRelationArrayId: userRelationArrayId,
+                userRelationArrayID: userRelationArrayID,
             }
         })
     }
 
-    static returnMultipleProjects(projectIdList) {
+    static returnMultipleProjects(projectIDList) {
         return axios.get(urls.MULTIPLE_PROJECTS_URL, {
             params: {
-                projectIdList: projectIdList
+                projectIDList: projectIDList
             }
         })
     }
 
-    static returnMultiplePostInfo(targetUserDataId, postIdList) {
+    static returnMultiplePostInfo(targetUserDataID, postIDList) {
         return axios.get(urls.MULTIPLE_POSTS_URL, {
             params: {
-                targetUserDataId: targetUserDataId,
-                postIdList: postIdList
+                targetUserDataID: targetUserDataID,
+                postIDList: postIDList
             }
         })
     }
 
-    static returnMultiplePosts(postIdList, includePostText) {
+    static returnMultiplePosts(postIDList, includePostText) {
         return axios.get(urls.MULTIPLE_POSTS_URL, {
             params: {
-                postIdList: postIdList,
+                postIDList: postIDList,
                 includePostText: includePostText
             }
         })
     }
 
-    static retrievePost(postId, textOnly) {
+    static retrievePost(postID, textOnly) {
         return axios.get(urls.SINGLE_POST_TEXT_DATA_URL, {
             params: {
-                postId: postId,
+                postID: postID,
                 textOnly: textOnly
             }
         })
     }
 
-    static returnSocialFeedPosts(indexUserId, postIdList) {
+    static returnSocialFeedPosts(indexUserID, postIDList) {
         return axios.get(urls.SOCIAL_FEED_POSTS_URL, {
             params: {
-                indexUserId: indexUserId,
-                postIdList: postIdList
+                indexUserID: indexUserID,
+                postIDList: postIDList
 
             }
         })
@@ -158,8 +173,11 @@ export default class AxiosHelper {
         return axios.get(urls.USER_ACCOUNT_SETTINGS_INFO_URL, urls.returnUsernameObject(username))
     }
 
-    static updateBio(formData) {
-        return axios.put(urls.USER_BIO_URL, formData);
+    static updateBio(bio, username) {
+        return axios.put(urls.USER_BIO_URL, {
+            bio: bio,
+            username: username,
+        });
     }
 
     static updatePost(postInfoForm) {
@@ -170,20 +188,43 @@ export default class AxiosHelper {
         return axios.post(photoType === "COVER" ? urls.COVER_PHOTO_URL : urls.DISPLAY_PHOTO_URL, formData)
     }
 
-    static getComments(rootCommentIdArray, viewingMode) {
+    static getComments(rootCommentIDArray, viewingMode) {
         return axios.get(urls.COMMENT_BASE_URL, {
             params: {
-                rootCommentIdArray: rootCommentIdArray,
+                rootCommentIDArray: rootCommentIDArray,
                 viewingMode: viewingMode
             }
         })
     }
-    static postComment(payload) {
-        return axios.post(urls.ROOT_COMMENT_URL, payload);
+    static postComment(visitorProfilePreviewID, comment, postID, imagePageNumber) {
+        return axios.post(urls.ROOT_COMMENT_URL, {
+            visitorProfilePreviewID: visitorProfilePreviewID,
+            comment: comment,
+            postID: postID,
+            imagePageNumber: imagePageNumber
+        });
     }
-
-    static postReply(payload) {
-        return axios.post(urls.REPLY_COMMENT_URL, payload);
+    static postAnnotation(
+        visitorProfilePreviewID,
+        postID,
+        imagePageNumber,
+        annotationData,
+        annotationGeometry) {
+        return axios.post(urls.ROOT_COMMENT_URL, {
+            visitorProfilePreviewID: visitorProfilePreviewID,
+            postID: postID,
+            imagePageNumber: imagePageNumber,
+            annotationData: annotationData,
+            annotationGeometry: annotationGeometry
+        });
+    }
+    static postReply(postID, visitorProfilePreviewID, ancestors, comment) {
+        return axios.post(urls.REPLY_COMMENT_URL, {
+            postID: postID,
+            visitorProfilePreviewID: visitorProfilePreviewID,
+            ancestors: ancestors,
+            comment: comment,
+        });
     }
 
     static retrieveNewPostInfo(username) {
@@ -195,10 +236,10 @@ export default class AxiosHelper {
             .get(urls.IMAGE_BASE_URL, { params: { imageKey: imageKey } })
     }
 
-    static refreshComments(rootCommentIdArray) {
+    static refreshComments(rootCommentIDArray) {
         return axios.get(urls.REFRESH_COMMENTS_URL, {
             params: {
-                rootCommentIdArray: rootCommentIdArray
+                rootCommentIDArray: rootCommentIDArray
             }
         });
     }
@@ -212,24 +253,35 @@ export default class AxiosHelper {
         )
     }
 
-    static saveDraftMetaInfo(metaInfoForm) {
-        return axios.put(urls.DRAFT_BASE_URL, metaInfoForm)
+    // static saveDraftMetaInfo(metaInfoForm) {
+    //     return axios.put(urls.DRAFT_BASE_URL, metaInfoForm)
+    // }
+
+    static updatePostDisplayPhotos(username, imageKey) {
+        return axios.patch(urls.POST_DISPLAY_PHOTO_URL, {
+            username: username,
+            imageKey: imageKey
+        });
+    }
+    static updateTemplate(indexUserID, text, pursuit) {
+        return axios.put(urls.USER_TEMPLATE_URL, {
+            indexUserID: indexUserID,
+            text: text,
+            pursuit: pursuit
+        });
     }
 
-    static updatePostDisplayPhotos(formData) {
-        return axios.patch(urls.POST_DISPLAY_PHOTO_URL, formData);
-    }
-    static updateTemplate(formData) {
-        return axios.put(urls.USER_TEMPLATE_URL, formData);
-    }
-
-    static voteOnComment(payload) {
-        return axios.put(urls.VOTE_ON_COMMENT_URL, payload);
+    static voteOnComment(visitorProfilePreviewID, commentID, voteValue) {
+        return axios.put(urls.VOTE_ON_COMMENT_URL, {
+            visitorProfilePreviewID: visitorProfilePreviewID,
+            commentID: commentID,
+            voteValue: voteValue,
+        });
     }
 
-    static saveTitle(payload) {
-        return axios.put(urls.DRAFT_TITLE_URL, payload);
-    }
+    // static saveTitle(payload) {
+    //     return axios.put(urls.DRAFT_TITLE_URL, payload);
+    // }
 
 }
 

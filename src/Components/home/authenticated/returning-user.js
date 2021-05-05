@@ -34,7 +34,6 @@ class ReturningUserPage extends React.Component {
             selectedEvent: null,
             textData: '',
             recentPosts: null,
-
             recentPostsKey: 0
         }
 
@@ -133,7 +132,6 @@ class ReturningUserPage extends React.Component {
                         }
                     }
                     else {
-                        console.log("HITS");
                         if (result.data.recent_posts.length > 0) {
                             return Promise.all([
                                 AxiosHelper
@@ -253,7 +251,6 @@ class ReturningUserPage extends React.Component {
         let nextOpenPostIndex = this.state.nextOpenPostIndex;
         let index = 0;
         for (const feedItem of inputArray) {
-
             const preferredPostType = feedItem.username === this.state.username ? (
                 this.state.preferredPostType) : (null);
             const textData = feedItem.post_format === SHORT ?
@@ -321,7 +318,6 @@ class ReturningUserPage extends React.Component {
             this.state.selectedEvent._id
         ).then(
             (result) => {
-                console.log(result);
                 alert(result);
             }
         );
@@ -431,7 +427,7 @@ class ReturningUserPage extends React.Component {
                 eventData={this.state.selectedEvent}
                 selectedPostFeedType={this.state.selectedPostFeedType}
                 textData={this.state.textData}
-                
+
                 closeModal={this.closeModal}
                 onCommentIDInjection={this.handleCommentIDInjection}
             />

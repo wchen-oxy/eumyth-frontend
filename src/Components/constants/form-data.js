@@ -2,6 +2,7 @@ const COVER_PHOTO_FIELD = "coverPhoto";
 const POST_ID_FIELD = "postID";
 const USER_ID_FIELD = "userID";
 const INDEX_USER_ID_FIELD = "indexUserID";
+
 const REMOVE_COVER_PHOTO = "removeCoverPhoto";
 const OVERVIEW_FIELD = "overview";
 const DISPLAY_PHOTO_FIELD = "displayPhoto";
@@ -20,6 +21,7 @@ const END_DATE_FIELD = "endDate";
 const MIN_DURATION_FIELD = "minDuration";
 const SELECTED_POSTS_FIELD = "selectedPosts";
 const SUBTITLE_FIELD = "subtitle";
+const IMAGE_KEY_FIELD = "imageKey";
 const IMAGES_FIELD = "images";
 const TEXT_DATA_FIELD = "textData";
 
@@ -53,6 +55,7 @@ module.exports = {
     MIN_DURATION_FIELD,
     SELECTED_POSTS_FIELD,
     SUBTITLE_FIELD,
+    IMAGE_KEY_FIELD,
     IMAGES_FIELD,
     TEXT_DATA_FIELD,
 

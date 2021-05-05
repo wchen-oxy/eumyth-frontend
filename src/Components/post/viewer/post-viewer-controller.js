@@ -26,13 +26,10 @@ const removeTitleFromBody = (data) => {
 
 const PostViewerController = (props) => {
     const deletePostCallback = () => {
-        console.log(props.targetProfileId);
-        console.log(props.targetIndexUserId);
-        console.log(props.eventData._id);
         return AxiosHelper
             .deletePost(
-                props.targetProfileId,
-                props.targetIndexUserId,
+                props.targetProfileID,
+                props.targetIndexUserID,
                 props.eventData._id)
             .then((result) => console.log(result))
             .catch((err) => {

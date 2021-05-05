@@ -224,14 +224,14 @@ class ShortPostViewer extends React.Component {
         this.setState({ fullCommentData: fullCommentData }, () => {
             console.log("line225");
             console.log(this.props.postIndex);
-            if (this.props.postIndex !== null)
+            if (this.props.postIndex !== null) {
                 this.props.onCommentIDInjection(
                     postIndex,
                     newCommentIdArray,
                     feedType
-                )
-        }
-        )
+                );
+            }
+        })
     }
 
     handlePromptAnnotation() {
@@ -291,16 +291,15 @@ class ShortPostViewer extends React.Component {
 
     handleAnnotationSubmit(annotation) {
         const { geometry, data } = annotation;
-        const annotationPayload = {
-            postId: this.props.eventData._id,
-            visitorProfilePreviewId: this.state.visitorProfilePreviewId,
-            imagePageNumber: this.state.imageIndex,
-            annotationData: JSON.stringify(data),
-            annotationGeometry: JSON.stringify(geometry),
-        };
 
         AxiosHelper
-            .postComment(annotationPayload)
+            .postAnnotation(
+                this.state.visitorProfilePreviewId,
+                this.props.eventData._id,
+                this.state.imageIndex,
+                JSON.stringify(data),
+                JSON.stringify(geometry)
+            )
             .then((result) => {
                 const rootCommentIdArray = result.data.rootCommentIdArray;
                 let newRootCommentData = result.data.newRootComment;

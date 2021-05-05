@@ -80,11 +80,11 @@ class SingleComment extends React.Component {
         })
 
         return AxiosHelper
-            .voteOnComment({
-                visitorProfilePreviewId: this.props.visitorProfilePreviewId,
-                commentId: this.props.commentId,
-                voteValue: voteValue,
-            })
+            .voteOnComment(
+                this.props.visitorProfilePreviewId,
+                this.props.commentId,
+                voteValue,
+            )
             .then((result) => {
                 console.log(result);
             })
@@ -106,7 +106,6 @@ class SingleComment extends React.Component {
     }
 
     postReply() {
-
         if (this.isReplyTextInvalid()) {
             alert("You need to write something");
         }
@@ -116,12 +115,10 @@ class SingleComment extends React.Component {
             ancestorArray.push(this.props.commentId);
             // console.log(ancestorArray);
             return AxiosHelper.postReply(
-                {
-                    postId: this.props.postId,
-                    visitorProfilePreviewId: this.props.visitorProfilePreviewId,
-                    ancestors: JSON.stringify(ancestorArray),
-                    comment: this.state.replyText
-                }
+                this.props.postId,
+                this.props.visitorProfilePreviewId,
+                JSON.stringify(ancestorArray),
+                this.state.replyText
             )
                 .then((result) => {
                     alert("Comment added! Refresh the page to see!");

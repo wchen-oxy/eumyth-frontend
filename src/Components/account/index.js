@@ -7,6 +7,13 @@ import { withFirebase } from '../../Firebase';
 import { PUBLIC, PRIVATE, DISPLAY, COVER } from "../constants/flags";
 import "./index.scss";
 import ProfilePhotoEditor from '../profile-photo-editor.js';
+import {
+  USERNAME_FIELD,
+  CROPPED_IMAGE_FIELD,
+  SMALL_CROPPED_IMAGE_FIELD,
+  TINY_CROPPED_IMAGE_FIELD,
+  COVER_PHOTO_FIELD
+} from '../constants/form-data';
 
 const AccountPage = (props) => {
   const [indexUserID, setIndexUserID] = useState(null);
@@ -65,10 +72,7 @@ const AccountPage = (props) => {
       AxiosHelper
         .deleteAccountPhoto(username, photoType)
         .then(() => {
-          let formData = new FormData();
-          formData.append("username", username);
-          formData.append("imageKey", "");
-          return AxiosHelper.updatePostDisplayPhotos(formData)
+          return AxiosHelper.updatePostDisplayPhotos(username, "")
         })
         .then(() => {
           if (photoType === DISPLAY) {
@@ -98,14 +102,9 @@ const AccountPage = (props) => {
   const handlePhotoSubmitCallback = (formData, photoType, username) => {
     return AxiosHelper.updateAccountImage(formData, photoType)
       .then((results) => {
-        const form = {
-          username: username,
-          imageKey: results.data.imageKey
-        };
-        return AxiosHelper.updatePostDisplayPhotos(form)
+        return AxiosHelper.updatePostDisplayPhotos(username, results.data.imageKey)
       })
       .then((results) => {
-        console.log(results);
         alert("Successfully updated!");
         window.location.reload();
       })
@@ -122,7 +121,6 @@ const AccountPage = (props) => {
         AxiosHelper
           .deleteAccountPhoto(username, photoType)
           .then((result) => {
-            console.log(result);
             return handlePhotoSubmitCallback(formData, photoType, username);
           }));
     }
@@ -173,7 +171,7 @@ const AccountPage = (props) => {
 
   const submitPhoto = (photoType) => {
     let formData = new FormData();
-    formData.append('username', props.firebase.returnUsername());
+    formData.append(USERNAME_FIELD, props.firebase.returnUsername());
     if (photoType === DISPLAY) {
       const titles = ["normal", "small", "tiny"];
       const canvas = AvatarEditorInstance.getImage();
@@ -209,9 +207,9 @@ const AccountPage = (props) => {
               new File([results[i]], titles[i], { type: "image/jpeg" })
             );
           }
-          formData.append("croppedImage", results[0]);
-          formData.append("smallCroppedImage", results[1]);
-          formData.append("tinyCroppedImage", results[2]);
+          formData.append(CROPPED_IMAGE_FIELD, results[0]);
+          formData.append(SMALL_CROPPED_IMAGE_FIELD, results[1]);
+          formData.append(TINY_CROPPED_IMAGE_FIELD, results[2]);
           return handlePhotoSubmit(formData, photoType);
         }
         )
@@ -221,13 +219,13 @@ const AccountPage = (props) => {
         return (
           imageCompression(coverPhoto, { maxSizeMB: 1, fileType: "image/jpeg" })
             .then(formattedImage => {
-              formData.append('coverPhoto', formattedImage);
+              formData.append(COVER_PHOTO_FIELD, formattedImage);
               handlePhotoSubmit(formData, photoType);
             })
         );
       }
       else {
-        formData.append('coverPhoto', coverPhoto);
+        formData.append(COVER_PHOTO_FIELD, coverPhoto);
         return handlePhotoSubmit(formData, photoType);
       }
     }
@@ -323,9 +321,11 @@ const AccountPage = (props) => {
               </button>
                 <div ref={coverPhotoRef} className="account-photo-edit-container">
                   <label>Change your cover photo!</label>
-                  <input type="file" onChange={(e) => {
-                    setCoverPhoto(e.target.files[0]);
-                  }} />
+                  <input
+                    type="file"
+                    onChange={(e) => {
+                      setCoverPhoto(e.target.files[0]);
+                    }} />
                   <button
                     disabled={!coverPhoto}
                     onClick={() => submitPhoto(COVER)}>
