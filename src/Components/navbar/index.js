@@ -59,8 +59,6 @@ class NavigationAuth extends React.Component {
       }
     )
       .then((result) => {
-        console.log(isUserStillLoading);
-        console.log(isExistingUser);
         this.setState({
           isExistingUser: isExistingUser,
           existingUserLoading: isUserStillLoading,
@@ -85,7 +83,6 @@ class NavigationAuth extends React.Component {
   }
 
   closeModal() {
-    console.log("Clicked");
     this.modalRef.current.style.display = "none";
     document.body.style.overflow = "visible";
     this.setState({
@@ -100,7 +97,10 @@ class NavigationAuth extends React.Component {
     if (this.state.isPostModalShowing) {
       modal = (
         <>
-          <div className="overlay" onClick={(() => this.closeModal())}></div>
+          <div
+            className="overlay"
+            onClick={(() => this.closeModal())}>
+          </div>
           <PostDraftController
             username={this.state.username}
             closeModal={this.closeModal}
@@ -127,8 +127,6 @@ class NavigationAuth extends React.Component {
   }
 
   render() {
-    console.log(this.state.isPostModalShowing);
-    console.log(this.state.isRequestModalShowing);
     const shouldHideFeatures =
       this.state.existingUserLoading
       || !this.state.existingUserLoading && !this.state.isExistingUser;
@@ -150,7 +148,6 @@ class NavigationAuth extends React.Component {
                 </button>
               </div>
             }
-
           </div>
           <div id="navbar-right-container">
             {shouldHideFeatures ?

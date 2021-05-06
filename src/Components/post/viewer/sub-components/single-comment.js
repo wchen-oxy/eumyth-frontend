@@ -14,7 +14,6 @@ class SingleComment extends React.Component {
             isReplyBoxToggled: false,
             replyText: ""
         }
-
         this.toggleReplyBox = this.toggleReplyBox.bind(this);
         this.setReplyText = this.setReplyText.bind(this);
         this.handleVote = this.handleVote.bind(this);
@@ -22,14 +21,12 @@ class SingleComment extends React.Component {
         this.isReplyTextInvalid = this.isReplyTextInvalid.bind(this);
         this.renderThreadIndicators = this.renderThreadIndicators.bind(this);
         this.cancelTextInput = this.cancelTextInput.bind(this);
-
-
     }
     componentDidMount() {
-        if (this.props.likes.includes(this.props.visitorProfilePreviewId)) {
+        if (this.props.likes.includes(this.props.visitorProfilePreviewID)) {
             this.setState({ previousVote: 1 })
         }
-        else if (this.props.dislikes.includes(this.props.visitorProfilePreviewId)) {
+        else if (this.props.dislikes.includes(this.props.visitorProfilePreviewID)) {
             this.setState({ previousVote: -1 })
         }
     }
@@ -81,8 +78,8 @@ class SingleComment extends React.Component {
 
         return AxiosHelper
             .voteOnComment(
-                this.props.visitorProfilePreviewId,
-                this.props.commentId,
+                this.props.visitorProfilePreviewID,
+                this.props.commentID,
                 voteValue,
             )
             .then((result) => {
@@ -112,11 +109,10 @@ class SingleComment extends React.Component {
         else {
 
             let ancestorArray = this.props.ancestors;
-            ancestorArray.push(this.props.commentId);
-            // console.log(ancestorArray);
+            ancestorArray.push(this.props.commentID);
             return AxiosHelper.postReply(
-                this.props.postId,
-                this.props.visitorProfilePreviewId,
+                this.props.postID,
+                this.props.visitorProfilePreviewID,
                 JSON.stringify(ancestorArray),
                 this.state.replyText
             )
@@ -173,13 +169,13 @@ class SingleComment extends React.Component {
                         </div>
                         <div className={"singlecomment-main-content-container"}>
                             <div className="singlecomment-comment-container"
-                                key={this.props.commentId}
+                                key={this.props.commentID}
                                 onMouseOver={() => (
-                                    this.props.onMouseOver(this.props.commentId))}
+                                    this.props.onMouseOver(this.props.commentID))}
                                 onMouseOut={() => (
-                                    this.props.onMouseOut(this.props.commentId))}
+                                    this.props.onMouseOut(this.props.commentID))}
                                 onClick={() => (
-                                    this.props.onMouseClick(this.props.commentId))}
+                                    this.props.onMouseClick(this.props.commentID))}
                             >
                                 <p>{this.props.commentText}</p>
                             </div>

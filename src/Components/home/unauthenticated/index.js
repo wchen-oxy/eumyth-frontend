@@ -81,7 +81,6 @@ export default class WelcomePage extends React.Component {
 
   handleSendEmailVerication(e) {
     e.preventDefault();
-    console.log("sent");
     this.props.firebase.doSendEmailVerification();
     alert(
       `Email has been sent! Once you verify 
@@ -98,7 +97,6 @@ export default class WelcomePage extends React.Component {
 
   handleWindowToggle(e) {
     e.preventDefault();
-    console.log(e.target.value)
     this.setState({
       window: e.target.value
     });
@@ -109,10 +107,9 @@ export default class WelcomePage extends React.Component {
     if (!Isemail.validate(this.state.email)) {
       return alert("This is not a valid email!");
     }
-    this.props.firebase.doSignIn(this.state.email, this.state.password).then(
-      (result) => {
+    this.props.firebase.doSignIn(this.state.email, this.state.password)
+      .then((result) => {
         if (result) {
-          console.log(result.user.emailVerified);
           if (result.user.emailVerified) this.props.history.push("/");
           else {
             this.handleVerifiedState(result.user.emailVerified);
@@ -133,8 +130,7 @@ export default class WelcomePage extends React.Component {
     else {
       this.props.firebase.doCreateUser(this.state.email, this.state.password)
         .then(
-          () => 
-          this.setState({ showRegisterSuccess: true })
+          () => this.setState({ showRegisterSuccess: true })
         )
         .catch((err) => console.log(err));
     }

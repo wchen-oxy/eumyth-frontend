@@ -51,7 +51,6 @@ class ImageSlider extends React.Component {
   renderImageContainers(isLoaded) {
     let count = 0;
     if (isLoaded) {
-      console.log(this.state.imageArray);
       return (
         this.state.imageArray.map(
           item => (

@@ -79,9 +79,7 @@ class ShortEditor extends React.Component {
                 this.props.onUnsupportedFileChange(files[i]);
             }
         }
-
         this.updateDisabilityState(invalidFound);
-
     }
 
     validateFile(file) {
@@ -109,8 +107,6 @@ class ShortEditor extends React.Component {
     }
 
     removeFile = (name) => {
-        console.log(name);
-        console.log("asdfadf");
         const index = this.props.validFiles.findIndex(e => e.name === name);
         const index2 = this.props.selectedFiles.findIndex(e => e.name === name);
         const index3 = this.props.unsupportedFiles.findIndex(e => e.name === name);
@@ -173,7 +169,6 @@ class ShortEditor extends React.Component {
     }
 
     render() {
-
         if (!isAdvancedUpload) {
             console.log("Sorry, this is not a modern browser! Try another browser.");
         }

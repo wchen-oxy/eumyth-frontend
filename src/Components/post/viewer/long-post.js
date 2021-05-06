@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
 import PostHeader from "./sub-components/post-header";
 import Comments from "./comments";
-
 import DanteEditor from 'Dante2';
 import { ImageBlockConfig } from 'Dante2/package/es/components/blocks/image.js';
 import { PlaceholderBlockConfig } from 'Dante2/package/es/components/blocks/placeholder';
 import { IMAGE_BASE_URL, returnUserImageURL } from '../../constants/urls';
 import { LONG, INITIAL_STATE, EDIT_STATE, REVIEW_STATE, EXPANDED, COLLAPSED } from '../../constants/flags';
-
 import ReviewPost from "../draft/review-post";
 import { withFirebase } from "../../../Firebase/index";
 import "./long-post.scss";
 
-const SAVE_INTERVAL = 1000;
-
-const temp = { "blocks": [{ "key": "ck5ad", "text": "hit enter", "type": "header-one", "depth": 0, "inlineStyleRanges": [], "entityRanges": [], "data": {} }], "entityMap": {} };
-
+const monthNames = ["January", "February", "March", "April", "May",
+    "June", "July", "August", "September", "October", "November",
+    "December"];
 
 const LongPostViewer = (props) => {
     const [key, setKey] = useState(0);
@@ -40,14 +37,14 @@ const LongPostViewer = (props) => {
     }
 
     const handleCommentDataInjection = (postIndex, fullCommentData, feedType) => {
-        let newCommentIdArray = props.eventData.comments;
-        const newCommentId = fullCommentData[fullCommentData.length - 1]._id;
-        newCommentIdArray.push(newCommentId)
+        let newCommentIDArray = props.eventData.comments;
+        const newCommentID = fullCommentData[fullCommentData.length - 1]._id;
+        newCommentIDArray.push(newCommentID)
         setFullCommentData(fullCommentData)
         if (props.postIndex !== null)
             props.onCommentIDInjection(
                 postIndex,
-                newCommentIdArray,
+                newCommentIDArray,
                 feedType
             )
     }
@@ -64,7 +61,7 @@ const LongPostViewer = (props) => {
                     commentIDArray={props.eventData.comments}
                     windowType={windowType}
                     visitorUsername={props.visitorUsername}
-                    postId={props.postId}
+                    postID={props.postID}
                     postIndex={props.postIndex}
                     onCommentIDInjection={props.onCommentIDInjection}
                     selectedPostFeedType={props.selectedPostFeedType}
@@ -80,15 +77,7 @@ const LongPostViewer = (props) => {
         }
     }
 
-
-
-
-
     if (window === INITIAL_STATE) {
-
-        const monthNames = ["January", "February", "March", "April", "May",
-            "June", "July", "August", "September", "October", "November",
-            "December"];
         const title = props.title;
         const date = props.eventData.date ? new Date(props.eventData.date) : null;
         const coverPhotoURL = returnUserImageURL(props.eventData.cover_photo_key);
@@ -171,7 +160,6 @@ const LongPostViewer = (props) => {
                         </div>
                     </div>
                     <div className="longpostviewer-editor-container">
-
                         < DanteEditor
                             key={key}
                             content={props.textData}
@@ -232,9 +220,7 @@ const LongPostViewer = (props) => {
                             read_only={true}
                         />
                     </div>
-
                     {renderComments(COLLAPSED)}
-
                 </div>
             )
         }
@@ -287,7 +273,6 @@ const LongPostViewer = (props) => {
             </div>
         )
     }
-
     else {
         let formattedDate = null;
         if (props.eventData.date) {
@@ -307,10 +292,10 @@ const LongPostViewer = (props) => {
                 postType={LONG}
                 setPostStage={setWindow}
                 username={props.visitorUsername}
-                preferredPostType={props.preferredPostType}
+                preferredPostPrivacy={props.preferredPostPrivacy}
                 pursuitNames={props.pursuitNames}
-                handlePreferredPostTypeChange={props.handlePreferredPostTypeChange}
-                postId={props.eventData._id}
+                handlePreferredPostPrivacyChange={props.handlePreferredPostPrivacyChange}
+                postID={props.eventData._id}
                 isMilestone={props.eventData.is_milestone}
                 previewTitle={props.eventData.title}
                 previewSubtitle={props.eventData.subtitle}

@@ -65,7 +65,6 @@ const LongPost = (props) => {
       }
     }
   }
-  console.log(props.localDraft);
   if (windowState === INITIAL_STATE)
     return (
       <div
@@ -103,7 +102,6 @@ const LongPost = (props) => {
         </div>
 
         <div id="longpost-title-editor">
-          {/* <textarea /> */}
         </div>
         {props.onlineDraftRetrieved && !props.loading ?
           (
@@ -139,7 +137,7 @@ const LongPost = (props) => {
   else {
     return (
       <ReviewPost
-         previousState={INITIAL_STATE}
+        previousState={INITIAL_STATE}
         displayPhoto={props.displayPhoto}
         isPaginated={false}
         textData={props.onlineDraft}
@@ -147,9 +145,9 @@ const LongPost = (props) => {
         postType={LONG}
         setPostStage={setPostStage}
         username={props.username}
-        preferredPostType={props.preferredPostType}
+        preferredPostPrivacy={props.preferredPostPrivacy}
         pursuitNames={props.pursuitNames}
-        handlePreferredPostTypeChange={props.handlePreferredPostTypeChange}
+        handlePreferredPostPrivacyChange={props.handlePreferredPostPrivacyChange}
         previewTitle={previewTitle}
       />
     )

@@ -15,7 +15,7 @@ const FeedObject = (props) => {
                 displayPhoto={feedItem.display_photo_key}
                 username={feedItem.username}
                 pursuits={null}
-                preferredPostType={null}
+                preferredPostPrivacy={null}
                 textData={feedItem.is_paginated ?
                     JSON.parse(feedItem.text_data) : feedItem.text_data}
                 largeViewMode={LARGE_VIEW_MODE}
@@ -30,7 +30,7 @@ const FeedObject = (props) => {
             displayPhoto={feedItem.displayPhoto}
             username={feedItem.username}
             pursuits={feedItem.pursuits}
-            preferredPostType={feedItem.preferredPostType}
+            preferredPostPrivacy={feedItem.preferredPostPrivacy}
             textData={feedItem.textData}
             isOwnProfile={IS_OWN_PROFILE}
             eventData={feedItem}

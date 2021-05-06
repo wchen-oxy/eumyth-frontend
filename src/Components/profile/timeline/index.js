@@ -34,7 +34,6 @@ class Timeline extends React.Component {
         let masterArray = this.props.feedData;
         let index = masterArray.length - 1; //index position of array in masterArray
         let nextOpenPostIndex = this.state.nextOpenPostIndex;
-
         let j = 0;
         let k = masterArray[index].length; //length of last array 
         //while input array is not empty
@@ -93,7 +92,6 @@ class Timeline extends React.Component {
                     this.state.nextOpenPostIndex + this.state.fixedDataLoadLength))
                 .then(
                     (result) => {
-                        console.log(result.data);
                         if (this._isMounted) {
                             this.createTimelineRow(
                                 result.data,
@@ -115,8 +113,7 @@ class Timeline extends React.Component {
                             result.data.posts,
                             this.props.mediaType);
                     }
-                }
-                )
+                })
                 .catch((error) => console.log(error));
         }
     }

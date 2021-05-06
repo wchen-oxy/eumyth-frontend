@@ -11,7 +11,4 @@ const PursuitHolder = (props) => (
     </div>
 );
 
-
-
-
 export default withRouter(PursuitHolder);

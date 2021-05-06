@@ -3,7 +3,6 @@ import AvatarEditor from 'react-avatar-editor';
 import Dropzone from 'react-dropzone';
 
 const ProfilePhotoEditor = (props) => {
-
     const handleDefaultBehavior = (event, defaultValue, method) => {
         event.preventDefault();
         method(defaultValue);

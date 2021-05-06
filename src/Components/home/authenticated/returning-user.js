@@ -22,9 +22,9 @@ class ReturningUserPage extends React.Component {
             pursuitNames: null,
             croppedDisplayPhoto: null,
             smallCroppedDisplayPhoto: null,
-            indexUserDataId: null,
-            fullUserDataId: null,
-            preferredPostType: null,
+            indexUserDataID: null,
+            fullUserDataID: null,
+            preferredPostPrivacy: null,
             followedUserPostIDs: [],
             isMoreFollowedUserPosts: true,
             fixedDataLoadLength: 4,
@@ -60,17 +60,17 @@ class ReturningUserPage extends React.Component {
             let firstName = firebaseName ? firebaseName.firstName : null;
             let lastName = firebaseName.lastName ? firebaseName.lastName : null;
             let followedUserPostIDs = null;
-            let preferredPostType = null;
+            let preferredPostPrivacy = null;
             let croppedDisplayPhoto = "";
             let smallCroppedDisplayPhoto = "";
-            let indexUserDataId = null;
-            let fullUserDataId = null;
+            let indexUserDataID = null;
+            let fullUserDataID = null;
             let pursuits = null;
             let pursuitNames = [];
             let isMoreFollowedUserPosts = null;
             let totalMin = 0;
             let pursuitInfoArray = [];
-
+            console.log(this.state.username)
             return (AxiosHelper
                 .returnIndexUser(this.state.username)
                 .then((result) => {
@@ -83,15 +83,15 @@ class ReturningUserPage extends React.Component {
                         );
                     followedUserPostIDs =
                         indexUser.following_feed;
-                    preferredPostType =
-                        indexUser.preferred_post_type
+                    preferredPostPrivacy =
+                        indexUser.preferred_post_privacy
                     croppedDisplayPhoto =
                         indexUser.cropped_display_photo_key;
                     smallCroppedDisplayPhoto =
                         indexUser.small_cropped_display_photo_key;
-                    indexUserDataId =
+                    indexUserDataID =
                         indexUser._id;
-                    fullUserDataId =
+                    fullUserDataID =
                         indexUser.user_profile_id;
                     pursuits =
                         result.data.pursuits;
@@ -182,9 +182,9 @@ class ReturningUserPage extends React.Component {
                             firstName: firstName,
                             lastName: lastName,
                             followedUserPostIDs: followedUserPostIDs,
-                            preferredPostType: preferredPostType,
-                            indexUserDataId: indexUserDataId,
-                            fullUserDataId: fullUserDataId,
+                            preferredPostPrivacy: preferredPostPrivacy,
+                            indexUserDataID: indexUserDataID,
+                            fullUserDataID: fullUserDataID,
                             croppedDisplayPhoto: croppedDisplayPhoto,
                             smallCroppedDisplayPhoto: smallCroppedDisplayPhoto,
                             pursuits: pursuits,
@@ -251,22 +251,22 @@ class ReturningUserPage extends React.Component {
         let nextOpenPostIndex = this.state.nextOpenPostIndex;
         let index = 0;
         for (const feedItem of inputArray) {
-            const preferredPostType = feedItem.username === this.state.username ? (
-                this.state.preferredPostType) : (null);
+            const preferredPostPrivacy = feedItem.username === this.state.username ? (
+                this.state.preferredPostPrivacy) : (null);
             const textData = feedItem.post_format === SHORT ?
                 feedItem.text_data : JSON.parse(feedItem.text_data);
 
             masterArray.push(
                 <PostViewerController
-                    targetProfileId={this.state.fullUserDataId}
-                    targetIndexUserId={this.state.indexUserDataId}
+                    targetProfileID={this.state.fullUserDataID}
+                    targetIndexUserID={this.state.indexUserDataID}
                     key={nextOpenPostIndex++}
                     postIndex={index++}
-                    postId={feedItem._id}
+                    postID={feedItem._id}
                     visitorUsername={this.state.username}
                     isOwnProfile={feedItem.username === this.state.username}
                     displayPhoto={feedItem.display_photo_key}
-                    preferredPostType={preferredPostType}
+                    preferredPostPrivacy={preferredPostPrivacy}
                     pursuitNames={this.state.pursuitNames}
                     eventData={feedItem}
                     textData={textData}
@@ -313,8 +313,8 @@ class ReturningUserPage extends React.Component {
 
     handleDeletePost() {
         return AxiosHelper.deletePost(
-            this.state.fullUserDataId,
-            this.state.indexUserDataId,
+            this.state.fullUserDataID,
+            this.state.indexUserDataID,
             this.state.selectedEvent._id
         ).then(
             (result) => {
@@ -357,7 +357,6 @@ class ReturningUserPage extends React.Component {
     }
 
     handleEventClick(selectedEvent, postIndex) {
-        console.log(postIndex)
         return (AxiosHelper
             .retrievePost(selectedEvent._id, true)
             .then(
@@ -412,9 +411,8 @@ class ReturningUserPage extends React.Component {
     renderModal() {
         return (
             <PostViewerController
-                targetProfileId={this.state.fullUserDataId}
-                targetIndexUserId={this.state.indexUserDataId}
-
+                targetProfileID={this.state.fullUserDataID}
+                targetIndexUserID={this.state.indexUserDataID}
                 largeViewMode={true}
                 visitorUsername={this.state.username}
                 key={this.state.selectedEvent._id}
@@ -422,12 +420,11 @@ class ReturningUserPage extends React.Component {
                 isOwnProfile={true}
                 isPostOnlyView={false}
                 displayPhoto={this.state.smallCroppedDisplayPhoto}
-                preferredPostType={this.state.preferredPostType}
+                preferredPostPrivacy={this.state.preferredPostPrivacy}
                 pursuitNames={this.state.pursuitNames}
                 eventData={this.state.selectedEvent}
                 selectedPostFeedType={this.state.selectedPostFeedType}
                 textData={this.state.textData}
-
                 closeModal={this.closeModal}
                 onCommentIDInjection={this.handleCommentIDInjection}
             />
@@ -445,14 +442,12 @@ class ReturningUserPage extends React.Component {
             this.renderRecentPosts(this.state.recentPosts) : null;
         const renderedModal = this.state.isModalShowing &&
             this.state.selectedEvent ? this.renderModal() : null;
-        console.log(this.state.recentPostsKey);
         return (
             <div>
                 <div
                     id="returninguser-profile-container"
                     className="returninguser-main-row"
                 >
-
                     <div
                         id="returninguser-hero-profile-column"
                         className="returninguser-profile-column"
@@ -539,7 +534,9 @@ class ReturningUserPage extends React.Component {
                         </InfiniteScroll>
                     </div>
                 </div>
-                <div className="modal" ref={this.modalRef}>
+                <div
+                    className="modal"
+                    ref={this.modalRef}>
                     <div
                         className="overlay"
                         onClick={(() => this.closeModal())}

@@ -124,10 +124,10 @@ class CustomImageSlider extends React.Component {
                         annotations={annotations}
                         disableOverlay={this.props.hideAnnotations
                             ||
-                            !this.props.visitorProfilePreviewId
+                            !this.props.visitorProfilePreviewID
                         }
                         disableAnnotation={this.props.windowType === COLLAPSED
-                            || !this.props.visitorProfilePreviewId
+                            || !this.props.visitorProfilePreviewID
                         }
                         value={this.state.annotation}
                         renderEditor={this.renderEditor}
@@ -145,8 +145,6 @@ class CustomImageSlider extends React.Component {
             </>
         )
     }
-
-
 }
 
 export default CustomImageSlider;

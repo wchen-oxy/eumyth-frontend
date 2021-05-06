@@ -7,7 +7,21 @@ import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import AxiosHelper from '../../Axios/axios';
 import { POST } from "../constants/flags";
 import "./index.scss";
-import { COVER_PHOTO_FIELD, DISPLAY_PHOTO_FIELD, END_DATE_FIELD, INDEX_USER_ID_FIELD, IS_COMPLETE_FIELD, MIN_DURATION_FIELD, OVERVIEW_FIELD, PURSUIT_CATEGORY_FIELD, SELECTED_POSTS_FIELD, START_DATE_FIELD, TITLE_FIELD, USERNAME_FIELD, USER_ID_FIELD } from '../constants/form-data';
+import {
+    COVER_PHOTO_FIELD,
+    DISPLAY_PHOTO_FIELD,
+    END_DATE_FIELD,
+    INDEX_USER_ID_FIELD,
+    IS_COMPLETE_FIELD,
+    MIN_DURATION_FIELD,
+    OVERVIEW_FIELD,
+    PURSUIT_CATEGORY_FIELD,
+    SELECTED_POSTS_FIELD,
+    START_DATE_FIELD,
+    TITLE_FIELD,
+    USERNAME_FIELD,
+    USER_ID_FIELD
+} from '../constants/form-data';
 
 const MAIN = "MAIN";
 const EDIT = "EDIT";
@@ -146,9 +160,7 @@ class ProjectController extends React.Component {
             }
         }
         this.setState({ window: window, min: min !== 0 ? min : null });
-
     }
-
 
     handleProjectEventSelect(eventData) {
         let updatedProjectData = [];
@@ -169,15 +181,12 @@ class ProjectController extends React.Component {
             eventData.column_index = index;
             updatedProjectData.push(eventData);
         }
-        console.log(updatedProjectData);
         this.setState({ selectedPosts: updatedProjectData });
     }
 
 
     handleSortEnd({ oldIndex, newIndex }) {
-        console.log(oldIndex, newIndex);
         const items = this.state.selectedPosts;
-
         const [reorderedItem] = items.splice(oldIndex, 1);
         let index = -1;
         items.splice(newIndex, 0, reorderedItem);
@@ -185,7 +194,6 @@ class ProjectController extends React.Component {
             index = handleIndexUpdate(index);
             item.column_index = index;
         }
-        console.log(items);
         this.setState({ selectedPosts: items });
     }
 
@@ -193,8 +201,8 @@ class ProjectController extends React.Component {
         let formData = new FormData();
         formData.append(USERNAME_FIELD, this.props.username);
         formData.append(DISPLAY_PHOTO_FIELD, this.props.displayPhoto)
-        formData.append(USER_ID_FIELD, this.props.targetProfileId);
-        formData.append(INDEX_USER_ID_FIELD, this.props.targetIndexUserId);
+        formData.append(USER_ID_FIELD, this.props.targetProfileID);
+        formData.append(INDEX_USER_ID_FIELD, this.props.targetIndexUserID);
         formData.append(TITLE_FIELD, this.state.title);
         if (this.state.overview) {
             formData.append(OVERVIEW_FIELD, this.state.overview);
@@ -224,7 +232,6 @@ class ProjectController extends React.Component {
 
         return AxiosHelper.createProject(formData)
             .then((result) => {
-                console.log(result);
                 alert("Success!");
                 window.location.reload();
             })
@@ -292,12 +299,11 @@ class ProjectController extends React.Component {
                                 onEventClick={this.props.onEventClick}
                                 feedData={this.state.feedData}
                                 updateFeedData={this.updateFeedData}
-                                targetProfileId={this.props.targetProfileId} />
+                                targetProfileID={this.props.targetProfileID} />
                         </div>
                     </>
                 );
             case (EDIT):
-
                 return (
                     <div >
                         <div className="">

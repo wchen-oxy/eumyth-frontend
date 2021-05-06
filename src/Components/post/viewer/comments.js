@@ -2,7 +2,7 @@ import React from 'react';
 import AxiosHelper from '../../../Axios/axios';
 import SingleComment from "./sub-components/single-comment";
 import CommentInput from "./sub-components/comment-input";
-import { SHORT, EXPANDED, COLLAPSED, RECENT_POSTS } from "../../constants/flags";
+import { SHORT, EXPANDED, COLLAPSED } from "../../constants/flags";
 
 import "./comments.scss";
 
@@ -25,7 +25,6 @@ class Comments extends React.Component {
     componentDidMount() {
         if (this.props.commentIDArray.length > 0) {
             if (this.props.visitorUsername) {
-                console.log(this.props.visitorUsername);
                 return Promise.all([
                     AxiosHelper.getComments(
                         JSON.stringify(this.props.commentIDArray),
@@ -36,14 +35,14 @@ class Comments extends React.Component {
                     .then(
                         (result) => {
                             this.setState({
-                                visitorProfilePreviewId: result[1].data.userPreviewId,
+                                visitorProfilePreviewID: result[1].data.userPreviewID,
                                 loadingComments: false,
 
                             }, () => {
                                 if (this.props.postType === SHORT) {
                                     this.props.passAnnotationData(
                                         result[0].data.rootComments,
-                                        result[1].data.userPreviewId)
+                                        result[1].data.userPreviewID)
                                 }
                                 else {
                                     this.props.passAnnotationData(
@@ -81,17 +80,17 @@ class Comments extends React.Component {
         }
         else {
             if (this.props.visitorUsername) {
-                return AxiosHelper.getUserPreviewID({ params: { username: this.props.visitorUsername } })
+                return AxiosHelper.getUserPreviewID(this.props.visitorUsername)
                     .then((result) => {
                         this.setState({
-                            visitorProfilePreviewId: result.data.userPreviewId,
+                            visitorProfilePreviewID: result.data.userPreviewID,
                             loadingComments: false,
 
                         }, () => {
                             if (this.props.postType === SHORT) {
                                 this.props.passAnnotationData(
                                     null,
-                                    result.data.userPreviewId
+                                    result.data.userPreviewID
                                 );
                             }
                         });
@@ -123,11 +122,11 @@ class Comments extends React.Component {
             .postComment(
                 this.state.visitorProfilePreviewID,
                 this.state.commentText,
-                this.props.postId,
+                this.props.postID,
                 0)
             .then(
                 (result) => {
-                    const commentArray = result.data.rootCommentIdArray
+                    const commentArray = result.data.rootCommentIDArray
                     return AxiosHelper
                         .refreshComments(JSON.stringify(commentArray))
                         .then((result) => {
@@ -143,21 +142,16 @@ class Comments extends React.Component {
 
     renderCommentSectionType(viewingMode) {
         if (this.state.loadingComments || !this.props.fullCommentData) {
-            return <div>
+            return (<div>
                 Loading...
-            </div>
+            </div>);
         }
 
         if (viewingMode === COLLAPSED) {
-            return (
-                this.renderCommentThreads(this.props.fullCommentData)
-            )
+            return (this.renderCommentThreads(this.props.fullCommentData));
         }
         else if (viewingMode === EXPANDED) {
-            console.log(this.props.fullCommentData);
-            return (
-                this.renderCommentThreads(this.props.fullCommentData)
-            )
+            return (this.renderCommentThreads(this.props.fullCommentData));
         }
         else {
             throw new Error("No viewing modes matched");
@@ -175,9 +169,9 @@ class Comments extends React.Component {
             return (
                 <SingleComment
                     level={currentLevel}
-                    postId={this.props.postId}
-                    visitorProfilePreviewId={this.state.visitorProfilePreviewId}
-                    commentId={commentData._id}
+                    postID={this.props.postID}
+                    visitorProfilePreviewID={this.state.visitorProfilePreviewID}
+                    commentID={commentData._id}
                     ancestors={commentData.ancestor_post_ids}
                     username={commentData.username}
                     commentText={text}
@@ -185,7 +179,6 @@ class Comments extends React.Component {
                     dislikes={commentData.dislikes}
                     displayPhoto={commentData.display_photo_key}
                     score={commentData.score}
-
                     annotation={annotation}
                     onMouseOver={this.props.onMouseOver}
                     onMouseOut={this.props.onMouseOut}
@@ -212,10 +205,10 @@ class Comments extends React.Component {
                 <div>
                     <SingleComment
                         level={currentLevel}
-                        postId={this.props.postId}
-                        visitorProfilePreviewId={this.state.visitorProfilePreviewId}
+                        postID={this.props.postID}
+                        visitorProfilePreviewID={this.state.visitorProfilePreviewID}
                         visitorUsername={this.props.visitorUsername}
-                        commentId={commentData._id}
+                        commentID={commentData._id}
                         ancestors={commentData.ancestor_post_ids}
                         username={commentData.username}
                         commentText={text}
@@ -223,7 +216,6 @@ class Comments extends React.Component {
                         likes={commentData.likes}
                         dislikes={commentData.dislikes}
                         displayPhoto={commentData.display_photo_key}
-
                         annotation={annotation}
                         onMouseOver={this.props.onMouseOver}
                         onMouseOut={this.props.onMouseOut}

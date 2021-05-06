@@ -12,12 +12,9 @@ class PostController extends React.Component {
         this.state = {
             feedKey: 0,
             feedData: [[]],
-
             selectedEvent: null,
             selectedPostIndex: null,
-
             isModalShowing: false,
-
         }
         this.modalRef = createRef(null);
         this.updateFeedData = this.updateFeedData.bind(this);
@@ -31,12 +28,10 @@ class PostController extends React.Component {
         this.setState({ feedData: masterArray })
     }
 
-
-    openModal(postId) {
-        console.log(postId);
+    openModal(postID) {
         this.modalRef.current.style.display = "block";
         document.body.style.overflow = "hidden";
-        this.setState({ isModalShowing: true }, this.props.history.replace(returnPostURL(postId)));
+        this.setState({ isModalShowing: true }, this.props.history.replace(returnPostURL(postID)));
 
     }
 
@@ -55,7 +50,8 @@ class PostController extends React.Component {
         const row = Math.floor(this.state.selectedPostIndex / 4);
         const columnIndex = this.state.selectedPostColumnIndex;
         currentPost[row][columnIndex].props.eventData.comments = rootCommentsArray;
-        currentPost[row][columnIndex].props.eventData.comment_count = currentPost[row][columnIndex].props.eventData.comment_count + 1;
+        currentPost[row][columnIndex].props.eventData.comment_count
+            = currentPost[row][columnIndex].props.eventData.comment_count + 1;
         this.setState((state) => ({
             feedData: currentPost,
             feedKey: state.feedKey + 1
@@ -74,11 +70,9 @@ class PostController extends React.Component {
                         textData: result.data,
                         postType: selectedEvent.post_format
                     }, this.openModal(selectedEvent._id))
-
             )
             .catch(error => console.log(error));
     }
-
 
     render() {
         return (
@@ -86,13 +80,13 @@ class PostController extends React.Component {
                 <ProfileModal
                     modalRef={this.modalRef}
                     isModalShowing={this.state.isModalShowing}
-                    targetProfileId={this.props.targetProfileId}
-                    targetIndexUserId={this.props.targetIndexUserId}
+                    targetProfileID={this.props.targetProfileID}
+                    targetIndexUserID={this.props.targetIndexUserID}
                     isOwnProfile={this.props.isOwnProfile}
                     visitorUsername={this.props.visitorUsername}
                     postIndex={this.state.selectedPostIndex}
                     visitorDisplayPhoto={this.props.visitorDisplayPhoto}
-                    preferredPostType={this.props.preferredPostType}
+                    preferredPostPrivacy={this.props.preferredPostPrivacy}
                     postType={this.state.postType}
                     pursuitNames={this.props.pursuitNames}
                     eventData={this.state.selectedEvent}
@@ -105,12 +99,11 @@ class PostController extends React.Component {
                     mediaType={POST}
                     feedKey={this.state.feedKey}
                     allPosts={this.props.feedIDList}
-                    targetProfileId={this.props.targetProfileId}
+                    targetProfileID={this.props.targetProfileID}
                     feedData={this.state.feedData}
                     onEventClick={this.handleEventClick}
                     updateFeedData={this.updateFeedData}
                 />
-
             </>
         );
     }

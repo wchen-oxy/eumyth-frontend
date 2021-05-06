@@ -24,8 +24,8 @@ class PasswordForgetFormBase extends React.Component {
     this.handleTextUpdate = this.handleTextUpdate.bind(this);
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
+  handleSubmit(e) {
+    e.preventDefault();
     const { email } = this.state;
     this.props.firebase
       .doPasswordReset(email)
@@ -37,8 +37,8 @@ class PasswordForgetFormBase extends React.Component {
       });
   };
 
-  handleTextUpdate(event) {
-    this.setState({ [event.target.name]: event.target.value });
+  handleTextUpdate(e) {
+    this.setState({ [e.target.name]: e.target.value });
   };
 
   render() {
@@ -60,7 +60,12 @@ class PasswordForgetFormBase extends React.Component {
         </button>
           {error && <p>{error.message}</p>}
         </form>
-        <button onClick={this.props.onToggleLoginRegisterWindow} value={LOGIN_STATE} >Return</button>
+        <button
+          onClick={this.props.onToggleLoginRegisterWindow}
+          value={LOGIN_STATE}
+        >
+          Return
+          </button>
       </div>
 
     );

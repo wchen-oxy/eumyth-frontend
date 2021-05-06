@@ -12,13 +12,13 @@ const ProfileModal = (props) => {
                     props.isModalShowing && props.eventData ?
                         <PostViewerController
                             isOwnProfile={props.visitorUsername === props.targetUsername}
-                            targetProfileId={props.targetProfileId}
-                            targetIndexUserId={props.targetIndexUserId}
+                            targetProfileID={props.targetProfileID}
+                            targetIndexUserID={props.targetIndexUserID}
                             visitorUsername={props.visitorUsername}
                             isPostOnlyView={false}
                             postIndex={props.selectedPostIndex}
                             visitorDisplayPhoto={props.smallCroppedDisplayPhoto}
-                            preferredPostType={props.preferredPostType}
+                            preferredPostPrivacy={props.preferredPostPrivacy}
                             postType={props.postType}
                             largeViewMode={true}
                             pursuitNames={props.pursuitNames}

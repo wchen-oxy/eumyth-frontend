@@ -33,19 +33,17 @@ const ShortEvent = (props) => {
         </div>
     </div>);
     if (!post.cover_photo_key) {
-        console.log(post.text_snippet);
-        const intitialText = (
-            post.is_paginated && isJSON(post.text_snippet) ?
-                JSON.parse(post.text_snippet)[0] : post.text_snippet);
+        // const hasText = post.is_paginated && isJSON(post.text_snippet);
+        // const intitialText = (hasText ?
+        //     JSON.parse(post.text_snippet) : post.text_snippet);
         return (
             <div>
                 <div className="shortevent-no-cover-photo-container">
-                    <p>{intitialText}</p>
+                    <p>{ post.text_snippet}</p>
                 </div>
                 {postInfo}
             </div>
         );
-
     }
     else {
         return (

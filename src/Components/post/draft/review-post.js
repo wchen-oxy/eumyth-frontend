@@ -30,7 +30,7 @@ const ReviewPost = (props) => {
     const [milestone, setMilestone] = useState(props.isMilestone);
     const [title, setTitle] = useState(props.previewTitle);
     const [subtitle, setSubtitle] = useState('');
-    const [postPrivacyType, setPostPrivacyType] = useState(props.preferredPostType);
+    const [postPrivacyType, setPostPrivacyType] = useState(props.preferredPostPrivacy);
     const [pursuitCategory, setPursuitCategory] = useState(
         props.selectedPursuit ? props.selectedPursuit : null)
     const [loading, setLoading] = useState(false);
@@ -62,7 +62,6 @@ const ReviewPost = (props) => {
     const setFile = (file) => {
         if (!file) return;
         setUseCoverPhoto(true);
-        console.log(file);
         return imageCompression(file, {
             maxSizeMB: 0.5,
             maxWidthOrHeight: 250
@@ -87,7 +86,7 @@ const ReviewPost = (props) => {
     const handlePostSpecificForm = (formData, type) => {
         if (type === SHORT) {
             if (props.isUpdateToPost) {
-                formData.append(POST_ID_FIELD, props.postId);
+                formData.append(POST_ID_FIELD, props.postID);
                 if (useImageForThumbnail) {
                     if (!props.coverPhoto && !props.coverPhotoKey) {
                         return alert(`One moment friend, I'm almost done compressing
@@ -122,7 +121,7 @@ const ReviewPost = (props) => {
         }
         else if (type === LONG) {
             if (props.isUpdateToPost) {
-                formData.append(POST_ID_FIELD, props.postId);
+                formData.append(POST_ID_FIELD, props.postID);
                 if (useCoverPhoto) {
                     if (!coverPhoto && !props.coverPhotoKey) {
                         return alert(`One moment friend, I'm almost 
@@ -167,9 +166,6 @@ const ReviewPost = (props) => {
     }
 
     const handleUpdateSubmit = (formData) => {
-        for (var value of formData.entries()) {
-            console.log(value[0], ",", value[1]);
-        }
         return AxiosHelper.updatePost(formData)
             .then((result) => {
                 console.log(result);
@@ -235,7 +231,6 @@ const ReviewPost = (props) => {
                 return null;
             }
         }
-
 
         else if (props.postType === LONG) {
             return (<div>
@@ -320,6 +315,8 @@ const ReviewPost = (props) => {
             <option key={pursuit} value={pursuit}>{pursuit}</option>
         );
     }
+
+    console.log(props.preferredPostPrivacy);
     return (
         <div id="reviewpost-small-window">
             <div>
@@ -379,8 +376,8 @@ const ReviewPost = (props) => {
                         <select
                             name="posts"
                             id="cars"
-                            value={props.preferredPostType ?
-                                props.preferredPostType : PUBLIC_FEED}
+                            value={props.preferredPostPrivacy ?
+                                props.preferredPostPrivacy : PUBLIC_FEED}
                             onChange={(e) => setPostPrivacyType(e.target.value)}
                         >
                             <option value={PRIVATE}>

@@ -30,7 +30,7 @@ class ShortPostViewer extends React.Component {
             annotations: null,
             activeAnnotations: [],
             fullCommentData: [],
-            visitorProfilePreviewId: '',
+            visitorProfilePreviewID: '',
             areAnnotationsHidden: true,
             selectedAnnotationIndex: null,
             imageIndex: 0,
@@ -94,7 +94,7 @@ class ShortPostViewer extends React.Component {
         }
     }
 
-    passAnnotationData(rawComments, visitorProfilePreviewId) {
+    passAnnotationData(rawComments, visitorProfilePreviewID) {
         let annotations = this.state.annotations;
         if (rawComments) {
             for (const comment of rawComments) {
@@ -113,7 +113,7 @@ class ShortPostViewer extends React.Component {
         this.setState({
             fullCommentData: rawComments ? rawComments : [],
             annotations: annotations,
-            visitorProfilePreviewId: visitorProfilePreviewId
+            visitorProfilePreviewID: visitorProfilePreviewID
         })
     }
 
@@ -138,7 +138,7 @@ class ShortPostViewer extends React.Component {
                     isImageOnly={isImageOnly}
                     windowType={windowType}
                     visitorUsername={this.props.visitorUsername}
-                    postId={this.props.postId}
+                    postID={this.props.postID}
                     postIndex={this.props.postIndex}
                     onCommentIDInjection={this.props.onCommentIDInjection}
                     onCommentDataInjection={this.handleCommentDataInjection}
@@ -187,7 +187,7 @@ class ShortPostViewer extends React.Component {
                     onAnnotationSubmit={this.handleAnnotationSubmit}
                     toggleAnnotations={this.toggleAnnotations}
                     handleArrowPress={this.handleArrowPress}
-                    visitorProfilePreviewId={this.state.visitorProfilePreviewId}
+                    visitorProfilePreviewID={this.state.visitorProfilePreviewID}
 
                 />
             </div>)
@@ -218,16 +218,14 @@ class ShortPostViewer extends React.Component {
     }
 
     handleCommentDataInjection(postIndex, fullCommentData, feedType) {
-        let newCommentIdArray = this.props.eventData.comments;
-        const newCommentId = fullCommentData[fullCommentData.length - 1]._id;
-        newCommentIdArray.push(newCommentId)
+        let newCommentIDArray = this.props.eventData.comments;
+        const newCommentID = fullCommentData[fullCommentData.length - 1]._id;
+        newCommentIDArray.push(newCommentID)
         this.setState({ fullCommentData: fullCommentData }, () => {
-            console.log("line225");
-            console.log(this.props.postIndex);
             if (this.props.postIndex !== null) {
                 this.props.onCommentIDInjection(
                     postIndex,
-                    newCommentIdArray,
+                    newCommentIDArray,
                     feedType
                 );
             }
@@ -294,14 +292,14 @@ class ShortPostViewer extends React.Component {
 
         AxiosHelper
             .postAnnotation(
-                this.state.visitorProfilePreviewId,
+                this.state.visitorProfilePreviewID,
                 this.props.eventData._id,
                 this.state.imageIndex,
                 JSON.stringify(data),
                 JSON.stringify(geometry)
             )
             .then((result) => {
-                const rootCommentIdArray = result.data.rootCommentIdArray;
+                const rootCommentIDArray = result.data.rootCommentIDArray;
                 let newRootCommentData = result.data.newRootComment;
                 const currentAnnotationArray =
                     this.state
@@ -310,7 +308,7 @@ class ShortPostViewer extends React.Component {
                             geometry,
                             data: {
                                 ...data,
-                                id: rootCommentIdArray[0]
+                                id: rootCommentIDArray[0]
                             }
                         });
                 let fullAnnotationArray = this.state.annotations;
@@ -321,7 +319,7 @@ class ShortPostViewer extends React.Component {
                     currentAnnotationArray;
                 return this.setState({
                     annotations: fullAnnotationArray,
-                    commentArray: rootCommentIdArray,
+                    commentArray: rootCommentIDArray,
                     fullCommentData: fullCommentData,
                     annotateButtonPressed: false
 
@@ -475,7 +473,9 @@ class ShortPostViewer extends React.Component {
                 if (this.props.largeViewMode) {
                     return (
                         <div className="shortpostviewer-window">
-                            <div id="shortpostviewer-large-main-container" className="with-image">
+                            <div id="shortpostviewer-large-main-container"
+                                className="with-image"
+                            >
                                 {this.renderImageSlider(EXPANDED)}
                                 <div
                                     className="shortpostviewer-large-side-container"
@@ -574,7 +574,7 @@ class ShortPostViewer extends React.Component {
                 <ReviewPost
                     isUpdateToPost
                     previousState={EDIT_STATE}
-                    postId={this.props.eventData._id}
+                    postID={this.props.eventData._id}
                     displayPhoto={this.props.visitorDisplayPhoto}
                     coverPhoto={this.state.coverPhoto}
                     coverPhotoKey={this.props.eventData.cover_photo_key ?
@@ -592,8 +592,8 @@ class ShortPostViewer extends React.Component {
                     postType={SHORT}
                     textData={this.state.tempTextForEdit}
                     username={this.props.visitorUsername}
-                    preferredPostType={this.props.preferredPostType}
-                    handlePreferredPostTypeChange={this.handlePreferredPostTypeChange}
+                    preferredPostPrivacy={this.props.preferredPostPrivacy}
+                    handlePreferredPostPrivacyChange={this.handlePreferredPostPrivacyChange}
                     setPostStage={this.handleWindowChange}
                 />
             );

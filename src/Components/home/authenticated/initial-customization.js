@@ -4,9 +4,19 @@ import CustomMultiSelect from "../../custom-clickables/createable-single";
 import AxiosHelper from '../../../Axios/axios';
 import _ from 'lodash';
 import { withFirebase } from '../../../Firebase';
-import './initial-customization.scss';
 import ProfilePhotoEditor from '../../profile-photo-editor.js';
-import { CROPPED_IMAGE_FIELD, DISPLAY_PHOTO_FIELD, FIRST_NAME_FIELD, LAST_NAME_FIELD, PURSUITS_FIELD, SMALL_CROPPED_IMAGE_FIELD, TINY_CROPPED_IMAGE_FIELD, USERNAME_FIELD } from "../../constants/form-data";
+import {
+    CROPPED_IMAGE_FIELD,
+    DISPLAY_PHOTO_FIELD,
+    FIRST_NAME_FIELD,
+    LAST_NAME_FIELD,
+    PURSUITS_FIELD,
+    SMALL_CROPPED_IMAGE_FIELD,
+    TINY_CROPPED_IMAGE_FIELD,
+    USERNAME_FIELD
+} from "../../constants/form-data";
+import './initial-customization.scss';
+
 
 const INITIAL_STATE = {
     firstName: '',
@@ -22,17 +32,11 @@ const INITIAL_STATE = {
     imageRotation: 0,
     isSubmitting: false
 }
-
-// const debouncer = (func) => (
-//     _.debounce(func, 100)
-// )
-
 class InitialCustomizationPage extends React.Component {
     constructor(props) {
         super(props);
         this.editor = React.createRef(null);
         this.handleTextChange = this.handleTextChange.bind(this);
-        // this.handleUsernameChange = (username) => debouncer(this.checkUsernameAvailable(username));
         this.handleUsernameChange = _.debounce((username) => this.checkUsernameAvailable(username), 1000);
         this.handleExperienceSelect = this.handleExperienceSelect.bind(this);
         this.handleProfileSubmit = this.handleProfileSubmit.bind(this);
@@ -67,7 +71,6 @@ class InitialCustomizationPage extends React.Component {
         this.setState({
             imageScale: parseFloat(value)
         })
-
     }
 
     checkUsernameAvailable(username) {
@@ -195,7 +198,6 @@ class InitialCustomizationPage extends React.Component {
                         formData.append(CROPPED_IMAGE_FIELD, results[0]);
                         formData.append(SMALL_CROPPED_IMAGE_FIELD, results[1]);
                         formData.append(TINY_CROPPED_IMAGE_FIELD, results[2]);
-
                         return AxiosHelper.createUserProfile(formData)
                     }
                 )
@@ -233,7 +235,7 @@ class InitialCustomizationPage extends React.Component {
                 .then(
                     (result) => {
                         if (result.status === 201) window.location.reload();
-                        else { alert("Something unexpected happen: (", result.status) }
+                        else { alert("Something unexpected happened: ", result.status) }
                     }
                 )
                 .catch((error) => console.log(error));

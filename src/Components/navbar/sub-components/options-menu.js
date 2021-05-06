@@ -6,11 +6,9 @@ import "./options-menu.scss";
 class OptionsMenu extends React.Component {
     constructor() {
         super();
-
         this.state = {
             showMenu: false,
         };
-
         this.showMenu = this.showMenu.bind(this);
         this.closeMenu = this.closeMenu.bind(this);
     }

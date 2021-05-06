@@ -33,7 +33,6 @@ const ShortReEditor = (props) => {
         if (props.eventData.image_data.length > 0) {
             newArray = images;
             newArray = adjustURLS(newArray);
-            console.log(newArray);
         }
 
         return (

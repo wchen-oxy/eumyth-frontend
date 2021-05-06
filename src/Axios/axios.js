@@ -14,7 +14,7 @@ export default class AxiosHelper {
 
     static checkUsernameAvailable(username) {
         return axios.get(urls.CHECK_USERNAME_URL, {
-            username: urls.returnUsernameObject(username)
+            username: username
         });
     }
 

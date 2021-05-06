@@ -5,7 +5,7 @@ import AxiosHelper from '../../../Axios/axios';
 import { ImageBlockConfig } from 'Dante2/package/es/components/blocks/image.js';
 import { PlaceholderBlockConfig } from 'Dante2/package/es/components/blocks/placeholder';
 import { withFirebase } from '../../../Firebase';
-import { IMAGE_BASE_URL, COMPRESS_PHOTO_URL } from '../../constants/urls';
+import { IMAGE_BASE_URL } from '../../constants/urls';
 
 const SAVE_INTERVAL = 4000;
 class LongEditor extends React.Component {
@@ -37,7 +37,6 @@ class LongEditor extends React.Component {
         if (this.state.isInitial) {
             if (this.checkIsEqual()) {
                 console.log("Catch uneccessary first save");
-
                 return this.setState({ isInitial: false },
                     this.props.onSavePending(false));
             }
@@ -56,12 +55,8 @@ class LongEditor extends React.Component {
         else {
             console.log("Saving");
             return AxiosHelper.saveDraft(this.props.username, content)
-                .then(
-                    (result) => this.handleSaveSuccess(result)
-                )
-                .catch(
-                    (err) => this.handleSaveError(err)
-                )
+                .then((result) => this.handleSaveSuccess(result))
+                .catch((err) => this.handleSaveError(err))
         }
     }
 

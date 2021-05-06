@@ -43,7 +43,6 @@ const Event = (props) => {
     );
 
     if (props.mediaType === POST) {
-        console.log(post);
         switch (post.post_format) {
             case (SHORT):
                 content = (

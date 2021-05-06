@@ -36,7 +36,7 @@ class PostDraftController extends React.Component {
     this.handleDraftRetrieval = this.handleDraftRetrieval.bind(this);
     this.handleIndexUserDataSet = this.handleIndexUserDataSet.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
-    this.onPreferredPostTypeChange = this.onPreferredPostTypeChange.bind(this);
+    this.onPreferredPostPrivacyChange = this.onPreferredPostPrivacyChange.bind(this);
     this.renderWindow = this.renderWindow.bind(this);
   }
 
@@ -61,7 +61,6 @@ class PostDraftController extends React.Component {
         this.handleLocalOnlineSync(this.state.localDraft)
           .then((result) => {
             if (result) {
-              console.log("SAVING SIDE WAY");
               this.setSavePending(false);
             }
             else {
@@ -81,8 +80,8 @@ class PostDraftController extends React.Component {
   setLocalDraft(draft) {
     this.setState({ localDraft: draft });
   }
-  onPreferredPostTypeChange(type) {
-    this.setState({ preferredPostType: type });
+  onPreferredPostPrivacyChange(type) {
+    this.setState({ preferredPostPrivacy: type });
   }
 
   handleInitialPageLaunch(e, postType, clearLongDraft) {
@@ -130,12 +129,10 @@ class PostDraftController extends React.Component {
           let pursuitArray = [];
           let pursuitTemplates = {};
           for (const pursuit of result.data.pursuits) {
-            console.log(pursuit.name);
             pursuitTemplates[pursuit.name] = pursuit.meta_template ?
               pursuit.meta_template : "";
             pursuitArray.push(pursuit.name);
           }
-          console.log(pursuitTemplates);
           this.setState({
             updatingOnlineDraft: false,
             onlineDraftRetrieved: true,
@@ -228,7 +225,7 @@ class PostDraftController extends React.Component {
   }
 
   renderWindow(postType) {
-    switch (postType) {
+     switch (postType) {
       case (NONE):
         return (
           <NewPost
@@ -246,8 +243,8 @@ class PostDraftController extends React.Component {
             disablePost={this.handleDisablePost}
             setImageArray={this.setImageArray}
             onPostTypeSet={this.handlePostTypeSet}
-            preferredPostType={this.state.indexUserData.preferredPostType}
-            handlePreferredPostTypeChange={this.onPreferredPostTypeChange}
+            preferredPostPrivacy={this.state.indexUserData.preferred_post_privacy}
+            handlePreferredPostPrivacyChange={this.onPreferredPostPrivacyChange}
           />
         );
       case (LONG):
@@ -258,7 +255,7 @@ class PostDraftController extends React.Component {
             onlineDraft={this.state.onlineDraft}
             pursuitNames={this.state.pursuitNames}
             onlineDraftRetrieved={this.state.onlineDraftRetrieved}
-            preferredPostType={this.state.indexUserData.preferredPostType}
+            preferredPostPrivacy={this.state.indexUserData.preferred_post_privacy}
             updatingOnlineDraft={this.state.updatingOnlineDraft}
             onLocalDraftChange={this.handleLocalDraftChange}
             localDraft={this.state.localDraft}
@@ -269,7 +266,7 @@ class PostDraftController extends React.Component {
             setSavePending={this.setSavePending}
             isSavePending={this.state.isSavePending}
             disablePost={this.handleDisablePost}
-            handlePreferredPostTypeChange={this.onPreferredPostTypeChange}
+            handlePreferredPostPrivacyChange={this.onPreferredPostPrivacyChange}
             closeModal={this.props.closeModal}
           />
         );

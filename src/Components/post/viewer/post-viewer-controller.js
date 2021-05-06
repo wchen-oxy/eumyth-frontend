@@ -53,17 +53,18 @@ const PostViewerController = (props) => {
     }
 
     const isOwnProfile = (props.eventData.username === props.visitorUsername);
-    const textData = props.textData && props.eventData.isPaginated ? JSON.parse(props.textData) : props.textData;
+    const textData = props.textData && props.eventData.isPaginated ?
+        JSON.parse(props.textData) : props.textData;
     switch (props.eventData.post_format) {
         case (SHORT):
             return (
                 <ShortPostViewer
-                    postId={props.eventData._id}
+                    postID={props.eventData._id}
                     postIndex={props.postIndex}
                     displayPhoto={props.visitorDisplayPhoto}
                     visitorUsername={props.visitorUsername}
                     pursuitNames={props.pursuitNames}
-                    preferredPostType={props.preferredPostType}
+                    preferredPostPrivacy={props.preferredPostPrivacy}
                     textData={textData}
                     largeViewMode={props.largeViewMode}
                     isOwnProfile={isOwnProfile}
@@ -78,15 +79,16 @@ const PostViewerController = (props) => {
             );
         case (LONG):
             const title = props.eventData.title;
-            const textContent = title && title === parsePossibleTitle(props.textData) ? removeTitleFromBody(props.textData) : props.textData;
+            const textContent = title && title === parsePossibleTitle(props.textData)
+                ? removeTitleFromBody(props.textData) : props.textData;
             return (
                 <LongPostViewer
-                    postId={props.eventData._id}
+                    postID={props.eventData._id}
                     postIndex={props.postIndex}
                     displayPhoto={props.visitorDisplayPhoto}
                     visitorUsername={props.visitorUsername}
                     pursuitNames={props.pursuitNames}
-                    preferredPostType={props.preferredPostType}
+                    preferredPostPrivacy={props.preferredPostPrivacy}
                     largeViewMode={props.largeViewMode}
                     title={title}
                     textData={textContent}

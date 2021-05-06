@@ -5,8 +5,6 @@ import { INITIAL_STATE, REVIEW_STATE, SHORT, NONE } from "../../constants/flags"
 import "./short-post.scss";
 import imageCompression from 'browser-image-compression';
 
-const TITLE = "TITLE";
-
 class ShortPost extends React.Component {
   constructor(props) {
     super(props);
@@ -75,9 +73,6 @@ class ShortPost extends React.Component {
         for (let i = 0; i < results.length - 1; i++) {
           files.push(new File([results[i]], "file"))
         }
-        console.log("Created Compressed Files");
-        console.log(files);
-        console.log(thumbnail);
 
         this.setState({
           tinyPhotos: files,
@@ -132,7 +127,6 @@ class ShortPost extends React.Component {
     else {
       if (this.state.isPaginated) {
         let updatedArray = this.state.textData;
-        console.log(updatedArray);
         updatedArray[this.state.imageIndex] = (this.props.pursuitTemplates[this.state.selectedTemplate]
           + "\n"
           + updatedArray[this.state.imageIndex]);
@@ -279,7 +273,6 @@ class ShortPost extends React.Component {
             </span>
           </div>
           <div id="shortpost-special-button-container">
-
             <select
               onChange={(e) => {
                 return this.handleTemplateSelect(e.target.value)
@@ -332,9 +325,9 @@ class ShortPost extends React.Component {
           coverPhoto={this.state.coverPhoto}
           textData={this.state.textData}
           username={this.props.username}
-          preferredPostType={this.props.preferredPostType}
+          preferredPostPrivacy={this.props.preferredPostPrivacy}
           pursuitNames={this.props.pursuitNames}
-          handlePreferredPostTypeChange={this.props.handlePreferredPostTypeChange}
+          handlePreferredPostPrivacyChange={this.props.handlePreferredPostPrivacyChange}
           setPostStage={this.handleClick}
         />
       );

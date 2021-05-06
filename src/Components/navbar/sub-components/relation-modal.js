@@ -14,7 +14,7 @@ class RelationModal extends React.Component {
     constructor() {
         super();
         this.state = {
-            userRelationId: null,
+            userRelationID: null,
             following: [],
             followers: [],
             requested: []
@@ -42,7 +42,7 @@ class RelationModal extends React.Component {
                         result.data.requested,
                         true);
                     this.setState({
-                        userRelationId: result.data._id,
+                        userRelationID: result.data._id,
                         following: following,
                         followers: followers,
                         requested: requested
