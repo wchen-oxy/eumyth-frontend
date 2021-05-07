@@ -154,8 +154,9 @@ class NavigationAuth extends React.Component {
               (<></>) :
               (
                 <>
-                  <Link
-                    to={returnUsernameURL(this.state.username)}
+                  <a
+                  href={returnUsernameURL(this.state.username)}
+                    
                   >
                     <div
                       className="navbar-main-action-buttons-container"
@@ -165,7 +166,7 @@ class NavigationAuth extends React.Component {
                       </div>
                       <p>{this.state.username}</p>
                     </div>
-                  </Link>
+                  </a>
                   <div className="navbar-main-action-buttons-container">
                     <button onClick={() => this.openModal(REQUEST_ACTION)}>
                       <h4>Friends</h4>

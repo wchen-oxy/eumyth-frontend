@@ -2,7 +2,7 @@
 
 #newpost-window {
     @include small-post-window;
-
+    z-index: 23;
     button,
     input,
     select {

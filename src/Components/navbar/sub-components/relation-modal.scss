@@ -1,16 +1,8 @@
 @import "../../../partials";
 
 #relationmodal-window {
-    position: fixed;
-    z-index: top;
-    background-color: white;
-    margin-top: -38vh;
-    margin-left: -38vw;
-    top: 50%;
-    left: 50%;
-    z-index: 22;
-    height: 74vh;
-    width: 76vw;
+    @include small-post-window;
+    z-index: 23;
     #relationmodal-hero-container {
         @include flex-display-row;
 

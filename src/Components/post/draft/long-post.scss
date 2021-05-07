@@ -10,6 +10,10 @@
         color: black;
     }
 }
+#longpost-review-window {
+    @include small-post-window;
+    z-index: 23;
+}
 
 .longpost-window {
     @include large-post-window;

@@ -2,9 +2,14 @@
 #shortpost-window {
     @include flex-display-column;
     @include small-post-window;
+    z-index: 23;
+}
+#shortpost-review-window {
+    @include small-post-window;
+    z-index: 23;
 }
 
-#shortpost-special-button-container{
+#shortpost-special-button-container {
     margin: 0 auto;
 }
 
@@ -12,7 +17,7 @@
     @include flex-display-row;
     justify-content: space-between;
     padding: 0 5px;
-    p{
+    p {
         margin: 0;
     }
 }

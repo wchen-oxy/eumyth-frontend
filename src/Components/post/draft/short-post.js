@@ -314,22 +314,25 @@ class ShortPost extends React.Component {
     }
     else {
       return (
-        <ReviewPost
-          previousState={INITIAL_STATE}
-          displayPhoto={this.props.displayPhoto}
-          isPaginated={this.state.isPaginated}
-          previewTitle={this.state.previewTitle}
-          closeModal={this.props.closeModal}
-          postType={SHORT}
-          imageArray={this.state.tinyPhotos}
-          coverPhoto={this.state.coverPhoto}
-          textData={this.state.textData}
-          username={this.props.username}
-          preferredPostPrivacy={this.props.preferredPostPrivacy}
-          pursuitNames={this.props.pursuitNames}
-          handlePreferredPostPrivacyChange={this.props.handlePreferredPostPrivacyChange}
-          setPostStage={this.handleClick}
-        />
+        <div id="shortpost-review-window">
+          <ReviewPost
+            previousState={INITIAL_STATE}
+            displayPhoto={this.props.displayPhoto}
+            isPaginated={this.state.isPaginated}
+            previewTitle={this.state.previewTitle}
+            closeModal={this.props.closeModal}
+            postType={SHORT}
+            imageArray={this.state.tinyPhotos}
+            coverPhoto={this.state.coverPhoto}
+            textData={this.state.textData}
+            username={this.props.username}
+            preferredPostPrivacy={this.props.preferredPostPrivacy}
+            pursuitNames={this.props.pursuitNames}
+            handlePreferredPostPrivacyChange={this.props.handlePreferredPostPrivacyChange}
+            setPostStage={this.handleClick}
+          />
+        </div>
+
       );
     }
   }

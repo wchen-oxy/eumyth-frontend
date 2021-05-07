@@ -289,7 +289,6 @@ class ShortPostViewer extends React.Component {
 
     handleAnnotationSubmit(annotation) {
         const { geometry, data } = annotation;
-
         AxiosHelper
             .postAnnotation(
                 this.state.visitorProfilePreviewID,

@@ -136,20 +136,23 @@ const LongPost = (props) => {
     );
   else {
     return (
-      <ReviewPost
-        previousState={INITIAL_STATE}
-        displayPhoto={props.displayPhoto}
-        isPaginated={false}
-        textData={props.onlineDraft}
-        closeModal={props.closeModal}
-        postType={LONG}
-        setPostStage={setPostStage}
-        username={props.username}
-        preferredPostPrivacy={props.preferredPostPrivacy}
-        pursuitNames={props.pursuitNames}
-        handlePreferredPostPrivacyChange={props.handlePreferredPostPrivacyChange}
-        previewTitle={previewTitle}
-      />
+      <div id="longpost-review-window">
+        <ReviewPost
+          previousState={INITIAL_STATE}
+          displayPhoto={props.displayPhoto}
+          isPaginated={false}
+          textData={props.onlineDraft}
+          closeModal={props.closeModal}
+          postType={LONG}
+          setPostStage={setPostStage}
+          username={props.username}
+          preferredPostPrivacy={props.preferredPostPrivacy}
+          pursuitNames={props.pursuitNames}
+          handlePreferredPostPrivacyChange={props.handlePreferredPostPrivacyChange}
+          previewTitle={previewTitle}
+        />
+      </div>
+
     )
   }
 }
