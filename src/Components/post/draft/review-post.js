@@ -16,7 +16,7 @@ import {
     POST_ID_FIELD,
     POST_PRIVACY_TYPE_FIELD,
     POST_TYPE_FIELD,
-    PURSUIT_CATEGORY_FIELD,
+    PURSUIT_FIELD,
     REMOVE_COVER_PHOTO,
     SUBTITLE_FIELD,
     TEXT_DATA_FIELD,
@@ -31,7 +31,7 @@ const ReviewPost = (props) => {
     const [title, setTitle] = useState(props.previewTitle);
     const [subtitle, setSubtitle] = useState('');
     const [postPrivacyType, setPostPrivacyType] = useState(props.preferredPostPrivacy);
-    const [pursuitCategory, setPursuitCategory] = useState(
+    const [pursuit, setPursuit] = useState(
         props.selectedPursuit ? props.selectedPursuit : null)
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -87,6 +87,7 @@ const ReviewPost = (props) => {
         if (type === SHORT) {
             if (props.isUpdateToPost) {
                 formData.append(POST_ID_FIELD, props.postID);
+                formData.append(REMOVE_COVER_PHOTO, shouldRemoveSavedCoverPhoto)
                 if (useImageForThumbnail) {
                     if (!props.coverPhoto && !props.coverPhotoKey) {
                         return alert(`One moment friend, I'm almost done compressing
@@ -99,10 +100,7 @@ const ReviewPost = (props) => {
                 }
                 else if (!useImageForThumbnail && props.coverPhotoKey) {
                     return AxiosHelper.deletePhotoByKey(props.coverPhotoKey)
-                        .then(() => {
-                            formData.append(REMOVE_COVER_PHOTO, true);
-                            return handleUpdateSubmit(formData)
-                        });
+                        .then(() => handleUpdateSubmit(formData));
                 }
                 else {
                     return handleUpdateSubmit(formData)
@@ -122,6 +120,7 @@ const ReviewPost = (props) => {
         else if (type === LONG) {
             if (props.isUpdateToPost) {
                 formData.append(POST_ID_FIELD, props.postID);
+                formData.append(REMOVE_COVER_PHOTO, shouldRemoveSavedCoverPhoto)
                 if (useCoverPhoto) {
                     if (!coverPhoto && !props.coverPhotoKey) {
                         return alert(`One moment friend, I'm almost 
@@ -135,10 +134,7 @@ const ReviewPost = (props) => {
                 else if (props.coverPhotoKey) {
                     if (shouldRemoveSavedCoverPhoto) {
                         return AxiosHelper.deletePhotoByKey(props.coverPhotoKey)
-                            .then(() => {
-                                formData.append(REMOVE_COVER_PHOTO, true);
-                                return handleUpdateSubmit(formData)
-                            });
+                            .then(() => handleUpdateSubmit(formData));
                     }
                     else {
                         return handleUpdateSubmit(formData);
@@ -159,7 +155,7 @@ const ReviewPost = (props) => {
                 return handleNewSubmit(formData);
             }
         }
-        else{
+        else {
             throw new Error("No Content Type matched in reviewpost")
         }
 
@@ -168,8 +164,7 @@ const ReviewPost = (props) => {
     const handleUpdateSubmit = (formData) => {
         return AxiosHelper.updatePost(formData)
             .then((result) => {
-                console.log(result);
-                setIsSubmitting(false);
+                 setIsSubmitting(false);
                 //     result.status === 200 ? handleSuccess() : handleError();
             }).catch((result) => {
                 console.log(result.error);
@@ -188,7 +183,7 @@ const ReviewPost = (props) => {
         formData.append(IS_MILESTONE_FIELD, milestone ? milestone : false)
         if (title) formData.append(TITLE_FIELD, _.trim(title));
         if (postPrivacyType) formData.append(POST_PRIVACY_TYPE_FIELD, postPrivacyType);
-        if (pursuitCategory) formData.append(PURSUIT_CATEGORY_FIELD, pursuitCategory);
+        if (pursuit) formData.append(PURSUIT_FIELD, pursuit);
         if (date) formData.append(DATE_FIELD, date);
         if (minDuration) formData.append(MIN_DURATION_FIELD, minDuration);
         if (subtitle) {
@@ -316,7 +311,6 @@ const ReviewPost = (props) => {
         );
     }
 
-    console.log(props.preferredPostPrivacy);
     return (
         <div id="reviewpost-small-window">
             <div>
@@ -352,8 +346,8 @@ const ReviewPost = (props) => {
                     <label>Pursuit</label>
                     <select
                         name="pursuit-category"
-                        value={pursuitCategory}
-                        onChange={(e) => setPursuitCategory(e.target.value)}
+                        value={pursuit}
+                        onChange={(e) => setPursuit(e.target.value)}
                     >
                         {pursuitSelects}
                     </select>
@@ -361,6 +355,7 @@ const ReviewPost = (props) => {
                     <input
                         type="number"
                         value={props.min}
+                        min={0}
                         onChange={(e) => setMinDuration(e.target.value)}>
                     </input>
                     <label>Is Milestone</label>

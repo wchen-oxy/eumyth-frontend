@@ -10,11 +10,11 @@ const USERNAME_FIELD = "username";
 const IS_PAGINATED_FIELD = "isPaginated";
 const IS_MILESTONE_FIELD = "isMilestone";
 const IS_COMPLETE_FIELD = "isComplete";
-const TITLE_FIELD = "field";
+const TITLE_FIELD = "title";
 const POST_PRIVACY_TYPE_FIELD = "postPrivacyType";
 const POST_TYPE_FIELD = "postType";
-const PURSUITS_FIELD = "pursuits";
-const PURSUIT_CATEGORY_FIELD = "pursuitCategory";
+const PURSUIT_ARRAY_FIELD = "pursuitArray";
+const PURSUIT_FIELD = "pursuit";
 const DATE_FIELD = "date";
 const START_DATE_FIELD = "startDate";
 const END_DATE_FIELD = "endDate";
@@ -49,8 +49,8 @@ module.exports = {
     TITLE_FIELD,
     POST_PRIVACY_TYPE_FIELD,
     POST_TYPE_FIELD,
-    PURSUITS_FIELD,
-    PURSUIT_CATEGORY_FIELD,
+    PURSUIT_ARRAY_FIELD,
+    PURSUIT_FIELD,
     DATE_FIELD,
     MIN_DURATION_FIELD,
     SELECTED_POSTS_FIELD,

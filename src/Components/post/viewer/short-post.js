@@ -385,7 +385,7 @@ class ShortPostViewer extends React.Component {
 
 
     retrieveThumbnail() {
-        if (this.props.eventData.image_data) {
+        if (this.props.eventData.image_data.length > 0) {
             return AxiosHelper.returnImage(this.props.eventData.image_data[0])
                 .then((result) => {
                     return fetch(result.data.image)

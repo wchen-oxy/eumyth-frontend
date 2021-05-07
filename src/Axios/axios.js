@@ -39,10 +39,10 @@ export default class AxiosHelper {
         })
     }
 
-    static deletePhotoByKey(key) {
+    static deletePhotoByKey(imageKey) {
         return axios.delete(urls.IMAGE_BASE_URL, {
             data: {
-                key: key
+                imageKey: imageKey
             }
         })
     }
@@ -78,7 +78,7 @@ export default class AxiosHelper {
     static setProfilePrivacy(username, isPrivate) {
         return axios.put(urls.USER_PRIVACY, {
             username: username,
-            private: isPrivate
+            isPrivate: isPrivate
         });
     }
 
@@ -196,32 +196,32 @@ export default class AxiosHelper {
             }
         })
     }
-    static postComment(visitorProfilePreviewID, comment, postID, imagePageNumber) {
+    static postComment(profilePreviewID, comment, postID, imagePageNumber) {
         return axios.post(urls.ROOT_COMMENT_URL, {
-            visitorProfilePreviewID: visitorProfilePreviewID,
+            profilePreviewID: profilePreviewID,
             comment: comment,
             postID: postID,
             imagePageNumber: imagePageNumber
         });
     }
     static postAnnotation(
-        visitorProfilePreviewID,
+        profilePreviewID,
         postID,
         imagePageNumber,
         annotationData,
         annotationGeometry) {
         return axios.post(urls.ROOT_COMMENT_URL, {
-            visitorProfilePreviewID: visitorProfilePreviewID,
+            profilePreviewID: profilePreviewID,
             postID: postID,
             imagePageNumber: imagePageNumber,
             annotationData: annotationData,
             annotationGeometry: annotationGeometry
         });
     }
-    static postReply(postID, visitorProfilePreviewID, ancestors, comment) {
+    static postReply(postID, profilePreviewID, ancestors, comment) {
         return axios.post(urls.REPLY_COMMENT_URL, {
             postID: postID,
-            visitorProfilePreviewID: visitorProfilePreviewID,
+            profilePreviewID: profilePreviewID,
             ancestors: ancestors,
             comment: comment,
         });
@@ -271,9 +271,9 @@ export default class AxiosHelper {
         });
     }
 
-    static voteOnComment(visitorProfilePreviewID, commentID, voteValue) {
+    static voteOnComment(profilePreviewID, commentID, voteValue) {
         return axios.put(urls.VOTE_ON_COMMENT_URL, {
-            visitorProfilePreviewID: visitorProfilePreviewID,
+            profilePreviewID: profilePreviewID,
             commentID: commentID,
             voteValue: voteValue,
         });

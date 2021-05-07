@@ -19,7 +19,7 @@ const App = () => (
                   {/* <Route exact path ='/new' component={NewPost} /> */}
                   {/* <Route exact path = '/pursuit' component={PursuitPage}/> */}
                   <Route exact path='/u/:username' component={ProfilePage} />
-                  <Route exact path='/p/:postId' component={ProfilePage} />
+                  <Route exact path='/p/:postID' component={ProfilePage} />
 
                   {/* <Route exact path = '/:username/pursuit/:pursuit' component={DetailedPursuit} /> */}
             </Switch>

@@ -10,7 +10,7 @@ import {
     DISPLAY_PHOTO_FIELD,
     FIRST_NAME_FIELD,
     LAST_NAME_FIELD,
-    PURSUITS_FIELD,
+    PURSUIT_ARRAY_FIELD,
     SMALL_CROPPED_IMAGE_FIELD,
     TINY_CROPPED_IMAGE_FIELD,
     USERNAME_FIELD
@@ -194,7 +194,7 @@ class InitialCustomizationPage extends React.Component {
                     (results) => {
                         let formData = new FormData();
                         formData.append(USERNAME_FIELD, this.state.username);
-                        formData.append(PURSUITS_FIELD, JSON.stringify(this.state.pursuits));
+                        formData.append(PURSUIT_ARRAY_FIELD, JSON.stringify(this.state.pursuits));
                         formData.append(CROPPED_IMAGE_FIELD, results[0]);
                         formData.append(SMALL_CROPPED_IMAGE_FIELD, results[1]);
                         formData.append(TINY_CROPPED_IMAGE_FIELD, results[2]);
@@ -228,7 +228,7 @@ class InitialCustomizationPage extends React.Component {
                         formData.append(USERNAME_FIELD, this.state.username);
                         formData.append(FIRST_NAME_FIELD, this.state.firstName);
                         formData.append(LAST_NAME_FIELD, this.state.lastName);
-                        formData.append(PURSUITS_FIELD, JSON.stringify(this.state.pursuits));
+                        formData.append(PURSUIT_ARRAY_FIELD, JSON.stringify(this.state.pursuits));
                         return AxiosHelper.createUserProfile(formData);
                     }
                 )
@@ -365,7 +365,7 @@ class InitialCustomizationPage extends React.Component {
                             pursue or choose one from the list!
                         </label>
                         <CustomMultiSelect
-                            name={PURSUITS_FIELD}
+                            name={PURSUIT_ARRAY_FIELD}
                             onSelect={this.handleExperienceSelect}
                         />
                         {pursuitDetails}

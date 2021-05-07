@@ -15,7 +15,7 @@ import {
     IS_COMPLETE_FIELD,
     MIN_DURATION_FIELD,
     OVERVIEW_FIELD,
-    PURSUIT_CATEGORY_FIELD,
+    PURSUIT_FIELD,
     SELECTED_POSTS_FIELD,
     START_DATE_FIELD,
     TITLE_FIELD,
@@ -208,7 +208,7 @@ class ProjectController extends React.Component {
             formData.append(OVERVIEW_FIELD, this.state.overview);
         }
         if (this.state.pursuitCategory) {
-            formData.append(PURSUIT_CATEGORY_FIELD, this.state.pursuitCategory);
+            formData.append(PURSUIT_FIELD, this.state.pursuitCategory);
         }
         if (this.state.startDate) {
             formData.append(START_DATE_FIELD, this.state.startDate);
