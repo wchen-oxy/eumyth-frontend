@@ -11,22 +11,18 @@ class PostController extends React.Component {
         super(props);
         this.state = {
             feedKey: 0,
-            feedData: [[]],
+
             selectedEvent: null,
             selectedPostIndex: null,
             isModalShowing: false,
         }
         this.modalRef = createRef(null);
-        this.updateFeedData = this.updateFeedData.bind(this);
         this.handleEventClick = this.handleEventClick.bind(this);
         this.handleCommentIDInjection = this.handleCommentIDInjection.bind(this)
         this.closeModal = this.closeModal.bind(this);
         this.openModal = this.openModal.bind(this);
     }
 
-    updateFeedData(masterArray) {
-        this.setState({ feedData: masterArray })
-    }
 
     openModal(postID) {
         this.modalRef.current.style.display = "block";
@@ -46,16 +42,14 @@ class PostController extends React.Component {
     }
 
     handleCommentIDInjection(postIndex, rootCommentsArray, feedType) {
-        let currentPost = this.state.feedData;
+        let currentFeed = this.props.loadedFeed;
         const row = Math.floor(this.state.selectedPostIndex / 4);
         const columnIndex = this.state.selectedPostColumnIndex;
-        currentPost[row][columnIndex].props.eventData.comments = rootCommentsArray;
-        currentPost[row][columnIndex].props.eventData.comment_count
-            = currentPost[row][columnIndex].props.eventData.comment_count + 1;
-        this.setState((state) => ({
-            feedData: currentPost,
-            feedKey: state.feedKey + 1
-        }))
+        currentFeed[row][columnIndex].props.eventData.comments = rootCommentsArray;
+        currentFeed[row][columnIndex].props.eventData.comment_count
+            = currentFeed[row][columnIndex].props.eventData.comment_count + 1;
+        this.props.updateFeedData(currentFeed);
+
     }
 
     handleEventClick(selectedEvent, postIndex, columnIndex) {
@@ -97,12 +91,15 @@ class PostController extends React.Component {
                 />
                 <Timeline
                     mediaType={POST}
-                    feedKey={this.state.feedKey}
+                    feedID={this.props.feedID}
                     allPosts={this.props.feedIDList}
                     targetProfileID={this.props.targetProfileID}
-                    feedData={this.state.feedData}
+                    loadedFeed={this.props.loadedFeed}
                     onEventClick={this.handleEventClick}
-                    updateFeedData={this.updateFeedData}
+                    shouldPull={this.props.shouldPull}
+                    hasMore={this.props.hasMore}
+                    updateFeedData={this.props.updateFeedData}
+                    nextOpenPostIndex={this.props.nextOpenPostIndex}
                 />
             </>
         );

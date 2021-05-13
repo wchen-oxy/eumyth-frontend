@@ -10,30 +10,29 @@ class Timeline extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            hasMore: true,
-            feedData: [[]],
             fixedDataLoadLength: 4,
             nextOpenPostIndex: 0
         }
         this.fetchNextPosts = this.fetchNextPosts.bind(this);
         this.createTimelineRow = this.createTimelineRow.bind(this);
-
     }
 
     componentDidMount() {
         this._isMounted = true;
+        console.log("Remount");
         if (this.props.allPosts) {
             this.fetchNextPosts(this.props.allPosts);
         }
         else {
-            this.setState({ hasMore: false });
+            this.props.shouldPull(false);
         }
     }
 
+
     createTimelineRow(inputArray, mediaType) {
-        let masterArray = this.props.feedData;
+        let masterArray = this.props.loadedFeed;
         let index = masterArray.length - 1; //index position of array in masterArray
-        let nextOpenPostIndex = this.state.nextOpenPostIndex;
+        let nextOpenPostIndex = this.props.nextOpenPostIndex;
         let j = 0;
         let k = masterArray[index].length; //length of last array 
         //while input array is not empty
@@ -71,25 +70,23 @@ class Timeline extends React.Component {
             index++;
             k = 0;
         }
-        this.setState({
-            // feedData: masterArray,
-            nextOpenPostIndex: nextOpenPostIndex
-        },
-            () => this.props.updateFeedData(masterArray)
-        );
+        this.props.updateFeedData(masterArray, nextOpenPostIndex);
+
     }
 
     fetchNextPosts() {
-        if (this.state.nextOpenPostIndex + this.state.fixedDataLoadLength
+        console.log("refetch");
+        if (this.props.nextOpenPostIndex + this.state.fixedDataLoadLength
             >= this.props.allPosts.length) {
             console.log("Length of All Posts Exceeded");
-            this.setState({ hasMore: false });
+            this.props.shouldPull(false);
         }
+
         if (this.props.mediaType === PROJECT) {
             return AxiosHelper.returnMultipleProjects(
                 this.props.allPosts.slice(
-                    this.state.nextOpenPostIndex,
-                    this.state.nextOpenPostIndex + this.state.fixedDataLoadLength))
+                    this.props.nextOpenPostIndex,
+                    this.props.nextOpenPostIndex + this.state.fixedDataLoadLength))
                 .then(
                     (result) => {
                         if (this._isMounted) {
@@ -102,10 +99,15 @@ class Timeline extends React.Component {
                 .catch((error) => console.log(error));
         }
         else {
+            console.log(this.props.nextOpenPostIndex);
+            console.log(this.props.allPosts);
+            console.log(this.props.allPosts.slice(
+                this.props.nextOpenPostIndex,
+                this.props.nextOpenPostIndex + this.state.fixedDataLoadLength));
             return AxiosHelper.returnMultiplePosts(
                 this.props.allPosts.slice(
-                    this.state.nextOpenPostIndex,
-                    this.state.nextOpenPostIndex + this.state.fixedDataLoadLength),
+                    this.props.nextOpenPostIndex,
+                    this.props.nextOpenPostIndex + this.state.fixedDataLoadLength),
                 false)
                 .then((result) => {
                     if (this._isMounted) {
@@ -132,18 +134,19 @@ class Timeline extends React.Component {
                 <p>Loading</p>
             </div>
         );
+        // console.log(this.props.allPosts);
         return (
             <div
-                key={this.props.feedKey}
+                key={this.props.feedID}
             >
                 {this.props.allPosts && this.props.allPosts.length > 0 ?
                     (<InfiniteScroll
-                        dataLength={this.state.nextOpenPostIndex}
+                        dataLength={this.props.nextOpenPostIndex}
                         next={this.fetchNextPosts}
-                        hasMore={this.state.hasMore}
+                        hasMore={this.props.hasMore}
                         loader={<h4>Loading...</h4>}
                         endMessage={endMessage}>
-                        {this.props.feedData.map((item, index) => (
+                        {this.props.loadedFeed.map((item, index) => (
                             <div
                                 className="timeline-infinite-scroll-row"
                                 key={index}

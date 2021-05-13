@@ -23,11 +23,19 @@ import {
 import './index.scss';
 import PostController from './post-controller';
 
+const DEFAULT_FEED_META = {
+    loadedFeed: [[]],
+    hasMore: true,
+    nextOpenPostIndex: 0
+}
+
 class ProfilePage extends React.Component {
     _isMounted = false;
     constructor(props) {
         super(props);
         this.state = {
+            ...DEFAULT_FEED_META,
+
             visitorUsername: null,
             targetProfileID: null,
             targetProfilePreviewID: null,
@@ -63,6 +71,8 @@ class ProfilePage extends React.Component {
         this.handleFeedSwitch = this.handleFeedSwitch.bind(this);
         this.handleMediaTypeSwitch = this.handleMediaTypeSwitch.bind(this);
         this.handleNewBackProjectClick = this.handleNewBackProjectClick.bind(this);
+        this.updateFeedData = this.updateFeedData.bind(this);
+        this.shouldPull = this.shouldPull.bind(this);
     }
     //fixme add catch for no found anything
     componentDidMount() {
@@ -157,6 +167,10 @@ class ProfilePage extends React.Component {
         this._isMounted = false;
     }
 
+    shouldPull(value) {
+        this.setState({ hasMore: value });
+    }
+
     handleMediaTypeSwitch(mediaType) {
         if (this.state.newProject) {
             if (!window.confirm("Do you want to discard your new project?")) return;
@@ -172,6 +186,7 @@ class ProfilePage extends React.Component {
         }
         else {
             this.setState((state) => ({
+                nextOpenPostIndex: 0,
                 feedID: state.pursuits[state.selectedPursuitIndex].name + mediaType,
                 mediaType: mediaType,
                 feedIDList: mediaType === POST ?
@@ -191,19 +206,27 @@ class ProfilePage extends React.Component {
         }
         if (index === -1) {
             this.setState((state) => ({
+                hasMore: true,
+                nextOpenPostIndex: 0,
+                loadedFeed: [[]],
                 selectedPursuitIndex: -1,
                 feedID: ALL + state.mediaType,
                 feedIDList: state.mediaType === POST ? state.allPosts : state.allProjects,
+
             }));
         }
         else {
             this.setState((state) => ({
+                hasMore: true,
+                nextOpenPostIndex: 0,
+                loadedFeed: [[]],
                 selectedPursuitIndex: index,
                 feedID: state.pursuits[index].name + state.mediaType,
                 feedIDList: state.mediaType === POST ?
                     state.pursuits[index].all_posts ? state.pursuits[index].all_posts : []
                     :
                     state.pursuits[index].all_projects ? state.pursuits[index].all_projects : [],
+
             }))
         }
     }
@@ -283,11 +306,18 @@ class ProfilePage extends React.Component {
     }
 
 
+    updateFeedData(masterArray, nextOpenPostIndex) {
+        this.setState({
+            loadedFeed: masterArray,
+            nextOpenPostIndex: nextOpenPostIndex
+        })
+    }
 
     renderHeroContent() {
-
+        console.log(this.state.feedIDList)
         return this.state.mediaType === POST ?
             (<PostController
+                feedID={this.state.feedID}
                 targetProfileID={this.state.targetProfileID}
                 targetIndexUserID={this.state.targetIndexUserID}
                 feedIDList={this.state.feedIDList}
@@ -298,10 +328,14 @@ class ProfilePage extends React.Component {
                 visitorDisplayPhoto={this.state.smallCroppedDisplayPhoto}
                 preferredPostPrivacy={this.state.preferredPostPrivacy}
                 postType={this.state.postType}
-
                 pursuitNames={this.state.pursuitNames}
                 eventData={this.state.selectedEvent}
                 textData={this.state.textData}
+                hasMore={this.state.hasMore}
+                nextOpenPostIndex={this.state.nextOpenPostIndex}
+                shouldPull={this.shouldPull}
+                loadedFeed={this.state.loadedFeed}
+                updateFeedData={this.updateFeedData}
             />)
             :
             (<ProjectController
