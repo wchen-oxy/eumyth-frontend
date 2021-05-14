@@ -305,7 +305,6 @@ class ProfilePage extends React.Component {
         });
     }
 
-
     updateFeedData(masterArray, nextOpenPostIndex) {
         this.setState({
             loadedFeed: masterArray,
@@ -314,7 +313,6 @@ class ProfilePage extends React.Component {
     }
 
     renderHeroContent() {
-        console.log(this.state.feedIDList)
         return this.state.mediaType === POST ?
             (<PostController
                 feedID={this.state.feedID}

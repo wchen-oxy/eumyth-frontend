@@ -121,6 +121,9 @@ class Timeline extends React.Component {
     }
 
     render() {
+        console.log(this.props.hasMore);
+        console.log(this.props.allPosts);
+        console.log(this.props.loadedFeed);
         const endMessage = (
             <div>
                 <br />
@@ -160,6 +163,12 @@ class Timeline extends React.Component {
                     :
                     <p>There doesn't seem to be anything here</p>
                 }
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
             </div>
         )
     }
