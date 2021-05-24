@@ -23,18 +23,14 @@ import {
 import './index.scss';
 import PostController from './post-controller';
 
-const DEFAULT_FEED_META = {
-    loadedFeed: [[]],
-    hasMore: true,
-    nextOpenPostIndex: 0
-}
-
 class ProfilePage extends React.Component {
     _isMounted = false;
     constructor(props) {
         super(props);
         this.state = {
-            ...DEFAULT_FEED_META,
+            hasMore: true,
+            nextOpenPostIndex: 0,
+            loadedFeed: [[]],
 
             visitorUsername: null,
             targetProfileID: null,
@@ -76,6 +72,7 @@ class ProfilePage extends React.Component {
     }
     //fixme add catch for no found anything
     componentDidMount() {
+        console.log("Profile is mounted");
         this._isMounted = true;
         if (this._isMounted && this.state.targetUsername) {
             this.props.firebase.auth.onAuthStateChanged(

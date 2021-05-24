@@ -20,6 +20,7 @@ class Timeline extends React.Component {
     componentDidMount() {
         this._isMounted = true;
         console.log("Remount");
+        console.log(this.props.loadedFeed);
         if (this.props.allPosts) {
             this.fetchNextPosts(this.props.allPosts);
         }
@@ -121,9 +122,6 @@ class Timeline extends React.Component {
     }
 
     render() {
-        console.log(this.props.hasMore);
-        console.log(this.props.allPosts);
-        console.log(this.props.loadedFeed);
         const endMessage = (
             <div>
                 <br />
@@ -140,7 +138,7 @@ class Timeline extends React.Component {
         // console.log(this.props.allPosts);
         return (
             <div
-                key={this.props.feedID}
+                key={this.props.feedID }
             >
                 {this.props.allPosts && this.props.allPosts.length > 0 ?
                     (<InfiniteScroll
@@ -163,12 +161,12 @@ class Timeline extends React.Component {
                     :
                     <p>There doesn't seem to be anything here</p>
                 }
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
             </div>
         )
     }
