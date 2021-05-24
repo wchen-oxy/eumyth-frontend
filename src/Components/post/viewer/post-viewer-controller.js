@@ -30,7 +30,11 @@ const PostViewerController = (props) => {
             .deletePost(
                 props.targetProfileID,
                 props.targetIndexUserID,
-                props.eventData._id)
+                props.eventData._id, 
+                props.eventData.pursuit_category,
+                props.eventData.min_duration,
+                props.eventData.is_milestone
+                )
             .then((result) => console.log(result))
             .catch((err) => {
                 console.log(err);

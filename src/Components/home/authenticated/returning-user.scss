@@ -27,6 +27,9 @@
     text-decoration: none;
     color: black;
 }
+#returninguser-recent-work-title:hover {
+    text-decoration: underline;
+}
 .returninguser-title {
     @extend %title-texts;
 }
@@ -37,6 +40,7 @@
     padding: 2vh;
     #returninguser-hero-profile-column {
         @include button-rounding;
+        background-color: $primary-color-faded;
         a {
             @include link-decoration;
         }
@@ -52,6 +56,8 @@
     #returninguser-profile-photo {
         object-fit: cover;
         border-radius: 50%;
+        display: block;
+        margin: auto;
         @include medium-profile-photo;
     }
 

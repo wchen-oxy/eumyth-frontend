@@ -4,11 +4,10 @@
     margin: auto;
     color: white;
 }
-.navbar-main-action-buttons-container 
-{
+.navbar-main-action-buttons-container {
     @include flex-display-row;
-    @include button-rounding
-
+    @include button-rounding;
+    background-color: $primary-color-faded;
 }
 
 #navbar-profile-home:hover,
@@ -44,8 +43,6 @@ nav {
 
     #navbar-right-container {
         @include flex-display-row;
-
-   
 
         p,
         h4 {

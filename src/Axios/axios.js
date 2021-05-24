@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { COVER } from '../Components/constants/flags';
 import urls from "../Components/constants/urls";
 
 export default class AxiosHelper {
@@ -31,7 +32,7 @@ export default class AxiosHelper {
     }
 
     static deleteAccountPhoto(username, photoType) {
-        return axios.delete(photoType === "COVER" ? urls.COVER_PHOTO_URL : urls.DISPLAY_PHOTO_URL, {
+        return axios.delete(photoType === COVER ? urls.COVER_PHOTO_URL : urls.DISPLAY_PHOTO_URL, {
             data: {
                 username: username,
                 contentType: photoType
@@ -53,12 +54,15 @@ export default class AxiosHelper {
         });
     }
 
-    static deletePost(userID, indexUserID, postID) {
+    static deletePost(userID, indexUserID, postID, pursuit, duration, isMilestone) {
         return axios.delete(urls.POST_BASE_URL, {
             data: {
                 userID: userID,
                 indexUserID: indexUserID,
-                postID: postID
+                postID: postID,
+                pursuit: pursuit,
+                duration: duration,
+                isMilestone: isMilestone
             }
         });
     }

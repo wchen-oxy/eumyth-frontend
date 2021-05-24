@@ -311,6 +311,7 @@ const ReviewPost = (props) => {
         );
     }
 
+    console.log(pursuit);
     return (
         <div id="reviewpost-small-window">
             <div>

@@ -144,7 +144,7 @@ class NavigationAuth extends React.Component {
             {shouldHideFeatures ? (<></>) :
               <div className="navbar-main-action-buttons-container" >
                 <button onClick={() => this.openModal(POST)}>
-                  <h4>New Entry</h4>
+                  <h4>+ New Entry</h4>
                 </button>
               </div>
             }

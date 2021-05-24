@@ -102,7 +102,8 @@ const AccountPage = (props) => {
   const handlePhotoSubmitCallback = (formData, photoType, username) => {
     return AxiosHelper.updateAccountImage(formData, photoType)
       .then((results) => {
-        return AxiosHelper.updatePostDisplayPhotos(username, results.data.imageKey)
+        if (photoType !== COVER) return AxiosHelper.updatePostDisplayPhotos(username, results.data.imageKey);
+        else return;
       })
       .then((results) => {
         alert("Successfully updated!");
@@ -132,10 +133,7 @@ const AccountPage = (props) => {
 
   const handleBioSubmit = () => {
     return (
-      AxiosHelper.updateBio({
-        bio: bio,
-        username: props.firebase.returnUsername()
-      })
+      AxiosHelper.updateBio(bio, props.firebase.returnUsername())
         .then(() => {
           alert("Successfully updated your bio!");
           window.location.reload();
@@ -147,11 +145,11 @@ const AccountPage = (props) => {
 
   const handleTemplateTextSubmit = () => {
     return (
-      AxiosHelper.updateTemplate({
-        indexUserID: indexUserID,
-        text: templateText,
-        pursuit: templateCategory
-      })
+      AxiosHelper.updateTemplate(
+        indexUserID,
+        templateText,
+        templateCategory
+      )
     )
   }
 
