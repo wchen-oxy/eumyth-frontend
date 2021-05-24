@@ -222,7 +222,7 @@ class ShortPostViewer extends React.Component {
         const newCommentID = fullCommentData[fullCommentData.length - 1]._id;
         newCommentIDArray.push(newCommentID)
         this.setState({ fullCommentData: fullCommentData }, () => {
-            if (this.props.postIndex !== null) {
+            if (this.props.postIndex !== null && !this.props.isPostOnlyView) {
                 this.props.onCommentIDInjection(
                     postIndex,
                     newCommentIDArray,

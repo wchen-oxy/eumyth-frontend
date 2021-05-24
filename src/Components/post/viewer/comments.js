@@ -82,6 +82,7 @@ class Comments extends React.Component {
             if (this.props.visitorUsername) {
                 return AxiosHelper.getUserPreviewID(this.props.visitorUsername)
                     .then((result) => {
+                        console.log(result.data);
                         this.setState({
                             visitorProfilePreviewID: result.data.userPreviewID,
                             loadingComments: false,
