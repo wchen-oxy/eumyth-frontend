@@ -281,6 +281,7 @@ const LongPostViewer = (props) => {
         return (
             <ReviewPost
                 isUpdateToPost
+                difficulty={this.props.eventData.difficulty}
                 previousState={EDIT_STATE}
                 displayPhoto={props.visitorDisplayPhoto}
                 coverPhotoKey={props.eventData.cover_photo_key ?

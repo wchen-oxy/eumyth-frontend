@@ -27,7 +27,9 @@ class PostController extends React.Component {
     openModal(postID) {
         this.modalRef.current.style.display = "block";
         document.body.style.overflow = "hidden";
-        this.setState({ isModalShowing: true }, this.props.history.replace(returnPostURL(postID)));
+        this.setState({
+            isModalShowing: true
+        }, this.props.history.replace(returnPostURL(postID)));
 
     }
 
@@ -36,7 +38,8 @@ class PostController extends React.Component {
         document.body.style.overflow = "visible";
         this.setState(
             {
-                isModalShowing: false
+                isModalShowing: false,
+                selectedEvent: null
             }, this.props.history.replace(returnUsernameURL(this.props.targetUsername))
         );
     }
@@ -85,7 +88,6 @@ class PostController extends React.Component {
                     pursuitNames={this.props.pursuitNames}
                     eventData={this.state.selectedEvent}
                     textData={this.state.textData}
-
                     closeModal={this.closeModal}
                     onCommentIDInjection={this.handleCommentIDInjection}
                 />

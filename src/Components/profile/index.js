@@ -55,7 +55,7 @@ class ProfilePage extends React.Component {
             selectedPursuitIndex: -1,
             preferredPostPrivacy: null,
             newProject: false,
-            postOnlyView: null,
+            isPostOnlyView: null,
         }
         this.modalRef = React.createRef();
         this.miniModalRef = React.createRef();
@@ -72,7 +72,6 @@ class ProfilePage extends React.Component {
     }
     //fixme add catch for no found anything
     componentDidMount() {
-        console.log("Profile is mounted");
         this._isMounted = true;
         if (this._isMounted && this.state.targetUsername) {
             this.props.firebase.auth.onAuthStateChanged(
@@ -127,7 +126,7 @@ class ProfilePage extends React.Component {
                                     }
                                     if (this._isMounted) this.setState({
                                         selectedEvent: result[0].data,
-                                        postOnlyView: true,
+                                        isPostOnlyView: true,
                                         postType: result[0].data.post_format,
                                         visitorUsername: user.displayName,
                                         targetUsername: result[0].data.username,
@@ -143,7 +142,7 @@ class ProfilePage extends React.Component {
                                 (result => {
                                     if (this._isMounted) this.setState({
                                         selectedEvent: result.data,
-                                        postOnlyView: true,
+                                        isPostOnlyView: true,
                                         postType: result.data.post_format,
                                         visitorUsername: null,
                                         targetUsername: result.data.username,
@@ -298,7 +297,7 @@ class ProfilePage extends React.Component {
             feedID: ALL + POST,
             userRelationID: targetUserInfo.user_relation_id,
             followerStatus: followerStatus,
-            postOnlyView: false,
+            isPostOnlyView: false,
         });
     }
 
@@ -424,7 +423,7 @@ class ProfilePage extends React.Component {
                 );
             }
         }
-        if (this.state.postOnlyView) {
+        if (this.state.isPostOnlyView) {
             return (
                 <PostViewerController
                     targetProfileID={this.state.targetProfileID}
@@ -433,7 +432,7 @@ class ProfilePage extends React.Component {
                     isOwnProfile={this.state.visitorUsername === this.state.selectedEvent.username}
                     visitorUsername={this.state.visitorUsername}
                     largeViewMode={true}
-                    isPostOnlyView={this.state.postOnlyView}
+                    isPostOnlyView={this.state.isPostOnlyView}
                     visitorDisplayPhoto={this.state.smallCroppedDisplayPhoto}
                     preferredPostPrivacy={this.state.preferredPostPrivacy}
                     postType={this.state.postType}
@@ -447,7 +446,7 @@ class ProfilePage extends React.Component {
                 />
             )
         }
-        else if (!this.state.postOnlyView) {
+        else if (!this.state.isPostOnlyView) {
             return (
                 <div>
                     <div id="profile-main-container">

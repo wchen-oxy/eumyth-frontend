@@ -7,7 +7,7 @@ const ProfileModal = (props) => {
         <div className="modal" ref={props.modalRef}>
             <div className="overlay" onClick={props.closeModal}></div>
             <span className="close" onClick={props.closeModal}>X</span>
-            <div id="profilemodal-window-reset">
+            <div id={"profilemodal-window-reset"}>
                 {
                     props.isModalShowing && props.eventData ?
                         <PostViewerController

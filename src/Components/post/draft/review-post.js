@@ -25,6 +25,7 @@ import {
 } from "../../constants/form-data";
 
 const ReviewPost = (props) => {
+    const [difficulty, setDifficulty] = useState(props.difficulty);
     const [date, setDate] = useState(props.date);
     const [minDuration, setMinDuration] = useState(null);
     const [milestone, setMilestone] = useState(props.isMilestone);
@@ -311,7 +312,6 @@ const ReviewPost = (props) => {
         );
     }
 
-    console.log(pursuit);
     return (
         <div id="reviewpost-small-window">
             <div>
@@ -358,6 +358,14 @@ const ReviewPost = (props) => {
                         value={props.min}
                         min={0}
                         onChange={(e) => setMinDuration(e.target.value)}>
+                    </input>
+                    <label>Difficulty</label>
+                    <input
+                        type="number"
+                        value={props.difficulty}
+                        min={1}
+                        max={5}
+                        onChange={(e) => setDifficulty(e.target.value)}>
                     </input>
                     <label>Is Milestone</label>
                     <input

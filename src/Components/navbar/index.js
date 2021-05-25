@@ -39,6 +39,7 @@ class NavigationAuth extends React.Component {
       isPostModalShowing: false,
       isRequestModalShowing: false,
     };
+    
     this.modalRef = React.createRef();
     this.renderModal = this.renderModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
@@ -52,7 +53,6 @@ class NavigationAuth extends React.Component {
       (result) => {
         isUserStillLoading = false;
         if (result) {
-          console.log("isExisting");
           isExistingUser = true;
         }
         return AxiosHelper.returnTinyDisplayPhoto(this.state.username);
@@ -155,8 +155,8 @@ class NavigationAuth extends React.Component {
               (
                 <>
                   <a
-                  href={returnUsernameURL(this.state.username)}
-                    
+                    href={returnUsernameURL(this.state.username)}
+
                   >
                     <div
                       className="navbar-main-action-buttons-container"

@@ -19,8 +19,6 @@ class Timeline extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
-        console.log("Remount");
-        console.log(this.props.loadedFeed);
         if (this.props.allPosts) {
             this.fetchNextPosts(this.props.allPosts);
         }
@@ -76,10 +74,8 @@ class Timeline extends React.Component {
     }
 
     fetchNextPosts() {
-        console.log("refetch");
         if (this.props.nextOpenPostIndex + this.state.fixedDataLoadLength
             >= this.props.allPosts.length) {
-            console.log("Length of All Posts Exceeded");
             this.props.shouldPull(false);
         }
 
@@ -100,11 +96,6 @@ class Timeline extends React.Component {
                 .catch((error) => console.log(error));
         }
         else {
-            console.log(this.props.nextOpenPostIndex);
-            console.log(this.props.allPosts);
-            console.log(this.props.allPosts.slice(
-                this.props.nextOpenPostIndex,
-                this.props.nextOpenPostIndex + this.state.fixedDataLoadLength));
             return AxiosHelper.returnMultiplePosts(
                 this.props.allPosts.slice(
                     this.props.nextOpenPostIndex,
@@ -135,10 +126,9 @@ class Timeline extends React.Component {
                 <p>Loading</p>
             </div>
         );
-        // console.log(this.props.allPosts);
         return (
             <div
-                key={this.props.feedID }
+                key={this.props.feedID}
             >
                 {this.props.allPosts && this.props.allPosts.length > 0 ?
                     (<InfiniteScroll

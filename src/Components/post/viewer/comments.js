@@ -22,8 +22,8 @@ class Comments extends React.Component {
         this.handleCommentPost = this.handleCommentPost.bind(this);
     }
 
-    componentDidMount() {
-        if (this.props.commentIDArray.length > 0) {
+    componentDidMount() {     
+         if (this.props.commentIDArray.length > 0) {
             if (this.props.visitorUsername) {
                 return Promise.all([
                     AxiosHelper.getComments(

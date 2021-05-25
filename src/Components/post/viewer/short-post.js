@@ -110,6 +110,7 @@ class ShortPostViewer extends React.Component {
                 }
             }
         }
+        console.log("comments gotten");
         this.setState({
             fullCommentData: rawComments ? rawComments : [],
             annotations: annotations,
@@ -130,6 +131,7 @@ class ShortPostViewer extends React.Component {
     renderComments(windowType) {
         if (windowType === EXPANDED) {
             const isImageOnly = this.props.eventData.image_data.length ? true : false;
+            console.log(this.props.eventData.comments);
             return (
                 <Comments
                     postType={SHORT}
@@ -572,6 +574,7 @@ class ShortPostViewer extends React.Component {
             return (
                 <ReviewPost
                     isUpdateToPost
+                    difficulty={this.props.eventData.difficulty}
                     previousState={EDIT_STATE}
                     postID={this.props.eventData._id}
                     displayPhoto={this.props.visitorDisplayPhoto}
