@@ -136,7 +136,7 @@ const LongPostViewer = (props) => {
                                         <></>}
                                 </div>
                                 <div className="longpostviewer-stats-container">
-                                    {props.eventData.is_milestone ?
+                                    {props.eventData.progression ?
                                         <p>Milestone :)</p> : <></>}
                                     {props.eventData.min_duration ?
                                         <p>
@@ -186,7 +186,7 @@ const LongPostViewer = (props) => {
                             <h4>{props.eventData.subtitle}</h4> : <></>}
                     </div>
                     <div className="longpostviewer-stats-container">
-                        {props.eventData.is_milestone ?
+                        {props.eventData.progression ?
                             <p>Milestone :)</p> : <></>}
                         {props.eventData.date ? (
                             <p>
@@ -297,7 +297,7 @@ const LongPostViewer = (props) => {
                 pursuitNames={props.pursuitNames}
                 handlePreferredPostPrivacyChange={props.handlePreferredPostPrivacyChange}
                 postID={props.eventData._id}
-                isMilestone={props.eventData.is_milestone}
+                progression={props.eventData.progression}
                 previewTitle={props.eventData.title}
                 previewSubtitle={props.eventData.subtitle}
                 coverPhoto={props.eventData.cover_photo_url}

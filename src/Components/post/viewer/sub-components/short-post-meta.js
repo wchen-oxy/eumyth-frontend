@@ -5,7 +5,7 @@ const ShortPostMetaInfo = (props) => {
     return (
         <div>
             <div className="shortpostmetainfo-stat-container">
-                {props.isMilestone ? <p>Milestone :)</p> : <></>}
+                {props.progression ? <p>Milestone :)</p> : <></>}
                 {props.pursuit ? <p>{props.pursuit}</p> : <></>}
                 {props.min ? <p>{props.min} minutes</p> : <></>}
             </div>

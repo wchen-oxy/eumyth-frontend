@@ -70,7 +70,6 @@ class ReturningUserPage extends React.Component {
             let isMoreFollowedUserPosts = null;
             let totalMin = 0;
             let pursuitInfoArray = [];
-            console.log(this.state.username)
             return (AxiosHelper
                 .returnIndexUser(this.state.username)
                 .then((result) => {
@@ -444,6 +443,11 @@ class ReturningUserPage extends React.Component {
             this.state.selectedEvent ? this.renderModal() : null;
         return (
             <div>
+                <div
+                    id="returninguser-top-title-container"
+                >
+                    <h4 className="returninguser-title">Your Dashboard</h4>
+                </div>
                 <div
                     id="returninguser-profile-container"
                     className="returninguser-main-row"

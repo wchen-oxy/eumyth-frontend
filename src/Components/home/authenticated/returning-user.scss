@@ -5,6 +5,10 @@
     font-weight: 200;
 }
 
+#returninguser-top-title-container{
+    padding-left: 2vh;
+}
+
 #returninguser-profile-container {
     @include flex-display-row;
 }
@@ -33,6 +37,8 @@
 .returninguser-title {
     @extend %title-texts;
 }
+
+
 
 .returninguser-main-row {
     margin-top: 2.5%;

@@ -6,9 +6,10 @@ const INDEX_USER_ID_FIELD = "indexUserID";
 const REMOVE_COVER_PHOTO = "removeCoverPhoto";
 const OVERVIEW_FIELD = "overview";
 const DISPLAY_PHOTO_FIELD = "displayPhoto";
+const DIFFICULTY_FIELD = "difficulty";
 const USERNAME_FIELD = "username";
 const IS_PAGINATED_FIELD = "isPaginated";
-const IS_MILESTONE_FIELD = "isMilestone";
+const PROGRESSION_FIELD = "progression";
 const IS_COMPLETE_FIELD = "isComplete";
 const TITLE_FIELD = "title";
 const POST_PRIVACY_TYPE_FIELD = "postPrivacyType";
@@ -31,7 +32,7 @@ const TINY_CROPPED_IMAGE_FIELD = "tinyCroppedImage";
 
 const FIRST_NAME_FIELD = "firstName";
 const LAST_NAME_FIELD = "lastName";
- 
+
 module.exports = {
     COVER_PHOTO_FIELD,
     POST_ID_FIELD,
@@ -40,11 +41,12 @@ module.exports = {
     OVERVIEW_FIELD,
     REMOVE_COVER_PHOTO,
     DISPLAY_PHOTO_FIELD,
+    DIFFICULTY_FIELD,
     START_DATE_FIELD,
     END_DATE_FIELD,
     USERNAME_FIELD,
     IS_PAGINATED_FIELD,
-    IS_MILESTONE_FIELD,
+    PROGRESSION_FIELD,
     IS_COMPLETE_FIELD,
     TITLE_FIELD,
     POST_PRIVACY_TYPE_FIELD,
@@ -65,5 +67,5 @@ module.exports = {
 
     FIRST_NAME_FIELD,
     LAST_NAME_FIELD,
-    
+
 }

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import LongEditor from '../editor/long-editor';
 import ReviewPost from './review-post';
 import {
@@ -71,7 +71,9 @@ const LongPost = (props) => {
         className="longpost-window"
         ref={editorContainerRef}>
         <div ref={postHeaderRef}>
-          {props.isSavePending ? (<p>Saving</p>) : (<p>Saved</p>)}
+          <div id="longpost-save-status-container">
+            {props.isSavePending ? (<h4>Saving</h4>) : (<h4>Saved</h4>)}
+          </div>
           <div className="longpost-button-container">
             <span  >
               <button
@@ -149,6 +151,7 @@ const LongPost = (props) => {
           preferredPostPrivacy={props.preferredPostPrivacy}
           pursuitNames={props.pursuitNames}
           handlePreferredPostPrivacyChange={props.handlePreferredPostPrivacyChange}
+          progression={1}
           previewTitle={previewTitle}
         />
       </div>

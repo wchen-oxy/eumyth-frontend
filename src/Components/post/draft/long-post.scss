@@ -1,5 +1,9 @@
 @import "../../../partials";
 
+#longpost-save-status-container {
+    padding-left: 2vh;
+}
+
 #longpost-container {
     @include long-post-editor-container;
     height: 100%;
@@ -10,6 +14,7 @@
         color: black;
     }
 }
+
 #longpost-review-window {
     @include small-post-window;
     z-index: 23;
@@ -23,7 +28,4 @@
     @include long-post-button-container;
     display: flex;
     justify-content: space-between;
-}
-
-#longpost-title-editor {
 }

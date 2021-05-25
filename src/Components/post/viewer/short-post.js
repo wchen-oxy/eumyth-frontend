@@ -42,7 +42,7 @@ class ShortPostViewer extends React.Component {
             min: this.props.eventData.min_duration,
             pursuitCategory: this.props.eventData.pursuit_category,
             isPaginated: this.props.eventData.is_paginated,
-            isMilestone: this.props.eventData.is_milestone,
+            progression: this.props.eventData.progression,
             postDisabled: true,
             window: INITIAL_STATE,
             tempTextForEdit: this.props.textData
@@ -110,8 +110,7 @@ class ShortPostViewer extends React.Component {
                 }
             }
         }
-        console.log("comments gotten");
-        this.setState({
+         this.setState({
             fullCommentData: rawComments ? rawComments : [],
             annotations: annotations,
             visitorProfilePreviewID: visitorProfilePreviewID
@@ -131,7 +130,6 @@ class ShortPostViewer extends React.Component {
     renderComments(windowType) {
         if (windowType === EXPANDED) {
             const isImageOnly = this.props.eventData.image_data.length ? true : false;
-            console.log(this.props.eventData.comments);
             return (
                 <Comments
                     postType={SHORT}
@@ -427,7 +425,7 @@ class ShortPostViewer extends React.Component {
                                     />
                                     <ShortPostMetaInfo
                                         index={this.state.imageIndex}
-                                        isMilestone={this.state.isMilestone}
+                                        progression={this.state.progression}
                                         pursuit={this.state.pursuitCategory}
                                         min={this.state.min}
                                         textData={null}
@@ -457,7 +455,7 @@ class ShortPostViewer extends React.Component {
                                     <ShortPostMetaInfo
                                         index={this.state.imageIndex}
                                         isPaginated={this.state.isPaginated}
-                                        isMilestone={this.state.isMilestone}
+                                        progression={this.state.progression}
                                         pursuit={this.state.pursuitCategory}
                                         min={this.state.min}
                                         textData={null}
@@ -493,7 +491,7 @@ class ShortPostViewer extends React.Component {
                                     <ShortPostMetaInfo
                                         index={this.state.imageIndex}
                                         isPaginated={this.state.isPaginated}
-                                        isMilestone={this.state.isMilestone}
+                                        progression={this.state.progression}
                                         pursuit={this.state.pursuitCategory}
                                         min={this.state.min}
                                         textData={this.props.textData}
@@ -523,7 +521,7 @@ class ShortPostViewer extends React.Component {
                                     <ShortPostMetaInfo
                                         index={this.state.imageIndex}
                                         isPaginated={this.state.isPaginated}
-                                        isMilestone={this.state.isMilestone}
+                                        progression={this.state.progression}
                                         pursuit={this.state.pursuitCategory}
                                         min={this.state.min}
                                         textData={this.props.textData}
@@ -583,7 +581,7 @@ class ShortPostViewer extends React.Component {
                         this.props.eventData.cover_photo_key : null
                     }
                     isPaginated={this.state.isPaginated}
-                    isMilestone={this.props.eventData.is_milestone}
+                    progression={this.props.eventData.progression}
                     previewTitle={this.props.eventData.title}
                     previewSubtitle={this.props.eventData.subtitle}
                     date={formattedDate}

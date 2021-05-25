@@ -8,14 +8,15 @@ import AxiosHelper from '../../../Axios/axios';
 import {
     COVER_PHOTO_FIELD,
     DATE_FIELD,
+    DIFFICULTY_FIELD,
     DISPLAY_PHOTO_FIELD,
     IMAGES_FIELD,
-    IS_MILESTONE_FIELD,
     IS_PAGINATED_FIELD,
     MIN_DURATION_FIELD,
     POST_ID_FIELD,
     POST_PRIVACY_TYPE_FIELD,
     POST_TYPE_FIELD,
+    PROGRESSION_FIELD,
     PURSUIT_FIELD,
     REMOVE_COVER_PHOTO,
     SUBTITLE_FIELD,
@@ -28,7 +29,7 @@ const ReviewPost = (props) => {
     const [difficulty, setDifficulty] = useState(props.difficulty);
     const [date, setDate] = useState(props.date);
     const [minDuration, setMinDuration] = useState(null);
-    const [milestone, setMilestone] = useState(props.isMilestone);
+    const [progression, setProgression] = useState(props.progression);
     const [title, setTitle] = useState(props.previewTitle);
     const [subtitle, setSubtitle] = useState('');
     const [postPrivacyType, setPostPrivacyType] = useState(props.preferredPostPrivacy);
@@ -165,8 +166,8 @@ const ReviewPost = (props) => {
     const handleUpdateSubmit = (formData) => {
         return AxiosHelper.updatePost(formData)
             .then((result) => {
-                 setIsSubmitting(false);
-                //     result.status === 200 ? handleSuccess() : handleError();
+                setIsSubmitting(false);
+                result.status === 200 ? handleSuccess() : handleError();
             }).catch((result) => {
                 console.log(result.error);
                 setIsSubmitting(false);
@@ -181,7 +182,8 @@ const ReviewPost = (props) => {
         formData.append(POST_TYPE_FIELD, props.postType);
         formData.append(USERNAME_FIELD, props.username);
         formData.append(IS_PAGINATED_FIELD, props.isPaginated);
-        formData.append(IS_MILESTONE_FIELD, milestone ? milestone : false)
+        formData.append(PROGRESSION_FIELD, progression)
+        formData.append(DIFFICULTY_FIELD, difficulty);
         if (title) formData.append(TITLE_FIELD, _.trim(title));
         if (postPrivacyType) formData.append(POST_PRIVACY_TYPE_FIELD, postPrivacyType);
         if (pursuit) formData.append(PURSUIT_FIELD, pursuit);
@@ -311,7 +313,7 @@ const ReviewPost = (props) => {
             <option key={pursuit} value={pursuit}>{pursuit}</option>
         );
     }
-
+    console.log(progression);
     return (
         <div id="reviewpost-small-window">
             <div>
@@ -367,11 +369,14 @@ const ReviewPost = (props) => {
                         max={5}
                         onChange={(e) => setDifficulty(e.target.value)}>
                     </input>
-                    <label>Is Milestone</label>
+                    <label>Progress</label>
                     <input
-                        type="checkbox"
-                        value={milestone}
-                        onClick={() => setMilestone(!milestone)}>
+                        defaultValue={progression}
+                        type="range"
+                        step={1}
+                        min={0}
+                        max={2}
+                        onClick={(e) => setProgression(e.target.value)}>
                     </input>
                 </div>
                 <div className="reviewpost-button-container">

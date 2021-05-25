@@ -316,6 +316,7 @@ class ShortPost extends React.Component {
       return (
         <div id="shortpost-review-window">
           <ReviewPost
+            progression={1}
             previousState={INITIAL_STATE}
             displayPhoto={this.props.displayPhoto}
             isPaginated={this.state.isPaginated}

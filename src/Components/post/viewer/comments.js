@@ -22,8 +22,8 @@ class Comments extends React.Component {
         this.handleCommentPost = this.handleCommentPost.bind(this);
     }
 
-    componentDidMount() {     
-         if (this.props.commentIDArray.length > 0) {
+    componentDidMount() {
+        if (this.props.commentIDArray.length > 0) {
             if (this.props.visitorUsername) {
                 return Promise.all([
                     AxiosHelper.getComments(
@@ -82,7 +82,6 @@ class Comments extends React.Component {
             if (this.props.visitorUsername) {
                 return AxiosHelper.getUserPreviewID(this.props.visitorUsername)
                     .then((result) => {
-                        console.log(result.data);
                         this.setState({
                             visitorProfilePreviewID: result.data.userPreviewID,
                             loadingComments: false,
