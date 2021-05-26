@@ -32,7 +32,7 @@ const LongEvent = (props) => {
                 {post.pursuit_category ?
                     <p>
                         {post.pursuit_category}
-                        {post.is_milestone ? " " + "MileStone" : " " + "Progress"}
+                        {post.progression === 2 ? " " + "MileStone" : " " + "Progress"}
                     </p>
                     : <></>
                 }

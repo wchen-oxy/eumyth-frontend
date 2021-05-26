@@ -140,6 +140,7 @@ const LongPost = (props) => {
     return (
       <div id="longpost-review-window">
         <ReviewPost
+          date={new Date().toISOString().substr(0, 10)}
           previousState={INITIAL_STATE}
           displayPhoto={props.displayPhoto}
           isPaginated={false}

@@ -116,7 +116,7 @@ class CustomImageSlider extends React.Component {
 
         return (
             <>
-                <div className="customimageslider-hero-container">
+                <div id={this.props.newPost ? "customimageslider-new-post-hero-container": "customimageslider-hero-container"}>
                     <Annotation
                         src={this.props.imageArray[this.props.imageIndex]}
                         alt='Image Display Goes Here'

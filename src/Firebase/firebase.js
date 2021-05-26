@@ -26,6 +26,7 @@ class Firebase {
     this.doIsEmailVerified = this.doIsEmailVerified.bind(this);
     this.checkIsExistingUser = this.checkIsExistingUser.bind(this);
     this.writeBasicUserData = this.writeBasicUserData.bind(this);
+    this.clearBasicUserData = this.clearBasicUserData.bind(this);
   }
 
   doTest() {
@@ -47,7 +48,7 @@ class Firebase {
         if (errorCode === 'auth/weak-password') {
           alert('The password is too weak.');
         } else {
-          alert (errorMessage);
+          alert(errorMessage);
         }
       });
   }
@@ -144,6 +145,16 @@ class Firebase {
         lastName: lastName
       })
       .then(() => 200)
+  }
+
+  clearBasicUserData(uid) {
+    if (this.auth.currentUser) {
+      const uid = this.auth.currentUser.uid;
+      return this.db.ref('users/' + uid).remove();
+    }
+    else {
+      return;
+    }
   }
 }
 

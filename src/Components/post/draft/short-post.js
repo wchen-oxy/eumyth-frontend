@@ -41,6 +41,7 @@ class ShortPost extends React.Component {
     this.loadImage = this.loadImage.bind(this);
     this.transformImageProp = this.transformImageProp.bind(this);
     this.createTinyFiles = this.createTinyFiles.bind(this);
+    this.handleArrowPress = this.handleArrowPress.bind(this);
   }
 
   transformImageProp(validFiles) {
@@ -176,6 +177,28 @@ class ShortPost extends React.Component {
     this.setState({ unsupportedFiles: value })
   }
 
+  handleArrowPress(value) {
+    const currentIndex = this.state.imageIndex + value;
+    if (currentIndex === this.state.imageArray.length) {
+      return (
+        this.setState({
+          imageIndex: 0,
+        }));
+    }
+    else if (currentIndex === -1) {
+      return (
+        this.setState({
+          imageIndex: this.state.imageArray.length - 1,
+
+        }));
+    }
+    else {
+      return (
+        this.setState(({
+          imageIndex: currentIndex,
+        })));
+    }
+  }
   handleTextChange(text, isPostText) {
     if (isPostText) {
       this.setState({ previewTitle: text });
@@ -296,11 +319,12 @@ class ShortPost extends React.Component {
             unsupportedFiles={this.state.unsupportedFiles}
             isPaginated={this.state.isPaginated}
             textPageText={this.state.textData}
-            imageIndex={this.state.imageIndex}
             onSortEnd={this.handleSortEnd}
             setImageArray={this.setImageArray}
             onPaginatedChange={this.handlePaginatedChange}
-            onIndexChange={this.handleIndexChange}
+            // onIndexChange={this.handleIndexChange}
+            imageIndex={this.state.imageIndex}
+            handleArrowPress={this.handleArrowPress}
             onTextChange={this.handleTextChange}
             onSelectedFileChange={this.handleSelectedFileChange}
             onUnsupportedFileChange={this.handleUnsupportedFileChange}
@@ -316,6 +340,7 @@ class ShortPost extends React.Component {
       return (
         <div id="shortpost-review-window">
           <ReviewPost
+            date={new Date().toISOString().substr(0, 10)}
             progression={1}
             previousState={INITIAL_STATE}
             displayPhoto={this.props.displayPhoto}

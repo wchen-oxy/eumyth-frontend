@@ -36,6 +36,7 @@ class InitialCustomizationPage extends React.Component {
     constructor(props) {
         super(props);
         this.editor = React.createRef(null);
+        this.handleRegisterFailure = this.handleRegisterFailure.bind(this);
         this.handleTextChange = this.handleTextChange.bind(this);
         this.handleUsernameChange = _.debounce((username) => this.checkUsernameAvailable(username), 1000);
         this.handleExperienceSelect = this.handleExperienceSelect.bind(this);
@@ -94,6 +95,12 @@ class InitialCustomizationPage extends React.Component {
             })
     }
 
+    handleRegisterFailure(error) {
+        this.setState({ isSubmitting: false });
+        console.log(error);
+        return this.props.firebase.clearBasicUserData();
+    }
+
     handleTextChange(e, isInvalid) {
         e.preventDefault();
         this.setState({ [e.target.name]: e.target.value });
@@ -101,9 +108,7 @@ class InitialCustomizationPage extends React.Component {
             const username = e.target.value;
             if (!isInvalid) {
                 this.handleUsernameChange(username);
-
             }
-
         }
     }
 
@@ -194,6 +199,8 @@ class InitialCustomizationPage extends React.Component {
                     (results) => {
                         let formData = new FormData();
                         formData.append(USERNAME_FIELD, this.state.username);
+                        formData.append(FIRST_NAME_FIELD, this.state.firstName);
+                        formData.append(LAST_NAME_FIELD, this.state.lastName);
                         formData.append(PURSUIT_ARRAY_FIELD, JSON.stringify(this.state.pursuits));
                         formData.append(CROPPED_IMAGE_FIELD, results[0]);
                         formData.append(SMALL_CROPPED_IMAGE_FIELD, results[1]);
@@ -208,8 +215,8 @@ class InitialCustomizationPage extends React.Component {
                     }
                 )
                 .catch((error) => {
-                    this.setState({ isSubmitting: false });
-                    console.log(error);
+
+                    this.handleRegisterFailure(error);
                 });
         }
         else {
@@ -238,7 +245,9 @@ class InitialCustomizationPage extends React.Component {
                         else { alert("Something unexpected happened: ", result.status) }
                     }
                 )
-                .catch((error) => console.log(error));
+                .catch((error) => {
+                    this.handleRegisterFailure(error);
+                });
         }
 
     }

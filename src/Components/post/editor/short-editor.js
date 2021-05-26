@@ -5,6 +5,8 @@ import ImageDrop from './sub-components/image-drop';
 import FileDisplayContainer from './sub-components/file-display-container';
 import TextContainer from './sub-components/text-container';
 import './short-editor.scss';
+import CustomImageSlider from '../../image-carousel/custom-image-slider';
+import { COLLAPSED } from '../../constants/flags';
 
 var isAdvancedUpload = function () {
     var div = document.createElement('div');
@@ -25,6 +27,8 @@ class ShortEditor extends React.Component {
         this.setErrorMessage = this.setErrorMessage.bind(this);
         this.validateFile = this.validateFile.bind(this);
         this.renderTextContainer = this.renderTextContainer.bind(this);
+
+
     }
 
 
@@ -65,6 +69,7 @@ class ShortEditor extends React.Component {
     fileInputClicked = () => {
         this.fileInputRef.current.click();
     }
+
     handleFiles = (files) => {
         let invalidFound = false;
         for (let i = 0; i < files.length; i++) {
@@ -168,6 +173,8 @@ class ShortEditor extends React.Component {
         )
     }
 
+
+
     render() {
         if (!isAdvancedUpload) {
             console.log("Sorry, this is not a modern browser! Try another browser.");
@@ -195,7 +202,6 @@ class ShortEditor extends React.Component {
             );
         }
         else {
-            console.log("short-editor")
             return (
                 <>
                     <div id="shorteditor-main-container">
@@ -203,11 +209,23 @@ class ShortEditor extends React.Component {
                             {this.props.unsupportedFiles.length ?
                                 <p>Please remove all unsupported files.</p> : ''}
                             <div id="shorteditor-image-slider-container">
-                                <ImageSlider
+                                <CustomImageSlider
+                                    newPost
+                                    windowType={COLLAPSED}
+                                    imageArray={this.props.imageArray}
+                                    imageIndex={this.props.imageIndex}
+                                    handleArrowPress={this.props.handleArrowPress}
+
+                                    hideAnnotations={true}
+                                    activeAnnotations={[]}
+
+
+                                />
+                                {/* <ImageSlider
                                     disableAnnotations={true}
                                     onIndexChange={this.props.onIndexChange}
                                     imageArray={this.props.imageArray}
-                                />
+                                /> */}
                             </div>
                         </div>
                         <div id="shorteditor-side-container">

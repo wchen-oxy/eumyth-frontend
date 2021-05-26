@@ -54,7 +54,7 @@ export default class AxiosHelper {
         });
     }
 
-    static deletePost(userID, indexUserID, postID, pursuit, duration, isMilestone) {
+    static deletePost(userID, indexUserID, postID, pursuit, duration, progression) {
         return axios.delete(urls.POST_BASE_URL, {
             data: {
                 userID: userID,
@@ -62,7 +62,7 @@ export default class AxiosHelper {
                 postID: postID,
                 pursuit: pursuit,
                 duration: duration,
-                isMilestone: isMilestone
+                progression: progression
             }
         });
     }

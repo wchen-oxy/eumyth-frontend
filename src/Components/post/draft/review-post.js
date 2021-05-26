@@ -25,6 +25,20 @@ import {
     USERNAME_FIELD
 } from "../../constants/form-data";
 
+const returnProgressType = (value) => {
+
+    switch (parseInt(value)) {
+        case (0):
+            return "Setback";
+        case (1):
+            return "";
+        case (2):
+            return "Milestone";
+        default:
+            throw new Error("No Progress Type Matched in REVIEWPOST");
+    }
+}
+
 const ReviewPost = (props) => {
     const [difficulty, setDifficulty] = useState(props.difficulty);
     const [date, setDate] = useState(props.date);
@@ -313,7 +327,6 @@ const ReviewPost = (props) => {
             <option key={pursuit} value={pursuit}>{pursuit}</option>
         );
     }
-    console.log(progression);
     return (
         <div id="reviewpost-small-window">
             <div>
@@ -370,6 +383,7 @@ const ReviewPost = (props) => {
                         onChange={(e) => setDifficulty(e.target.value)}>
                     </input>
                     <label>Progress</label>
+                    <p>{returnProgressType(progression)}</p>
                     <input
                         defaultValue={progression}
                         type="range"
@@ -384,7 +398,7 @@ const ReviewPost = (props) => {
                     <div>
                         <select
                             name="posts"
-                            id="cars"
+                            id="postPrivacyType"
                             value={props.preferredPostPrivacy ?
                                 props.preferredPostPrivacy : PUBLIC_FEED}
                             onChange={(e) => setPostPrivacyType(e.target.value)}

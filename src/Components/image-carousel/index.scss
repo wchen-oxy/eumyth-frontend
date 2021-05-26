@@ -1,11 +1,13 @@
 .imageslider-image-container {
   height: 100%;
   overflow: visible;
-  background-color: black;
+  width: 100%;
+  
+  // background-color: black;
 
   img {
     height: 100%;
-    width: 100%;
+    margin: auto;
     object-fit: contain;
   }
 }
