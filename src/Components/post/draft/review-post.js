@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
 import TextareaAutosize from 'react-textarea-autosize';
-import { PUBLIC_FEED, PERSONAL_PAGE, PRIVATE, SHORT, LONG } from "../../constants/flags";
+import { PUBLIC_FEED, PERSONAL_PAGE, PRIVATE, SHORT, LONG, SETBACK, NEUTRAL, MILESTONE } from "../../constants/flags";
 import imageCompression from 'browser-image-compression';
-import "./review-post.scss";
 import AxiosHelper from '../../../Axios/axios';
 import {
     COVER_PHOTO_FIELD,
@@ -24,20 +23,23 @@ import {
     TITLE_FIELD,
     USERNAME_FIELD
 } from "../../constants/form-data";
+import { displayProgressionType } from "../../constants/ui-text";
+import "./review-post.scss";
 
-const returnProgressType = (value) => {
 
+const returnFinalProgressionType = (value) => {
     switch (parseInt(value)) {
         case (0):
-            return "Setback";
+            return SETBACK;
         case (1):
-            return "";
+            return NEUTRAL;
         case (2):
-            return "Milestone";
+            return MILESTONE;
         default:
             throw new Error("No Progress Type Matched in REVIEWPOST");
     }
 }
+
 
 const ReviewPost = (props) => {
     const [difficulty, setDifficulty] = useState(props.difficulty);
@@ -196,7 +198,7 @@ const ReviewPost = (props) => {
         formData.append(POST_TYPE_FIELD, props.postType);
         formData.append(USERNAME_FIELD, props.username);
         formData.append(IS_PAGINATED_FIELD, props.isPaginated);
-        formData.append(PROGRESSION_FIELD, progression)
+        formData.append(PROGRESSION_FIELD, returnFinalProgressionType(progression))
         formData.append(DIFFICULTY_FIELD, difficulty);
         if (title) formData.append(TITLE_FIELD, _.trim(title));
         if (postPrivacyType) formData.append(POST_PRIVACY_TYPE_FIELD, postPrivacyType);
@@ -383,7 +385,7 @@ const ReviewPost = (props) => {
                         onChange={(e) => setDifficulty(e.target.value)}>
                     </input>
                     <label>Progress</label>
-                    <p>{returnProgressType(progression)}</p>
+                    <p>{displayProgressionType(progression)}</p>
                     <input
                         defaultValue={progression}
                         type="range"

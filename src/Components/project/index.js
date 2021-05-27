@@ -285,21 +285,36 @@ class ProjectController extends React.Component {
                             {this.props.newProject ?
                                 <p>Select the posts you want to include in this project!</p>
                                 : <></>}
-                            <Timeline
-                                mediaType={isNewProjectState ?
-                                    POST : this.props.mediaType}
-                                selectedPosts={this.state.selectedPosts}
-                                newProjectView={this.props.newProject}
-                                onProjectEventSelect={this.handleProjectEventSelect}
-                                onProjectClick={this.handleProjectClick}
-                                allPosts={this.state.projectSelected ? (
-                                    this.state.projectSelected.post_ids
-                                ) : (
-                                    this.props.allPosts)}
-                                onEventClick={this.props.onEventClick}
-                                feedData={this.state.feedData}
-                                updateFeedData={this.updateFeedData}
-                                targetProfileID={this.props.targetProfileID} />
+                            {
+                                this.props.allPosts.length > 0 ?
+                                    <Timeline
+                                        mediaType={isNewProjectState ?
+                                            POST : this.props.mediaType}
+                                        selectedPosts={this.state.selectedPosts}
+                                        newProjectView={this.props.newProject}
+                                        onProjectEventSelect={this.handleProjectEventSelect}
+                                        onProjectClick={this.handleProjectClick}
+                                        allPosts={this.state.projectSelected ? (
+                                            this.state.projectSelected.post_ids
+                                        ) : (
+                                            this.props.allPosts)}
+                                        onEventClick={this.props.onEventClick}
+                                        feedData={this.state.feedData}
+                                        updateFeedData={this.updateFeedData}
+                                        targetProfileID={this.props.targetProfileID} />
+                                    :
+                                    <div>
+                                        <br />
+                                        <p>You haven't made any projects yet. Feel free to make one!</p>
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br />
+                                    </div>
+
+                            }
                         </div>
                     </>
                 );

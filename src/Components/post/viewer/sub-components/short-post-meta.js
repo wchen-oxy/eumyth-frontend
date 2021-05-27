@@ -1,11 +1,14 @@
 import React from "react";
+import { displayProgressionType } from "../../../constants/ui-text";
 import "./short-post-meta.scss";
 
+
 const ShortPostMetaInfo = (props) => {
+    console.log(props.progression);
     return (
         <div>
             <div className="shortpostmetainfo-stat-container">
-                {props.progression ? <p>Milestone :)</p> : <></>}
+                {props.progression ? <p>{displayProgressionType(props.progression)}</p> : <></>}
                 {props.pursuit ? <p>{props.pursuit}</p> : <></>}
                 {props.min ? <p>{props.min} minutes</p> : <></>}
             </div>

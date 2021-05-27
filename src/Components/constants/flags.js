@@ -36,6 +36,11 @@ export const LONG = "LONG";
 export const NEW_LONG = "NEW_LONG";
 export const OLD_LONG = "OLD_LONG";
 
+//POST PROGRESSION
+export const SETBACK = "SETBACK";
+export const NEUTRAL = "NEUTRAL";
+export const MILESTONE = "MILESTONE";
+
 //PRIVACY
 export const PUBLIC = "PUBLIC";
 export const PRIVATE = "PRIVATE";
