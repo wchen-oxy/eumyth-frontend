@@ -119,6 +119,9 @@ class PostDraftController extends React.Component {
           }
         );
     }
+    else {
+      return Promise.resolve(false);
+    }
   }
 
   handleIndexUserDataSet() {
@@ -225,16 +228,17 @@ class PostDraftController extends React.Component {
   }
 
   renderWindow(postType) {
-     switch (postType) {
+    switch (postType) {
       case (NONE):
         return (
           <NewPost
-            onlineDraft={this.state.onlineDraft}
+            onlineDraft
             onPostTypeSet={this.handlePostTypeSet} />
         );
       case (SHORT):
         return (
           <ShortPost
+            onlineDraft
             displayPhoto={this.state.displayPhoto}
             username={this.props.username}
             closeModal={this.props.closeModal}

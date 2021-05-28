@@ -4,7 +4,6 @@ import "./short-post-meta.scss";
 
 
 const ShortPostMetaInfo = (props) => {
-    console.log(props.progression);
     return (
         <div>
             <div className="shortpostmetainfo-stat-container">

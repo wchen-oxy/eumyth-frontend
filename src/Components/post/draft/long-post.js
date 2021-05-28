@@ -10,6 +10,8 @@ import {
 import "./long-post.scss";
 import _ from 'lodash';
 
+// const  = (func) => _.debounce(func, 2000);
+
 const LongPost = (props) => {
   const [windowState, setWindowState] = useState(INITIAL_STATE);
   const [hasContent, setHasContent] = useState(props.onlineDraft !== null || props.localDraft);
@@ -19,6 +21,10 @@ const LongPost = (props) => {
   const dummyScrollRef = useRef(null);
 
   const syncChanges = () => {
+    console.log("Sync HIT");
+    console.log(props.updatingOnlineDraft);
+    if (props.updatingOnlineDraft) return;
+    // console.log(props.onLocalOnlineSync(props.localDraft));
     props.onLocalOnlineSync(props.localDraft)
       .then((result) => {
         if (result) {
@@ -28,9 +34,11 @@ const LongPost = (props) => {
         else {
           alert("Save unsucessful");
         }
-      }
-      );
+      });
   }
+
+  const syncDebounce = _.debounce(() => { syncChanges() }, 130);
+
 
   const setPostStage = (windowType, isSavePending) => {
     if (isSavePending) {
@@ -86,7 +94,9 @@ const LongPost = (props) => {
             <span  >
               <button
                 value={NONE}
-                onClick={syncChanges}
+                onClick={syncDebounce}
+              // onClick={() => syncDebounce(syncChanges)}
+
               >
                 Save Now
                 </button>
@@ -116,7 +126,6 @@ const LongPost = (props) => {
                 onSavePending={props.setSavePending}
                 onlineDraft={props.onlineDraft}
                 localDraft={props.localDraft}
-                syncChanges={syncChanges}
                 setLocalDraft={props.setLocalDraft}
               />
               <br />

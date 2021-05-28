@@ -21,7 +21,6 @@ class LongEditor extends React.Component {
         this.handleSaveSuccess = this.handleSaveSuccess.bind(this);
         this.handleSaveError = this.handleSaveError.bind(this);
         this.handleTextChange = _.debounce(() => {
-            console.log(this.props.isSavePending);
             if (this.props.isSavePending) this.props.onSavePending(false)
         }, 4200);
         this.checkIsEqual = this.checkIsEqual.bind(this);

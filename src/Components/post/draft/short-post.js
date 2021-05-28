@@ -1,7 +1,7 @@
 import React from 'react';
 import ShortEditor from '../editor/short-editor';
 import ReviewPost from './review-post';
-import { INITIAL_STATE, REVIEW_STATE, SHORT, NONE } from "../../constants/flags";
+import { INITIAL_STATE, REVIEW_STATE, SHORT, NONE, NEW_LONG, OLD_LONG } from "../../constants/flags";
 import "./short-post.scss";
 import imageCompression from 'browser-image-compression';
 
@@ -19,13 +19,20 @@ class ShortPost extends React.Component {
       postDisabled: true,
       window: INITIAL_STATE,
       previewTitle: null,
-      selectedTemplate: null,
-      tinyPhotos: null
+      // selectedTemplate: null,
+      tinyPhotos: null,
+
+      //new draft stuff
+      isLongDraftButtonToggled: false,
+
     };
-    this.handleTemplateInjection = this.handleTemplateInjection.bind(this);
+    // this.handleTemplateInjection = this.handleTemplateInjection.bind(this);
+    this.confirmDraftDiscard = this.confirmDraftDiscard.bind(this);
+    this.longDraftOptionsRef = React.createRef(null);
     this.handleIndexChange = this.handleIndexChange.bind(this);
-    this.handleTemplateSelect = this.handleTemplateSelect.bind(this);
-    this.returnOptions = this.returnOptions.bind(this);
+    this.toggleLongDraft = this.toggleLongDraft.bind(this);
+    // this.handleTemplateSelect = this.handleTemplateSelect.bind(this);
+    // this.returnOptions = this.returnOptions.bind(this);
     this.setSelectedFiles = this.setSelectedFiles.bind(this);
     this.setValidFiles = this.setValidFiles.bind(this);
     this.setUnsupportedFiles = this.setUnsupportedFiles.bind(this);
@@ -42,6 +49,38 @@ class ShortPost extends React.Component {
     this.transformImageProp = this.transformImageProp.bind(this);
     this.createTinyFiles = this.createTinyFiles.bind(this);
     this.handleArrowPress = this.handleArrowPress.bind(this);
+
+    this.newLongPost = this.newLongPost.bind(this);
+  }
+
+  confirmDraftDiscard() {
+    this.props.onlineDraft ? (
+      window.confirm(`Starting a new Long Post will
+                      erase your saved draft. Continue anyway?`)
+      && this.props.onPostTypeSet(NEW_LONG)
+    ) : (
+      this.props.onPostTypeSet(NEW_LONG));
+  }
+
+  toggleLongDraft(isShowing) {
+    console.log(this.longDraftOptionsRef.current)
+
+    if (isShowing) {
+      this.longDraftOptionsRef.current.style.visibility = "hidden";
+    }
+    else {
+      this.longDraftOptionsRef.current.style.visibility = "visible";
+    }
+    this.setState({ isLongDraftButtonToggled: !isShowing });
+  }
+
+  newLongPost(e) {
+    !!this.props.onlineDraft ? (
+      window.confirm(`Starting a new Long Post will
+                        erase your saved draft. Continue anyway?`)
+      && this.props.onPostTypeSet(e.target.value, null)
+    ) : (
+      this.props.onPostTypeSet(e.target.value, null));
   }
 
   transformImageProp(validFiles) {
@@ -96,48 +135,48 @@ class ShortPost extends React.Component {
     });
   }
 
-  returnOptions() {
-    let pursuitOptions = [<option key={"0"} value={null}></option>];
-    for (const pursuit of this.props.pursuitNames) {
-      if (this.props.pursuitTemplates && this.props.pursuitTemplates[pursuit])
-        pursuitOptions.push(
-          <option key={pursuit} value={pursuit}>{pursuit}</option>
-        );
-    }
-    return pursuitOptions;
-  }
+  // returnOptions() {
+  //   let pursuitOptions = [<option key={"0"} value={null}></option>];
+  //   for (const pursuit of this.props.pursuitNames) {
+  //     if (this.props.pursuitTemplates && this.props.pursuitTemplates[pursuit])
+  //       pursuitOptions.push(
+  //         <option key={pursuit} value={pursuit}>{pursuit}</option>
+  //       );
+  //   }
+  //   return pursuitOptions;
+  // }
 
   handleIndexChange(value) {
     this.setState({ imageIndex: value });
   }
 
-  handleTemplateSelect(pursuit) {
-    this.setState({
-      selectedTemplate: pursuit ? pursuit : null
-    });
-  }
+  // handleTemplateSelect(pursuit) {
+  //   this.setState({
+  //     selectedTemplate: pursuit ? pursuit : null
+  //   });
+  // }
 
 
-  handleTemplateInjection() {
-    let newState;
-    if (!this.state.isPaginated) {
-      newState = (this.props.pursuitTemplates[this.state.selectedTemplate]
-        + "\n"
-        + this.state.textData);
-    }
-    else {
-      if (this.state.isPaginated) {
-        let updatedArray = this.state.textData;
-        updatedArray[this.state.imageIndex] = (this.props.pursuitTemplates[this.state.selectedTemplate]
-          + "\n"
-          + updatedArray[this.state.imageIndex]);
-        newState = updatedArray;
-      }
-    }
-    this.setState(({
-      textData: newState
-    }))
-  }
+  // handleTemplateInjection() {
+  //   let newState;
+  //   if (!this.state.isPaginated) {
+  //     newState = (this.props.pursuitTemplates[this.state.selectedTemplate]
+  //       + "\n"
+  //       + this.state.textData);
+  //   }
+  //   else {
+  //     if (this.state.isPaginated) {
+  //       let updatedArray = this.state.textData;
+  //       updatedArray[this.state.imageIndex] = (this.props.pursuitTemplates[this.state.selectedTemplate]
+  //         + "\n"
+  //         + updatedArray[this.state.imageIndex]);
+  //       newState = updatedArray;
+  //     }
+  //   }
+  //   this.setState(({
+  //     textData: newState
+  //   }))
+  // }
 
   handlePaginatedChange() {
     if (this.state.isPaginated === false) {
@@ -271,7 +310,7 @@ class ShortPost extends React.Component {
 
   render() {
     if (this.state.window === INITIAL_STATE) {
-      const pursuitOptions = this.returnOptions();
+      // const pursuitOptions = this.returnOptions();
       return (
         <div id="shortpost-window">
           <h2>Short Post</h2>
@@ -296,7 +335,17 @@ class ShortPost extends React.Component {
             </span>
           </div>
           <div id="shortpost-special-button-container">
-            <select
+            <button
+              id="shortpost-long-draft-button"
+              onClick={() => this.toggleLongDraft(this.state.isLongDraftButtonToggled)}
+            >
+              Switch To Long Draft
+              </button>
+            <div id="shortpost-long-draft-options" ref={this.longDraftOptionsRef}>
+              <button value={NEW_LONG} onClick={this.confirmDraftDiscard}>New Draft</button>
+              <button value={OLD_LONG} onClick={() => this.props.onPostTypeSet(OLD_LONG)}>Continue Previous Draft</button>
+            </div>
+            {/* <select
               onChange={(e) => {
                 return this.handleTemplateSelect(e.target.value)
               }}
@@ -309,7 +358,7 @@ class ShortPost extends React.Component {
               onClick={this.handleTemplateInjection}
             >
               Inject Template
-            </button>
+            </button> */}
           </div>
           <ShortEditor
             username={this.props.username}

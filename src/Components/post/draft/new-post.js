@@ -7,9 +7,9 @@ const NewPost = (props) => {
         !!props.onlineDraft ? (
             window.confirm(`Starting a new Long Post will
                             erase your saved draft. Continue anyway?`)
-            && props.onPostTypeSet(e.target.value, null)
+            && props.onPostTypeSet(e.target.value)
         ) : (
-                props.onPostTypeSet(e.target.value, null));
+                props.onPostTypeSet(e.target.value));
     }
     return (
         <div id="newpost-window">
@@ -18,20 +18,20 @@ const NewPost = (props) => {
                 <h4>Make a Normal Post</h4>
                 <button
                     value={SHORT}
-                    onClick={(e) => props.onPostTypeSet(e.target.value, null)}
+                    onClick={(e) => props.onPostTypeSet(e.target.value)}
                 >
                     New Normal Post
                 </button>
                 <h4>Make an Essay Post</h4>
                 <button
                     value={NEW_LONG}
-                    onClick={(e) => handleClick(e)}
+                    onClick={(e) => handleClick(e.target.value)}
                 >
                     New Draft
                 </button>
                 <button
                     value={OLD_LONG}
-                    onClick={(e) => props.onPostTypeSet(e.target.value, null)}
+                    onClick={(e) => props.onPostTypeSet(e.target.value)}
                 >
                     Continue Previous Draft?
                      </button>
