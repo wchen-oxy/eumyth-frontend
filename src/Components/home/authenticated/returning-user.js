@@ -392,7 +392,7 @@ class ReturningUserPage extends React.Component {
                         {pursuit.total_min}
                     </td>
                     <td key={pursuit.num_posts + "posts"}>
-                        {pursuit.num_posts}
+                        {pursuit.posts.length}
                     </td>
                     <td key={pursuit.num_milestones + " milestones"}>
                         {pursuit.num_milestones}
