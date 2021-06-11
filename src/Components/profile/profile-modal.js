@@ -11,6 +11,7 @@ const ProfileModal = (props) => {
                 {
                     props.isModalShowing && props.eventData ?
                         <PostViewerController
+                            disableCommenting={props.disableCommenting}
                             isOwnProfile={props.visitorUsername === props.targetUsername}
                             targetProfileID={props.targetProfileID}
                             targetIndexUserID={props.targetIndexUserID}

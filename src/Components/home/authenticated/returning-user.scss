@@ -5,7 +5,11 @@
     font-weight: 200;
 }
 
-#returninguser-top-title-container{
+#returninguser-body-container {
+    margin-top: 100px;
+}
+
+#returninguser-top-title-container {
     padding-left: 2vh;
 }
 
@@ -37,8 +41,6 @@
 .returninguser-title {
     @extend %title-texts;
 }
-
-
 
 .returninguser-main-row {
     margin-top: 2.5%;

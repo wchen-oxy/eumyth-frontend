@@ -146,6 +146,7 @@ export default class AxiosHelper {
     }
 
     static returnMultiplePosts(postIDList, includePostText) {
+        console.log(postIDList);
         return axios.get(urls.MULTIPLE_POSTS_URL, {
             params: {
                 postIDList: postIDList,

@@ -54,11 +54,10 @@ class ProfilePage extends React.Component {
             mediaType: POST,
             selectedPursuitIndex: -1,
             preferredPostPrivacy: null,
-            newProject: false,
+            newProjectState: false,
             isPostOnlyView: null,
         }
-        this.modalRef = React.createRef();
-        this.miniModalRef = React.createRef();
+        this.clearLoadedFeed = this.clearLoadedFeed.bind(this);
         this.renderHeroContent = this.renderHeroContent.bind(this);
         this.returnPublicPosts = this.returnPublicPosts.bind(this);
         this.handleFollowClick = this.handleFollowClick.bind(this);
@@ -162,20 +161,28 @@ class ProfilePage extends React.Component {
     componentWillUnmount() {
         this._isMounted = false;
     }
-
+    clearLoadedFeed() {
+        this.setState({
+            loadedFeed: [[]],
+            nextOpenPostIndex: 0
+        });
+    }
     shouldPull(value) {
         this.setState({ hasMore: value });
     }
 
     handleMediaTypeSwitch(mediaType) {
-        if (this.state.newProject) {
+        if (this.state.newProjectState) {
             if (!window.confirm("Do you want to discard your new project?")) return;
-            this.setState({ newProject: false });
+            this.setState({ newProjectState: false });
         }
 
         if (this.state.selectedPursuitIndex === -1) {
             this.setState((state) => ({
                 feedID: ALL + mediaType,
+                hasMore: true,
+                nextOpenPostIndex: 0,
+                loadedFeed: [[]],
                 mediaType: mediaType,
                 feedIDList: mediaType === POST ? state.allPosts : state.allProjects
             }));
@@ -183,6 +190,7 @@ class ProfilePage extends React.Component {
         else {
             this.setState((state) => ({
                 nextOpenPostIndex: 0,
+                hasMore: true,
                 feedID: state.pursuits[state.selectedPursuitIndex].name + mediaType,
                 mediaType: mediaType,
                 feedIDList: mediaType === POST ?
@@ -196,15 +204,13 @@ class ProfilePage extends React.Component {
     }
 
     handleFeedSwitch(index) {
-        if (this.state.newProject) {
+        if (this.state.newProjectState) {
             if (!window.confirm("Do you want to discard your new project?")) return;
-            this.setState({ newProject: false });
+            this.setState({ newProjectState: false });
         }
         if (index === -1) {
             this.setState((state) => ({
                 hasMore: true,
-                nextOpenPostIndex: 0,
-                loadedFeed: [[]],
                 selectedPursuitIndex: -1,
                 feedID: ALL + state.mediaType,
                 feedIDList: state.mediaType === POST ? state.allPosts : state.allProjects,
@@ -302,6 +308,7 @@ class ProfilePage extends React.Component {
     }
 
     updateFeedData(masterArray, nextOpenPostIndex) {
+        console.log(masterArray);
         this.setState({
             loadedFeed: masterArray,
             nextOpenPostIndex: nextOpenPostIndex
@@ -338,24 +345,33 @@ class ProfilePage extends React.Component {
                 targetProfileID={this.state.targetProfileID}
                 targetIndexUserID={this.state.targetIndexUserID}
                 mediaType={this.state.mediaType}
-                newProject={this.state.newProject}
+                newProjectState={this.state.newProjectState}
                 feedID={this.state.feedID}
-                allPosts={this.state.feedIDList}
+                feedIDList={this.state.feedIDList}
                 onNewBackProjectClick={this.handleNewBackProjectClick}
                 pursuitNames={this.state.pursuitNames}
+                isOwnProfile={this.state.visitorUsername === this.state.targetUsername}
+                clearLoadedFeed={this.clearLoadedFeed}
+
+                hasMore={this.state.hasMore}
+                shouldPull={this.shouldPull}
+                nextOpenPostIndex={this.state.nextOpenPostIndex}
+                loadedFeed={this.state.loadedFeed}
+                updateFeedData={this.updateFeedData}
+
             />)
     }
 
     handleNewBackProjectClick() {
-        if (!this.state.newProject) {
+        if (!this.state.newProjectState) {
             this.setState((state) => ({
-                newProject: !state.newProject,
+                newProjectState: !state.newProjectState,
                 feedID: NEW_PROJECT,
                 feedIDList: state.allPosts
             }));
         }
         else {
-            this.setState({ newProject: false }, this.handleMediaTypeSwitch(this.state.mediaType))
+            this.setState({ newProjectState: false }, this.handleMediaTypeSwitch(this.state.mediaType))
         }
     }
     handleFollowerStatusChange(action) {

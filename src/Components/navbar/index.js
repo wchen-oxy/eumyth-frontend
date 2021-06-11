@@ -10,14 +10,19 @@ import { returnUserImageURL, returnUsernameURL, TEMP_PROFILE_PHOTO_URL } from ".
 import AxiosHelper from '../../Axios/axios';
 import './index.scss';
 
-const NavBar = () => (
-  <AuthUserContext.Consumer>
-    {authUser =>
-      authUser &&
-        authUser.emailVerified ? <NavigationAuthBase /> : <NavigationNonAuth />
-    }
-  </AuthUserContext.Consumer>
-);
+const NavBar = (props) => {
+  return (
+    <AuthUserContext.Consumer>
+      {authUser =>
+        authUser && authUser.emailVerified ?
+          <NavigationAuthBase
+            shouldFloatNavbar={props.shouldFloatNavbar}
+            onFloatNavbarChange={props.onFloatNavbarChange}
+          /> : <NavigationNonAuth />
+      }
+    </AuthUserContext.Consumer>
+  );
+}
 
 const NavigationNonAuth = () => (
   <nav>
@@ -36,10 +41,9 @@ class NavigationAuth extends React.Component {
       previousLongDraft: null,
       existingUserLoading: true,
       isExistingUser: false,
-      isPostModalShowing: false,
       isRequestModalShowing: false,
     };
-    
+
     this.modalRef = React.createRef();
     this.renderModal = this.renderModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
@@ -74,8 +78,7 @@ class NavigationAuth extends React.Component {
       this.modalRef.current.style.display = "block";
     }
     if (postType === POST) {
-      this.setState({ isPostModalShowing: true });
-
+      this.props.onFloatNavbarChange(true);
     }
     else if (postType === REQUEST_ACTION) {
       this.setState({ isRequestModalShowing: true });
@@ -87,14 +90,13 @@ class NavigationAuth extends React.Component {
     document.body.style.overflow = "visible";
     this.setState({
       isRequestModalShowing: false,
-      isPostModalShowing: false
-    });
+    }, this.props.onFloatNavbarChange(false));
 
   }
 
   renderModal() {
     let modal = null;
-    if (this.state.isPostModalShowing) {
+    if (this.props.shouldFloatNavbar) {
       modal = (
         <>
           <div
@@ -132,7 +134,7 @@ class NavigationAuth extends React.Component {
       || !this.state.existingUserLoading && !this.state.isExistingUser;
     return (
       <>
-        <nav>
+        <nav id={this.props.shouldFloatNavbar ? "navbar-modal-open" : ""}>
           <div id="navbar-left-container">
             <Link
               to={"/"}

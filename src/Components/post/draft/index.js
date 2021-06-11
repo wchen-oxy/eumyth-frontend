@@ -5,7 +5,6 @@ import LongPost from './long-post';
 import AxiosHelper from '../../../Axios/axios';
 import { withFirebase } from '../../../Firebase';
 import { NONE, SHORT, LONG, NEW_LONG, OLD_LONG } from "../../constants/flags";
-import _ from 'lodash';
 
 class PostDraftController extends React.Component {
   _isMounted = false;
@@ -18,7 +17,7 @@ class PostDraftController extends React.Component {
       displayPhoto: null,
       isSavePending: false,
       updatingOnlineDraft: true,
-      postType: NONE,
+      postType: SHORT,
       pursuitNames: null,
       pursuitTemplates: null,
       indexUserData: null,

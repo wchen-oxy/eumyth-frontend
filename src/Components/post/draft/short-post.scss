@@ -2,11 +2,9 @@
 #shortpost-window {
     @include flex-display-column;
     @include small-post-window;
-    z-index: 23;
 }
 #shortpost-review-window {
     @include small-post-window;
-    z-index: 23;
 }
 
 #shortpost-special-button-container {

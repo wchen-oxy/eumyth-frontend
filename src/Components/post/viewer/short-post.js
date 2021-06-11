@@ -110,7 +110,7 @@ class ShortPostViewer extends React.Component {
                 }
             }
         }
-         this.setState({
+        this.setState({
             fullCommentData: rawComments ? rawComments : [],
             annotations: annotations,
             visitorProfilePreviewID: visitorProfilePreviewID
@@ -129,6 +129,9 @@ class ShortPostViewer extends React.Component {
 
     renderComments(windowType) {
         if (windowType === EXPANDED) {
+            if (this.props.disableCommenting){
+                return null;
+            }
             const isImageOnly = this.props.eventData.image_data.length ? true : false;
             return (
                 <Comments
@@ -409,12 +412,22 @@ class ShortPostViewer extends React.Component {
                 if (this.props.largeViewMode) {
                     return (
                         <div className="shortpostviewer-window">
-                            <div id="shortpostviewer-large-main-container" >
-                                <div className="shortpostviewer-large-hero-text-container">
-                                    <ShortHeroText
-                                        text={this.props.textData} />
-                                </div>
-                                <div className="shortpostviewer-large-side-container">
+                            <div id="shortpostviewer-large-inline-header-container">
+                                <PostHeader
+                                    isOwnProfile={this.props.isOwnProfile}
+                                    username={this.props.eventData.username}
+                                    date={this.state.date}
+                                    displayPhoto={this.props.eventData.display_photo_key}
+                                    onEditClick={this.handleWindowChange}
+                                    onDeletePost={this.props.onDeletePost}
+                                />
+                            </div>
+
+                            <div className="shortpostviewer-large-hero-text-container">
+                                <ShortHeroText
+                                    text={this.props.textData} />
+                            </div>
+                            {/* <div className="shortpostviewer-large-side-container">
                                     <PostHeader
                                         isOwnProfile={this.props.isOwnProfile}
                                         username={this.props.eventData.username}
@@ -430,8 +443,7 @@ class ShortPostViewer extends React.Component {
                                         min={this.state.min}
                                         textData={null}
                                     />
-                                </div>
-                            </div>
+                                </div> */}
                             {this.renderComments(EXPANDED)}
                         </div>
                     )

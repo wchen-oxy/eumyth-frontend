@@ -79,6 +79,7 @@ const PostViewerController = (props) => {
                     passDataToModal={props.passDataToModal}
                     onCommentIDInjection={props.onCommentIDInjection}
                     selectedPostFeedType={props.selectedPostFeedType}
+                    disableCommenting={props.disableCommenting}
                 />
             );
         case (LONG):
@@ -104,6 +105,8 @@ const PostViewerController = (props) => {
                     passDataToModal={props.passDataToModal}
                     onCommentIDInjection={props.onCommentIDInjection}
                     selectedPostFeedType={props.selectedPostFeedType}
+                    disableCommenting={props.disableCommenting}
+
                 />
             );
         default:

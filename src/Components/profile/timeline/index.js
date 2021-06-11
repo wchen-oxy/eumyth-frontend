@@ -19,8 +19,8 @@ class Timeline extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
-        if (this.props.allPosts) {
-            this.fetchNextPosts(this.props.allPosts);
+        if (this.props.allPosts && this.props.hasMore) {
+            this.fetchNextPosts();
         }
         else {
             this.props.shouldPull(false);
@@ -46,20 +46,22 @@ class Timeline extends React.Component {
                     }
                 }
                 masterArray[index].push(
-                    <Event
-                        columnIndex={k}
-                        mediaType={mediaType}
-                        isSelected={isSelected}
-                        newProjectView={this.props.newProjectView}
-                        key={nextOpenPostIndex}
-                        eventIndex={nextOpenPostIndex}
-                        eventData={inputArray[j]}
-                        onEventClick={this.props.onEventClick}
-                        onProjectClick={this.props.onProjectClick}
-                        onProjectEventSelect={this.props.onProjectEventSelect}
-                    />
-                );
+                    <div>
+                        <Event
+                            columnIndex={k}
+                            mediaType={mediaType}
+                            isSelected={isSelected}
+                            newProjectView={this.props.newProjectView}
+                            key={nextOpenPostIndex}
+                            eventIndex={nextOpenPostIndex}
+                            eventData={inputArray[j]}
+                            onEventClick={this.props.onEventClick}
+                            onProjectClick={this.props.onProjectClick}
+                            onProjectEventSelect={this.props.onProjectEventSelect}
+                        />
+                    </div>
 
+                );
                 nextOpenPostIndex++;
                 k++;
                 j++;
@@ -78,21 +80,19 @@ class Timeline extends React.Component {
             >= this.props.allPosts.length) {
             this.props.shouldPull(false);
         }
-
         if (this.props.mediaType === PROJECT) {
+            console.log(this.props.allPosts);
             return AxiosHelper.returnMultipleProjects(
                 this.props.allPosts.slice(
                     this.props.nextOpenPostIndex,
                     this.props.nextOpenPostIndex + this.state.fixedDataLoadLength))
-                .then(
-                    (result) => {
-                        if (this._isMounted) {
-                            this.createTimelineRow(
-                                result.data,
-                                this.props.mediaType);
-                        }
+                .then((result) => {
+                    if (this._isMounted) {
+                        this.createTimelineRow(
+                            result.data.projects,
+                            this.props.mediaType);
                     }
-                )
+                })
                 .catch((error) => console.log(error));
         }
         else {
@@ -137,12 +137,12 @@ class Timeline extends React.Component {
                         hasMore={this.props.hasMore}
                         loader={<h4>Loading...</h4>}
                         endMessage={endMessage}>
-                        {this.props.loadedFeed.map((item, index) => (
+                        {this.props.loadedFeed.map((row, index) => (
                             <div
                                 className="timeline-infinite-scroll-row"
                                 key={index}
                             >
-                                {item}
+                                {row}
                             </div>
                         ))}
                         <br />

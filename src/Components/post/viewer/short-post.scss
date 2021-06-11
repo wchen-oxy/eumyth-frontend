@@ -1,4 +1,8 @@
 @import "../../../partials";
+
+#shortpostviewer-large-inline-header-container{
+    padding-left: 10px;
+}
 .shortpostviewer-window {
     @include small-post-window;
 }

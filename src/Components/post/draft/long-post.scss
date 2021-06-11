@@ -22,6 +22,8 @@
 
 .longpost-window {
     @include large-post-window;
+    top: 50px;
+    padding-top:10px;
 }
 
 .longpost-button-container {

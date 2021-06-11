@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
 import LongEditor from '../editor/long-editor';
 import ReviewPost from './review-post';
 import {
   INITIAL_STATE,
   REVIEW_STATE,
   NONE,
-  LONG
+  LONG,
+  SHORT
 } from "../../constants/flags";
 import "./long-post.scss";
 import _ from 'lodash';
@@ -47,7 +49,7 @@ const LongPost = (props) => {
       }
       else {
         if (windowType === NONE) {
-          props.onPostTypeSet(windowType, null);
+          props.onPostTypeSet(SHORT, null);
         }
         else {
           setWindowState(windowType);
@@ -57,7 +59,7 @@ const LongPost = (props) => {
     else {
       switch (windowType) {
         case (NONE):
-          props.onPostTypeSet(windowType, props.localDraft);
+          props.onPostTypeSet(SHORT, props.localDraft);
           break;
         case (INITIAL_STATE):
           setWindowState(windowType);
@@ -113,11 +115,18 @@ const LongPost = (props) => {
           </div>
         </div>
 
-        <div id="longpost-title-editor">
-        </div>
         {props.onlineDraftRetrieved && !props.loading ?
           (
             <div id="longpost-container">
+              <div id="longpost-title-editor">
+                <TextareaAutosize
+                  id='textcontainer-text-input'
+                  placeholder='Title'
+                  onChange={(e) => this.setPreviewTitle(e.target.value)}
+                  minRows={1}
+                  value={previewTitle}
+                />
+              </div>
               <LongEditor
                 username={props.username}
                 isSavePending={props.isSavePending}

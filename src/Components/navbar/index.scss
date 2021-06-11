@@ -4,6 +4,11 @@
     margin: auto;
     color: white;
 }
+
+#navbar-modal-open{
+    @include navbar-float-over;
+}
+
 .navbar-main-action-buttons-container {
     @include flex-display-row;
     @include button-rounding;
@@ -25,12 +30,17 @@
     }
 }
 
+
 nav {
     background-color: $primary-color;
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 50px;
+    z-index: 23;
+    top: 0;
+    width: 100%;
+    position: fixed;
 
     #navbar-left-container {
         @include flex-display-row;

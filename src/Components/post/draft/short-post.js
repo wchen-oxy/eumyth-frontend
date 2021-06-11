@@ -1,5 +1,7 @@
 import React from 'react';
 import ShortEditor from '../editor/short-editor';
+import TextareaAutosize from 'react-textarea-autosize';
+
 import ReviewPost from './review-post';
 import { INITIAL_STATE, REVIEW_STATE, SHORT, NONE, NEW_LONG, OLD_LONG } from "../../constants/flags";
 import "./short-post.scss";
@@ -316,12 +318,12 @@ class ShortPost extends React.Component {
           <h2>Short Post</h2>
           <div className="shortpost-button-container">
             <span >
-              <button
+              {/* <button
                 value={NONE}
                 onClick={e => this.props.onPostTypeSet(e.target.value, false)}
               >
                 Return
-                  </button>
+                  </button> */}
             </span>
             {this.state.isCompressing ? <p>Compressing Photos</p> : null}
             <span>
@@ -360,53 +362,59 @@ class ShortPost extends React.Component {
               Inject Template
             </button> */}
           </div>
-          <ShortEditor
-            username={this.props.username}
-            selectedFiles={this.state.selectedFiles}
-            validFiles={this.state.validFiles}
-            imageArray={this.state.imageArray}
-            unsupportedFiles={this.state.unsupportedFiles}
-            isPaginated={this.state.isPaginated}
-            textPageText={this.state.textData}
-            onSortEnd={this.handleSortEnd}
-            setImageArray={this.setImageArray}
-            onPaginatedChange={this.handlePaginatedChange}
-            // onIndexChange={this.handleIndexChange}
-            imageIndex={this.state.imageIndex}
-            handleArrowPress={this.handleArrowPress}
-            onTextChange={this.handleTextChange}
-            onSelectedFileChange={this.handleSelectedFileChange}
-            onUnsupportedFileChange={this.handleUnsupportedFileChange}
-            onDisablePost={this.handleDisablePost}
-            setValidFiles={this.setValidFiles}
-            setSelectedFiles={this.setSelectedFiles}
-            setUnsupportedFiles={this.setUnsupportedFiles}
-          />
+          <TextareaAutosize
+            id='textcontainer-text-input'
+            placeholder='Title'
+            onChange={(e) => this.handleTextChange(e.target.value, true)}
+            minRows={1}
+            value={this.state.previewTitle}/>
+            <ShortEditor
+              username={this.props.username}
+              selectedFiles={this.state.selectedFiles}
+              validFiles={this.state.validFiles}
+              imageArray={this.state.imageArray}
+              unsupportedFiles={this.state.unsupportedFiles}
+              isPaginated={this.state.isPaginated}
+              textPageText={this.state.textData}
+              onSortEnd={this.handleSortEnd}
+              setImageArray={this.setImageArray}
+              onPaginatedChange={this.handlePaginatedChange}
+              // onIndexChange={this.handleIndexChange}
+              imageIndex={this.state.imageIndex}
+              handleArrowPress={this.handleArrowPress}
+              onTextChange={this.handleTextChange}
+              onSelectedFileChange={this.handleSelectedFileChange}
+              onUnsupportedFileChange={this.handleUnsupportedFileChange}
+              onDisablePost={this.handleDisablePost}
+              setValidFiles={this.setValidFiles}
+              setSelectedFiles={this.setSelectedFiles}
+              setUnsupportedFiles={this.setUnsupportedFiles}
+            />
         </div>
       );
     }
     else {
       return (
-        <div id="shortpost-review-window">
-          <ReviewPost
-            date={new Date().toISOString().substr(0, 10)}
-            progression={1}
-            previousState={INITIAL_STATE}
-            displayPhoto={this.props.displayPhoto}
-            isPaginated={this.state.isPaginated}
-            previewTitle={this.state.previewTitle}
-            closeModal={this.props.closeModal}
-            postType={SHORT}
-            imageArray={this.state.tinyPhotos}
-            coverPhoto={this.state.coverPhoto}
-            textData={this.state.textData}
-            username={this.props.username}
-            preferredPostPrivacy={this.props.preferredPostPrivacy}
-            pursuitNames={this.props.pursuitNames}
-            handlePreferredPostPrivacyChange={this.props.handlePreferredPostPrivacyChange}
-            setPostStage={this.handleClick}
-          />
-        </div>
+          <div id="shortpost-review-window">
+            <ReviewPost
+              date={new Date().toISOString().substr(0, 10)}
+              progression={1}
+              previousState={INITIAL_STATE}
+              displayPhoto={this.props.displayPhoto}
+              isPaginated={this.state.isPaginated}
+              previewTitle={this.state.previewTitle}
+              closeModal={this.props.closeModal}
+              postType={SHORT}
+              imageArray={this.state.tinyPhotos}
+              coverPhoto={this.state.coverPhoto}
+              textData={this.state.textData}
+              username={this.props.username}
+              preferredPostPrivacy={this.props.preferredPostPrivacy}
+              pursuitNames={this.props.pursuitNames}
+              handlePreferredPostPrivacyChange={this.props.handlePreferredPostPrivacyChange}
+              setPostStage={this.handleClick}
+            />
+          </div>
 
       );
     }

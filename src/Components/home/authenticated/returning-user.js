@@ -442,10 +442,8 @@ class ReturningUserPage extends React.Component {
         const renderedModal = this.state.isModalShowing &&
             this.state.selectedEvent ? this.renderModal() : null;
         return (
-            <div>
-                <div
-                    id="returninguser-top-title-container"
-                >
+            <div id="returninguser-body-container">
+                <div id="returninguser-top-title-container" >
                     <h4 className="returninguser-title">Your Dashboard</h4>
                 </div>
                 <div
