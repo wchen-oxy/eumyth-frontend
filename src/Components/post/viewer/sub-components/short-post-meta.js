@@ -10,6 +10,7 @@ const ShortPostMetaInfo = (props) => {
                 {props.progression ? <p>{displayProgressionType(props.progression)}</p> : <></>}
                 {props.pursuit ? <p>{props.pursuit}</p> : <></>}
                 {props.min ? <p>{props.min} minutes</p> : <></>}
+                {props.labels ? <p>{props.labels.map(value => value + " ")}</p> : <></>}
             </div>
             <div className="shortpostmetainfo-text-container">
                 <p>{props.isPaginated && props.textData ?

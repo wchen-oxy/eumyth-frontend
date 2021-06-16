@@ -129,7 +129,7 @@ class ShortPostViewer extends React.Component {
 
     renderComments(windowType) {
         if (windowType === EXPANDED) {
-            if (this.props.disableCommenting){
+            if (this.props.disableCommenting) {
                 return null;
             }
             const isImageOnly = this.props.eventData.image_data.length ? true : false;
@@ -422,6 +422,14 @@ class ShortPostViewer extends React.Component {
                                     onDeletePost={this.props.onDeletePost}
                                 />
                             </div>
+                            <ShortPostMetaInfo
+                                isPaginated={this.state.isPaginated}
+                                progression={this.state.progression}
+                                labels={this.props.eventData.labels}
+                                pursuit={this.state.pursuitCategory}
+                                min={this.state.min}
+                                textData={null}
+                            />
 
                             <div className="shortpostviewer-large-hero-text-container">
                                 <ShortHeroText
@@ -468,9 +476,11 @@ class ShortPostViewer extends React.Component {
                                         index={this.state.imageIndex}
                                         isPaginated={this.state.isPaginated}
                                         progression={this.state.progression}
+                                        labels={this.props.eventData.labels}
                                         pursuit={this.state.pursuitCategory}
                                         min={this.state.min}
                                         textData={null}
+
                                     />
                                 </div>
                             </div>
@@ -504,6 +514,7 @@ class ShortPostViewer extends React.Component {
                                         index={this.state.imageIndex}
                                         isPaginated={this.state.isPaginated}
                                         progression={this.state.progression}
+                                        labels={this.props.eventData.labels}
                                         pursuit={this.state.pursuitCategory}
                                         min={this.state.min}
                                         textData={this.props.textData}
@@ -534,6 +545,7 @@ class ShortPostViewer extends React.Component {
                                         index={this.state.imageIndex}
                                         isPaginated={this.state.isPaginated}
                                         progression={this.state.progression}
+                                        labels={this.props.eventData.labels}
                                         pursuit={this.state.pursuitCategory}
                                         min={this.state.min}
                                         textData={this.props.textData}
