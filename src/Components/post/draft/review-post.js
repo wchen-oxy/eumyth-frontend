@@ -10,6 +10,7 @@ import {
     DIFFICULTY_FIELD,
     DISPLAY_PHOTO_FIELD,
     IMAGES_FIELD,
+    LABELS_FIELD,
     IS_PAGINATED_FIELD,
     MIN_DURATION_FIELD,
     POST_ID_FIELD,
@@ -25,6 +26,7 @@ import {
 } from "../../constants/form-data";
 import { displayProgressionType } from "../../constants/ui-text";
 import "./review-post.scss";
+import CustomMultiSelect from '../../custom-clickables/createable-single';
 
 
 const returnFinalProgressionType = (value) => {
@@ -59,6 +61,7 @@ const ReviewPost = (props) => {
     const [shouldRemoveSavedCoverPhoto, setShouldRemoveSavedCoverPhoto] = useState(false);
     const [randomKey, setRandomKey] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [labels, setLabels] = useState(null);
     let pursuitSelects = [];
 
     const clearFile = () => {
@@ -199,7 +202,7 @@ const ReviewPost = (props) => {
         formData.append(POST_TYPE_FIELD, props.postType);
         formData.append(USERNAME_FIELD, props.username);
         formData.append(IS_PAGINATED_FIELD, props.isPaginated);
-        formData.append(PROGRESSION_FIELD, returnFinalProgressionType(progression))
+        formData.append(PROGRESSION_FIELD, returnFinalProgressionType(progression));
         if (difficulty) formData.append(DIFFICULTY_FIELD, difficulty);
         if (title) formData.append(TITLE_FIELD, _.trim(title));
         if (postPrivacyType) formData.append(POST_PRIVACY_TYPE_FIELD, postPrivacyType);
@@ -207,6 +210,11 @@ const ReviewPost = (props) => {
         if (minDuration) formData.append(MIN_DURATION_FIELD, minDuration);
         if (subtitle) {
             formData.append(SUBTITLE_FIELD, _.trim(subtitle));
+        }
+        if (labels) {
+            for (const label of labels) {
+                formData.append(LABELS_FIELD, label.value);
+            }
         }
         if (props.textData) {
             formData.append(
@@ -395,6 +403,15 @@ const ReviewPost = (props) => {
                         max={2}
                         onClick={(e) => setProgression(e.target.value)}>
                     </input>
+                </div>
+                <div>
+                    <label>Tags</label>
+                    <CustomMultiSelect
+                        clearOptions={true}
+                        name={"Tags"}
+                        onSelect={setLabels}
+                    />
+
                 </div>
                 <div className="reviewpost-button-container">
                     <p>Post to:</p>

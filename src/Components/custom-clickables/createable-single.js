@@ -26,7 +26,7 @@ export default class CustomMultiSelect extends Component {
         components={{ Menu }}
         isMulti
         onChange={this.props.onSelect}
-        options={pursuitOptions}
+        options={this.props.clearOptions ? null : pursuitOptions}
         isValidNewOption={this.isValidNewOption}
       />
     );

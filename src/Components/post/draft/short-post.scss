@@ -7,13 +7,13 @@
     @include small-post-window;
 }
 
-#shortpost-special-button-container {
-    @include flex-display-column;
-    margin: 0 auto;
-}
-
 #shortpost-long-draft-button {
     margin: 0 5px;
+}
+
+#shortpost-title-container{
+    width: 50%;
+    margin: 0 auto;
 }
 
 #shortpost-long-draft-options {
@@ -23,6 +23,14 @@
         margin-left: 5px;
         margin-right: 5px;
     }
+}
+
+#textcontainer-text-input {
+}
+
+.shortpost-special-button-container {
+    @include flex-display-column;
+    margin: 0 auto;
 }
 
 .shortpost-button-container {

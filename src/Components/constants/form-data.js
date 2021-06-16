@@ -9,6 +9,7 @@ const DISPLAY_PHOTO_FIELD = "displayPhoto";
 const DIFFICULTY_FIELD = "difficulty";
 const USERNAME_FIELD = "username";
 const IS_PAGINATED_FIELD = "isPaginated";
+const LABELS_FIELD = 'labels';
 const PROGRESSION_FIELD = "progression";
 const IS_COMPLETE_FIELD = "isComplete";
 const TITLE_FIELD = "title";
@@ -46,6 +47,7 @@ module.exports = {
     END_DATE_FIELD,
     USERNAME_FIELD,
     IS_PAGINATED_FIELD,
+    LABELS_FIELD,
     PROGRESSION_FIELD,
     IS_COMPLETE_FIELD,
     TITLE_FIELD,
