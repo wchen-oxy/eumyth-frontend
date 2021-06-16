@@ -72,6 +72,7 @@ class PostController extends React.Component {
     }
 
     render() {
+        console.log(this.props.feedIDList);
         return (
             <>
                 <ProfileModal

@@ -324,7 +324,8 @@ const ReviewPost = (props) => {
     pursuitSelects.push(
         <option value={null}></option>
     )
-    for (const pursuit of props.pursuitNames) {
+    for (let i = 1; i < props.pursuitNames.length; i++) {
+        const pursuit = props.pursuitNames[i];
         pursuitSelects.push(
             <option key={pursuit} value={pursuit}>{pursuit}</option>
         );

@@ -19,10 +19,13 @@ class Timeline extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
-        if (this.props.allPosts && this.props.hasMore) {
+        if (this.props.allPosts.length > 0 && this.props.hasMore) {
+            console.log("H");
             this.fetchNextPosts();
         }
         else {
+            console.log("H2");
+
             this.props.shouldPull(false);
         }
     }
@@ -80,12 +83,15 @@ class Timeline extends React.Component {
             >= this.props.allPosts.length) {
             this.props.shouldPull(false);
         }
+
+        const slicedObjectIDs = this.props.allPosts.slice(
+            this.props.nextOpenPostIndex,
+            this.props.nextOpenPostIndex + this.state.fixedDataLoadLength).map((item) => item.post_id)
+
         if (this.props.mediaType === PROJECT) {
-            console.log(this.props.allPosts);
+
             return AxiosHelper.returnMultipleProjects(
-                this.props.allPosts.slice(
-                    this.props.nextOpenPostIndex,
-                    this.props.nextOpenPostIndex + this.state.fixedDataLoadLength))
+                this.props.allPosts.slice(slicedObjectIDs))
                 .then((result) => {
                     if (this._isMounted) {
                         this.createTimelineRow(
@@ -96,11 +102,7 @@ class Timeline extends React.Component {
                 .catch((error) => console.log(error));
         }
         else {
-            return AxiosHelper.returnMultiplePosts(
-                this.props.allPosts.slice(
-                    this.props.nextOpenPostIndex,
-                    this.props.nextOpenPostIndex + this.state.fixedDataLoadLength),
-                false)
+            return AxiosHelper.returnMultiplePosts(slicedObjectIDs, false)
                 .then((result) => {
                     if (this._isMounted) {
                         this.createTimelineRow(
@@ -113,6 +115,7 @@ class Timeline extends React.Component {
     }
 
     render() {
+        console.log(this.props.allPosts);
         const endMessage = (
             <div>
                 <br />

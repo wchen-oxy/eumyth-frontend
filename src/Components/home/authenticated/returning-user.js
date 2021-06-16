@@ -151,19 +151,27 @@ class ReturningUserPage extends React.Component {
                                 });
                         }
                         else {
-                            return AxiosHelper
-                                .returnMultiplePosts(
-                                    slicedFeed,
-                                    true)
-                                .then((result) => {
-                                    if (result.data.posts.length <= this.state.fixedDataLoadLength) {
-                                        isMoreFollowedUserPosts = false;
-                                    }
-                                    return {
-                                        isRecentPostsOnly: false,
-                                        feedData: result.data.posts
-                                    }
-                                });
+                            if (!slicedFeed) {
+                                return {
+                                    isRecentPostsOnly: true,
+                                    feedData: result.data.posts
+                                }
+                            }
+                            else {
+                                return AxiosHelper
+                                    .returnMultiplePosts(
+                                        slicedFeed,
+                                        true)
+                                    .then((result) => {
+                                        if (result.data.posts.length <= this.state.fixedDataLoadLength) {
+                                            isMoreFollowedUserPosts = false;
+                                        }
+                                        return {
+                                            isRecentPostsOnly: false,
+                                            feedData: result.data.posts
+                                        }
+                                    });
+                            }
                         }
                     }
                 })
@@ -392,7 +400,7 @@ class ReturningUserPage extends React.Component {
                         {pursuit.total_min}
                     </td>
                     <td key={pursuit.num_posts + "posts"}>
-                        {pursuit.posts.length}
+                        {pursuit.posts ? pursuit.posts.length : 0}
                     </td>
                     <td key={pursuit.num_milestones + " milestones"}>
                         {pursuit.num_milestones}

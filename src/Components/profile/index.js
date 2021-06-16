@@ -204,19 +204,21 @@ class ProfilePage extends React.Component {
     }
 
     handleFeedSwitch(index) {
+        console.log(index);
+        console.log(this.state.pursuits[index]);
         if (this.state.newProjectState) {
             if (!window.confirm("Do you want to discard your new project?")) return;
             this.setState({ newProjectState: false });
         }
-        if (index === -1) {
-            this.setState((state) => ({
-                hasMore: true,
-                selectedPursuitIndex: -1,
-                feedID: ALL + state.mediaType,
-                feedIDList: state.mediaType === POST ? state.allPosts : state.allProjects,
+        // if (index === -1) {
+        //     this.setState((state) => ({
+        //         hasMore: true,
+        //         selectedPursuitIndex: -1,
+        //         feedID: ALL + state.mediaType,
+        //         feedIDList: state.mediaType === POST ? state.allPosts : state.allProjects,
 
-            }));
-        }
+        //     }));
+        // }
         else {
             this.setState((state) => ({
                 hasMore: true,
@@ -225,9 +227,9 @@ class ProfilePage extends React.Component {
                 selectedPursuitIndex: index,
                 feedID: state.pursuits[index].name + state.mediaType,
                 feedIDList: state.mediaType === POST ?
-                    state.pursuits[index].all_posts ? state.pursuits[index].all_posts : []
+                    state.pursuits[index].posts ? state.pursuits[index].posts : []
                     :
-                    state.pursuits[index].all_projects ? state.pursuits[index].all_projects : [],
+                    state.pursuits[index].projects ? state.pursuits[index].projects : [],
 
             }))
         }
@@ -266,10 +268,11 @@ class ProfilePage extends React.Component {
     }
 
     handleResponseData(user, targetUserInfo, followerStatusResponse) {
+        const currentPagePosts = targetUserInfo.pursuits[0].posts ? targetUserInfo.pursuits[0].posts : [];
         let pursuitNameArray = [];
         let projectArray = [];
         const postsArray = user && user.displayName === targetUserInfo.username ?
-            targetUserInfo.all_posts : this.returnPublicPosts(targetUserInfo.all_posts);
+            currentPagePosts : this.returnPublicPosts(currentPagePosts);
         const followerStatus = followerStatusResponse ?
             this.handleFollowerStatusResponse(followerStatusResponse) : null;
         for (const pursuit of targetUserInfo.pursuits) {
@@ -418,23 +421,26 @@ class ProfilePage extends React.Component {
             )
             && (this.state.followerStatus !== "FOLLOWING" &&
                 this.state.followerStatus !== "REQUEST_ACCEPTED");
-        let pursuitHolderArray = [
-            <PursuitHolder
-                key={ALL}
-                name={ALL}
-                value={-1}
-                onFeedSwitch={this.handleFeedSwitch}
-            />
-        ];
+        let pursuitHolderArray = [];
+        // let pursuitHolderArray = [
+        //     <PursuitHolder
+        //         key={ALL}
+        //         name={ALL}
+        //         value={-1}
+        //         onFeedSwitch={this.handleFeedSwitch}
+        //     />
+        // ];
         if (this.state.fail) return NoMatch;
         if (this.state.pursuits) {
             let index = 0;
             for (const pursuit of this.state.pursuits) {
+                // const pursuit = this.state.pursuits[i];
                 pursuitHolderArray.push(
                     <PursuitHolder
                         name={pursuit.name}
                         numEvents={pursuit.num_posts}
-                        key={pursuit.name} value={index++}
+                        key={pursuit.name} 
+                        value={index++}
                         onFeedSwitch={this.handleFeedSwitch} />
                 );
             }
