@@ -1,6 +1,6 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Event from './timeline-event';
+import EventController from './timeline-event-controller';
 import AxiosHelper from '../../../Axios/axios';
 import { PROJECT } from "../../constants/flags";
 import './index.scss';
@@ -50,7 +50,7 @@ class Timeline extends React.Component {
                 }
                 masterArray[index].push(
                     <div>
-                        <Event
+                        <EventController
                             columnIndex={k}
                             mediaType={mediaType}
                             isSelected={isSelected}

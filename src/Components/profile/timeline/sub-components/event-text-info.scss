@@ -1,0 +1,34 @@
+@import "../timeline-event.scss";
+
+.eventtextinfo-text-container {
+    @include flex-display-column;
+    @include lower-text-container;
+    position: relative;
+
+    .eventtextinfo-progression-container {
+        padding: 0 4px;
+    }
+
+    .eventtextinfo-dynamic-container {
+        @include flex-display-column;
+        flex-grow: 1;
+        justify-content: space-between;
+        .eventtextinfo-all-labels-container {
+            @include flex-display-row;
+            flex-wrap: wrap;
+        }
+    }
+    .eventtextinfo-comment-text-container {
+        padding: 0 4px;
+    }
+    h4,
+    p {
+        margin: 0 auto;
+    }
+    h4 {
+        font-size: 18px;
+    }
+    p {
+        font-size: 14px;
+    }
+}

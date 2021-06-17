@@ -1,0 +1,17 @@
+@import "./timeline-event.scss";
+
+.eventherocontent-with-cover-photo-container {
+    @include with-cover-photo-container-size;
+}
+
+.eventherocontent-no-cover-photo-container {
+    @include flex-display-row;
+    @include no-cover-photo-container-size;
+    p {
+        font-size: 14px;
+    }
+}
+
+.eventherocontent-cover-photo {
+    @include cover-photo-size;
+}

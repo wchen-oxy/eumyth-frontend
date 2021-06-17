@@ -1,10 +1,9 @@
 import React from 'react';
-import ShortEvent from "./timeline-short-event";
-import LongEvent from "./timeline-long-event";
+import EventHeroContent from "./timeline-event-hero-content";
 import ProjectEvent from "./timeline-project-event";
 import { POST, PROJECT, LONG, SHORT } from "../../constants/flags";
-import './timeline-event.scss';
 import EventCheckbox from './sub-components/event-checkbox';
+import './timeline-event.scss';
 
 const selectClassStyle = (num) => {
     switch (num) {
@@ -21,10 +20,8 @@ const selectClassStyle = (num) => {
     }
 }
 
-const Event = (props) => {
+const EventController = (props) => {
     const post = props.eventData;
-    let content = null;
-
     const handleRecentEventClick = () => {
         if (!props.disableModalPreview) {
             props.onEventClick(post, props.index)
@@ -37,9 +34,11 @@ const Event = (props) => {
     if (props.isRecentEvents) {
         return (
             <div className={"event-middle-container"}>
-                <div
-                    onClick={handleRecentEventClick}>
-                    {content}
+                <div onClick={handleRecentEventClick}>
+                    <EventHeroContent
+                        post={post}
+                        commentCount={post.comment_count}
+                    />
                 </div>
                 <EventCheckbox
                     post={post}
@@ -50,37 +49,18 @@ const Event = (props) => {
             </div>
         );
     }
-
-    if (props.mediaType === POST) {
-        switch (post.post_format) {
-            case (SHORT):
-                content = (
-                    <ShortEvent
-                        post={post}
-                        commentCount={post.comment_count}
-                    />
-                );
-                break;
-            case (LONG):
-                content = (
-                    <LongEvent
-                        post={post}
-                        commentCount={post.comment_count}
-                    />
-                );
-                break;
-            default:
-                throw Error("No matching post type: " + post.post_format);
-        }
+    else if (props.mediaType === POST) {
         return (
             <div className={props.columnIndex !== null ?
                 selectClassStyle(props.columnIndex) : "event-middle-container"}>
                 <div onClick={props.disableModalPreview ?
                     () => console.log("Selected")
                     :
-                    () => props.onEventClick(post, props.eventIndex, props.columnIndex)}
-                >
-                    {content}
+                    () => props.onEventClick(post, props.eventIndex, props.columnIndex)} >
+                    <EventHeroContent
+                        post={post}
+                        commentCount={post.comment_count}
+                    />
                 </div>
                 <EventCheckbox
                     post={post}
@@ -110,4 +90,4 @@ const Event = (props) => {
 
 }
 
-export default Event;
+export default EventController;

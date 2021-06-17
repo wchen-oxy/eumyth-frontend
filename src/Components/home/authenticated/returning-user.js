@@ -1,12 +1,12 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import EventController from '../../profile/timeline/timeline-event-controller';
 import { Link } from "react-router-dom";
 import { withAuthorization } from '../../session';
 import { withFirebase } from '../../../Firebase';
 import AxiosHelper from '../../../Axios/axios';
 import PostViewerController from "../../post/viewer/post-viewer-controller";
-import Event from "../../profile/timeline/timeline-event";
-import { returnUsernameURL, returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../../constants/urls";
+ import { returnUsernameURL, returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../../constants/urls";
 import { POST, SHORT, RECENT_POSTS, FRIEND_POSTS } from "../../constants/flags";
 import './returning-user.scss';
 
@@ -220,7 +220,7 @@ class ReturningUserPage extends React.Component {
         let array = []
         for (const value of data) {
             array.push(
-                <Event
+                <EventController
                     isRecentEvents={true}
                     index={postIndex}
                     mediaType={POST}

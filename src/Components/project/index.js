@@ -1,8 +1,7 @@
 import React from 'react';
 import ProjectText from "./sub-components/project-text";
 import Timeline from "../profile/timeline/index";
-import Event from "../profile/timeline/timeline-event";
-import ProfileModal from '../profile/profile-modal';
+ import ProfileModal from '../profile/profile-modal';
 import TextareaAutosize from 'react-textarea-autosize';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import AxiosHelper from '../../Axios/axios';
@@ -23,6 +22,7 @@ import {
     USERNAME_FIELD,
     USER_ID_FIELD
 } from '../constants/form-data';
+import EventController from '../profile/timeline/timeline-event-controller';
 
 const MAIN = "MAIN";
 const EDIT = "EDIT";
@@ -46,7 +46,7 @@ const handleIndexUpdate = (index) => {
 
 const SortableItem = SortableElement(({ mediaType, value, classColumnIndex }) =>
 (<div className="projectcontroller-event-container">
-    <Event
+    <EventController
         columnIndex={classColumnIndex}
         mediaType={mediaType}
         eventData={value}
