@@ -7,26 +7,42 @@
 .shortevent-no-cover-photo-container {
     @include flex-display-row;
     @include no-cover-photo-container-size;
-    p{
+    p {
         font-size: 14px;
     }
-
 }
+
+.shortevent-all-labels-container {
+    @include flex-display-row;
+    flex-wrap: wrap;
+}
+
 
 .shortevent-cover-photo {
     @include cover-photo-size;
 }
 .shortevent-text-container {
+    @include flex-display-column;
     @include lower-text-container;
     position: relative;
-    .shortevent-comment-text-container {
-        position: absolute;
-        bottom: 0;
+
+    .shortevent-progression-container {
+        padding: 0 4px;
     }
-    h4, p {
+
+    .shortevent-dynamic-container {
+        @include flex-display-column;
+        flex-grow: 1;
+        justify-content: space-between;
+    }
+    .shortevent-comment-text-container {
+        padding: 0 4px;
+    }
+    h4,
+    p {
         margin: 0 auto;
     }
-    h4{ 
+    h4 {
         font-size: 18px;
     }
     p {

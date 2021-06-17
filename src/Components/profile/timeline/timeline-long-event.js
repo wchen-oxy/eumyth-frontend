@@ -1,7 +1,7 @@
 import React from 'react';
+import { returnUserImageURL } from "../../constants/urls";
+import { returnFormattedDate } from "../../constants/ui-text";
 import "./timeline-long-event.scss";
-import { returnUserImageURL } from "../../../constants/urls";
-import { returnFormattedDate } from "../../../constants/ui-text";
 
 const LongEvent = (props) => {
     if (props.post.text_data === undefined) return (<></>);

@@ -487,7 +487,6 @@ class ProfilePage extends React.Component {
                         </div>
                         <div id="profile-intro-container">
                             <div id="profile-display-photo-container">
-
                                 <img
                                     alt="user profile photo"
                                     src={

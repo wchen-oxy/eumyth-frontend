@@ -1,7 +1,7 @@
 import React from 'react';
 import ProjectText from "./sub-components/project-text";
 import Timeline from "../profile/timeline/index";
-import Event from "../profile/timeline/sub-components/timeline-event";
+import Event from "../profile/timeline/timeline-event";
 import ProfileModal from '../profile/profile-modal';
 import TextareaAutosize from 'react-textarea-autosize';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';

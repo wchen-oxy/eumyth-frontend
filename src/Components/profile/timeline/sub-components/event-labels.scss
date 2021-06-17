@@ -1,0 +1,12 @@
+@import "../timeline-event.scss";
+
+.eventlabels-outer-label-container {
+    padding: 1px;
+}
+.eventlabels-inner-label-container {
+    @include label-container;
+    margin: 0 2px;
+    p {
+        color: white;
+    }
+}

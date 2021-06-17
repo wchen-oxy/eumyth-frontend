@@ -122,7 +122,7 @@ const LongPost = (props) => {
                 <TextareaAutosize
                   id='textcontainer-text-input'
                   placeholder='Title'
-                  onChange={(e) => this.setPreviewTitle(e.target.value)}
+                  onChange={(e) => setPreviewTitle(e.target.value)}
                   minRows={1}
                   value={previewTitle}
                 />

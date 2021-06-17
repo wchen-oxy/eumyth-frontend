@@ -1,6 +1,6 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Event from './sub-components/timeline-event';
+import Event from './timeline-event';
 import AxiosHelper from '../../../Axios/axios';
 import { PROJECT } from "../../constants/flags";
 import './index.scss';

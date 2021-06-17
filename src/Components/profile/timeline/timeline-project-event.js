@@ -1,5 +1,5 @@
 import React from 'react';
-import { returnUserImageURL } from "../../../constants/urls";
+import { returnUserImageURL } from "../../constants/urls";
 
 
 const ProjectEvent = (props) => {

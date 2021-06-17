@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ShortEvent from "./timeline-short-event";
 import LongEvent from "./timeline-long-event";
 import ProjectEvent from "./timeline-project-event";
-import { POST, PROJECT, LONG, SHORT } from "../../../constants/flags";
+import { POST, PROJECT, LONG, SHORT } from "../../constants/flags";
 import './timeline-event.scss';
+import EventCheckbox from './sub-components/event-checkbox';
 
 const selectClassStyle = (num) => {
     switch (num) {
@@ -33,17 +34,22 @@ const Event = (props) => {
         }
     };
 
-    const renderCheckbox = (e) => (
-        props.newProjectView ? (
-            <input
-                type="checkbox"
-                defaultChecked={post.isChecked}
-                onClick={(e) => {
-                    console.log("asf");
-                    props.onProjectEventSelect(post, e.target.value)
-                }} />
-        ) : (<></>)
-    );
+    if (props.isRecentEvents) {
+        return (
+            <div className={"event-middle-container"}>
+                <div
+                    onClick={handleRecentEventClick}>
+                    {content}
+                </div>
+                <EventCheckbox
+                    post={post}
+                    newProjectView={props.newProjectView}
+                    isChecked={post.isChecked}
+                    handleClick={props.onProjectEventSelect}
+                />
+            </div>
+        );
+    }
 
     if (props.mediaType === POST) {
         switch (post.post_format) {
@@ -66,32 +72,24 @@ const Event = (props) => {
             default:
                 throw Error("No matching post type: " + post.post_format);
         }
-        if (props.isRecentEvents) {
-            return (
-                <div className={"event-middle-container"}>
-                    <div
-                        onClick={handleRecentEventClick}>
-                        {content}
-                    </div>
-                    {renderCheckbox()}
+        return (
+            <div className={props.columnIndex !== null ?
+                selectClassStyle(props.columnIndex) : "event-middle-container"}>
+                <div onClick={props.disableModalPreview ?
+                    () => console.log("Selected")
+                    :
+                    () => props.onEventClick(post, props.eventIndex, props.columnIndex)}
+                >
+                    {content}
                 </div>
-            );
-        }
-        else {
-            return (
-                <div className={props.columnIndex !== null ?
-                    selectClassStyle(props.columnIndex) : "event-middle-container"}>
-                    <div onClick={props.disableModalPreview ?
-                        () => console.log("Selected")
-                        :
-                        () => props.onEventClick(post, props.eventIndex, props.columnIndex)}
-                    >
-                        {content}
-                    </div>
-                    {renderCheckbox()}
-                </div>
-            );
-        }
+                <EventCheckbox
+                    post={post}
+                    newProjectView={props.newProjectView}
+                    isChecked={post.isChecked}
+                    handleClick={props.onProjectEventSelect}
+                />
+            </div>
+        );
     }
     else if (props.mediaType === PROJECT) {
         return (
