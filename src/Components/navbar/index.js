@@ -18,6 +18,9 @@ const NavBar = (props) => {
           <NavigationAuthBase
             shouldFloatNavbar={props.shouldFloatNavbar}
             onFloatNavbarChange={props.onFloatNavbarChange}
+            masterModal={props.masterModal}
+            openMasterModal={props.openMasterModal}
+            closeMasterModal={props.closeMasterModal}
           /> : <NavigationNonAuth />
       }
     </AuthUserContext.Consumer>
@@ -46,8 +49,8 @@ class NavigationAuth extends React.Component {
 
     this.modalRef = React.createRef();
     this.renderModal = this.renderModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-    this.openModal = this.openModal.bind(this);
+    this.clearModal = this.clearModal.bind(this);
+    this.setModal = this.setModal.bind(this);
 
   }
   componentDidMount() {
@@ -72,60 +75,52 @@ class NavigationAuth extends React.Component {
       ;
   }
 
-  openModal(postType) {
-    document.body.style.overflow = "hidden";
-    if (this.modalRef.current) {
-      this.modalRef.current.style.display = "block";
-    }
+  setModal(postType) {
     if (postType === POST) {
-      this.props.onFloatNavbarChange(true);
+      this.props.openMasterModal();
     }
     else if (postType === REQUEST_ACTION) {
-      this.setState({ isRequestModalShowing: true });
+      this.setState({ isRequestModalShowing: true }, this.props.openMasterModal());
     }
   }
 
-  closeModal() {
-    this.modalRef.current.style.display = "none";
-    document.body.style.overflow = "visible";
+  clearModal() {
     this.setState({
       isRequestModalShowing: false,
-    }, this.props.onFloatNavbarChange(false));
-
+    }, this.props.closeMasterModal());
   }
 
   renderModal() {
     let modal = null;
-    if (this.props.shouldFloatNavbar) {
+    if (this.state.isRequestModalShowing) {
       modal = (
-        <>
-          <div
-            className="overlay"
-            onClick={(() => this.closeModal())}>
-          </div>
-          <PostDraftController
-            username={this.state.username}
-            closeModal={this.closeModal}
-          />
-        </>
-      );
-    }
-    else if (this.state.isRequestModalShowing) {
-      modal = (
-        <>
-          <div className="overlay" onClick={(() => this.closeModal())}></div>
-          <RelationModal
-            username={this.state.username}
-            closeModal={this.closeModal} />
-        </>
+
+        <RelationModal
+          username={this.state.username}
+          closeModal={this.clearModal} />
       )
     }
-    return (
-      <div className="modal" ref={this.modalRef}>
-        <div className="overlay"></div>
-        {modal}
-      </div>
-    );
+    else {
+      modal = (
+        <PostDraftController
+          username={this.state.username}
+          closeModal={this.clearModal}
+        />
+
+      );
+    }
+    return this.props.masterModal(modal);
+
+    // (
+
+    //   <div className="modal" ref={this.modalRef}>
+    //       <div
+    //         className="overlay"
+    //         onClick={(() => this.closeMasterModal())}>
+    //       </div>
+    //     {modal}
+    //   </div>
+    // );
   }
 
   render() {
@@ -134,7 +129,7 @@ class NavigationAuth extends React.Component {
       || !this.state.existingUserLoading && !this.state.isExistingUser;
     return (
       <>
-        <nav id={this.props.shouldFloatNavbar ? "navbar-modal-open" : ""}>
+        <nav>
           <div id="navbar-left-container">
             <Link
               to={"/"}
@@ -145,7 +140,7 @@ class NavigationAuth extends React.Component {
             </Link>
             {shouldHideFeatures ? (<></>) :
               <div className="navbar-main-action-buttons-container" >
-                <button onClick={() => this.openModal(POST)}>
+                <button onClick={() => this.setModal(POST)}>
                   <h4>+ New Entry</h4>
                 </button>
               </div>
@@ -170,7 +165,7 @@ class NavigationAuth extends React.Component {
                     </div>
                   </a>
                   <div className="navbar-main-action-buttons-container">
-                    <button onClick={() => this.openModal(REQUEST_ACTION)}>
+                    <button onClick={() => this.setModal(REQUEST_ACTION)}>
                       <h4>Friends</h4>
                     </button>
                   </div>

@@ -5,9 +5,9 @@
     color: white;
 }
 
-#navbar-modal-open{
-    @include navbar-float-over;
-}
+// #navbar-modal-open{
+//     @include navbar-float-over;
+// }
 
 .navbar-main-action-buttons-container {
     @include flex-display-row;

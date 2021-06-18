@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import HomePage from './Components/home/index';
 import AccountPage from './Components/account';
@@ -9,10 +9,40 @@ import Test from "./Components/test";
 import './App.scss';
 
 const App = () => {
+      const masterModalRef = useRef(null);
+      const openModal = () => {
+            document.body.style.overflow = "hidden";
+            console.log("open");
+            if (masterModalRef.current) {
+                  masterModalRef.current.style.display = "block";
+            }
+      };
+
+      const closeModal = () => {
+            masterModalRef.current.style.display = "none";
+            document.body.style.overflow = "visible";
+      };
+
+      const masterModal = (content) => (
+            <div className="modal" ref={masterModalRef}>
+                  <div
+                        className="overlay"
+                        onClick={(() => closeModal())}>
+                  </div>
+                  {content}
+            </div>
+      );
+
       const [shouldFloatNavbar, setShouldFloatNavbar] = useState(false);
       return (
             <Router>
-                  <Navbar shouldFloatNavbar={shouldFloatNavbar} onFloatNavbarChange={setShouldFloatNavbar} />
+                  <Navbar
+                        shouldFloatNavbar={shouldFloatNavbar}
+                        onFloatNavbarChange={setShouldFloatNavbar}
+                        masterModal={masterModal}
+                        openMasterModal={openModal}
+                        closeMasterModal={closeModal}
+                  />
                   <Switch>
                         <Route exact path='/' component={HomePage} />
                         <Route exact path='/account' component={AccountPage} />
@@ -33,6 +63,7 @@ const App = () => {
 
                         {/* <Route exact path = '/:username/pursuit/:pursuit' component={DetailedPursuit} /> */}
                   </Switch>
+
             </Router>
       )
 }
