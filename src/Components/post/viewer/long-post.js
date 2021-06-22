@@ -4,7 +4,7 @@ import Comments from "./comments";
 import DanteEditor from 'Dante2';
 import { ImageBlockConfig } from 'Dante2/package/es/components/blocks/image.js';
 import { PlaceholderBlockConfig } from 'Dante2/package/es/components/blocks/placeholder';
-import { IMAGE_BASE_URL, returnUserImageURL } from '../../constants/urls';
+import { IMAGE_BASE_URL, returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from '../../constants/urls';
 import { LONG, INITIAL_STATE, EDIT_STATE, REVIEW_STATE, EXPANDED, COLLAPSED } from '../../constants/flags';
 import ReviewPost from "../draft/review-post";
 import { withFirebase } from "../../../Firebase/index";
@@ -81,6 +81,8 @@ const LongPostViewer = (props) => {
         const title = props.title;
         const date = props.eventData.date ? new Date(props.eventData.date) : null;
         const coverPhotoURL = returnUserImageURL(props.eventData.cover_photo_key);
+        const displayPhotoURL = props.eventData.display_photo_key ?
+            returnUserImageURL(props.eventData.display_photo_key) : TEMP_PROFILE_PHOTO_URL;
         if (props.largeViewMode) {
             return (
                 <div className={props.isPostOnlyView ? "" : "longpostviewer-window"}>
@@ -116,7 +118,7 @@ const LongPostViewer = (props) => {
                             <div className="longpostviewer-author-info-container">
                                 <div>
                                     <img className="longpostviewer-display-photo"
-                                        src={returnUserImageURL(props.eventData.display_photo_key)} />
+                                        src={displayPhotoURL} />
                                     {props.eventData.date ? (
                                         <p>{monthNames[date.getMonth()]}
                                             {date.getDate() + 1},

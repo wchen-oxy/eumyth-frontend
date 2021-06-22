@@ -1,5 +1,5 @@
 import React, { createRef } from 'react';
-import { POST } from '../constants/flags';
+import { POST, POST_VIEWER_MODAL_STATE } from '../constants/flags';
 import Timeline from "./timeline/index";
 import AxiosHelper from '../../Axios/axios';
 import ProfileModal from './profile-modal';
@@ -16,29 +16,22 @@ class PostController extends React.Component {
             selectedPostIndex: null,
             isModalShowing: false,
         }
-        this.modalRef = createRef(null);
         this.handleEventClick = this.handleEventClick.bind(this);
         this.handleCommentIDInjection = this.handleCommentIDInjection.bind(this)
-        this.closeModal = this.closeModal.bind(this);
-        this.openModal = this.openModal.bind(this);
+        this.clearModal = this.clearModal.bind(this);
+        this.setModal = this.setModal.bind(this);
     }
 
 
-    openModal(postID) {
-        this.modalRef.current.style.display = "block";
-        document.body.style.overflow = "hidden";
-        this.setState({
-            isModalShowing: true
-        }, this.props.history.replace(returnPostURL(postID)));
-
+    setModal(postID) {
+        this.props.history.replace(returnPostURL(postID));
+        console.log(this.props.openMasterModal);
+        this.props.openMasterModal(POST_VIEWER_MODAL_STATE);
     }
 
-    closeModal() {
-        this.modalRef.current.style.display = "none";
-        document.body.style.overflow = "visible";
+    clearModal() {
         this.setState(
             {
-                isModalShowing: false,
                 selectedEvent: null
             }, this.props.history.replace(returnUsernameURL(this.props.targetUsername))
         );
@@ -66,32 +59,36 @@ class PostController extends React.Component {
                         selectedPostColumnIndex: columnIndex,
                         textData: result.data,
                         postType: selectedEvent.post_format
-                    }, this.openModal(selectedEvent._id))
+                    }, this.setModal(selectedEvent._id))
             )
             .catch(error => console.log(error));
     }
 
+    renderModal() {
+        console.log()
+        if (this.props.modalState === POST_VIEWER_MODAL_STATE)
+            return (<ProfileModal
+                targetProfileID={this.props.targetProfileID}
+                targetIndexUserID={this.props.targetIndexUserID}
+                isOwnProfile={this.props.isOwnProfile}
+                visitorUsername={this.props.visitorUsername}
+                postIndex={this.state.selectedPostIndex}
+                visitorDisplayPhoto={this.props.visitorDisplayPhoto}
+                preferredPostPrivacy={this.props.preferredPostPrivacy}
+                postType={this.state.postType}
+                pursuitNames={this.props.pursuitNames}
+                eventData={this.state.selectedEvent}
+                textData={this.state.textData}
+                closeModal={this.clearModal}
+                onCommentIDInjection={this.handleCommentIDInjection}
+                returnModalStructure={this.props.returnModalStructure}
+            />);
+    }
+
     render() {
-        console.log(this.props.feedIDList);
         return (
             <>
-                <ProfileModal
-                    modalRef={this.modalRef}
-                    isModalShowing={this.state.isModalShowing}
-                    targetProfileID={this.props.targetProfileID}
-                    targetIndexUserID={this.props.targetIndexUserID}
-                    isOwnProfile={this.props.isOwnProfile}
-                    visitorUsername={this.props.visitorUsername}
-                    postIndex={this.state.selectedPostIndex}
-                    visitorDisplayPhoto={this.props.visitorDisplayPhoto}
-                    preferredPostPrivacy={this.props.preferredPostPrivacy}
-                    postType={this.state.postType}
-                    pursuitNames={this.props.pursuitNames}
-                    eventData={this.state.selectedEvent}
-                    textData={this.state.textData}
-                    closeModal={this.closeModal}
-                    onCommentIDInjection={this.handleCommentIDInjection}
-                />
+                {this.renderModal()}
                 <Timeline
                     mediaType={POST}
                     feedID={this.props.feedID}

@@ -31,7 +31,6 @@ class ProfilePage extends React.Component {
             hasMore: true,
             nextOpenPostIndex: 0,
             loadedFeed: [[]],
-
             visitorUsername: null,
             targetProfileID: null,
             targetProfilePreviewID: null,
@@ -204,8 +203,6 @@ class ProfilePage extends React.Component {
     }
 
     handleFeedSwitch(index) {
-        console.log(index);
-        console.log(this.state.pursuits[index]);
         if (this.state.newProjectState) {
             if (!window.confirm("Do you want to discard your new project?")) return;
             this.setState({ newProjectState: false });
@@ -340,6 +337,9 @@ class ProfilePage extends React.Component {
                 shouldPull={this.shouldPull}
                 loadedFeed={this.state.loadedFeed}
                 updateFeedData={this.updateFeedData}
+                returnModalStructure={this.props.returnModalStructure}
+                modalState={this.props.modalState}
+                openMasterModal={this.props.openMasterModal}
             />)
             :
             (<ProjectController
@@ -361,7 +361,9 @@ class ProfilePage extends React.Component {
                 nextOpenPostIndex={this.state.nextOpenPostIndex}
                 loadedFeed={this.state.loadedFeed}
                 updateFeedData={this.updateFeedData}
-
+                returnModalStructure={this.props.returnModalStructure}
+                modalState={this.props.modalState}
+                openMasterModal={this.props.openMasterModal}
             />)
     }
 
@@ -439,7 +441,7 @@ class ProfilePage extends React.Component {
                     <PursuitHolder
                         name={pursuit.name}
                         numEvents={pursuit.num_posts}
-                        key={pursuit.name} 
+                        key={pursuit.name}
                         value={index++}
                         onFeedSwitch={this.handleFeedSwitch} />
                 );

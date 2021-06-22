@@ -35,7 +35,12 @@ class UserHomePage extends React.Component {
         }
         return (this.state.isNewUser ?
             <InitialCustomizationPage /> :
-            <ReturningUserPage />
+            <ReturningUserPage
+                returnModalStructure={this.props.returnModalStructure}
+                openMasterModal={this.props.openMasterModal}
+                closeMasterModal={this.props.closeMasterModal}
+                modalState={this.props.modalState}
+            />
         );
     }
 }

@@ -198,11 +198,11 @@ const ReviewPost = (props) => {
         setIsSubmitting(true);
         let formData = new FormData();
         formData.append(DATE_FIELD, date);
-        formData.append(DISPLAY_PHOTO_FIELD, props.displayPhoto);
         formData.append(POST_TYPE_FIELD, props.postType);
         formData.append(USERNAME_FIELD, props.username);
         formData.append(IS_PAGINATED_FIELD, props.isPaginated);
         formData.append(PROGRESSION_FIELD, returnFinalProgressionType(progression));
+        if (props.displayPhoto) formData.append(DISPLAY_PHOTO_FIELD, props.displayPhoto);
         if (difficulty) formData.append(DIFFICULTY_FIELD, difficulty);
         if (title) formData.append(TITLE_FIELD, _.trim(title));
         if (postPrivacyType) formData.append(POST_PRIVACY_TYPE_FIELD, postPrivacyType);

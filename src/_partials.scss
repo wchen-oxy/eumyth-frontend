@@ -21,6 +21,11 @@ $small-post-height: calc(100vh - 50px);
 $small-post-width: 76vw;
 $small-button-window: 19vh;
 
+//z-indexes
+$navbar: 25;
+$general-window: 24;
+$overlay: 10;
+
 @mixin button-rounding {
     padding: 5px;
     border-radius: 25px;

@@ -281,11 +281,6 @@ class PostDraftController extends React.Component {
     if (!this.state.indexUserData) return (<>updatingOnlineDraft...</>)
     return (
       <>
-        <span
-          className="close"
-          onClick={this.props.closeModal}>
-          X
-          </span>
         {this.renderWindow(this.state.postType)}
       </>
     );

@@ -3,7 +3,6 @@ import AxiosHelper from '../../../Axios/axios';
 import { returnUserImageURL, returnUsernameURL } from "../../constants/urls";
 import {
     UNFOLLOW_ACTION,
-    REQUEST_ACTION,
     ACCEPT_ACTION,
     DECLINE_ACTION
 } from "../../constants/flags";
@@ -67,10 +66,8 @@ class RelationModal extends React.Component {
                         this.setState({ userRelation: result.data });
                     }
                 })
-                .catch((err) => window.alert("Something went wrong :(")))
-            ;
+                .catch((err) => window.alert("Something went wrong :(")));
     }
-
 
     renderUserRow(data, isRequest) {
         let users = [];
@@ -134,12 +131,6 @@ class RelationModal extends React.Component {
     render() {
         return (
             <div id="relationmodal-window">
-                <span
-                    className="close"
-                    onClick={(() => this.props.closeModal(REQUEST_ACTION))}
-                >
-                    X
-                </span>
                 <div id="relationmodal-hero-container">
                     <div className="relationmodal-column">
                         <h2>Requests</h2>

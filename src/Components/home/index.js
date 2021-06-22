@@ -7,15 +7,23 @@ import { AuthUserContext } from '../session';
 import { compose } from "recompose";
 
 
-const HomePage = () => {
+const HomePage = (props) => {
     return (
         <>
             <AuthUserContext.Consumer>
                 {
                     authUser =>
                         authUser && authUser.emailVerified ?
-                            <LandingBase /> :
-                            <WelcomePageBase emailVerifiedStatus={false} />
+                            <LandingBase
+                                returnModalStructure={props.returnModalStructure}
+                                openMasterModal={props.openMasterModal}
+                                closeMasterModal={props.closeMasterModal}
+                                modalState={props.modalState}
+
+                            /> :
+                            <WelcomePageBase
+                                emailVerifiedStatus={false}
+                            />
                 }
             </AuthUserContext.Consumer>
         </>

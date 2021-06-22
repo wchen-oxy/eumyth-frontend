@@ -2,7 +2,6 @@
 
 #relationmodal-window {
     @include small-post-window;
-    z-index: 23;
     #relationmodal-hero-container {
         @include flex-display-row;
 

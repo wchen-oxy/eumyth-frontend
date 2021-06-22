@@ -1,13 +1,13 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import EventController from '../../profile/timeline/timeline-event-controller';
+import AxiosHelper from '../../../Axios/axios';
+import PostViewerController from "../../post/viewer/post-viewer-controller";
 import { Link } from "react-router-dom";
 import { withAuthorization } from '../../session';
 import { withFirebase } from '../../../Firebase';
-import AxiosHelper from '../../../Axios/axios';
-import PostViewerController from "../../post/viewer/post-viewer-controller";
- import { returnUsernameURL, returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../../constants/urls";
-import { POST, SHORT, RECENT_POSTS, FRIEND_POSTS } from "../../constants/flags";
+import { returnUsernameURL, returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../../constants/urls";
+import { POST, SHORT, RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE } from "../../constants/flags";
 import './returning-user.scss';
 
 class ReturningUserPage extends React.Component {
@@ -37,14 +37,13 @@ class ReturningUserPage extends React.Component {
             recentPostsKey: 0
         }
 
-        this.modalRef = React.createRef();
         this.handlePursuitClick = this.handlePursuitClick.bind(this);
         this.handleRecentWorkClick = this.handleRecentWorkClick.bind(this);
         this.handleEventClick = this.handleEventClick.bind(this);
-        this.openModal = this.openModal.bind(this);
+        this.setModal = this.setModal.bind(this);
         this.createPursuits = this.createPursuits.bind(this);
         this.passDataToModal = this.passDataToModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
+        this.clearModal = this.clearModal.bind(this);
         this.handleDeletePost = this.handleDeletePost.bind(this);
         this.fetchNextPosts = this.fetchNextPosts.bind(this);
         this.createFeed = this.createFeed.bind(this);
@@ -55,6 +54,7 @@ class ReturningUserPage extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
+        console.log(this.props.closeMasterModal)
         if (this._isMounted && this.state.username) {
             const firebaseName = this.props.firebase.returnName();
             let firstName = firebaseName ? firebaseName.firstName : null;
@@ -337,20 +337,18 @@ class ReturningUserPage extends React.Component {
             textData: textData,
             selectedPostFeedType: FRIEND_POSTS,
             selectedPostIndex: postIndex,
-        }, this.openModal())
+        }, this.setModal())
     }
 
-    openModal() {
-        this.modalRef.current.style.display = "block";
-        document.body.style.overflow = "hidden";
-        this.setState({ isModalShowing: true });
-
+    setModal() {
+        this.props.openMasterModal(POST_VIEWER_MODAL_STATE);
     }
 
-    closeModal() {
-        this.modalRef.current.style.display = "none";
-        document.body.style.overflow = "visible";
-        this.setState({ isModalShowing: false, selectedEvent: null });
+    clearModal() {
+        this.setState({
+            selectedEvent: null
+        },
+            this.props.closeMasterModal());
     }
 
     handlePursuitClick(e) {
@@ -374,7 +372,7 @@ class ReturningUserPage extends React.Component {
                             selectedPostIndex: postIndex,
                             selectedPostFeedType: RECENT_POSTS,
                             textData: result.data,
-                        }, this.openModal());
+                        }, this.setModal());
                     }
                 }
             )
@@ -416,26 +414,36 @@ class ReturningUserPage extends React.Component {
     }
 
     renderModal() {
-        return (
-            <PostViewerController
-                targetProfileID={this.state.fullUserDataID}
-                targetIndexUserID={this.state.indexUserDataID}
-                largeViewMode={true}
-                visitorUsername={this.state.username}
-                key={this.state.selectedEvent._id}
-                postIndex={this.state.selectedPostIndex}
-                isOwnProfile={true}
-                isPostOnlyView={false}
-                displayPhoto={this.state.smallCroppedDisplayPhoto}
-                preferredPostPrivacy={this.state.preferredPostPrivacy}
-                pursuitNames={this.state.pursuitNames}
-                eventData={this.state.selectedEvent}
-                selectedPostFeedType={this.state.selectedPostFeedType}
-                textData={this.state.textData}
-                closeModal={this.closeModal}
-                onCommentIDInjection={this.handleCommentIDInjection}
-            />
-        );
+        if (this.props.modalState === POST_VIEWER_MODAL_STATE &&
+            this.state.selectedEvent) {
+            const content = (
+                <PostViewerController
+                    targetProfileID={this.state.fullUserDataID}
+                    targetIndexUserID={this.state.indexUserDataID}
+                    largeViewMode={true}
+                    visitorUsername={this.state.username}
+                    key={this.state.selectedEvent._id}
+                    postIndex={this.state.selectedPostIndex}
+                    isOwnProfile={true}
+                    isPostOnlyView={false}
+                    displayPhoto={this.state.smallCroppedDisplayPhoto}
+                    preferredPostPrivacy={this.state.preferredPostPrivacy}
+                    pursuitNames={this.state.pursuitNames}
+                    eventData={this.state.selectedEvent}
+                    selectedPostFeedType={this.state.selectedPostFeedType}
+                    textData={this.state.textData}
+                    closeModal={this.clearModal}
+                    onCommentIDInjection={this.handleCommentIDInjection}
+                />
+            );
+            return this.props.returnModalStructure(
+                content,
+                this.clearModal
+            );
+        }
+        else {
+            return null;
+        }
     }
 
     render() {
@@ -447,8 +455,7 @@ class ReturningUserPage extends React.Component {
                 TEMP_PROFILE_PHOTO_URL);
         const renderedRecentPosts = this.state.recentPosts ?
             this.renderRecentPosts(this.state.recentPosts) : null;
-        const renderedModal = this.state.isModalShowing &&
-            this.state.selectedEvent ? this.renderModal() : null;
+
         return (
             <div id="returninguser-body-container">
                 <div id="returninguser-top-title-container" >
@@ -544,17 +551,7 @@ class ReturningUserPage extends React.Component {
                         </InfiniteScroll>
                     </div>
                 </div>
-                <div
-                    className="modal"
-                    ref={this.modalRef}>
-                    <div
-                        className="overlay"
-                        onClick={(() => this.closeModal())}
-                    >
-                    </div>
-                    <span className="close" onClick={(() => this.closeModal())}>X</span>
-                    {renderedModal}
-                </div>
+                {this.renderModal()}
             </div>
         )
     }

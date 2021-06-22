@@ -5,7 +5,7 @@ import OptionsMenu from "./sub-components/options-menu";
 import { AuthUserContext } from '../../Components/session/'
 import { withFirebase } from '../../Firebase';
 import { Link } from 'react-router-dom';
-import { POST, REQUEST_ACTION } from "../constants/flags";
+import { NEW_ENTRY_MODAL_STATE, RELATION_MODAL_STATE } from "../constants/flags";
 import { returnUserImageURL, returnUsernameURL, TEMP_PROFILE_PHOTO_URL } from "../constants/urls";
 import AxiosHelper from '../../Axios/axios';
 import './index.scss';
@@ -16,11 +16,10 @@ const NavBar = (props) => {
       {authUser =>
         authUser && authUser.emailVerified ?
           <NavigationAuthBase
-            shouldFloatNavbar={props.shouldFloatNavbar}
-            onFloatNavbarChange={props.onFloatNavbarChange}
-            masterModal={props.masterModal}
+            returnModalStructure={props.returnModalStructure}
             openMasterModal={props.openMasterModal}
             closeMasterModal={props.closeMasterModal}
+            modalState={props.modalState}
           /> : <NavigationNonAuth />
       }
     </AuthUserContext.Consumer>
@@ -44,10 +43,10 @@ class NavigationAuth extends React.Component {
       previousLongDraft: null,
       existingUserLoading: true,
       isExistingUser: false,
+      isPostModalShowing: false,
       isRequestModalShowing: false,
     };
 
-    this.modalRef = React.createRef();
     this.renderModal = this.renderModal.bind(this);
     this.clearModal = this.clearModal.bind(this);
     this.setModal = this.setModal.bind(this);
@@ -76,51 +75,36 @@ class NavigationAuth extends React.Component {
   }
 
   setModal(postType) {
-    if (postType === POST) {
-      this.props.openMasterModal();
-    }
-    else if (postType === REQUEST_ACTION) {
-      this.setState({ isRequestModalShowing: true }, this.props.openMasterModal());
-    }
+    this.clearModal();
+    this.props.openMasterModal(postType);
   }
 
   clearModal() {
-    this.setState({
-      isRequestModalShowing: false,
-    }, this.props.closeMasterModal());
+    this.props.closeMasterModal();
   }
 
   renderModal() {
     let modal = null;
-    if (this.state.isRequestModalShowing) {
+    if (this.props.modalState === RELATION_MODAL_STATE) {
       modal = (
-
         <RelationModal
           username={this.state.username}
           closeModal={this.clearModal} />
       )
+      return this.props.returnModalStructure(modal, this.clearModal);
     }
-    else {
+    else if (this.props.modalState === NEW_ENTRY_MODAL_STATE) {
       modal = (
         <PostDraftController
           username={this.state.username}
           closeModal={this.clearModal}
         />
-
       );
+      return this.props.returnModalStructure(modal, this.clearModal);
     }
-    return this.props.masterModal(modal);
-
-    // (
-
-    //   <div className="modal" ref={this.modalRef}>
-    //       <div
-    //         className="overlay"
-    //         onClick={(() => this.closeMasterModal())}>
-    //       </div>
-    //     {modal}
-    //   </div>
-    // );
+    else {
+      return null;
+    }
   }
 
   render() {
@@ -140,7 +124,7 @@ class NavigationAuth extends React.Component {
             </Link>
             {shouldHideFeatures ? (<></>) :
               <div className="navbar-main-action-buttons-container" >
-                <button onClick={() => this.setModal(POST)}>
+                <button onClick={() => this.setModal(NEW_ENTRY_MODAL_STATE)}>
                   <h4>+ New Entry</h4>
                 </button>
               </div>
@@ -165,7 +149,7 @@ class NavigationAuth extends React.Component {
                     </div>
                   </a>
                   <div className="navbar-main-action-buttons-container">
-                    <button onClick={() => this.setModal(REQUEST_ACTION)}>
+                    <button onClick={() => this.setModal(RELATION_MODAL_STATE)}>
                       <h4>Friends</h4>
                     </button>
                   </div>
@@ -176,7 +160,7 @@ class NavigationAuth extends React.Component {
               && !this.state.isExistingUser} />
           </div>
         </nav>
-        {this.state.existingUserLoading ? <></> : this.renderModal()}
+        {this.renderModal()}
       </>
     );
   }

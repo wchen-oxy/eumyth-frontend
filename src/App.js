@@ -9,61 +9,92 @@ import Test from "./Components/test";
 import './App.scss';
 
 const App = () => {
+      const [modalState, setModalState] = useState(null);
       const masterModalRef = useRef(null);
-      const openModal = () => {
-            document.body.style.overflow = "hidden";
-            console.log("open");
+
+      const openModal = (type) => {
+            console.log(type);
             if (masterModalRef.current) {
                   masterModalRef.current.style.display = "block";
             }
+            document.body.style.overflow = "hidden";
+            setModalState(type);
       };
 
       const closeModal = () => {
             masterModalRef.current.style.display = "none";
             document.body.style.overflow = "visible";
+            setModalState(null);
       };
 
-      const masterModal = (content) => (
-            <div className="modal" ref={masterModalRef}>
-                  <div
-                        className="overlay"
-                        onClick={(() => closeModal())}>
+      const returnModalStructure = (content, closeModalFunction) => {
+            return (
+                  <div>
+                        <div
+                              className="overlay"
+                              onClick={closeModalFunction}>
+                        </div>
+                        <span
+                              className="close"
+                              onClick={closeModalFunction}>
+                              X    </span>
+                        {content}
                   </div>
-                  {content}
-            </div>
-      );
+            );
 
-      const [shouldFloatNavbar, setShouldFloatNavbar] = useState(false);
+      };
+
       return (
             <Router>
                   <Navbar
-                        shouldFloatNavbar={shouldFloatNavbar}
-                        onFloatNavbarChange={setShouldFloatNavbar}
-                        masterModal={masterModal}
+                        returnModalStructure={returnModalStructure}
                         openMasterModal={openModal}
                         closeMasterModal={closeModal}
+                        modalState={modalState}
+
                   />
                   <Switch>
-                        <Route exact path='/' component={HomePage} />
+                        <Route exact path='/'
+                              render={(props) =>
+                                    <HomePage
+                                          {...props}
+                                          returnModalStructure={returnModalStructure}
+                                          openMasterModal={openModal}
+                                          closeMasterModal={closeModal}
+                                          modalState={modalState}
+                                    />
+                              }
+                        />
                         <Route exact path='/account' component={AccountPage} />
                         <Route exact path='/test' component={Test} />
-
-                        {/* <Route exact path ='/new' component={NewPost} /> */}
-                        {/* <Route exact path = '/pursuit' component={PursuitPage}/> */}
                         <Route exact path='/u/:username'
                               render={(props) =>
                                     <ProfilePage
                                           {...props}
-                                          shouldFloatNavbar={shouldFloatNavbar}
-                                          onFloatNavbarChange={setShouldFloatNavbar}
+                                          returnModalStructure={returnModalStructure}
+                                          openMasterModal={openModal}
+                                          closeMasterModal={closeModal}
+                                          modalState={modalState}
+
                                     />
                               }
                         />
-                        <Route exact path='/p/:postID' component={ProfilePage} />
+                        <Route exact path='/p/:postID' render={(props) =>
+                              <ProfilePage
+                                    {...props}
+                                    returnModalStructure={returnModalStructure}
+                                    openMasterModal={openModal}
+                                    closeMasterModal={closeModal}
+                                    modalState={modalState}
+
+                              />
+                        } />
 
                         {/* <Route exact path = '/:username/pursuit/:pursuit' component={DetailedPursuit} /> */}
                   </Switch>
+                  <div className="modal" ref={masterModalRef} >
 
+                  </div>
             </Router>
       )
 }
