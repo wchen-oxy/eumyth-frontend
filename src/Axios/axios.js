@@ -249,11 +249,12 @@ export default class AxiosHelper {
         });
     }
 
-    static saveDraft(username, draft) {
+    static saveDraft(username, draft, draftTitle) {
         return axios.put(urls.DRAFT_BASE_URL,
             {
                 username: username,
                 draft: JSON.stringify(draft),
+                draftTitle: draftTitle
             }
         )
     }

@@ -21,9 +21,10 @@
     .longpostviewer-author-info-container {
         @include flex-display-row;
 
-        .longpostviewer-display-photo {
+        .longpostviewer-display-photo img {
             @include small-profile-photo;
             border-radius: 50%;
+            object-fit: cover;
         }
 
         .longpostviewer-author-info {

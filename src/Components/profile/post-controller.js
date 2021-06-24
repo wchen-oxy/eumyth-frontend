@@ -31,10 +31,10 @@ class PostController extends React.Component {
 
     clearModal() {
         this.setState(
-            {
-                selectedEvent: null
-            }, this.props.history.replace(returnUsernameURL(this.props.targetUsername))
-        );
+            { selectedEvent: null }, () => {
+                this.props.history.replace(returnUsernameURL(this.props.targetUsername));
+                this.props.closeMasterModal();
+            });
     }
 
     handleCommentIDInjection(postIndex, rootCommentsArray, feedType) {
@@ -65,24 +65,24 @@ class PostController extends React.Component {
     }
 
     renderModal() {
-        console.log()
         if (this.props.modalState === POST_VIEWER_MODAL_STATE)
-            return (<ProfileModal
-                targetProfileID={this.props.targetProfileID}
-                targetIndexUserID={this.props.targetIndexUserID}
-                isOwnProfile={this.props.isOwnProfile}
-                visitorUsername={this.props.visitorUsername}
-                postIndex={this.state.selectedPostIndex}
-                visitorDisplayPhoto={this.props.visitorDisplayPhoto}
-                preferredPostPrivacy={this.props.preferredPostPrivacy}
-                postType={this.state.postType}
-                pursuitNames={this.props.pursuitNames}
-                eventData={this.state.selectedEvent}
-                textData={this.state.textData}
-                closeModal={this.clearModal}
-                onCommentIDInjection={this.handleCommentIDInjection}
-                returnModalStructure={this.props.returnModalStructure}
-            />);
+            return (
+                <ProfileModal
+                    targetProfileID={this.props.targetProfileID}
+                    targetIndexUserID={this.props.targetIndexUserID}
+                    isOwnProfile={this.props.isOwnProfile}
+                    visitorUsername={this.props.visitorUsername}
+                    postIndex={this.state.selectedPostIndex}
+                    visitorDisplayPhoto={this.props.visitorDisplayPhoto}
+                    preferredPostPrivacy={this.props.preferredPostPrivacy}
+                    postType={this.state.postType}
+                    pursuitNames={this.props.pursuitNames}
+                    eventData={this.state.selectedEvent}
+                    textData={this.state.textData}
+                    closeModal={this.clearModal}
+                    onCommentIDInjection={this.handleCommentIDInjection}
+                    returnModalStructure={this.props.returnModalStructure}
+                />);
     }
 
     render() {

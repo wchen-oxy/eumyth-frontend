@@ -116,17 +116,19 @@ const LongPostViewer = (props) => {
                                     <></>
                                 )}
                             <div className="longpostviewer-author-info-container">
-                                <div>
-                                    <img className="longpostviewer-display-photo"
-                                        src={displayPhotoURL} />
+                                <div className="longpostviewer-display-photo">
+                                    <img src={displayPhotoURL} />
+
                                     {props.eventData.date ? (
                                         <p>{monthNames[date.getMonth()]}
                                             {date.getDate() + 1},
                                             {date.getFullYear()}
                                         </p>
+
                                     ) :
                                         (<></>)
                                     }
+
                                 </div>
                                 <div className="longpostviewer-author-info">
                                     <h4>{props.username}</h4>

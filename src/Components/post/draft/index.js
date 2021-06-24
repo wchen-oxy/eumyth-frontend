@@ -142,7 +142,8 @@ class PostDraftController extends React.Component {
             pursuitTemplates: pursuitTemplates,
             indexUserData: result.data,
             displayPhoto: result.data.small_cropped_display_photo_key,
-            onlineDraft: draft,
+            onlineDraft: result.data.draft,
+            draftTitle: result.data.draft.title,
             localDraft: draft
           });
         }).catch(
@@ -251,11 +252,13 @@ class PostDraftController extends React.Component {
           />
         );
       case (LONG):
+        console.log(this.state.draftTitle);
         return (
           <LongPost
             displayPhoto={this.state.displayPhoto}
             username={this.props.username}
             onlineDraft={this.state.onlineDraft}
+            draftTitle={this.state.draftTitle}
             pursuitNames={this.state.pursuitNames}
             onlineDraftRetrieved={this.state.onlineDraftRetrieved}
             preferredPostPrivacy={this.state.indexUserData.preferred_post_privacy}

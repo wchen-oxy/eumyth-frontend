@@ -17,7 +17,7 @@ import _ from 'lodash';
 const LongPost = (props) => {
   const [windowState, setWindowState] = useState(INITIAL_STATE);
   const [hasContent, setHasContent] = useState(props.onlineDraft !== null || props.localDraft);
-  const [previewTitle, setPreviewTitle] = useState(null);
+  const [previewTitle, setPreviewTitle] = useState(props.draftTitle);
   const editorContainerRef = useRef(null);
   const postHeaderRef = useRef(null);
   const dummyScrollRef = useRef(null);
@@ -122,7 +122,10 @@ const LongPost = (props) => {
                 <TextareaAutosize
                   id='textcontainer-text-input'
                   placeholder='Title'
-                  onChange={(e) => setPreviewTitle(e.target.value)}
+                  onChange={(e) => {
+                    setPreviewTitle(e.target.value);
+                    // syncDebounce();
+                  }}
                   minRows={1}
                   value={previewTitle}
                 />

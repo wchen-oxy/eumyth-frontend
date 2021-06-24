@@ -31,7 +31,7 @@ const PostHeader = (props) => {
             <div className="postheader-author-information">
                 <div className="postheader-display-photo-container">
                     <img src={
-                        props.displayPhoto !== "null" ?
+                        props.displayPhoto ?
                             returnUserImageURL(props.displayPhoto)
                             :
                             TEMP_PROFILE_PHOTO_URL

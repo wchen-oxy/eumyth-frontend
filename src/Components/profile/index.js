@@ -340,6 +340,7 @@ class ProfilePage extends React.Component {
                 returnModalStructure={this.props.returnModalStructure}
                 modalState={this.props.modalState}
                 openMasterModal={this.props.openMasterModal}
+                closeMasterModal={this.props.closeMasterModal}
             />)
             :
             (<ProjectController

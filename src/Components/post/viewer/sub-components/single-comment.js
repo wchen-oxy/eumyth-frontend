@@ -1,5 +1,5 @@
 import React from "react";
-import { returnUserImageURL } from "../../../constants/urls";
+import { returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../../../constants/urls";
 import CommentInput from "./comment-input";
 import AxiosHelper from "../../../../Axios/axios";
 import "./single-comment.scss";
@@ -145,6 +145,7 @@ class SingleComment extends React.Component {
     render() {
         const masterClassName = this.props.level > 1 ?
             "singlecomment-multiple-thread-style" : "";
+        const displayPhotoURL = this.props.displayPhoto ? returnUserImageURL(this.props.displayPhoto) : TEMP_PROFILE_PHOTO_URL;
         return (
             <div className={masterClassName}>
                 {this.props.level > 1 ? (
@@ -157,7 +158,7 @@ class SingleComment extends React.Component {
                         <div className="singlecomment-display-photo-container">
                             <img
                                 alt="Single Comment Display Photo Url"
-                                src={returnUserImageURL(this.props.displayPhoto)} />
+                                src={displayPhotoURL} />
                         </div>
                         <div className="singlecomment-username-container">
                             <p>{this.props.username}</p>
