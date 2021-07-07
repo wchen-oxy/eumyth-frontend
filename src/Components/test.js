@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DanteEditor from 'Dante2';
+// import DanteEditor from 'Dante2';
 import axios from 'axios';
 import urls from "./constants/urls";
 

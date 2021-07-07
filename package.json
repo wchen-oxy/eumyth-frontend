@@ -8,7 +8,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "Dante2": "^0.5.0-rc26",
+    "@udecode/slate-plugins": "^1.0.0-next.39",
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
     "browser-image-compression": "^1.0.14",
@@ -23,11 +23,11 @@
     "popper.js": "^1.16.0",
     "prismjs": "^1.20.0",
     "prop-types": "^15.7.2",
-    "react": "16.12.0",
+    "react": "^17.0.2",
     "react-avatar-editor": "^11.0.9",
     "react-beautiful-dnd": "^13.0.0",
     "react-bootstrap": "^1.0.1",
-    "react-dom": "16.12.0",
+    "react-dom": "^17.0.2",
     "react-dropzone": "^11.0.3",
     "react-image-annotation": "^0.9.10",
     "react-infinite-scroll-component": "^5.1.0",
@@ -38,7 +38,10 @@
     "react-sortable-hoc": "^1.11.0",
     "react-textarea-autosize": "^8.2.0",
     "recompose": "^0.30.0",
-    "slate": "^0.59.0",
+    "slate": "^0.63.0",
+    "slate-history": "^0.62.0",
+    "slate-hyperscript": "^0.62.0",
+    "slate-react": "^0.65.2",
     "slick-carousel": "^1.8.1"
   },
   "babel": {
@@ -72,7 +75,7 @@
     ]
   },
   "devDependencies": {
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.10"
   },
   "proxy": "http://localhost:5000"
 }

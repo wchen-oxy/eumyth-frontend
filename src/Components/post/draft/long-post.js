@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import LongEditor from '../editor/long-editor';
+import SlateEditor from "../editor/slate-editor";
 import ReviewPost from './review-post';
 import {
   INITIAL_STATE,
@@ -91,7 +92,7 @@ const LongPost = (props) => {
                 onClick={e => setPostStage(e.target.value, props.isSavePending)}
               >
                 Return
-                </button>
+              </button>
             </span>
             <span  >
               <button
@@ -101,7 +102,7 @@ const LongPost = (props) => {
 
               >
                 Save Now
-                </button>
+              </button>
             </span>
             <span  >
               <button
@@ -130,7 +131,8 @@ const LongPost = (props) => {
                   value={previewTitle}
                 />
               </div>
-              <LongEditor
+              <SlateEditor />
+              {/* <LongEditor
                 username={props.username}
                 isSavePending={props.isSavePending}
                 hasContent={hasContent}
@@ -139,7 +141,7 @@ const LongPost = (props) => {
                 onlineDraft={props.onlineDraft}
                 localDraft={props.localDraft}
                 setLocalDraft={props.setLocalDraft}
-              />
+              /> */}
               <br />
               <br />
               <br />
