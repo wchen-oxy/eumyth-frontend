@@ -336,13 +336,14 @@ class ShortPost extends React.Component {
                   </button>
             </span>
           </div>
+          
           <div className="shortpost-special-button-container">
-            <button
+            {/* <button
               id="shortpost-long-draft-button"
               onClick={() => this.toggleLongDraft(this.state.isLongDraftButtonToggled)}
             >
               Switch To Long Draft
-              </button>
+              </button> */}
             <div id="shortpost-long-draft-options" ref={this.longDraftOptionsRef}>
               <button value={NEW_LONG} onClick={this.confirmDraftDiscard}>New Draft</button>
               <button value={OLD_LONG} onClick={() => this.props.onPostTypeSet(OLD_LONG)}>Continue Previous Draft</button>
@@ -401,6 +402,7 @@ class ShortPost extends React.Component {
         <div id="shortpost-review-window">
           <ReviewPost
             date={new Date().toISOString().substr(0, 10)}
+            difficulty={0}
             progression={1}
             previousState={INITIAL_STATE}
             displayPhoto={this.props.displayPhoto}

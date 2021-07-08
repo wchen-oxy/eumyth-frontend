@@ -8,6 +8,25 @@ export const SETBACK_PROGRESSION_TEXT = "Setback";
 export const NEUTRAL_PROGRESSION_TEXT = "";
 export const MILESTONE_PROGRESSION_TEXT = "Milestone";
 
+export const CHALLENGING_TEXT = "Challenging";
+export const DIFFICULT_TEXT = "Difficult";
+
+
+export const displayDifficulty = (value) => {
+    const isnum = /^\d+$/.test(value);
+    if (isnum) value = parseInt(value);
+    switch (value) {
+        case (0):
+            return "";
+        case (1):
+            return CHALLENGING_TEXT;
+        case (2):
+            return DIFFICULT_TEXT;
+        default:
+            throw new Error("No Difficulty matched");
+    }
+}
+
 export const displayProgressionType = (value) => {
     const isnum = /^\d+$/.test(value);
     if (isnum) value = parseInt(value);

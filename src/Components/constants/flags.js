@@ -24,6 +24,7 @@ export const DECLINE_ACTION = "DECLINE";
 export const ALL = "ALL";
 export const POST = "POST";
 export const PROJECT = "PROJECT";
+export const PROJECT_EVENT = "PROJECT_EVENT";
 export const NEW_PROJECT = "NEW PROJECT";
 export const COLLAPSED = "COLLAPSED";
 export const EXPANDED = "EXPANDED";

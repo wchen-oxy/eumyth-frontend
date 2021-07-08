@@ -1,6 +1,7 @@
 
     import React from 'react';
-    const EventCheckbox = (props) => (
+    const EventCheckbox = (props) => {
+         return (
         props.newProjectView ? (
             <input
                 type="checkbox"
@@ -10,6 +11,6 @@
                     props.onProjectEventSelect(props.post, e.target.value)
                 }} />
         ) : (<></>)
-    );
+    )};
     
     export default EventCheckbox;

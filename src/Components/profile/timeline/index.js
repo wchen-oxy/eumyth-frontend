@@ -2,7 +2,7 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import EventController from './timeline-event-controller';
 import AxiosHelper from '../../../Axios/axios';
-import { PROJECT } from "../../constants/flags";
+import { PROJECT, PROJECT_EVENT } from "../../constants/flags";
 import './index.scss';
 
 class Timeline extends React.Component {
@@ -20,12 +20,9 @@ class Timeline extends React.Component {
     componentDidMount() {
         this._isMounted = true;
         if (this.props.allPosts.length > 0 && this.props.hasMore) {
-            console.log("H");
             this.fetchNextPosts();
         }
         else {
-            console.log("H2");
-
             this.props.shouldPull(false);
         }
     }
@@ -83,15 +80,17 @@ class Timeline extends React.Component {
             >= this.props.allPosts.length) {
             this.props.shouldPull(false);
         }
-
-        const slicedObjectIDs = this.props.allPosts.slice(
-            this.props.nextOpenPostIndex,
-            this.props.nextOpenPostIndex + this.state.fixedDataLoadLength).map((item) => item.post_id)
-
+        console.log(this.props.mediaType);
+        console.log(this.props.allPosts);
         if (this.props.mediaType === PROJECT) {
-
-            return AxiosHelper.returnMultipleProjects(
-                this.props.allPosts.slice(slicedObjectIDs))
+            const slicedObjectIDs = this.props.allPosts.slice(
+                this.props.nextOpenPostIndex,
+                this.props.nextOpenPostIndex + this.state.fixedDataLoadLength).map(
+                    (item) => {
+                        console.log(item.post_id);
+                        return item.post_id;
+                    });
+            return AxiosHelper.returnMultipleProjects(slicedObjectIDs)
                 .then((result) => {
                     if (this._isMounted) {
                         this.createTimelineRow(
@@ -101,7 +100,25 @@ class Timeline extends React.Component {
                 })
                 .catch((error) => console.log(error));
         }
+        else if (this.props.mediaType === PROJECT_EVENT) {
+            const slicedObjectIDs = this.props.allPosts.slice(
+                this.props.nextOpenPostIndex,
+                this.props.nextOpenPostIndex + this.state.fixedDataLoadLength);
+
+            return AxiosHelper.returnMultiplePosts(slicedObjectIDs, false)
+                .then((result) => {
+                    if (this._isMounted) {
+                        this.createTimelineRow(
+                            result.data.posts,
+                            this.props.mediaType);
+                    }
+                })
+                .catch((error) => console.log(error));
+        }
         else {
+            const slicedObjectIDs = this.props.allPosts.slice(
+                this.props.nextOpenPostIndex,
+                this.props.nextOpenPostIndex + this.state.fixedDataLoadLength).map((item) => item.post_id)
             return AxiosHelper.returnMultiplePosts(slicedObjectIDs, false)
                 .then((result) => {
                     if (this._isMounted) {
@@ -115,13 +132,12 @@ class Timeline extends React.Component {
     }
 
     render() {
-        console.log(this.props.allPosts);
         const endMessage = (
             <div>
                 <br />
                 <p style={{ textAlign: 'center' }}>
                     Yay! You have seen it all
-            </p>
+                </p>
             </div>
         )
         if (!this._isMounted || !this.props.allPosts) return (

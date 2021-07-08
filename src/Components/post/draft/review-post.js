@@ -24,7 +24,7 @@ import {
     TITLE_FIELD,
     USERNAME_FIELD
 } from "../../constants/form-data";
-import { displayProgressionType } from "../../constants/ui-text";
+import { displayDifficulty, displayProgressionType } from "../../constants/ui-text";
 import "./review-post.scss";
 import CustomMultiSelect from '../../custom-clickables/createable-single';
 
@@ -201,7 +201,7 @@ const ReviewPost = (props) => {
         formData.append(POST_TYPE_FIELD, props.postType);
         formData.append(USERNAME_FIELD, props.username);
         formData.append(IS_PAGINATED_FIELD, props.isPaginated);
-        formData.append(PROGRESSION_FIELD, returnFinalProgressionType(progression));
+        formData.append(PROGRESSION_FIELD, (progression));
         if (props.displayPhoto) formData.append(DISPLAY_PHOTO_FIELD, props.displayPhoto);
         if (difficulty) formData.append(DIFFICULTY_FIELD, difficulty);
         if (title) formData.append(TITLE_FIELD, _.trim(title));
@@ -386,12 +386,14 @@ const ReviewPost = (props) => {
                         onChange={(e) => setMinDuration(e.target.value)}>
                     </input>
                     <label>Difficulty</label>
+                    <p>{displayDifficulty(difficulty)}</p>
                     <input
-                        type="number"
-                        value={props.difficulty}
-                        min={1}
-                        max={5}
-                        onChange={(e) => setDifficulty(e.target.value)}>
+                        defaultValue={difficulty}
+                        type="range"
+                        step={1}
+                        min={0}
+                        max={2}
+                        onClick={(e) => setDifficulty(e.target.value)}>
                     </input>
                     <label>Progress</label>
                     <p>{displayProgressionType(progression)}</p>

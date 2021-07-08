@@ -1,11 +1,13 @@
 import React from 'react';
 import ProjectText from "./sub-components/project-text";
 import Timeline from "../profile/timeline/index";
- import ProfileModal from '../profile/profile-modal';
+import ProfileModal from '../profile/profile-modal';
 import TextareaAutosize from 'react-textarea-autosize';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import AxiosHelper from '../../Axios/axios';
-import { POST } from "../constants/flags";
+import { withRouter } from 'react-router-dom';
+import { POST, POST_VIEWER_MODAL_STATE, PROJECT_EVENT } from "../constants/flags";
+import { returnUsernameURL, returnPostURL } from "../constants/urls";
 import "./index.scss";
 import {
     COVER_PHOTO_FIELD,
@@ -61,7 +63,7 @@ const SortableList = SortableContainer(({ mediaType, items, onSortEnd }) => {
     let classColumnIndex = 0;
     return (
         <ul>
-            { items.map((value, index) => {
+            {items.map((value, index) => {
                 if (classColumnIndex === 4) classColumnIndex = 0;
                 return (
                     <SortableItem
@@ -95,6 +97,9 @@ class ProjectController extends React.Component {
             projectSelected: null,
             feedData: [[]],
 
+            selectedEvent: null,
+
+
         }
         this.modalRef = React.createRef(null);
         this.handleBackClick = this.handleBackClick.bind(this);
@@ -106,8 +111,12 @@ class ProjectController extends React.Component {
         this.handlePost = this.handlePost.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.updateFeedData = this.updateFeedData.bind(this);
-        this.openModal = this.openModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
+        // this.openModal = this.openModal.bind(this);
+        // this.closeModal = this.closeModal.bind(this);
+
+        this.setModal = this.setModal.bind(this);
+        this.clearModal = this.clearModal.bind(this);
+
     }
 
     updateFeedData(masterArray) {
@@ -129,24 +138,38 @@ class ProjectController extends React.Component {
 
     }
 
-    openModal() {
-        this.modalRef.current.style.display = "block";
-        document.body.style.overflow = "hidden";
-        this.setState({
-            isModalShowing: true
+
+    setModal(postID) {
+        this.props.history.replace(returnPostURL(postID));
+        this.props.openMasterModal(POST_VIEWER_MODAL_STATE);
+    }
+
+    clearModal() {
+        this.setState({ selectedEvent: null }, () => {
+            this.props.history.replace(returnUsernameURL(this.props.targetUsername));
+            this.props.closeMasterModal();
         });
     }
 
-    closeModal() {
-        this.modalRef.current.style.display = "none";
-        document.body.style.overflow = "visible";
-        this.setState({
-            isModalShowing: false
-        });
-    }
+    // openModal() {
+    //     this.modalRef.current.style.display = "block";
+    //     document.body.style.overflow = "hidden";
+    //     this.setState({
+    //         isModalShowing: true
+    //     });
+    // }
+
+    // closeModal() {
+    //     this.modalRef.current.style.display = "none";
+    //     document.body.style.overflow = "visible";
+    //     this.setState({
+    //         isModalShowing: false
+    //     });
+    // }
 
 
     handleEventClick(selectedEvent, postIndex, columnIndex) {
+        console.log(selectedEvent);
         return AxiosHelper
             .retrievePost(selectedEvent._id, true)
             .then(
@@ -155,9 +178,9 @@ class ProjectController extends React.Component {
                         selectedEvent: selectedEvent,
                         // selectedPostIndex: postIndex,
                         // selectedPostColumnIndex: columnIndex,
-                        // textData: result.data,
+                        textData: result.data,
                         // postType: selectedEvent.post_format
-                    }, this.openModal(selectedEvent._id))
+                    }, this.setModal(selectedEvent._id))
             )
             .catch(error => console.log(error));
     }
@@ -300,8 +323,6 @@ class ProjectController extends React.Component {
                 return (
                     <>
                         <ProfileModal
-                            modalRef={this.modalRef}
-                            isModalShowing={this.state.isModalShowing}
                             targetProfileID={this.props.targetProfileID}
                             targetIndexUserID={this.props.targetIndexUserID}
                             isOwnProfile={this.props.isOwnProfile}
@@ -313,9 +334,10 @@ class ProjectController extends React.Component {
                             pursuitNames={this.props.pursuitNames}
                             eventData={this.state.selectedEvent}
                             textData={this.state.textData}
-                            closeModal={this.closeModal}
-                            onCommentIDInjection={this.handleCommentIDInjection}
+                            closeModal={this.clearModal}
                             disableCommenting={true}
+                            returnModalStructure={this.props.returnModalStructure}
+
                         />
                         <div className="">
                             {requiresBackButton ? (
@@ -359,7 +381,7 @@ class ProjectController extends React.Component {
                                     <Timeline
                                         nextOpenPostIndex={this.props.nextOpenPostIndex}
                                         mediaType={this.props.newProjectState || this.state.projectSelected ?
-                                            POST : this.props.mediaType}
+                                            PROJECT_EVENT : this.props.mediaType}
                                         selectedPosts={this.state.selectedPosts}
                                         newProjectView={this.props.newProjectState}
                                         onProjectEventSelect={this.handleProjectEventSelect}
@@ -399,7 +421,7 @@ class ProjectController extends React.Component {
                                 onClick={() => this.handleWindowSwitch(MAIN)}
                             >
                                 Return
-                                </button>
+                            </button>
                             <button
                                 onClick={() => this.handleWindowSwitch(REVIEW)}
                             >
@@ -514,4 +536,4 @@ class ProjectController extends React.Component {
     }
 }
 
-export default ProjectController;
+export default withRouter(ProjectController);

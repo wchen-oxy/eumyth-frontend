@@ -51,6 +51,7 @@ class ProfilePage extends React.Component {
             feedID: null,
             feedIDList: null,
             mediaType: POST,
+            selectedPursuit: "ALL",
             selectedPursuitIndex: -1,
             preferredPostPrivacy: null,
             newProjectState: false,
@@ -192,12 +193,11 @@ class ProfilePage extends React.Component {
                 hasMore: true,
                 feedID: state.pursuits[state.selectedPursuitIndex].name + mediaType,
                 mediaType: mediaType,
+                loadedFeed: [[]],
                 feedIDList: mediaType === POST ?
-                    (state.pursuits[state.selectedPursuitIndex].all_posts ?
-                        state.pursuits[state.selectedPursuitIndex].all_posts : [])
+                    (state.pursuits[state.selectedPursuitIndex].posts)
                     :
-                    (state.pursuits[state.selectedPursuitIndex].all_projects ?
-                        state.pursuits[state.selectedPursuitIndex].all_projects : [])
+                    (state.pursuits[state.selectedPursuitIndex].projects)
             }));
         }
     }
@@ -222,11 +222,12 @@ class ProfilePage extends React.Component {
                 nextOpenPostIndex: 0,
                 loadedFeed: [[]],
                 selectedPursuitIndex: index,
+                selectedPursuit: state.pursuits[index].name,
                 feedID: state.pursuits[index].name + state.mediaType,
                 feedIDList: state.mediaType === POST ?
-                    state.pursuits[index].posts ? state.pursuits[index].posts : []
+                    state.pursuits[index].posts
                     :
-                    state.pursuits[index].projects ? state.pursuits[index].projects : [],
+                    state.pursuits[index].projects,
 
             }))
         }
@@ -316,6 +317,7 @@ class ProfilePage extends React.Component {
     }
 
     renderHeroContent() {
+        console.log(this.state.allPosts);
         return this.state.mediaType === POST ?
             (<PostController
                 feedID={this.state.feedID}
@@ -337,6 +339,7 @@ class ProfilePage extends React.Component {
                 shouldPull={this.shouldPull}
                 loadedFeed={this.state.loadedFeed}
                 updateFeedData={this.updateFeedData}
+
                 returnModalStructure={this.props.returnModalStructure}
                 modalState={this.props.modalState}
                 openMasterModal={this.props.openMasterModal}
@@ -362,9 +365,11 @@ class ProfilePage extends React.Component {
                 nextOpenPostIndex={this.state.nextOpenPostIndex}
                 loadedFeed={this.state.loadedFeed}
                 updateFeedData={this.updateFeedData}
+
                 returnModalStructure={this.props.returnModalStructure}
                 modalState={this.props.modalState}
                 openMasterModal={this.props.openMasterModal}
+                closeMasterModal={this.props.closeMasterModal}
             />)
     }
 
@@ -440,6 +445,7 @@ class ProfilePage extends React.Component {
                 // const pursuit = this.state.pursuits[i];
                 pursuitHolderArray.push(
                     <PursuitHolder
+                        isSelected={pursuit.name === this.state.selectedPursuit}
                         name={pursuit.name}
                         numEvents={pursuit.num_posts}
                         key={pursuit.name}
@@ -527,13 +533,13 @@ class ProfilePage extends React.Component {
                                     true : false}
                                 onClick={() => this.handleMediaTypeSwitch(POST)}>
                                 Posts
-                        </button>
+                            </button>
                             <button
                                 disabled={this.state.mediaType === PROJECT ?
                                     true : false}
                                 onClick={() => this.handleMediaTypeSwitch(PROJECT)}>
                                 Projects
-                        </button>
+                            </button>
                         </div>
                         {
                             shouldHideProfile

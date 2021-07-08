@@ -1,7 +1,7 @@
 import React from 'react';
 import EventHeroContent from "./timeline-event-hero-content";
 import ProjectEvent from "./timeline-project-event";
-import { POST, PROJECT, LONG, SHORT } from "../../constants/flags";
+import { POST, PROJECT, LONG, SHORT, PROJECT_EVENT } from "../../constants/flags";
 import EventCheckbox from './sub-components/event-checkbox';
 import './timeline-event.scss';
 
@@ -44,12 +44,13 @@ const EventController = (props) => {
                     post={post}
                     newProjectView={props.newProjectView}
                     isChecked={post.isChecked}
-                    handleClick={props.onProjectEventSelect}
+                    onProjectEventSelect={props.onProjectEventSelect}
                 />
             </div>
         );
     }
-    else if (props.mediaType === POST) {
+    else if (props.mediaType === POST || props.mediaType === PROJECT_EVENT) {
+        console.log(props.onProjectEventSelect);
         return (
             <div className={props.columnIndex !== null ?
                 selectClassStyle(props.columnIndex) : "event-middle-container"}>
@@ -66,7 +67,7 @@ const EventController = (props) => {
                     post={post}
                     newProjectView={props.newProjectView}
                     isChecked={post.isChecked}
-                    handleClick={props.onProjectEventSelect}
+                    onProjectEventSelect={props.onProjectEventSelect}
                 />
             </div>
         );

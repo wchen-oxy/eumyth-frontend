@@ -5,7 +5,9 @@ import "./pursuit-holder.scss";
 const PursuitHolder = (props) => (
     <div className="pursuitholder-container"
         key={props.name}
-        onClick={() => props.onFeedSwitch(props.value)}>
+        onClick={() => props.onFeedSwitch(props.value)}
+        style={props.isSelected ? {backgroundColor: "blue"} : null}
+        >
         <h4>  {props.name}  </h4>
         {  props.numEvents ? <p>  Events: {props.numEvents}  </p> : <></>}
     </div>

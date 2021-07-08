@@ -25,7 +25,6 @@ class PostController extends React.Component {
 
     setModal(postID) {
         this.props.history.replace(returnPostURL(postID));
-        console.log(this.props.openMasterModal);
         this.props.openMasterModal(POST_VIEWER_MODAL_STATE);
     }
 

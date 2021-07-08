@@ -1,5 +1,5 @@
 import React from "react";
-import { displayProgressionType } from "../../../constants/ui-text";
+import { displayDifficulty, displayProgressionType } from "../../../constants/ui-text";
 import "./short-post-meta.scss";
 
 
@@ -8,6 +8,7 @@ const ShortPostMetaInfo = (props) => {
         <div>
             <div className="shortpostmetainfo-stat-container">
                 {props.progression ? <p>{displayProgressionType(props.progression)}</p> : <></>}
+                {props.difficulty ? <p>{displayDifficulty(props.difficulty)}</p> : null}
                 {props.pursuit ? <p>{props.pursuit}</p> : <></>}
                 {props.min ? <p>{props.min} minutes</p> : <></>}
                 {props.labels ? <p>{props.labels.map(value => value + " ")}</p> : <></>}

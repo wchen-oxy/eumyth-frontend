@@ -84,8 +84,8 @@ const PostViewerController = (props) => {
             );
         case (LONG):
             const title = props.eventData.title;
-            const textContent = title && title === parsePossibleTitle(props.textData)
-                ? removeTitleFromBody(props.textData) : props.textData;
+            // const textContent = title && title === parsePossibleTitle(props.textData)
+            //     ? removeTitleFromBody(props.textData) : props.textData;
             return (
                 <LongPostViewer
                     postID={props.eventData._id}
@@ -96,7 +96,7 @@ const PostViewerController = (props) => {
                     preferredPostPrivacy={props.preferredPostPrivacy}
                     largeViewMode={props.largeViewMode}
                     title={title}
-                    textData={textContent}
+                    textData={props.textData}
                     isOwnProfile={isOwnProfile}
                     isPostOnlyView={props.isPostOnlyView}
                     eventData={props.eventData}

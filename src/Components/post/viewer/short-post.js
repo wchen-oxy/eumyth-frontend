@@ -408,6 +408,7 @@ class ShortPostViewer extends React.Component {
 
     render() {
         if (this.state.window === INITIAL_STATE) {
+            console.log(this.props.eventData.progression);
             if (!this.props.eventData.image_data.length) {
                 if (this.props.largeViewMode) {
                     return (
@@ -423,6 +424,7 @@ class ShortPostViewer extends React.Component {
                                 />
                             </div>
                             <ShortPostMetaInfo
+                                difficulty={this.props.eventData.difficulty}
                                 isPaginated={this.state.isPaginated}
                                 progression={this.state.progression}
                                 labels={this.props.eventData.labels}
@@ -594,32 +596,35 @@ class ShortPostViewer extends React.Component {
                         .substring(0, 10);
             }
             return (
-                <ReviewPost
-                    isUpdateToPost
-                    difficulty={this.props.eventData.difficulty}
-                    previousState={EDIT_STATE}
-                    postID={this.props.eventData._id}
-                    displayPhoto={this.props.visitorDisplayPhoto}
-                    coverPhoto={this.state.coverPhoto}
-                    coverPhotoKey={this.props.eventData.cover_photo_key ?
-                        this.props.eventData.cover_photo_key : null
-                    }
-                    isPaginated={this.state.isPaginated}
-                    progression={this.props.eventData.progression}
-                    previewTitle={this.props.eventData.title}
-                    previewSubtitle={this.props.eventData.subtitle}
-                    date={formattedDate}
-                    min={this.props.eventData.min_duration}
-                    selectedPursuit={this.props.eventData.pursuit_category}
-                    pursuitNames={this.props.pursuitNames}
-                    closeModal={this.props.closeModal}
-                    postType={SHORT}
-                    textData={this.state.tempTextForEdit}
-                    username={this.props.visitorUsername}
-                    preferredPostPrivacy={this.props.preferredPostPrivacy}
-                    handlePreferredPostPrivacyChange={this.handlePreferredPostPrivacyChange}
-                    setPostStage={this.handleWindowChange}
-                />
+                <div className="shortpostviewer-window">
+
+                    <ReviewPost
+                        isUpdateToPost
+                        difficulty={this.props.eventData.difficulty}
+                        progression={this.props.eventData.progression}
+                        previousState={EDIT_STATE}
+                        postID={this.props.eventData._id}
+                        displayPhoto={this.props.visitorDisplayPhoto}
+                        coverPhoto={this.state.coverPhoto}
+                        coverPhotoKey={this.props.eventData.cover_photo_key ?
+                            this.props.eventData.cover_photo_key : null
+                        }
+                        isPaginated={this.state.isPaginated}
+                        previewTitle={this.props.eventData.title}
+                        previewSubtitle={this.props.eventData.subtitle}
+                        date={formattedDate}
+                        min={this.props.eventData.min_duration}
+                        selectedPursuit={this.props.eventData.pursuit_category}
+                        pursuitNames={this.props.pursuitNames}
+                        closeModal={this.props.closeModal}
+                        postType={SHORT}
+                        textData={this.state.tempTextForEdit}
+                        username={this.props.visitorUsername}
+                        preferredPostPrivacy={this.props.preferredPostPrivacy}
+                        handlePreferredPostPrivacyChange={this.handlePreferredPostPrivacyChange}
+                        setPostStage={this.handleWindowChange}
+                    />
+                </div>
             );
         }
         else {
