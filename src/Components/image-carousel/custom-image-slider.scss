@@ -1,6 +1,6 @@
 @import "../../partials";
 
-#customimageslider-new-post-hero-container {
+.customimageslider-new-post-hero-container {
     height: $small-post-draft-height;
     max-height: $small-post-draft-height;
     background-color: black;
@@ -11,12 +11,14 @@
     }
 }
 
-#customimageslider-hero-container {
-
+.customimageslider-hero-container {
     background-color: black;
     img {
-        min-height: calc(#{$small-post-height} - 24px);
         max-height: calc(#{$small-post-height} - 24px);
         object-fit: contain;
     }
+}
+
+.customimageslider-expanded img {
+    min-height: calc(#{$small-post-height} - 24px);
 }

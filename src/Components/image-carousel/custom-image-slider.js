@@ -4,6 +4,15 @@ import TextareaAutosize from "react-textarea-autosize";
 import { EXPANDED, COLLAPSED } from "../constants/flags";
 import "./custom-image-slider.scss";
 
+const returnStyleName = (windowType) => {
+    if (windowType === EXPANDED) {
+        return "customimageslider-hero-container customimageslider-expanded"
+    }
+    else {
+        return "customimageslider-hero-container"
+    }
+}
+
 class CustomImageSlider extends React.Component {
 
     constructor(props) {
@@ -88,10 +97,10 @@ class CustomImageSlider extends React.Component {
                         <button
                             onClick={() => this.props.handleArrowPress(-1)}>
                             Previous
-                            </button>
+                        </button>
                         <button onClick={() => this.props.handleArrowPress(1)}>
                             Next
-                            </button>
+                        </button>
                     </>
                     )
                     : null
@@ -116,7 +125,7 @@ class CustomImageSlider extends React.Component {
 
         return (
             <>
-                <div id={this.props.newPost ? "customimageslider-new-post-hero-container": "customimageslider-hero-container"}>
+                <div className={this.props.newPost ? "customimageslider-new-post-hero-container" : returnStyleName(this.props.windowType)}>
                     <Annotation
                         src={this.props.imageArray[this.props.imageIndex]}
                         alt='Image Display Goes Here'

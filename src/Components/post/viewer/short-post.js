@@ -191,7 +191,7 @@ class ShortPostViewer extends React.Component {
                     toggleAnnotations={this.toggleAnnotations}
                     handleArrowPress={this.handleArrowPress}
                     visitorProfilePreviewID={this.state.visitorProfilePreviewID}
-
+                
                 />
             </div>)
     }
@@ -461,7 +461,6 @@ class ShortPostViewer extends React.Component {
                 else {
                     return (
                         <div onClick={this.handleModalLaunch}>
-
                             <div className="shortpostviewer-inline-main-container" >
                                 <div className="shortpostviewer-inline-hero-container">
                                     <PostHeader
@@ -532,7 +531,7 @@ class ShortPostViewer extends React.Component {
                         <>
                             <div
                                 id="shortpostviewer-inline-main-container"
-                                className="with-image"
+                                // className="with-image"
                                 onClick={this.handleModalLaunch}
                             >
                                 <PostHeader
@@ -541,7 +540,6 @@ class ShortPostViewer extends React.Component {
                                     date={this.state.date}
                                     displayPhoto={this.props.eventData.display_photo_key}
                                 />
-                                {this.renderImageSlider(COLLAPSED)}
                                 <div className="shortpostviewer-inline-side-container">
                                     <ShortPostMetaInfo
                                         index={this.state.imageIndex}
@@ -553,6 +551,7 @@ class ShortPostViewer extends React.Component {
                                         textData={this.props.textData}
                                     />
                                 </div>
+                                {this.renderImageSlider(COLLAPSED)}
                             </div>
                             {this.renderComments(COLLAPSED)}
                         </>

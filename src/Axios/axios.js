@@ -92,6 +92,7 @@ export default class AxiosHelper {
         targetProfilePreviewID,
         isPrivate,
         action) {
+            console.log(isPrivate);
         return axios.put(urls.RELATION_STATUS_URL,
             {
                 visitorUsername: visitorUsername,
