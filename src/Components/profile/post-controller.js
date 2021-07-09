@@ -48,19 +48,27 @@ class PostController extends React.Component {
     }
 
     handleEventClick(selectedEvent, postIndex, columnIndex) {
-        return AxiosHelper
-            .retrievePost(selectedEvent._id, true)
-            .then(
-                (result) =>
-                    this.setState({
-                        selectedEvent: selectedEvent,
-                        selectedPostIndex: postIndex,
-                        selectedPostColumnIndex: columnIndex,
-                        textData: result.data,
-                        postType: selectedEvent.post_format
-                    }, this.setModal(selectedEvent._id))
-            )
-            .catch(error => console.log(error));
+        this.setState({
+            selectedEvent: selectedEvent,
+            selectedPostIndex: postIndex,
+            selectedPostColumnIndex: columnIndex,
+            textData: selectedEvent.text_data,
+            postType: selectedEvent.post_format
+        }, this.setModal(selectedEvent._id))
+
+        // return AxiosHelper
+        //     .retrievePost(selectedEvent._id, true)
+        //     .then(
+        //         (result) =>
+        //             this.setState({
+        //                 selectedEvent: selectedEvent,
+        //                 selectedPostIndex: postIndex,
+        //                 selectedPostColumnIndex: columnIndex,
+        //                 textData: result.data,
+        //                 postType: selectedEvent.post_format
+        //             }, this.setModal(selectedEvent._id))
+        //     )
+        //     .catch(error => console.log(error));
     }
 
     renderModal() {

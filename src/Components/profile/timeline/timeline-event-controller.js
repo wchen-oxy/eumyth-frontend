@@ -50,7 +50,6 @@ const EventController = (props) => {
         );
     }
     else if (props.mediaType === POST || props.mediaType === PROJECT_EVENT) {
-        console.log(props.onProjectEventSelect);
         return (
             <div className={props.columnIndex !== null ?
                 selectClassStyle(props.columnIndex) : "event-middle-container"}>

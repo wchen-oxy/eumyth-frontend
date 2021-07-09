@@ -1,7 +1,7 @@
 import React from "react";
 import { displayDifficulty, displayProgressionType } from "../../../constants/ui-text";
+import EventLabels from "../../../profile/timeline/sub-components/event-labels";
 import "./short-post-meta.scss";
-
 
 const ShortPostMetaInfo = (props) => {
     return (
@@ -11,7 +11,7 @@ const ShortPostMetaInfo = (props) => {
                 {props.difficulty ? <p>{displayDifficulty(props.difficulty)}</p> : null}
                 {props.pursuit ? <p>{props.pursuit}</p> : <></>}
                 {props.min ? <p>{props.min} minutes</p> : <></>}
-                {props.labels ? <p>{props.labels.map(value => value + " ")}</p> : <></>}
+                <EventLabels labels={props.labels} />
             </div>
             <div className="shortpostmetainfo-text-container">
                 <p>{props.isPaginated && props.textData ?

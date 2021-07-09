@@ -80,8 +80,6 @@ class Timeline extends React.Component {
             >= this.props.allPosts.length) {
             this.props.shouldPull(false);
         }
-        console.log(this.props.mediaType);
-        console.log(this.props.allPosts);
         if (this.props.mediaType === PROJECT) {
             const slicedObjectIDs = this.props.allPosts.slice(
                 this.props.nextOpenPostIndex,

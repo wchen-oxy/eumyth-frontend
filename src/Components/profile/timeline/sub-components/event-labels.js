@@ -3,7 +3,7 @@ import React from 'react';
 import "./event-labels.scss";
 
 const EventLabels = (props) => (
-    props.labels.length > 0 ?
+    props.labels && props.labels.length > 0 ?
         props.labels.map(
             value => {
                 return (

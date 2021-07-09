@@ -170,19 +170,23 @@ class ProjectController extends React.Component {
 
     handleEventClick(selectedEvent, postIndex, columnIndex) {
         console.log(selectedEvent);
-        return AxiosHelper
-            .retrievePost(selectedEvent._id, true)
-            .then(
-                (result) =>
-                    this.setState({
-                        selectedEvent: selectedEvent,
-                        // selectedPostIndex: postIndex,
-                        // selectedPostColumnIndex: columnIndex,
-                        textData: result.data,
-                        // postType: selectedEvent.post_format
-                    }, this.setModal(selectedEvent._id))
-            )
-            .catch(error => console.log(error));
+        this.setState({
+            selectedEvent: selectedEvent,
+            textData: selectedEvent.text_data,
+        }, this.setModal(selectedEvent._id));
+        // return AxiosHelper
+        //     .retrievePost(selectedEvent._id, true)
+        //     .then(
+        //         (result) =>
+        //             this.setState({
+        //                 selectedEvent: selectedEvent,
+        //                 // selectedPostIndex: postIndex,
+        //                 // selectedPostColumnIndex: columnIndex,
+        //                 textData: result.data,
+        //                 // postType: selectedEvent.post_format
+        //             }, this.setModal(selectedEvent._id))
+        //     )
+        //     .catch(error => console.log(error));
     }
 
 
@@ -317,7 +321,7 @@ class ProjectController extends React.Component {
     }
 
     render() {
-        switch (this.state.window) {
+         switch (this.state.window) {
             case (MAIN):
                 const requiresBackButton = this.props.newProjectState || this.state.projectSelected;
                 return (

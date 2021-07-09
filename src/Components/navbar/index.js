@@ -4,7 +4,7 @@ import RelationModal from "./sub-components/relation-modal";
 import OptionsMenu from "./sub-components/options-menu";
 import { AuthUserContext } from '../../Components/session/'
 import { withFirebase } from '../../Firebase';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { NEW_ENTRY_MODAL_STATE, RELATION_MODAL_STATE } from "../constants/flags";
 import { returnUserImageURL, returnUsernameURL, TEMP_PROFILE_PHOTO_URL } from "../constants/urls";
 import AxiosHelper from '../../Axios/axios';
@@ -108,6 +108,7 @@ class NavigationAuth extends React.Component {
   }
 
   render() {
+
     const shouldHideFeatures =
       this.state.existingUserLoading
       || !this.state.existingUserLoading && !this.state.isExistingUser;
@@ -116,8 +117,17 @@ class NavigationAuth extends React.Component {
         <nav>
           <div id="navbar-left-container">
             <Link
-              to={"/"}
-              className="navbar-navigation-link">
+              onClick={() => {
+                if (window.location.pathname !== "/") {
+                  this.props.history.push("")
+                }
+                else if (window.location.pathname.toString() === "/") {
+
+                  window.location.reload()
+                }
+              }}
+              className="navbar-navigation-link"
+            >
               <div id="navbar-logo-container">
                 <h3>Everfire</h3>
               </div>
@@ -135,8 +145,8 @@ class NavigationAuth extends React.Component {
               (<></>) :
               (
                 <>
-                  <a
-                    href={returnUsernameURL(this.state.username)}
+                   <Link
+                    to={returnUsernameURL(this.state.username)}
 
                   >
                     <div
@@ -147,7 +157,7 @@ class NavigationAuth extends React.Component {
                       </div>
                       <p>{this.state.username}</p>
                     </div>
-                  </a>
+                  </Link>
                   <div className="navbar-main-action-buttons-container">
                     <button onClick={() => this.setModal(RELATION_MODAL_STATE)}>
                       <h4>Friends</h4>
@@ -166,6 +176,6 @@ class NavigationAuth extends React.Component {
   }
 }
 
-const NavigationAuthBase = withFirebase(NavigationAuth);
+const NavigationAuthBase = withRouter(withFirebase(NavigationAuth));
 
 export default NavBar;

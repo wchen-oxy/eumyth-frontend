@@ -62,6 +62,7 @@ const App = () => {
                                           openMasterModal={openModal}
                                           closeMasterModal={closeModal}
                                           modalState={modalState}
+                                          keyProp={Math.random()}
                                     />
                               }
                         />

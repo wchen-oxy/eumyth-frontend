@@ -309,7 +309,6 @@ class ProfilePage extends React.Component {
     }
 
     updateFeedData(masterArray, nextOpenPostIndex) {
-        console.log(masterArray);
         this.setState({
             loadedFeed: masterArray,
             nextOpenPostIndex: nextOpenPostIndex
@@ -317,7 +316,6 @@ class ProfilePage extends React.Component {
     }
 
     renderHeroContent() {
-        console.log(this.state.allPosts);
         return this.state.mediaType === POST ?
             (<PostController
                 feedID={this.state.feedID}
@@ -378,7 +376,7 @@ class ProfilePage extends React.Component {
             this.setState((state) => ({
                 newProjectState: !state.newProjectState,
                 feedID: NEW_PROJECT,
-                feedIDList: state.allPosts
+                feedIDList: state.allPosts.map(item => item.post_id)
             }));
         }
         else {
@@ -469,11 +467,7 @@ class ProfilePage extends React.Component {
                     postType={this.state.postType}
                     pursuitNames={this.state.pursuitNames}
                     eventData={this.state.selectedEvent}
-                    textData={
-                        this.state.selectedEvent.post_format === LONG ?
-                            JSON.parse(this.state.selectedEvent.text_data) :
-                            this.state.selectedEvent.text_data
-                    }
+                    textData={this.state.selectedEvent.text_data}
                 />
             )
         }

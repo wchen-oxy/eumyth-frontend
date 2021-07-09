@@ -30,11 +30,11 @@ const PostViewerController = (props) => {
             .deletePost(
                 props.targetProfileID,
                 props.targetIndexUserID,
-                props.eventData._id, 
+                props.eventData._id,
                 props.eventData.pursuit_category,
                 props.eventData.min_duration,
                 props.eventData.is_milestone
-                )
+            )
             .then((result) => console.log(result))
             .catch((err) => {
                 console.log(err);
@@ -57,8 +57,9 @@ const PostViewerController = (props) => {
     }
 
     const isOwnProfile = (props.eventData.username === props.visitorUsername);
-    const textData = props.textData && props.eventData.isPaginated ?
+    const textData = props.textData && props.eventData.is_paginated ?
         JSON.parse(props.textData) : props.textData;
+        console.log(textData);
     switch (props.eventData.post_format) {
         case (SHORT):
             return (
@@ -96,7 +97,7 @@ const PostViewerController = (props) => {
                     preferredPostPrivacy={props.preferredPostPrivacy}
                     largeViewMode={props.largeViewMode}
                     title={title}
-                    textData={props.textData}
+                    textData={JSON.parse(props.textData)}
                     isOwnProfile={isOwnProfile}
                     isPostOnlyView={props.isPostOnlyView}
                     eventData={props.eventData}

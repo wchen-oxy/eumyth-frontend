@@ -191,7 +191,7 @@ class ShortPostViewer extends React.Component {
                     toggleAnnotations={this.toggleAnnotations}
                     handleArrowPress={this.handleArrowPress}
                     visitorProfilePreviewID={this.state.visitorProfilePreviewID}
-                
+
                 />
             </div>)
     }
@@ -407,8 +407,8 @@ class ShortPostViewer extends React.Component {
     }
 
     render() {
+        // const formattedText =  JSON.parse(this.props.textData)
         if (this.state.window === INITIAL_STATE) {
-            console.log(this.props.eventData.progression);
             if (!this.props.eventData.image_data.length) {
                 if (this.props.largeViewMode) {
                     return (
@@ -435,7 +435,7 @@ class ShortPostViewer extends React.Component {
 
                             <div className="shortpostviewer-large-hero-text-container">
                                 <ShortHeroText
-                                    text={this.props.textData} />
+                                    textData={this.props.textData} />
                             </div>
                             {/* <div className="shortpostviewer-large-side-container">
                                     <PostHeader
@@ -462,17 +462,14 @@ class ShortPostViewer extends React.Component {
                     return (
                         <div onClick={this.handleModalLaunch}>
                             <div className="shortpostviewer-inline-main-container" >
-                                <div className="shortpostviewer-inline-hero-container">
+
+                                <div className="shortpostviewer-inline-side-container">
                                     <PostHeader
                                         isOwnProfile={this.props.isOwnProfile}
                                         username={this.props.eventData.username}
                                         date={this.state.date}
                                         displayPhoto={this.props.eventData.display_photo_key}
                                     />
-                                    <ShortHeroText
-                                        text={this.props.textData} />
-                                </div>
-                                <div className="shortpostviewer-inline-side-container">
                                     <ShortPostMetaInfo
                                         index={this.state.imageIndex}
                                         isPaginated={this.state.isPaginated}
@@ -483,6 +480,12 @@ class ShortPostViewer extends React.Component {
                                         textData={null}
 
                                     />
+                                </div>
+                                <div className="shortpostviewer-inline-hero-container">
+                                    <ShortHeroText
+                                        index={this.state.imageIndex}
+                                        isPaginated={this.state.isPaginated}
+                                        textData={this.props.textData} />
                                 </div>
                             </div>
                             {this.renderComments(COLLAPSED)}

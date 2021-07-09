@@ -92,7 +92,7 @@ export default class AxiosHelper {
         targetProfilePreviewID,
         isPrivate,
         action) {
-            console.log(isPrivate);
+        console.log(isPrivate);
         return axios.put(urls.RELATION_STATUS_URL,
             {
                 visitorUsername: visitorUsername,
@@ -147,7 +147,6 @@ export default class AxiosHelper {
     }
 
     static returnMultiplePosts(postIDList, includePostText) {
-        console.log(postIDList);
         return axios.get(urls.MULTIPLE_POSTS_URL, {
             params: {
                 postIDList: postIDList,

@@ -115,7 +115,7 @@ class ReturningUserPage extends React.Component {
                             return AxiosHelper
                                 .returnMultiplePosts(
                                     result.data.recent_posts,
-                                    false)
+                                    true)
                                 .then((result) => {
                                     return {
                                         isRecentPostsOnly: true,
@@ -136,7 +136,7 @@ class ReturningUserPage extends React.Component {
                                 AxiosHelper
                                     .returnMultiplePosts(
                                         result.data.recent_posts,
-                                        false),
+                                        true),
                                 AxiosHelper
                                     .returnMultiplePosts(
                                         slicedFeed,
@@ -260,8 +260,7 @@ class ReturningUserPage extends React.Component {
         for (const feedItem of inputArray) {
             const preferredPostPrivacy = feedItem.username === this.state.username ? (
                 this.state.preferredPostPrivacy) : (null);
-            const textData = feedItem.post_format === SHORT ?
-                feedItem.text_data : JSON.parse(feedItem.text_data);
+
 
             masterArray.push(
                 <PostViewerController
@@ -276,7 +275,7 @@ class ReturningUserPage extends React.Component {
                     preferredPostPrivacy={preferredPostPrivacy}
                     pursuitNames={this.state.pursuitNames}
                     eventData={feedItem}
-                    textData={textData}
+                    textData={feedItem.text_data}
                     passDataToModal={this.passDataToModal}
                     largeViewMode={false}
                     onCommentIDInjection={this.handleCommentIDInjection}
@@ -299,7 +298,7 @@ class ReturningUserPage extends React.Component {
         return (AxiosHelper
             .returnMultiplePosts(
                 slicedPostsArray,
-                false)
+                true)
             .then((result) => {
                 if (result.data) {
                     this.setState((state) => ({
@@ -331,10 +330,10 @@ class ReturningUserPage extends React.Component {
     }
 
     passDataToModal(data, type, postIndex) {
-        const textData = type === SHORT ? data.text_data : JSON.parse(data.text_data)
+        console.log(data.text_data);
         this.setState({
             selectedEvent: data,
-            textData: textData,
+            textData: data.text_data,
             selectedPostFeedType: FRIEND_POSTS,
             selectedPostIndex: postIndex,
         }, this.setModal())
@@ -362,21 +361,28 @@ class ReturningUserPage extends React.Component {
     }
 
     handleEventClick(selectedEvent, postIndex) {
-        return (AxiosHelper
-            .retrievePost(selectedEvent._id, true)
-            .then(
-                (result) => {
-                    if (this._isMounted) {
-                        this.setState({
-                            selectedEvent: selectedEvent,
-                            selectedPostIndex: postIndex,
-                            selectedPostFeedType: RECENT_POSTS,
-                            textData: result.data,
-                        }, this.setModal());
-                    }
-                }
-            )
-            .catch(error => console.log(error)));
+        if (this._isMounted) {
+            this.setState({
+                selectedEvent: selectedEvent,
+                selectedPostIndex: postIndex,
+                selectedPostFeedType: RECENT_POSTS,
+            }, this.setModal());
+        }
+        // return (AxiosHelper
+        //     .retrievePost(selectedEvent._id, true)
+        //     .then(
+        //         (result) => {
+        //             console.log(result.data);
+        //             if (this._isMounted) {
+        //                 this.setState({
+        //                     selectedEvent: selectedEvent,
+        //                     selectedPostIndex: postIndex,
+        //                     selectedPostFeedType: RECENT_POSTS,
+        //                 }, this.setModal());
+        //             }
+        //         }
+        //     )
+        //     .catch(error => console.log(error)));
     }
 
     createPursuits(pursuitArray) {
@@ -431,7 +437,7 @@ class ReturningUserPage extends React.Component {
                     pursuitNames={this.state.pursuitNames}
                     eventData={this.state.selectedEvent}
                     selectedPostFeedType={this.state.selectedPostFeedType}
-                    textData={this.state.textData}
+                    textData={this.state.selectedEvent.text_data}
                     closeModal={this.clearModal}
                     onCommentIDInjection={this.handleCommentIDInjection}
                 />
