@@ -409,7 +409,7 @@ const ReviewPost = (props) => {
                 <div>
                     <label>Tags</label>
                     <CustomMultiSelect
-                        clearOptions={true}
+                        options={props.labels}
                         name={"Tags"}
                         onSelect={setLabels}
                     />

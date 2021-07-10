@@ -144,7 +144,8 @@ class PostDraftController extends React.Component {
             displayPhoto: result.data.small_cropped_display_photo_key,
             onlineDraft: result.data.draft,
             draftTitle: result.data.draft.title,
-            localDraft: draft
+            localDraft: draft,
+            labels: result.data.labels.length > 0 ? JSON.parse(result.data.labels) : null
           });
         }).catch(
           (result) => {
@@ -249,6 +250,7 @@ class PostDraftController extends React.Component {
             onPostTypeSet={this.handlePostTypeSet}
             preferredPostPrivacy={this.state.indexUserData.preferred_post_privacy}
             handlePreferredPostPrivacyChange={this.onPreferredPostPrivacyChange}
+            labels={this.state.labels}
           />
         );
       case (LONG):

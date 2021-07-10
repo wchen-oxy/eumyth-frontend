@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import {components} from 'react-select';
-import {options as pursuitOptions}  from './options';
-
+ 
 const Menu = props => {
   const optionSelectedLength = props.getValue().length || 0;
   return (
@@ -26,7 +25,7 @@ export default class CustomMultiSelect extends Component {
         components={{ Menu }}
         isMulti
         onChange={this.props.onSelect}
-        options={this.props.clearOptions ? null : pursuitOptions}
+        options={this.props.options ? this.props.options : null}
         isValidNewOption={this.isValidNewOption}
       />
     );

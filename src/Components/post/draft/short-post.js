@@ -416,6 +416,7 @@ class ShortPost extends React.Component {
             username={this.props.username}
             preferredPostPrivacy={this.props.preferredPostPrivacy}
             pursuitNames={this.props.pursuitNames}
+            labels={this.props.labels}
             handlePreferredPostPrivacyChange={this.props.handlePreferredPostPrivacyChange}
             setPostStage={this.handleClick}
           />
