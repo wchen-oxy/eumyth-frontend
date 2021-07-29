@@ -407,6 +407,7 @@ class ShortPostViewer extends React.Component {
     }
 
     render() {
+        console.log(this.props.eventData);
         // const formattedText =  JSON.parse(this.props.textData)
         if (this.state.window === INITIAL_STATE) {
             if (!this.props.eventData.image_data.length) {

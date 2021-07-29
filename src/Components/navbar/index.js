@@ -74,6 +74,10 @@ class NavigationAuth extends React.Component {
       ;
   }
 
+  componentDidUpdate() {
+    console.log("ew");
+  }
+
   setModal(postType) {
     this.clearModal();
     this.props.openMasterModal(postType);
@@ -145,9 +149,12 @@ class NavigationAuth extends React.Component {
               (<></>) :
               (
                 <>
-                   <Link
-                    to={returnUsernameURL(this.state.username)}
-
+                  <Link
+                    to={"/u/".concat(this.state.username)}
+                  // to={
+                  //   window.location.pathname.slice(2) === "/".concat(this.state.username)
+                  //     ? "/u/".concat(this.state.username) : "/u/".concat(this.state.username) 
+                  // }  
                   >
                     <div
                       className="navbar-main-action-buttons-container"

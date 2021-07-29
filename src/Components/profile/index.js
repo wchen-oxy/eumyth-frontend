@@ -6,11 +6,12 @@ import NoMatch from '../no-match';
 import PostViewerController from "../post/viewer/post-viewer-controller";
 import FollowButton from "./sub-components/follow-buttons";
 import ProjectController from "../project/index";
+import PostController from './post-controller';
+import CoverPhoto from './sub-components/cover-photo';
 import { returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../constants/urls";
 import {
     ALL,
     POST,
-    LONG,
     PROJECT,
     NEW_PROJECT,
     PRIVATE,
@@ -21,7 +22,7 @@ import {
     FOLLOWED_STATE
 } from "../constants/flags";
 import './index.scss';
-import PostController from './post-controller';
+
 
 class ProfilePage extends React.Component {
     _isMounted = false;
@@ -34,7 +35,6 @@ class ProfilePage extends React.Component {
             visitorUsername: null,
             targetProfileID: null,
             targetProfilePreviewID: null,
-            targetUsername: this.props.match.params.username,
             isPrivate: true,
             croppedDisplayPhoto: null,
             smallCroppedDisplayPhoto: null,
@@ -59,6 +59,7 @@ class ProfilePage extends React.Component {
         }
         this.clearLoadedFeed = this.clearLoadedFeed.bind(this);
         this.renderHeroContent = this.renderHeroContent.bind(this);
+        this.handleLoadUser = this.handleLoadUser.bind(this);
         this.returnPublicPosts = this.returnPublicPosts.bind(this);
         this.handleFollowClick = this.handleFollowClick.bind(this);
         this.handleFollowerStatusChange = this.handleFollowerStatusChange.bind(this);
@@ -69,37 +70,20 @@ class ProfilePage extends React.Component {
         this.updateFeedData = this.updateFeedData.bind(this);
         this.shouldPull = this.shouldPull.bind(this);
     }
+
     //fixme add catch for no found anything
     componentDidMount() {
+        const targetUsername = this.props.match.params.username;
         this._isMounted = true;
-        if (this._isMounted && this.state.targetUsername) {
+        if (this._isMounted && targetUsername) {
             this.props.firebase.auth.onAuthStateChanged(
                 (user) => {
                     if (user) {
-                        let targetUserInfo = null;
-                        AxiosHelper
-                            .returnUser(this.state.targetUsername)
-                            .then(response => {
-                                targetUserInfo = response.data;
-                                return user.displayName !== this.state.targetUsername ?
-                                    AxiosHelper
-                                        .returnFollowerStatus(
-                                            user.displayName,
-                                            targetUserInfo.user_relation_id
-                                        ) : null;
-                            })
-                            .then((response) => {
-                                this.handleResponseData(
-                                    user,
-                                    targetUserInfo,
-                                    response ? response : null
-                                );
-                            })
-                            .catch(err => console.log(err));
+                        this.handleLoadUser(user.displayName, targetUsername)
                     }
                     else {
                         AxiosHelper
-                            .returnUser(this.state.targetUsername)
+                            .returnUser(targetUsername)
                             .then(response => this.handleResponseData(user, response.data, null))
                             .catch(err => console.log(err));
 
@@ -123,14 +107,16 @@ class ProfilePage extends React.Component {
                                     for (const pursuit of result[1].data.pursuits) {
                                         pursuitNameArray.push(pursuit.name);
                                     }
-                                    if (this._isMounted) this.setState({
-                                        selectedEvent: result[0].data,
-                                        isPostOnlyView: true,
-                                        postType: result[0].data.post_format,
-                                        visitorUsername: user.displayName,
-                                        targetUsername: result[0].data.username,
-                                        pursuitNames: pursuitNameArray,
-                                    })
+                                    if (this._isMounted) {
+                                        this.setState({
+                                            selectedEvent: result[0].data,
+                                            isPostOnlyView: true,
+                                            postType: result[0].data.post_format,
+                                            visitorUsername: user.displayName,
+                                            targetUsername: result[0].data.username,
+                                            pursuitNames: pursuitNameArray,
+                                        })
+                                    }
                                 })
                             )
                     }
@@ -158,9 +144,45 @@ class ProfilePage extends React.Component {
         }
     }
 
+    componentDidUpdate() {
+        if (this.props.match.params.username !== this.state.targetUser.username) {
+            AxiosHelper
+                .returnUser(this.state.targetUser.username)
+                .then(
+                    this.handleLoadUser(this.props.firebase.returnUsername(), this.props.match.params.username)
+                )
+
+        }
+    }
+
     componentWillUnmount() {
         this._isMounted = false;
     }
+
+    handleLoadUser(loggedInUsername, username) {
+        let targetUserInfo = null;
+        AxiosHelper
+            .returnUser(username)
+            .then(response => {
+                targetUserInfo = response.data;
+                return loggedInUsername !== this.state.targetUser.username ?
+                    AxiosHelper
+                        .returnFollowerStatus(
+                            loggedInUsername,
+                            targetUserInfo.user_relation_id
+                        ) : null;
+            })
+            .then((response) => {
+                this.handleResponseData(
+                    loggedInUsername,
+                    targetUserInfo,
+                    response ? response : null
+                );
+            })
+            .catch(err => console.log(err));
+    }
+
+
     clearLoadedFeed() {
         this.setState({
             loadedFeed: [[]],
@@ -265,11 +287,11 @@ class ProfilePage extends React.Component {
         }, [])
     }
 
-    handleResponseData(user, targetUserInfo, followerStatusResponse) {
+    handleResponseData(displayName, targetUserInfo, followerStatusResponse) {
         const currentPagePosts = targetUserInfo.pursuits[0].posts ? targetUserInfo.pursuits[0].posts : [];
         let pursuitNameArray = [];
         let projectArray = [];
-        const postsArray = user && user.displayName === targetUserInfo.username ?
+        const postsArray = displayName === targetUserInfo.username ?
             currentPagePosts : this.returnPublicPosts(currentPagePosts);
         const followerStatus = followerStatusResponse ?
             this.handleFollowerStatusResponse(followerStatusResponse) : null;
@@ -283,9 +305,9 @@ class ProfilePage extends React.Component {
         }
 
         //set visitor user info and targetUserinfo
-        if (this._isMounted) this.setState({
-            visitorUsername: user ? user.displayName : null,
-            targetUsername: targetUserInfo.username,
+        this.setState({
+            visitorUsername: displayName ? displayName : null,
+            targetUser: targetUserInfo,
             targetProfileID: targetUserInfo._id,
             targetIndexUserID: targetUserInfo.index_user_id,
             targetProfilePreviewID: targetUserInfo.user_preview_id,
@@ -319,12 +341,12 @@ class ProfilePage extends React.Component {
         return this.state.mediaType === POST ?
             (<PostController
                 feedID={this.state.feedID}
-                targetProfileID={this.state.targetProfileID}
-                targetIndexUserID={this.state.targetIndexUserID}
+                targetProfileID={this.state.targetUser._id}
+                targetIndexUserID={this.state.targetUser.index_user_id}
                 feedIDList={this.state.feedIDList}
-                isOwnProfile={this.state.visitorUsername === this.state.targetUsername}
+                isOwnProfile={this.state.visitorUsername === this.state.targetUser.username}
                 visitorUsername={this.state.visitorUsername}
-                targetUsername={this.state.targetUsername}
+                targetUsername={this.state.targetUser.username}
                 postIndex={this.state.selectedPostIndex}
                 visitorDisplayPhoto={this.state.smallCroppedDisplayPhoto}
                 preferredPostPrivacy={this.state.preferredPostPrivacy}
@@ -345,17 +367,17 @@ class ProfilePage extends React.Component {
             />)
             :
             (<ProjectController
-                username={this.state.targetUsername}
+                username={this.state.targetUser.username}
                 displayPhoto={this.state.smallCroppedDisplayPhoto}
-                targetProfileID={this.state.targetProfileID}
-                targetIndexUserID={this.state.targetIndexUserID}
+                targetProfileID={this.state.targetUser._id}
+                targetIndexUserID={this.state.targetUser.index_user_id}
                 mediaType={this.state.mediaType}
                 newProjectState={this.state.newProjectState}
                 feedID={this.state.feedID}
                 feedIDList={this.state.feedIDList}
                 onNewBackProjectClick={this.handleNewBackProjectClick}
                 pursuitNames={this.state.pursuitNames}
-                isOwnProfile={this.state.visitorUsername === this.state.targetUsername}
+                isOwnProfile={this.state.visitorUsername === this.state.targetUser.username}
                 clearLoadedFeed={this.clearLoadedFeed}
 
                 hasMore={this.state.hasMore}
@@ -387,7 +409,7 @@ class ProfilePage extends React.Component {
         AxiosHelper.setFollowerStatus(
             this.state.visitorUsername,
             this.state.userRelationID,
-            this.state.targetProfilePreviewID,
+            this.state.targetUser.user_preview_id,
             this.state.isPrivate,
             action)
             .then(
@@ -422,7 +444,7 @@ class ProfilePage extends React.Component {
         const shouldHideProfile = (
             this.state.visitorUsername === null && this.state.isPrivate)
             ||
-            (this.state.visitorUsername !== this.state.targetUsername
+            (this.state.visitorUsername !== this.state.targetUser.username
                 && this.state.isPrivate
             )
             && (this.state.followerStatus !== "FOLLOWING" &&
@@ -455,8 +477,8 @@ class ProfilePage extends React.Component {
         if (this.state.isPostOnlyView) {
             return (
                 <PostViewerController
-                    targetProfileID={this.state.targetProfileID}
-                    targetIndexUserID={this.state.targetIndexUserID}
+                    targetProfileID={this.state.targetUser._id}
+                    targetIndexUserID={this.state.targetUser.index_user_id}
                     key={this.state.selectedEvent._id}
                     isOwnProfile={this.state.visitorUsername === this.state.selectedEvent.username}
                     visitorUsername={this.state.visitorUsername}
@@ -476,7 +498,8 @@ class ProfilePage extends React.Component {
                 <div>
                     <div id="profile-main-container">
                         <div id="profile-cover-photo-container">
-                            {
+                            <CoverPhoto coverPhoto={this.state.coverPhoto} />
+                            {/* {
                                 this.state.coverPhoto ?
                                     (<img
                                         alt="cover photo"
@@ -486,7 +509,7 @@ class ProfilePage extends React.Component {
                                     ) : (
                                         <div id="profile-temp-cover"></div>
                                     )
-                            }
+                            } */}
                         </div>
                         <div id="profile-intro-container">
                             <div id="profile-display-photo-container">
@@ -502,11 +525,11 @@ class ProfilePage extends React.Component {
                                 ></img>
 
                                 <div id="profile-name-container">
-                                    <h4>{this.state.targetUsername}</h4>
+                                    <h4>{this.state.targetUser.username}</h4>
                                 </div>
                                 <div id="profile-follow-actions-container">
                                     <FollowButton
-                                        isOwner={this.state.targetUsername === this.state.visitorUsername}
+                                        isOwner={this.state.targetUser.username === this.state.visitorUsername}
                                         followerStatus={this.state.followerStatus}
                                         onFollowClick={this.handleFollowClick}
                                         onOptionsClick={this.handleOptionsClick}
