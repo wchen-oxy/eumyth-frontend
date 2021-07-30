@@ -54,7 +54,6 @@ class ReturningUserPage extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
-        console.log(this.props.closeMasterModal)
         if (this._isMounted && this.state.username) {
             const firebaseName = this.props.firebase.returnName();
             let firstName = firebaseName ? firebaseName.firstName : null;
@@ -368,21 +367,6 @@ class ReturningUserPage extends React.Component {
                 selectedPostFeedType: RECENT_POSTS,
             }, this.setModal());
         }
-        // return (AxiosHelper
-        //     .retrievePost(selectedEvent._id, true)
-        //     .then(
-        //         (result) => {
-        //             console.log(result.data);
-        //             if (this._isMounted) {
-        //                 this.setState({
-        //                     selectedEvent: selectedEvent,
-        //                     selectedPostIndex: postIndex,
-        //                     selectedPostFeedType: RECENT_POSTS,
-        //                 }, this.setModal());
-        //             }
-        //         }
-        //     )
-        //     .catch(error => console.log(error)));
     }
 
     createPursuits(pursuitArray) {

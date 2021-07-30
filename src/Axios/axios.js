@@ -80,7 +80,7 @@ export default class AxiosHelper {
     }
 
     static setProfilePrivacy(username, isPrivate) {
-        return axios.put(urls.USER_PRIVACY, {
+        return axios.put(urls.USER_PRIVACY_URL, {
             username: username,
             isPrivate: isPrivate
         });

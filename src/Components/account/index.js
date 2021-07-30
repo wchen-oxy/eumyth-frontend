@@ -161,7 +161,9 @@ const AccountPage = (props) => {
       .setProfilePrivacy(
         props.firebase.returnUsername(),
         isPrivate
-      ).catch((err) => {
+      )
+      .then((res) => alert("Success!"))
+      .catch((err) => {
         console.log(err);
         alert("Unable to update Profile Privacy.");
       })
@@ -265,7 +267,7 @@ const AccountPage = (props) => {
               <div className="account-section-container">
                 <label>
                   Choose the privacy of your profile!
-              </label>
+                </label>
                 <select
                   value={isPrivate ? PRIVATE : PUBLIC}
                   onChange={(e) => handleProfilePrivacyChange(e.target.value)}>
@@ -276,7 +278,7 @@ const AccountPage = (props) => {
               <div className="account-section-container">
                 <button onClick={() => showPhotoEditor(displayPhotoRef)}>
                   Edit your Display Photo
-              </button>
+                </button>
                 <div
                   ref={displayPhotoRef}
                   className="account-photo-edit-container"
@@ -306,17 +308,17 @@ const AccountPage = (props) => {
                     disabled={!displayPhoto}
                     onClick={() => submitPhoto(DISPLAY)}>
                     Submit your display photo!
-                </button>
+                  </button>
                   <button onClick={() => removePhoto(DISPLAY)}>
                     Remove display Photo?
-                </button>
+                  </button>
                 </div>
               </div>
               <div className="account-section-container">
 
                 <button onClick={() => showPhotoEditor(coverPhotoRef)}>
                   Edit your Cover Photo
-              </button>
+                </button>
                 <div ref={coverPhotoRef} className="account-photo-edit-container">
                   <label>Change your cover photo!</label>
                   <input
@@ -328,10 +330,10 @@ const AccountPage = (props) => {
                     disabled={!coverPhoto}
                     onClick={() => submitPhoto(COVER)}>
                     Submit your cover photo!
-                </button>
+                  </button>
                   <button onClick={() => removePhoto(COVER)}>
                     Remove your cover photo
-                </button>
+                  </button>
                 </div>
               </div>
 
@@ -345,7 +347,7 @@ const AccountPage = (props) => {
                 />
                 <button onClick={handleBioSubmit}>
                   Submit Bio
-              </button>
+                </button>
               </div>
               <div
                 id="account-template-container"
@@ -365,7 +367,7 @@ const AccountPage = (props) => {
                 />
                 <button onClick={handleTemplateTextSubmit}>
                   Submit Template
-              </button>
+                </button>
               </div>
             </div>
           );

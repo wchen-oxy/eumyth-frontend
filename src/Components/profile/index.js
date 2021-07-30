@@ -73,7 +73,7 @@ class ProfilePage extends React.Component {
             newProjectState: false,
             isPostOnlyView: null,
         }
-
+        this.decideHeroContentVisibility = this.decideHeroContentVisibility.bind(this);
         this.loadInitialProfileData = this.loadInitialProfileData.bind(this);
         this.loadInitialPostData = this.loadInitialPostData.bind(this);
         this.setInitialPostData = this.setInitialPostData.bind(this);
@@ -318,6 +318,7 @@ class ProfilePage extends React.Component {
         const followerStatus = followerStatusResponse ?
             this.handleFollowerStatusResponse(followerStatusResponse) : null;
         const pursuitData = createPusuitArray(targetUserInfo.pursuits);
+        const isOwner = targetUserInfo ? targetUserInfo.username === displayName : true;
 
         //set visitor user info and targetUserinfo
         this.setState({
@@ -327,6 +328,7 @@ class ProfilePage extends React.Component {
             targetIndexUserID: targetUserInfo.index_user_id,
             targetProfilePreviewID: targetUserInfo.user_preview_id,
             fail: targetUserInfo ? false : true,
+            isOwner: isOwner,
             isPrivate: targetUserInfo.private,
             coverPhoto: targetUserInfo.cover_photo_key,
             croppedDisplayPhoto: targetUserInfo.cropped_display_photo_key,
@@ -455,30 +457,27 @@ class ProfilePage extends React.Component {
     handleOptionsClick() {
     }
 
-
-    render() {
-        if (this.state.fail) return NoMatch;
-        const isOwner = this.state.targetUser ? this.state.targetUser.username === this.state.visitorUsername : true;
-        const shouldHideProfile = (
-            this.state.visitorUsername === null && this.state.isPrivate)
-            ||
-            (!isOwner && this.state.isPrivate)
+    decideHeroContentVisibility() {
+        const hideFromAll = this.state.visitorUsername === null && this.state.isPrivate;
+        const hideFromUnauthorized = (!this.state.isOwner && this.state.isPrivate)
             && (this.state.followerStatus !== "FOLLOWING" &&
                 this.state.followerStatus !== "REQUEST_ACCEPTED");
-        let pursuitHolderArray = [];
-        // let pursuitHolderArray = [
-        //     <PursuitHolder
-        //         key={ALL}
-        //         name={ALL}
-        //         value={-1}
-        //         onFeedSwitch={this.handleFeedSwitch}
-        //     />
-        // ];
 
+        if (hideFromAll || hideFromUnauthorized) {
+            return (<p>This profile is private. To see
+                these posts, please request access. </p>);
+        }
+        else {
+            return this.renderHeroContent();
+        }
+    }
+
+    render() {
+        let index = 0;
+        const pursuitHolderArray = [];
+        if (this.state.fail) return NoMatch;
         if (this.state.pursuits) {
-            let index = 0;
             for (const pursuit of this.state.pursuits) {
-                // const pursuit = this.state.pursuits[i];
                 pursuitHolderArray.push(
                     <PursuitHolder
                         isSelected={pursuit.name === this.state.selectedPursuit}
@@ -510,42 +509,33 @@ class ProfilePage extends React.Component {
             )
         }
         else if (!this.state.isPostOnlyView) {
+            const targetUsername = this.state.targetUser ? this.state.targetUser.username : "";
+            const targetProfilePhoto =
+                this.state.croppedDisplayPhoto ?
+                    returnUserImageURL(
+                        this.state.croppedDisplayPhoto)
+                    :
+                    TEMP_PROFILE_PHOTO_URL;
+
             return (
                 <div>
                     <div id="profile-main-container">
                         <div id="profile-cover-photo-container">
                             <CoverPhoto coverPhoto={this.state.coverPhoto} />
-                            {/* {
-                                this.state.coverPhoto ?
-                                    (<img
-                                        alt="cover photo"
-                                        src={returnUserImageURL(
-                                            this.state.coverPhoto)}
-                                    ></img>
-                                    ) : (
-                                        <div id="profile-temp-cover"></div>
-                                    )
-                            } */}
                         </div>
                         <div id="profile-intro-container">
                             <div id="profile-display-photo-container">
                                 <img
                                     alt="user profile photo"
-                                    src={
-                                        this.state.croppedDisplayPhoto ?
-                                            returnUserImageURL(
-                                                this.state.croppedDisplayPhoto)
-                                            :
-                                            TEMP_PROFILE_PHOTO_URL
-                                    }
-                                ></img>
+                                    src={targetProfilePhoto}
+                                />
 
                                 <div id="profile-name-container">
-                                    <h4>{this.state.targetUser ? this.state.targetUser.username : ""}</h4>
+                                    <h4>{targetUsername}</h4>
                                 </div>
                                 <div id="profile-follow-actions-container">
                                     <FollowButton
-                                        isOwner={isOwner}
+                                        isOwner={this.state.isOwner}
                                         followerStatus={this.state.followerStatus}
                                         onFollowClick={this.handleFollowClick}
                                         onOptionsClick={this.handleOptionsClick}
@@ -574,15 +564,7 @@ class ProfilePage extends React.Component {
                                 Projects
                             </button>
                         </div>
-                        {
-                            shouldHideProfile
-                                ?
-                                <p>This profile is private. To see
-                                    these posts, please request access. </p>
-                                :
-                                this.renderHeroContent()
-
-                        }
+                        {this.decideHeroContentVisibility()}
                     </div>
 
                 </div>
