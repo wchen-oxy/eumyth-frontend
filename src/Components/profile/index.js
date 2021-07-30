@@ -23,6 +23,22 @@ import {
 } from "../constants/flags";
 import './index.scss';
 
+const createPusuitArray = (pursuits) => {
+    let pursuitNameArray = [];
+    let projectArray = [];
+    for (const pursuit of pursuits) {
+        pursuitNameArray.push(pursuit.name);
+        if (pursuit.projects) {
+            for (const project of pursuit.projects) {
+                projectArray.push(project);
+            }
+        }
+    }
+    return {
+        names: pursuitNameArray,
+        projects: projectArray
+    }
+}
 
 class ProfilePage extends React.Component {
     _isMounted = false;
@@ -57,6 +73,10 @@ class ProfilePage extends React.Component {
             newProjectState: false,
             isPostOnlyView: null,
         }
+
+        this.loadInitialProfileData = this.loadInitialProfileData.bind(this);
+        this.loadInitialPostData = this.loadInitialPostData.bind(this);
+        this.setInitialPostData = this.setInitialPostData.bind(this);
         this.clearLoadedFeed = this.clearLoadedFeed.bind(this);
         this.renderHeroContent = this.renderHeroContent.bind(this);
         this.handleLoadUser = this.handleLoadUser.bind(this);
@@ -73,70 +93,16 @@ class ProfilePage extends React.Component {
 
     //fixme add catch for no found anything
     componentDidMount() {
-        const targetUsername = this.props.match.params.username;
         this._isMounted = true;
+        const targetUsername = this.props.match.params.username;
         if (this._isMounted && targetUsername) {
             this.props.firebase.auth.onAuthStateChanged(
-                (user) => {
-                    if (user) {
-                        this.handleLoadUser(user.displayName, targetUsername)
-                    }
-                    else {
-                        AxiosHelper
-                            .returnUser(targetUsername)
-                            .then(response => this.handleResponseData(user, response.data, null))
-                            .catch(err => console.log(err));
-
-                    }
-                }
+                (user) => this.loadInitialProfileData(user, targetUsername)
             )
         }
         else if (this._isMounted && this.props.match.params.postID) {
             this.props.firebase.auth.onAuthStateChanged(
-                (user) => {
-                    if (user) {
-                        return Promise.all([
-                            AxiosHelper
-                                .retrievePost(this.props.match.params.postID, false),
-                            AxiosHelper
-                                .returnUser(user.displayName)
-                        ])
-                            .then(
-                                (result => {
-                                    let pursuitNameArray = [];
-                                    for (const pursuit of result[1].data.pursuits) {
-                                        pursuitNameArray.push(pursuit.name);
-                                    }
-                                    if (this._isMounted) {
-                                        this.setState({
-                                            selectedEvent: result[0].data,
-                                            isPostOnlyView: true,
-                                            postType: result[0].data.post_format,
-                                            visitorUsername: user.displayName,
-                                            targetUsername: result[0].data.username,
-                                            pursuitNames: pursuitNameArray,
-                                        })
-                                    }
-                                })
-                            )
-                    }
-                    else {
-                        return AxiosHelper
-                            .retrievePost(this.props.match.params.postID, false)
-                            .then(
-                                (result => {
-                                    if (this._isMounted) this.setState({
-                                        selectedEvent: result.data,
-                                        isPostOnlyView: true,
-                                        postType: result.data.post_format,
-                                        visitorUsername: null,
-                                        targetUsername: result.data.username,
-                                        pursuitNames: [],
-                                    })
-                                })
-                            )
-                    }
-                }
+                (user) => this.loadInitialProfileData(user.displayName)
             )
         }
         else {
@@ -145,7 +111,7 @@ class ProfilePage extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.props.match.params.username !== this.state.targetUser.username) {
+        if (!this.state.fail && this.props.match.params.username !== this.state.targetUser.username) {
             AxiosHelper
                 .returnUser(this.state.targetUser.username)
                 .then(
@@ -159,13 +125,73 @@ class ProfilePage extends React.Component {
         this._isMounted = false;
     }
 
+    loadInitialProfileData(user, targetUsername) {
+        if (user) {
+            this.handleLoadUser(user.displayName, targetUsername)
+        }
+        else {
+            AxiosHelper
+                .returnUser(targetUsername)
+                .then(response =>
+                    this.handleResponseData(user, response.data, null)
+                )
+                .catch(error => {
+                    console.log(error)
+                });
+        }
+    }
+
+    setInitialPostData(post, pursuitNames, username) {
+        this.setState({
+            selectedEvent: post,
+            isPostOnlyView: true,
+            postType: post.post_format,
+            visitorUsername: username,
+            targetUsername: post.username,
+            pursuitNames: pursuitNames,
+        })
+    }
+
+    loadInitialPostData(username) {
+        if (username) {
+            return Promise.all([
+                AxiosHelper
+                    .retrievePost(this.props.match.params.postID, false),
+                AxiosHelper
+                    .returnUser(username)
+            ])
+                .then(result => {
+                    const pursuitData = createPusuitArray(result[1].data.pursuits);
+                    this.setInitialPostData(
+                        result[0].data,
+                        pursuitData.names,
+                        username
+                    )
+                })
+        }
+        else {
+            return AxiosHelper
+                .retrievePost(this.props.match.params.postID, false)
+                .then(
+                    (result => {
+                        this.setInitialPostData(
+                            result.data,
+                            [],
+                            null
+                        )
+                    })
+                )
+        }
+    }
+
+
     handleLoadUser(loggedInUsername, username) {
         let targetUserInfo = null;
         AxiosHelper
             .returnUser(username)
             .then(response => {
                 targetUserInfo = response.data;
-                return loggedInUsername !== this.state.targetUser.username ?
+                return loggedInUsername !== targetUserInfo.username ?
                     AxiosHelper
                         .returnFollowerStatus(
                             loggedInUsername,
@@ -179,7 +205,12 @@ class ProfilePage extends React.Component {
                     response ? response : null
                 );
             })
-            .catch(err => console.log(err));
+            .catch(error => {
+                console.log(error);
+                if (error.response && error.response.status === 404) {
+                    this.setState({ fail: true })
+                }
+            });
     }
 
 
@@ -229,16 +260,12 @@ class ProfilePage extends React.Component {
             if (!window.confirm("Do you want to discard your new project?")) return;
             this.setState({ newProjectState: false });
         }
-        // if (index === -1) {
-        //     this.setState((state) => ({
-        //         hasMore: true,
-        //         selectedPursuitIndex: -1,
-        //         feedID: ALL + state.mediaType,
-        //         feedIDList: state.mediaType === POST ? state.allPosts : state.allProjects,
-
-        //     }));
-        // }
         else {
+            const feedIDList = this.state.mediaType === POST ?
+                this.state.pursuits[index].posts
+                :
+                this.state.pursuits[index].projects;
+
             this.setState((state) => ({
                 hasMore: true,
                 nextOpenPostIndex: 0,
@@ -246,11 +273,7 @@ class ProfilePage extends React.Component {
                 selectedPursuitIndex: index,
                 selectedPursuit: state.pursuits[index].name,
                 feedID: state.pursuits[index].name + state.mediaType,
-                feedIDList: state.mediaType === POST ?
-                    state.pursuits[index].posts
-                    :
-                    state.pursuits[index].projects,
-
+                feedIDList: feedIDList,
             }))
         }
     }
@@ -287,22 +310,14 @@ class ProfilePage extends React.Component {
         }, [])
     }
 
+
     handleResponseData(displayName, targetUserInfo, followerStatusResponse) {
         const currentPagePosts = targetUserInfo.pursuits[0].posts ? targetUserInfo.pursuits[0].posts : [];
-        let pursuitNameArray = [];
-        let projectArray = [];
         const postsArray = displayName === targetUserInfo.username ?
             currentPagePosts : this.returnPublicPosts(currentPagePosts);
         const followerStatus = followerStatusResponse ?
             this.handleFollowerStatusResponse(followerStatusResponse) : null;
-        for (const pursuit of targetUserInfo.pursuits) {
-            pursuitNameArray.push(pursuit.name);
-            if (pursuit.projects) {
-                for (const project of pursuit.projects) {
-                    projectArray.push(project);
-                }
-            }
-        }
+        const pursuitData = createPusuitArray(targetUserInfo.pursuits);
 
         //set visitor user info and targetUserinfo
         this.setState({
@@ -311,6 +326,7 @@ class ProfilePage extends React.Component {
             targetProfileID: targetUserInfo._id,
             targetIndexUserID: targetUserInfo.index_user_id,
             targetProfilePreviewID: targetUserInfo.user_preview_id,
+            fail: targetUserInfo ? false : true,
             isPrivate: targetUserInfo.private,
             coverPhoto: targetUserInfo.cover_photo_key,
             croppedDisplayPhoto: targetUserInfo.cropped_display_photo_key,
@@ -318,9 +334,9 @@ class ProfilePage extends React.Component {
             bio: targetUserInfo.bio,
             pinned: targetUserInfo.pinned,
             pursuits: targetUserInfo.pursuits,
-            pursuitNames: pursuitNameArray,
+            pursuitNames: pursuitData.names,
             allPosts: postsArray,
-            allProjects: projectArray,
+            allProjects: pursuitData.projects,
             feedIDList: postsArray,
             mediaType: POST,
             feedID: ALL + POST,
@@ -441,12 +457,12 @@ class ProfilePage extends React.Component {
 
 
     render() {
+        if (this.state.fail) return NoMatch;
+        const isOwner = this.state.targetUser ? this.state.targetUser.username === this.state.visitorUsername : true;
         const shouldHideProfile = (
             this.state.visitorUsername === null && this.state.isPrivate)
             ||
-            (this.state.visitorUsername !== this.state.targetUser.username
-                && this.state.isPrivate
-            )
+            (!isOwner && this.state.isPrivate)
             && (this.state.followerStatus !== "FOLLOWING" &&
                 this.state.followerStatus !== "REQUEST_ACCEPTED");
         let pursuitHolderArray = [];
@@ -458,7 +474,7 @@ class ProfilePage extends React.Component {
         //         onFeedSwitch={this.handleFeedSwitch}
         //     />
         // ];
-        if (this.state.fail) return NoMatch;
+
         if (this.state.pursuits) {
             let index = 0;
             for (const pursuit of this.state.pursuits) {
@@ -525,11 +541,11 @@ class ProfilePage extends React.Component {
                                 ></img>
 
                                 <div id="profile-name-container">
-                                    <h4>{this.state.targetUser.username}</h4>
+                                    <h4>{this.state.targetUser ? this.state.targetUser.username : ""}</h4>
                                 </div>
                                 <div id="profile-follow-actions-container">
                                     <FollowButton
-                                        isOwner={this.state.targetUser.username === this.state.visitorUsername}
+                                        isOwner={isOwner}
                                         followerStatus={this.state.followerStatus}
                                         onFollowClick={this.handleFollowClick}
                                         onOptionsClick={this.handleOptionsClick}
