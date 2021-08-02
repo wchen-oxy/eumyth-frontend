@@ -1,7 +1,6 @@
 import React, { createRef } from 'react';
 import { POST, POST_VIEWER_MODAL_STATE } from '../constants/flags';
 import Timeline from "./timeline/index";
-import AxiosHelper from '../../Axios/axios';
 import ProfileModal from './profile-modal';
 import { withRouter } from 'react-router-dom';
 import { returnUsernameURL, returnPostURL } from "../constants/urls";

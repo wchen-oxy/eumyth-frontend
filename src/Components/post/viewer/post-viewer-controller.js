@@ -59,7 +59,6 @@ const PostViewerController = (props) => {
     const isOwnProfile = (props.eventData.username === props.visitorUsername);
     const textData = props.textData && props.eventData.is_paginated ?
         JSON.parse(props.textData) : props.textData;
-        console.log(textData);
     switch (props.eventData.post_format) {
         case (SHORT):
             return (
@@ -81,6 +80,7 @@ const PostViewerController = (props) => {
                     onCommentIDInjection={props.onCommentIDInjection}
                     selectedPostFeedType={props.selectedPostFeedType}
                     disableCommenting={props.disableCommenting}
+                    labels={props.labels}
                 />
             );
         case (LONG):

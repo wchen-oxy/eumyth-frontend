@@ -1,16 +1,16 @@
 @import "../../../partials";
 
-#shortpostviewer-large-inline-header-container{
+#shortpostviewer-large-inline-header-container {
     padding-left: 10px;
 }
 .shortpostviewer-window {
     @include small-post-window;
+    z-index: 22;
 }
 
 #shortpostviewer-large-main-container {
     @include flex-display-row;
     height: $small-post-height;
-   
 }
 
 .with-image {

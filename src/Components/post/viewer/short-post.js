@@ -407,8 +407,6 @@ class ShortPostViewer extends React.Component {
     }
 
     render() {
-        console.log(this.props.eventData);
-        // const formattedText =  JSON.parse(this.props.textData)
         if (this.state.window === INITIAL_STATE) {
             if (!this.props.eventData.image_data.length) {
                 if (this.props.largeViewMode) {
@@ -600,9 +598,10 @@ class ShortPostViewer extends React.Component {
             }
             return (
                 <div className="shortpostviewer-window">
-
                     <ReviewPost
                         isUpdateToPost
+                        labels={this.props.labels}
+                        selectedLabels={this.props.eventData.labels}
                         difficulty={this.props.eventData.difficulty}
                         progression={this.props.eventData.progression}
                         previousState={EDIT_STATE}

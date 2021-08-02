@@ -49,8 +49,6 @@ class ProfilePage extends React.Component {
             nextOpenPostIndex: 0,
             loadedFeed: [[]],
             visitorUsername: null,
-            targetProfileID: null,
-            targetProfilePreviewID: null,
             isPrivate: true,
             croppedDisplayPhoto: null,
             smallCroppedDisplayPhoto: null,
@@ -102,7 +100,7 @@ class ProfilePage extends React.Component {
         }
         else if (this._isMounted && this.props.match.params.postID) {
             this.props.firebase.auth.onAuthStateChanged(
-                (user) => this.loadInitialProfileData(user.displayName)
+                (user) => this.loadInitialPostData(user.displayName)
             )
         }
         else {
@@ -141,7 +139,7 @@ class ProfilePage extends React.Component {
         }
     }
 
-    setInitialPostData(post, pursuitNames, username) {
+    setInitialPostData(post, pursuitNames, username, indexUserID, completeUserID, labels) {
         this.setState({
             selectedEvent: post,
             isPostOnlyView: true,
@@ -149,6 +147,11 @@ class ProfilePage extends React.Component {
             visitorUsername: username,
             targetUsername: post.username,
             pursuitNames: pursuitNames,
+            targetUser: {
+                _id: completeUserID,
+                index_user_id: indexUserID,
+                labels: labels
+            }
         })
     }
 
@@ -158,14 +161,17 @@ class ProfilePage extends React.Component {
                 AxiosHelper
                     .retrievePost(this.props.match.params.postID, false),
                 AxiosHelper
-                    .returnUser(username)
+                    .returnIndexUser(username)
             ])
                 .then(result => {
                     const pursuitData = createPusuitArray(result[1].data.pursuits);
                     this.setInitialPostData(
                         result[0].data,
                         pursuitData.names,
-                        username
+                        username,
+                        result[0].data._id,
+                        result[0].data.user_profile_id,
+                        result[0].data.labels
                     )
                 })
         }
@@ -324,9 +330,7 @@ class ProfilePage extends React.Component {
         this.setState({
             visitorUsername: displayName ? displayName : null,
             targetUser: targetUserInfo,
-            targetProfileID: targetUserInfo._id,
             targetIndexUserID: targetUserInfo.index_user_id,
-            targetProfilePreviewID: targetUserInfo.user_preview_id,
             fail: targetUserInfo ? false : true,
             isOwner: isOwner,
             isPrivate: targetUserInfo.private,
@@ -458,6 +462,7 @@ class ProfilePage extends React.Component {
     }
 
     decideHeroContentVisibility() {
+        console.log(this.state.visitorUsername === null);
         const hideFromAll = this.state.visitorUsername === null && this.state.isPrivate;
         const hideFromUnauthorized = (!this.state.isOwner && this.state.isPrivate)
             && (this.state.followerStatus !== "FOLLOWING" &&
@@ -505,6 +510,7 @@ class ProfilePage extends React.Component {
                     pursuitNames={this.state.pursuitNames}
                     eventData={this.state.selectedEvent}
                     textData={this.state.selectedEvent.text_data}
+                    labels={this.state.targetUser.labels}
                 />
             )
         }
