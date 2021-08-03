@@ -74,6 +74,7 @@ class PostController extends React.Component {
         if (this.props.modalState === POST_VIEWER_MODAL_STATE)
             return (
                 <ProfileModal
+                    labels={this.props.labels}
                     targetProfileID={this.props.targetProfileID}
                     targetIndexUserID={this.props.targetIndexUserID}
                     isOwnProfile={this.props.isOwnProfile}

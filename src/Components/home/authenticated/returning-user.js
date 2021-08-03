@@ -58,6 +58,7 @@ class ReturningUserPage extends React.Component {
             const firebaseName = this.props.firebase.returnName();
             let firstName = firebaseName ? firebaseName.firstName : null;
             let lastName = firebaseName.lastName ? firebaseName.lastName : null;
+            let labels = null;
             let followedUserPostIDs = null;
             let preferredPostPrivacy = null;
             let croppedDisplayPhoto = "";
@@ -79,6 +80,7 @@ class ReturningUserPage extends React.Component {
                             this.state.nextOpenPostIndex +
                             this.state.fixedDataLoadLength
                         );
+                    labels = indexUser.labels;
                     followedUserPostIDs =
                         indexUser.following_feed;
                     preferredPostPrivacy =
@@ -200,7 +202,8 @@ class ReturningUserPage extends React.Component {
                             recentPosts: recentPosts,
                             feedData: feedData,
                             nextOpenPostIndex: nextOpenPostIndex,
-                            isMoreFollowedUserPosts: isMoreFollowedUserPosts
+                            isMoreFollowedUserPosts: isMoreFollowedUserPosts,
+                            labels: labels
                         }));
                 })
                 .catch((err) => {
@@ -263,6 +266,7 @@ class ReturningUserPage extends React.Component {
 
             masterArray.push(
                 <PostViewerController
+                    labels={this.state.labels}
                     targetProfileID={this.state.fullUserDataID}
                     targetIndexUserID={this.state.indexUserDataID}
                     key={nextOpenPostIndex++}
@@ -408,6 +412,7 @@ class ReturningUserPage extends React.Component {
             this.state.selectedEvent) {
             const content = (
                 <PostViewerController
+                    labels={this.state.labels}
                     targetProfileID={this.state.fullUserDataID}
                     targetIndexUserID={this.state.indexUserDataID}
                     largeViewMode={true}

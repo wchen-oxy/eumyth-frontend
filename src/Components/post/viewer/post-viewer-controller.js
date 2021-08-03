@@ -61,11 +61,13 @@ const PostViewerController = (props) => {
         JSON.parse(props.textData) : props.textData;
     switch (props.eventData.post_format) {
         case (SHORT):
+            console.log(props.labels)
             return (
                 <ShortPostViewer
                     postID={props.eventData._id}
                     postIndex={props.postIndex}
                     displayPhoto={props.visitorDisplayPhoto}
+                    targetIndexUserID={props.targetIndexUserID}
                     visitorUsername={props.visitorUsername}
                     pursuitNames={props.pursuitNames}
                     preferredPostPrivacy={props.preferredPostPrivacy}

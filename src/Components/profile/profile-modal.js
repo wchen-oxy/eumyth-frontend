@@ -8,6 +8,7 @@ const ProfileModal = (props) => {
         return (
             props.returnModalStructure(
                 <PostViewerController
+                    labels={props.labels}
                     disableCommenting={props.disableCommenting}
                     isOwnProfile={props.visitorUsername === props.targetUsername}
                     targetProfileID={props.targetProfileID}

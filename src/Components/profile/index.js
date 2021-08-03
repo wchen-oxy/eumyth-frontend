@@ -169,8 +169,8 @@ class ProfilePage extends React.Component {
                         result[0].data,
                         pursuitData.names,
                         username,
-                        result[0].data._id,
-                        result[0].data.user_profile_id,
+                        result[1].data._id,
+                        result[1].data.user_profile_id,
                         result[0].data.labels
                     )
                 })
@@ -360,6 +360,7 @@ class ProfilePage extends React.Component {
     }
 
     renderHeroContent() {
+        console.log(this.state.targetUser)
         return this.state.mediaType === POST ?
             (<PostController
                 feedID={this.state.feedID}
@@ -381,7 +382,8 @@ class ProfilePage extends React.Component {
                 shouldPull={this.shouldPull}
                 loadedFeed={this.state.loadedFeed}
                 updateFeedData={this.updateFeedData}
-
+                labels={this.state.targetUser.labels}
+                
                 returnModalStructure={this.props.returnModalStructure}
                 modalState={this.props.modalState}
                 openMasterModal={this.props.openMasterModal}
@@ -495,6 +497,7 @@ class ProfilePage extends React.Component {
             }
         }
         if (this.state.isPostOnlyView) {
+            console.log(this.state.targetUser)
             return (
                 <PostViewerController
                     targetProfileID={this.state.targetUser._id}

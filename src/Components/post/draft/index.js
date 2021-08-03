@@ -145,7 +145,7 @@ class PostDraftController extends React.Component {
             onlineDraft: result.data.draft,
             draftTitle: result.data.draft.title,
             localDraft: draft,
-            labels: result.data.labels.length > 0 ? JSON.parse(result.data.labels) : null
+            labels: result.data.labels.length > 0 ? result.data.labels : null
           });
         }).catch(
           (result) => {

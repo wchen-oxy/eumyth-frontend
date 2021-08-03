@@ -22,7 +22,8 @@ import {
     SUBTITLE_FIELD,
     TEXT_DATA_FIELD,
     TITLE_FIELD,
-    USERNAME_FIELD
+    USERNAME_FIELD,
+    INDEX_USER_ID_FIELD
 } from "../../constants/form-data";
 import { displayDifficulty, displayProgressionType } from "../../constants/ui-text";
 import "./review-post.scss";
@@ -202,8 +203,9 @@ const ReviewPost = (props) => {
         formData.append(USERNAME_FIELD, props.username);
         formData.append(IS_PAGINATED_FIELD, props.isPaginated);
         formData.append(PROGRESSION_FIELD, (progression));
+        formData.append(DIFFICULTY_FIELD, difficulty);
+        if (props.targetIndexUserID) formData.append(INDEX_USER_ID_FIELD, props.targetIndexUserID);
         if (props.displayPhoto) formData.append(DISPLAY_PHOTO_FIELD, props.displayPhoto);
-        if (difficulty) formData.append(DIFFICULTY_FIELD, difficulty);
         if (title) formData.append(TITLE_FIELD, _.trim(title));
         if (postPrivacyType) formData.append(POST_PRIVACY_TYPE_FIELD, postPrivacyType);
         if (pursuit) formData.append(PURSUIT_FIELD, pursuit);
@@ -285,7 +287,8 @@ const ReviewPost = (props) => {
 
     const handleSuccess = () => {
         alert("Post Successful! You will see your post soon.");
-        props.closeModal();
+
+        if (!props.isPostOnlyView) props.closeModal();
         window.location.reload();
     }
 
@@ -338,6 +341,7 @@ const ReviewPost = (props) => {
             <option key={pursuit} value={pursuit}>{pursuit}</option>
         );
     }
+    console.log(labels);
     return (
         <div id="reviewpost-small-window">
             <div>
@@ -389,6 +393,7 @@ const ReviewPost = (props) => {
                     <p>{displayDifficulty(difficulty)}</p>
                     <input
                         defaultValue={difficulty}
+                        disabled={props.difficulty}
                         type="range"
                         step={1}
                         min={0}
@@ -410,6 +415,7 @@ const ReviewPost = (props) => {
                     <label>Tags</label>
                     <CustomMultiSelect
                         options={props.labels}
+                        selectedLabels={props.selectedLabels}
                         name={"Tags"}
                         onSelect={setLabels}
                     />
@@ -445,7 +451,7 @@ const ReviewPost = (props) => {
                 {error ? <p>An Error Occured. Please try again. </p> : <></>}
                 {loading ? <div>  <p> Loading...</p>  </div> : <></>}
             </div>
-        </div>
+        </div >
     );
 }
 

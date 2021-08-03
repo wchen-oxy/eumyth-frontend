@@ -596,10 +596,13 @@ class ShortPostViewer extends React.Component {
                         .toISOString()
                         .substring(0, 10);
             }
+            console.log(this.props.targetIndexUserID);
             return (
                 <div className="shortpostviewer-window">
                     <ReviewPost
                         isUpdateToPost
+                        isPostOnlyView={this.props.isPostOnlyView}
+                        targetIndexUserID={this.props.targetIndexUserID}
                         labels={this.props.labels}
                         selectedLabels={this.props.eventData.labels}
                         difficulty={this.props.eventData.difficulty}
