@@ -168,6 +168,7 @@ class Comments extends React.Component {
         if (!commentData.replies) {
             return (
                 <SingleComment
+                    hasAnnotation={!!annotation}
                     level={currentLevel}
                     postID={this.props.postID}
                     visitorProfilePreviewID={this.state.visitorProfilePreviewID}

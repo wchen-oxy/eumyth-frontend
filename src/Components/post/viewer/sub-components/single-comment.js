@@ -169,6 +169,10 @@ class SingleComment extends React.Component {
                             {this.renderThreadIndicators(1)}
                         </div>
                         <div className={"singlecomment-main-content-container"}>
+                            {this.props.hasAnnotation ?
+                                <div className="singlecomment-annotation-indicator">Annotation</div>
+                                : null
+                            }
                             <div className="singlecomment-comment-container"
                                 key={this.props.commentID}
                                 onMouseOver={() => (

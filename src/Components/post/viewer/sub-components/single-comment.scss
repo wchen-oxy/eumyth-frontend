@@ -19,6 +19,11 @@
         }
     }
 
+    .singlecomment-annotation-indicator{
+        font-size: 10px;
+        font-style: italic;
+    }
+
     .singlecomment-body-container {
         @include flex-display-row;
     }
