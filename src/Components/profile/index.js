@@ -89,7 +89,6 @@ class ProfilePage extends React.Component {
         this.shouldPull = this.shouldPull.bind(this);
     }
 
-    //fixme add catch for no found anything
     componentDidMount() {
         this._isMounted = true;
         const targetUsername = this.props.match.params.username;

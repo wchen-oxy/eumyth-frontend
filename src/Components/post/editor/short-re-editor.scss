@@ -1,7 +1,6 @@
 @import "../../../partials";
 .shortreeditor-main-container {
   @include flex-display-row;
-  height: $small-post-height - 20vh;
 }
 
 .shortreeditor-hero-container {

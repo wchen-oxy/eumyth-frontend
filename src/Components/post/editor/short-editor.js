@@ -211,15 +211,12 @@ class ShortEditor extends React.Component {
                             <div id="shorteditor-image-slider-container">
                                 <CustomImageSlider
                                     newPost
+                                    hideAnnotations
                                     windowType={COLLAPSED}
                                     imageArray={this.props.imageArray}
                                     imageIndex={this.props.imageIndex}
                                     handleArrowPress={this.props.handleArrowPress}
-
-                                    hideAnnotations={true}
                                     activeAnnotations={[]}
-
-
                                 />
                                 {/* <ImageSlider
                                     disableAnnotations={true}

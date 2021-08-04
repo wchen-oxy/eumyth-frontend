@@ -360,17 +360,21 @@ class ShortPostViewer extends React.Component {
         if (this.state.isPaginated === false) {
             const imageCount = this.props.eventData.image_data.length;
             let postArray = [];
-            postArray.push(this.state.tempTextForEdit);
-            for (let i = 1; i < imageCount; i++) {
-                postArray.push([]);
+            for (let i = 0; i < imageCount; i++) {
+                if (i === this.state.imageIndex) {
+                    postArray.push(this.state.tempTextForEdit);
+                }
+                else {
+                    postArray.push([]);
+                }
             }
             this.setState({ tempTextForEdit: postArray, isPaginated: true });
         }
         else {
             if (window.confirm(`Switching back will remove all your captions except 
-                                for the first one. Keep going?`
+                                for the current one. Keep going?`
             )) {
-                const textData = this.state.tempTextForEdit[0];
+                const textData = this.state.tempTextForEdit[this.state.imageIndex];
                 this.setState({ tempTextForEdit: textData, isPaginated: false });
             }
         }
@@ -581,7 +585,7 @@ class ShortPostViewer extends React.Component {
                         eventData={this.props.eventData}
                         textData={this.state.tempTextForEdit}
                         isPaginated={this.state.isPaginated}
-                        onIndexChange={this.handleIndexChange}
+                        handleArrowPress={this.handleArrowPress}
                         onTextChange={this.handleTextChange}
                         onPaginatedChange={this.handlePaginatedChange}
                     />

@@ -1,5 +1,4 @@
 import React from 'react';
-import { POST_VIEWER_MODAL_STATE } from '../constants/flags';
 import PostViewerController from "../post/viewer/post-viewer-controller";
 import "./profile-modal.scss";
 
