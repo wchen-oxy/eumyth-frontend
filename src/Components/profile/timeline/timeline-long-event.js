@@ -28,14 +28,15 @@ const LongEvent = (props) => {
                     <p>{post.text_snippet}</p>
                 }
             </div>
-            <EventTextInfo
-                title={post.title}
-                date={date}
-                pursuitCategory={post.pursuit_category}
-                progression={post.progression}
-                labels={post.labels}
-                commentCount={props.commentCount}
-            />
+            {props.newProjectView &&
+                <EventTextInfo
+                    title={post.title}
+                    date={date}
+                    pursuitCategory={post.pursuit_category}
+                    progression={post.progression}
+                    labels={post.labels}
+                    commentCount={props.commentCount}
+                />}
         </div>
     );
 }

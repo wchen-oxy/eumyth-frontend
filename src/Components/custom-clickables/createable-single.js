@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import { components } from 'react-select';
+import { checkInputNotNull } from '../../util';
 
-const isNull = (data, func) => data ? func(data) : null;
 const formatter = (data) => data.map((value) => ({ label: value, value: value }));
 
 const Menu = props => {
@@ -23,8 +23,8 @@ export default class CustomMultiSelect extends Component {
   isValidNewOption = (inputValue, selectValue) =>
     inputValue.length > 0 && selectValue.length < 5;
   render() {
-    const defaults = isNull(this.props.selectedLabels, formatter);
-    const options = isNull(this.props.options, formatter);
+    const defaults = checkInputNotNull(this.props.selectedLabels, formatter);
+    const options = checkInputNotNull(this.props.options, formatter);
     return (
       <CreatableSelect
         isMulti

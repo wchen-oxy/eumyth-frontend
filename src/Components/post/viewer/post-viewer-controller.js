@@ -61,7 +61,6 @@ const PostViewerController = (props) => {
         JSON.parse(props.textData) : props.textData;
     switch (props.eventData.post_format) {
         case (SHORT):
-            console.log(props.labels)
             return (
                 <ShortPostViewer
                     postID={props.eventData._id}
@@ -87,8 +86,6 @@ const PostViewerController = (props) => {
             );
         case (LONG):
             const title = props.eventData.title;
-            // const textContent = title && title === parsePossibleTitle(props.textData)
-            //     ? removeTitleFromBody(props.textData) : props.textData;
             return (
                 <LongPostViewer
                     postID={props.eventData._id}

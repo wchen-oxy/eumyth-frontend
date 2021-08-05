@@ -99,7 +99,14 @@ class ProfilePage extends React.Component {
         }
         else if (this._isMounted && this.props.match.params.postID) {
             this.props.firebase.auth.onAuthStateChanged(
-                (user) => this.loadInitialPostData(user.displayName)
+                (user) => {
+                    if (user) {
+                        this.loadInitialPostData(user.displayName)
+                    }
+                    else {
+                        this.loadInitialPostData(null)
+                    }
+                }
             )
         }
         else {
@@ -382,7 +389,7 @@ class ProfilePage extends React.Component {
                 loadedFeed={this.state.loadedFeed}
                 updateFeedData={this.updateFeedData}
                 labels={this.state.targetUser.labels}
-                
+
                 returnModalStructure={this.props.returnModalStructure}
                 modalState={this.props.modalState}
                 openMasterModal={this.props.openMasterModal}

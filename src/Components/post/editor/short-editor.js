@@ -1,12 +1,11 @@
 import React from 'react';
 import { withFirebase } from '../../../Firebase';
-import ImageSlider from '../../image-carousel';
 import ImageDrop from './sub-components/image-drop';
 import FileDisplayContainer from './sub-components/file-display-container';
 import TextContainer from './sub-components/text-container';
-import './short-editor.scss';
 import CustomImageSlider from '../../image-carousel/custom-image-slider';
 import { COLLAPSED } from '../../constants/flags';
+import './short-editor.scss';
 
 var isAdvancedUpload = function () {
     var div = document.createElement('div');
@@ -27,10 +26,7 @@ class ShortEditor extends React.Component {
         this.setErrorMessage = this.setErrorMessage.bind(this);
         this.validateFile = this.validateFile.bind(this);
         this.renderTextContainer = this.renderTextContainer.bind(this);
-
-
     }
-
 
     setErrorMessage(value) {
         this.setState({ value });
@@ -173,8 +169,6 @@ class ShortEditor extends React.Component {
         )
     }
 
-
-
     render() {
         if (!isAdvancedUpload) {
             console.log("Sorry, this is not a modern browser! Try another browser.");
@@ -218,11 +212,6 @@ class ShortEditor extends React.Component {
                                     handleArrowPress={this.props.handleArrowPress}
                                     activeAnnotations={[]}
                                 />
-                                {/* <ImageSlider
-                                    disableAnnotations={true}
-                                    onIndexChange={this.props.onIndexChange}
-                                    imageArray={this.props.imageArray}
-                                /> */}
                             </div>
                         </div>
                         <div id="shorteditor-side-container">

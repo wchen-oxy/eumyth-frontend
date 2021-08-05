@@ -19,10 +19,7 @@ const ProjectEvent = (props) => {
             <h4 className="event-title-container">
                 {post.title ? post.title : post.pursuit_category}
             </h4>
-            {post.overview ?
-                <h6 className="event-overview-container">{post.overview}</h6>
-                : <></>
-            }
+            {post.overview && <h6 className="event-overview-container">{post.overview}</h6>}
         </div>
     );
 }

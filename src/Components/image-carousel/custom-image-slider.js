@@ -122,7 +122,6 @@ class CustomImageSlider extends React.Component {
     render() {
         let annotations = !this.props.hideAnnotations && !this.props.annotateButtonPressed
             ? this.props.annotations : [];
-        console.log(this.props.imageArray);
         return (
             <>
                 <div className={this.props.newPost ? "customimageslider-new-post-hero-container" : returnStyleName(this.props.windowType)}>

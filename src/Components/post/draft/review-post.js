@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
-import TextareaAutosize from 'react-textarea-autosize';
-import { PUBLIC_FEED, PERSONAL_PAGE, PRIVATE, SHORT, LONG, SETBACK, NEUTRAL, MILESTONE } from "../../constants/flags";
+import { SHORT, LONG } from "../../constants/flags";
 import imageCompression from 'browser-image-compression';
 import AxiosHelper from '../../../Axios/axios';
 import {
@@ -25,23 +24,19 @@ import {
     USERNAME_FIELD,
     INDEX_USER_ID_FIELD
 } from "../../constants/form-data";
-import { displayDifficulty, displayProgressionType } from "../../constants/ui-text";
-import "./review-post.scss";
+import { displayDifficulty, } from "../../constants/ui-text";
 import CustomMultiSelect from '../../custom-clickables/createable-single';
+import CoverPhotoControls from './sub-components/cover-photo-controls';
+import PrePostControls from './sub-components/pre-post-controls';
+import PostTypeTitle from './sub-components/post-type-title';
+import DateInput from './sub-components/data-input';
+import PursuitCategoryInput from './sub-components/pursuit-categoy-input';
+import DifficultyInput from './sub-components/difficulty-input';
+import ProgressInput from './sub-components/progress-input';
+import MinutesInput from './sub-components/minutes-input';
+import TitleInput from './sub-components/title-input';
+import "./review-post.scss";
 
-
-const returnFinalProgressionType = (value) => {
-    switch (parseInt(value)) {
-        case (0):
-            return SETBACK;
-        case (1):
-            return NEUTRAL;
-        case (2):
-            return MILESTONE;
-        default:
-            throw new Error("No Progress Type Matched in REVIEWPOST");
-    }
-}
 
 
 const ReviewPost = (props) => {
@@ -63,24 +58,7 @@ const ReviewPost = (props) => {
     const [randomKey, setRandomKey] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [labels, setLabels] = useState(null);
-    let pursuitSelects = [];
 
-    const clearFile = () => {
-        setUseCoverPhoto(false);
-        if (!shouldRemoveSavedCoverPhoto && coverPhoto !== null &&
-            window.confirm("Are you sure you want to remove your current cover photo?")) {
-            setCoverPhoto(null);
-            setRandomKey(randomKey + 1);
-        }
-        else if (!shouldRemoveSavedCoverPhoto &&
-            window.confirm("Are you sure you want to remove your saved cover photo?"
-            )) {
-            setShouldRemoveSavedCoverPhoto(true);
-        }
-        else if (shouldRemoveSavedCoverPhoto) {
-            setShouldRemoveSavedCoverPhoto(false);
-        }
-    }
     const setFile = (file) => {
         if (!file) return;
         setUseCoverPhoto(true);
@@ -93,6 +71,7 @@ const ReviewPost = (props) => {
             })
 
     }
+
     const handleNewSubmit = (formData) => {
         return AxiosHelper.createPost(formData)
             .then((result) => {
@@ -105,6 +84,7 @@ const ReviewPost = (props) => {
                 alert(result);
             });
     }
+
     const handlePostSpecificForm = (formData, type) => {
         if (type === SHORT) {
             if (props.isUpdateToPost) {
@@ -235,56 +215,6 @@ const ReviewPost = (props) => {
         handlePostSpecificForm(formData, props.postType);
     }
 
-    const renderCoverPhotoControl = () => {
-        if (props.postType === SHORT) {
-            if (props.isUpdateToPost || !props.isUpdateToPost && props.imageArray)
-                return (
-                    <div>
-                        <label>Use First Image For Thumbnail</label>
-                        <input
-                            type="checkbox"
-                            defaultChecked={useImageForThumbnail}
-                            onChange={() => {
-                                setUseImageForThumbnail(!useImageForThumbnail)
-                            }
-                            }
-                        />
-                    </div>
-                )
-            else {
-                return null;
-            }
-        }
-
-        else if (props.postType === LONG) {
-            return (<div>
-                {props.coverPhotoKey ?
-                    (<label>Upload New Cover Photo?</label>)
-                    :
-                    (<label>Upload a Cover Photo</label>)
-                }
-                <input
-                    type="file"
-                    key={randomKey}
-                    onChange={(e) => setFile(e.target.files[0])}>
-                </input>
-                {props.coverPhotoKey || useCoverPhoto ? (
-                    <button onClick={clearFile}>
-                        {shouldRemoveSavedCoverPhoto ?
-                            "Keep Saved Cover Photo" :
-                            "Remove Existing Cover Photo"
-                        }
-                    </button>)
-                    : null}
-            </div>)
-
-
-        }
-        else {
-            throw new Error("No Post Types Matched for Cover Photo Controls");
-        }
-    }
-
     const handleSuccess = () => {
         alert("Post Successful! You will see your post soon.");
 
@@ -310,43 +240,13 @@ const ReviewPost = (props) => {
     }
 
 
-    const postTypeTitle = props.postType === SHORT ? (
-        <div>
-            <h2>Add your metadata!</h2>
-            <p>Optional of course</p>
-        </div>
-    )
-        :
-        (<div>
-            <h2>Add your metadata!</h2>
-            <p>Optional of course</p>
-        </div>);
-
-    const optionalLongPostDescription = props.postType === LONG ? (
-        <TextareaAutosize
-            name="subtitle"
-            id='review-post-text'
-            placeholder='Create an Optional Description'
-            onChange={(e) => setSubtitle(e.target.value)}
-            maxLength={140} />)
-        :
-        (null);
-
-    pursuitSelects.push(
-        <option value={null}></option>
-    )
-    for (let i = 1; i < props.pursuitNames.length; i++) {
-        const pursuit = props.pursuitNames[i];
-        pursuitSelects.push(
-            <option key={pursuit} value={pursuit}>{pursuit}</option>
-        );
-    }
-    console.log(labels);
     return (
         <div id="reviewpost-small-window">
             <div>
                 <div>
-                    {postTypeTitle}
+                    <PostTypeTitle
+                        postType={props.postType}
+                    />
                     <div>
                         <span >
                             <button
@@ -359,57 +259,39 @@ const ReviewPost = (props) => {
                     </div>
                 </div>
                 <div className="reviewpost-button-container">
-                    <label>Preview Title</label>
-                    <TextareaAutosize
-                        name="title"
-                        placeholder='Create an Optional Preview Title Text'
-                        value={title ? title : null}
-                        onChange={(e) => setTitle(e.target.value)} maxLength={100}
+                    <TitleInput
+                        postType={props.postType}
+                        title={props.title}
+                        setTitle={setTitle}
+                        setSubtitle={setSubtitle}
                     />
-                    {optionalLongPostDescription}
-                    {renderCoverPhotoControl()}
-                    <label>Date</label>
-                    <input
-                        type="date"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                    ></input>
-                    <label>Pursuit</label>
-                    <select
-                        name="pursuit-category"
-                        value={pursuit}
-                        onChange={(e) => setPursuit(e.target.value)}
-                    >
-                        {pursuitSelects}
-                    </select>
-                    <label>Total Minutes</label>
-                    <input
-                        type="number"
-                        value={props.min}
-                        min={0}
-                        onChange={(e) => setMinDuration(e.target.value)}>
-                    </input>
-                    <label>Difficulty</label>
-                    <p>{displayDifficulty(difficulty)}</p>
-                    <input
-                        defaultValue={difficulty}
-                        disabled={props.difficulty}
-                        type="range"
-                        step={1}
-                        min={0}
-                        max={2}
-                        onClick={(e) => setDifficulty(e.target.value)}>
-                    </input>
-                    <label>Progress</label>
-                    <p>{displayProgressionType(progression)}</p>
-                    <input
-                        defaultValue={progression}
-                        type="range"
-                        step={1}
-                        min={0}
-                        max={2}
-                        onClick={(e) => setProgression(e.target.value)}>
-                    </input>
+                    <CoverPhotoControls
+                        useImageForThumbnail={useImageForThumbnail}
+                        setUseImageForThumbnail={setUseImageForThumbnail}
+                        useCoverPhoto={useCoverPhoto}
+                        postType={props.postType}
+                        isUpdateToPost={props.isUpdateToPost}
+                        imageArray={props.imageArray}
+                    />
+                    <DateInput date={date} setDate={setDate} />
+                    <PursuitCategoryInput
+                        pursuitNames={props.pursuitNames}
+                        pursuit={props.pursuit}
+                        setPursuit={setPursuit}
+                    />
+                    <MinutesInput
+                        min={props.min}
+                        setMinDuration={setMinDuration}
+                    />
+                    <DifficultyInput
+                        difficulty={difficulty}
+                        displayDifficulty={displayDifficulty}
+                        setDifficulty={setDifficulty}
+                    />
+                    <ProgressInput
+                        progression={progression}
+                        setProgression={setProgression}
+                    />
                 </div>
                 <div>
                     <label>Tags</label>
@@ -422,34 +304,15 @@ const ReviewPost = (props) => {
 
                 </div>
                 <div className="reviewpost-button-container">
-                    <p>Post to:</p>
-                    <div>
-                        <select
-                            name="posts"
-                            id="postPrivacyType"
-                            value={props.preferredPostPrivacy ?
-                                props.preferredPostPrivacy : PUBLIC_FEED}
-                            onChange={(e) => setPostPrivacyType(e.target.value)}
-                        >
-                            <option value={PRIVATE}>
-                                Make post private on your page
-                            </option>
-                            <option value={PERSONAL_PAGE}>
-                                Make post public on your page:
-                            </option>
-                            <option value={PUBLIC_FEED}>
-                                Post to your feed and page
-                            </option>
-                        </select>
-                    </div>
-                    <button onClick={(e) => handleFormAppend(e)} disabled={isSubmitting}>
-                        {props.isUpdateToPost ?
-                            isSubmitting ? "Updating!" : "Update!" :
-                            isSubmitting ? "Posting!" : "Post!"}
-                    </button>
+                    <PrePostControls
+                        preferredPostPrivacy={props.preferredPostPrivacy}
+                        setPostPrivacyType={setPostPrivacyType}
+                        handleFormAppend={handleFormAppend}
+                        disabled={isSubmitting}
+                    />
                 </div>
-                {error ? <p>An Error Occured. Please try again. </p> : <></>}
-                {loading ? <div>  <p> Loading...</p>  </div> : <></>}
+                {error && <p>An Error Occured. Please try again. </p>}
+                {loading && <div>  <p> Loading...</p>  </div>}
             </div>
         </div >
     );

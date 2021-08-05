@@ -35,7 +35,6 @@ class LongEditor extends React.Component {
     handleSave(editorContext, content) {
         if (this.state.isInitial) {
             if (this.checkIsEqual()) {
-                console.log("Catch uneccessary first save");
                 return this.setState({ isInitial: false },
                     this.props.onSavePending(false));
             }
@@ -60,12 +59,10 @@ class LongEditor extends React.Component {
     }
 
     handleSaveSuccess(result) {
-        console.log("Reached", result);
         this.props.onSavePending(false);
 
     }
     handleSaveError(result) {
-        console.log("Fail")
         this.props.onSavePending(false);
         alert(`Draft Failed to Save. Please check your
                connection or save your draft locally for now. : (`

@@ -3,7 +3,6 @@ import AxiosHelper from '../../../Axios/axios';
 import SingleComment from "./sub-components/single-comment";
 import CommentInput from "./sub-components/comment-input";
 import { SHORT, EXPANDED, COLLAPSED } from "../../constants/flags";
-
 import "./comments.scss";
 
 class Comments extends React.Component {
@@ -262,14 +261,13 @@ class Comments extends React.Component {
                             onClick={this.handleCommentPost}
                         >
                             Add Comment
-                                </button>
-                        {this.props.isImageOnly ?
+                        </button>
+                        {this.props.isImageOnly &&
                             <button
                                 onClick={this.props.onPromptAnnotation}
                             >
                                 Annotate
-                            </button>
-                            : null}
+                            </button>}
                     </div>
 
                 </div>

@@ -191,7 +191,6 @@ class ShortPostViewer extends React.Component {
                     toggleAnnotations={this.toggleAnnotations}
                     handleArrowPress={this.handleArrowPress}
                     visitorProfilePreviewID={this.state.visitorProfilePreviewID}
-
                 />
             </div>)
     }
@@ -238,13 +237,9 @@ class ShortPostViewer extends React.Component {
     handlePromptAnnotation() {
         this.heroRef.current.scrollIntoView({ block: "center" });
         this.setState({
-            // showPromptOverlay: true,
             areAnnotationsHidden: false,
             annotateButtonPressed: true,
         });
-        // setTimeout(() => {
-        //     this.setState({ showPromptOverlay: false });
-        // }, 3000);
     }
 
     handleMouseOver(id) {
@@ -316,7 +311,6 @@ class ShortPostViewer extends React.Component {
                 let fullAnnotationArray = this.state.annotations;
                 let fullCommentData = this.state.fullCommentData;
                 fullCommentData.push(newRootCommentData);
-
                 fullAnnotationArray[this.state.imageIndex] =
                     currentAnnotationArray;
                 return this.setState({
@@ -440,23 +434,6 @@ class ShortPostViewer extends React.Component {
                                 <ShortHeroText
                                     textData={this.props.textData} />
                             </div>
-                            {/* <div className="shortpostviewer-large-side-container">
-                                    <PostHeader
-                                        isOwnProfile={this.props.isOwnProfile}
-                                        username={this.props.eventData.username}
-                                        date={this.state.date}
-                                        displayPhoto={this.props.eventData.display_photo_key}
-                                        onEditClick={this.handleWindowChange}
-                                        onDeletePost={this.props.onDeletePost}
-                                    />
-                                    <ShortPostMetaInfo
-                                        index={this.state.imageIndex}
-                                        progression={this.state.progression}
-                                        pursuit={this.state.pursuitCategory}
-                                        min={this.state.min}
-                                        textData={null}
-                                    />
-                                </div> */}
                             {this.renderComments(EXPANDED)}
                         </div>
                     )
@@ -537,7 +514,6 @@ class ShortPostViewer extends React.Component {
                         <>
                             <div
                                 id="shortpostviewer-inline-main-container"
-                                // className="with-image"
                                 onClick={this.handleModalLaunch}
                             >
                                 <PostHeader

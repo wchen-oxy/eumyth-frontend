@@ -40,12 +40,13 @@ const EventController = (props) => {
                         commentCount={post.comment_count}
                     />
                 </div>
-                <EventCheckbox
-                    post={post}
-                    newProjectView={props.newProjectView}
-                    isChecked={post.isChecked}
-                    onProjectEventSelect={props.onProjectEventSelect}
-                />
+                {props.newProjectView &&
+                    <EventCheckbox
+                        post={post}
+                        isChecked={post.isChecked}
+                        onProjectEventSelect={props.onProjectEventSelect}
+                    />
+                }
             </div>
         );
     }
@@ -62,12 +63,13 @@ const EventController = (props) => {
                         commentCount={post.comment_count}
                     />
                 </div>
-                <EventCheckbox
-                    post={post}
-                    newProjectView={props.newProjectView}
-                    isChecked={post.isChecked}
-                    onProjectEventSelect={props.onProjectEventSelect}
-                />
+                {props.newProjectView &&
+                    <EventCheckbox
+                        post={post}
+                        isChecked={post.isChecked}
+                        onProjectEventSelect={props.onProjectEventSelect}
+
+                    />}
             </div>
         );
     }

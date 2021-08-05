@@ -1,13 +1,13 @@
 import React from 'react';
-import PostDraftController from '../post/draft/index';
-import RelationModal from "./sub-components/relation-modal";
 import OptionsMenu from "./sub-components/options-menu";
 import { AuthUserContext } from '../../Components/session/'
 import { withFirebase } from '../../Firebase';
 import { Link, withRouter } from 'react-router-dom';
 import { NEW_ENTRY_MODAL_STATE, RELATION_MODAL_STATE } from "../constants/flags";
-import { returnUserImageURL, returnUsernameURL, TEMP_PROFILE_PHOTO_URL } from "../constants/urls";
+import { returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../constants/urls";
 import AxiosHelper from '../../Axios/axios';
+import ModalController from './sub-components/modal-controller';
+import OptionalLinks from './sub-components/optional-links';
 import './index.scss';
 
 const NavBar = (props) => {
@@ -47,9 +47,10 @@ class NavigationAuth extends React.Component {
       isRequestModalShowing: false,
     };
 
-    this.renderModal = this.renderModal.bind(this);
     this.clearModal = this.clearModal.bind(this);
     this.setModal = this.setModal.bind(this);
+    this.displayOptionalsDecider = this.displayOptionalsDecider.bind(this);
+    this.linkDecider = this.linkDecider.bind(this);
 
   }
   componentDidMount() {
@@ -74,10 +75,6 @@ class NavigationAuth extends React.Component {
       ;
   }
 
-  componentDidUpdate() {
-    console.log("ew");
-  }
-
   setModal(postType) {
     this.clearModal();
     this.props.openMasterModal(postType);
@@ -87,97 +84,69 @@ class NavigationAuth extends React.Component {
     this.props.closeMasterModal();
   }
 
-  renderModal() {
-    let modal = null;
-    if (this.props.modalState === RELATION_MODAL_STATE) {
-      modal = (
-        <RelationModal
-          username={this.state.username}
-          closeModal={this.clearModal} />
-      )
-      return this.props.returnModalStructure(modal, this.clearModal);
+  displayOptionalsDecider(component) {
+    const shouldShowLinks =
+      this.state.existingUserLoading
+      || !this.state.existingUserLoading && this.state.isExistingUser;
+    return (shouldShowLinks && component);
+  }
+
+
+  linkDecider() {
+    if (window.location.pathname !== "/") {
+      this.props.history.push("")
     }
-    else if (this.props.modalState === NEW_ENTRY_MODAL_STATE) {
-      modal = (
-        <PostDraftController
-          username={this.state.username}
-          closeModal={this.clearModal}
-        />
-      );
-      return this.props.returnModalStructure(modal, this.clearModal);
+    else if (window.location.pathname.toString() === "/") {
+      window.location.reload()
     }
     else {
-      return null;
+      throw new Error("Navbar link went wrong for some reason");
     }
   }
 
   render() {
 
-    const shouldHideFeatures =
-      this.state.existingUserLoading
-      || !this.state.existingUserLoading && !this.state.isExistingUser;
     return (
       <>
         <nav>
           <div id="navbar-left-container">
             <Link
-              onClick={() => {
-                if (window.location.pathname !== "/") {
-                  this.props.history.push("")
-                }
-                else if (window.location.pathname.toString() === "/") {
-
-                  window.location.reload()
-                }
-              }}
               className="navbar-navigation-link"
+              onClick={() => this.linkDecider()}
             >
               <div id="navbar-logo-container">
                 <h3>Everfire</h3>
               </div>
             </Link>
-            {shouldHideFeatures ? (<></>) :
-              <div className="navbar-main-action-buttons-container" >
-                <button onClick={() => this.setModal(NEW_ENTRY_MODAL_STATE)}>
-                  <h4>+ New Entry</h4>
-                </button>
-              </div>
-            }
+            {this.displayOptionalsDecider(
+              <OptionalLinks
+                username={this.state.username}
+                linkType={NEW_ENTRY_MODAL_STATE}
+                setModal={this.setModal}
+              />)}
           </div>
           <div id="navbar-right-container">
-            {shouldHideFeatures ?
-              (<></>) :
-              (
-                <>
-                  <Link
-                    to={"/u/".concat(this.state.username)}
-                  // to={
-                  //   window.location.pathname.slice(2) === "/".concat(this.state.username)
-                  //     ? "/u/".concat(this.state.username) : "/u/".concat(this.state.username) 
-                  // }  
-                  >
-                    <div
-                      className="navbar-main-action-buttons-container"
-                    >
-                      <div id="navbar-display-photo-container">
-                        <img src={this.state.tinyDisplayPhoto} />
-                      </div>
-                      <p>{this.state.username}</p>
-                    </div>
-                  </Link>
-                  <div className="navbar-main-action-buttons-container">
-                    <button onClick={() => this.setModal(RELATION_MODAL_STATE)}>
-                      <h4>Friends</h4>
-                    </button>
-                  </div>
-                </>
-              )
-            }
+            {this.displayOptionalsDecider(
+              <OptionalLinks
+                username={this.state.username}
+                linkType={RELATION_MODAL_STATE}
+                tinyDisplayPhoto={this.state.tinyDisplayPhoto}
+                setModal={this.setModal}
+              />)}
             <OptionsMenu shouldHideFriendsTab={!this.state.existingUserLoading
               && !this.state.isExistingUser} />
           </div>
         </nav>
-        {this.renderModal()}
+        {
+          this.props.modalState &&
+          this.props.returnModalStructure(
+            <ModalController
+              modalState={this.props.modalState}
+              username={this.state.username}
+              closeModal={this.clearModal}
+            />,
+            this.clearModal)
+        }
       </>
     );
   }

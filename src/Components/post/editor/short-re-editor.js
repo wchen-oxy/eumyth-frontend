@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TextContainer from "./sub-components/text-container";
-import ImageSlider from '../../image-carousel';
 import { returnUserImageURL } from "../../constants/urls";
+import CustomImageSlider from '../../image-carousel/custom-image-slider';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./short-re-editor.scss";
-import CustomImageSlider from '../../image-carousel/custom-image-slider';
 
 const adjustURLS = (inputArray) => (
     inputArray.map((url) => returnUserImageURL(url))
@@ -45,11 +44,6 @@ const ShortReEditor = (props) => {
                         imageIndex={props.imageIndex}
                         imageArray={newArray}
                     />
-                    {/* <ImageSlider
-                        disableAnnotations={true}
-                        onIndexChange={props.onIndexChange}
-                    /> */}
-
                 </div>
                 <div className="shortreeditor-side-container">
                     {renderTextContainer()}

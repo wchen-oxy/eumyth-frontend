@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { POST, POST_VIEWER_MODAL_STATE } from '../constants/flags';
 import Timeline from "./timeline/index";
 import ProfileModal from './profile-modal';
@@ -54,20 +54,6 @@ class PostController extends React.Component {
             textData: selectedEvent.text_data,
             postType: selectedEvent.post_format
         }, this.setModal(selectedEvent._id))
-
-        // return AxiosHelper
-        //     .retrievePost(selectedEvent._id, true)
-        //     .then(
-        //         (result) =>
-        //             this.setState({
-        //                 selectedEvent: selectedEvent,
-        //                 selectedPostIndex: postIndex,
-        //                 selectedPostColumnIndex: columnIndex,
-        //                 textData: result.data,
-        //                 postType: selectedEvent.post_format
-        //             }, this.setModal(selectedEvent._id))
-        //     )
-        //     .catch(error => console.log(error));
     }
 
     renderModal() {
