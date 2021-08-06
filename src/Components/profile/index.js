@@ -366,7 +366,6 @@ class ProfilePage extends React.Component {
     }
 
     renderHeroContent() {
-        console.log(this.state.targetUser)
         return this.state.mediaType === POST ?
             (<PostController
                 feedID={this.state.feedID}
@@ -397,7 +396,7 @@ class ProfilePage extends React.Component {
             />)
             :
             (<ProjectController
-                username={this.state.targetUser.username}
+                targetUsername={this.state.targetUser.username}
                 displayPhoto={this.state.smallCroppedDisplayPhoto}
                 targetProfileID={this.state.targetUser._id}
                 targetIndexUserID={this.state.targetUser.index_user_id}
@@ -503,7 +502,6 @@ class ProfilePage extends React.Component {
             }
         }
         if (this.state.isPostOnlyView) {
-            console.log(this.state.targetUser)
             return (
                 <PostViewerController
                     targetProfileID={this.state.targetUser._id}
