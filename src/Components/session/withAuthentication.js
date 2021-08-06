@@ -1,19 +1,18 @@
 import React from 'react';
 import AuthUserContext from './context';
 import { withFirebase } from '../../Firebase/context';
- 
+
 const withAuthentication = Component => {
   class WithAuthentication extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
         authUser: null,
-        isLoading: false,
+        isLoading: true,
       };
     }
- 
+
     componentDidMount() {
-      this.setState({isLoading : true});
       this.listener = this.props.firebase.auth.onAuthStateChanged(
         authUser => {
           authUser
@@ -22,13 +21,13 @@ const withAuthentication = Component => {
         },
       );
     }
- 
+
     componentWillUnmount() {
       this.listener();
     }
- 
+
     render() {
-      const {isLoading} = this.state;
+      const { isLoading } = this.state;
       if (isLoading) {
         return <p>Loading ... </p>
       }
@@ -40,8 +39,8 @@ const withAuthentication = Component => {
       );
     }
   }
- 
+
   return withFirebase(WithAuthentication);
 };
- 
+
 export default withAuthentication;
