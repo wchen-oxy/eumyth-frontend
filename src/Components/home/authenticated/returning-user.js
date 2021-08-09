@@ -55,6 +55,7 @@ class ReturningUserPage extends React.Component {
     componentDidMount() {
         this._isMounted = true;
         if (this._isMounted && this.state.username) {
+            console.log(this.props)
             const firebaseName = this.props.firebase.returnName();
             let firstName = firebaseName ? firebaseName.firstName : null;
             let lastName = firebaseName.lastName ? firebaseName.lastName : null;
@@ -333,7 +334,6 @@ class ReturningUserPage extends React.Component {
     }
 
     passDataToModal(data, type, postIndex) {
-        console.log(data.text_data);
         this.setState({
             selectedEvent: data,
             textData: data.text_data,

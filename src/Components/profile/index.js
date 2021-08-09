@@ -2,6 +2,7 @@ import React from 'react';
 import { withFirebase } from '../../Firebase';
 import PursuitHolder from './sub-components/pursuit-holder';
 import AxiosHelper from '../../Axios/axios';
+import { AuthUserContext } from '../session';
 import NoMatch from '../no-match';
 import PostViewerController from "../post/viewer/post-viewer-controller";
 import FollowButton from "./sub-components/follow-buttons";
@@ -40,7 +41,21 @@ const createPusuitArray = (pursuits) => {
     }
 }
 
-class ProfilePage extends React.Component {
+const ProfilePage = (props) =>
+(
+    <AuthUserContext.Consumer>
+        {
+            authUser => <ProfilePageAuthenticated
+                {...props}
+                authUser={authUser}
+            />
+
+        }
+    </AuthUserContext.Consumer>
+)
+
+
+class ProfilePageAuthenticated extends React.Component {
     _isMounted = false;
     constructor(props) {
         super(props);
@@ -92,36 +107,32 @@ class ProfilePage extends React.Component {
     componentDidMount() {
         this._isMounted = true;
         const targetUsername = this.props.match.params.username;
+        const visitorUsername = this.props.authUser?.username;
+        const requestedPostID = this.props.match.params.postID;
         if (this._isMounted && targetUsername) {
-            this.props.firebase.auth.onAuthStateChanged(
-                (user) => this.loadInitialProfileData(user, targetUsername)
-            )
+            this.loadInitialProfileData(visitorUsername, targetUsername);
         }
-        else if (this._isMounted && this.props.match.params.postID) {
-            this.props.firebase.auth.onAuthStateChanged(
-                (user) => {
-                    if (user) {
-                        this.loadInitialPostData(user.displayName)
-                    }
-                    else {
-                        this.loadInitialPostData(null)
-                    }
-                }
-            )
+        else if (this._isMounted && requestedPostID) {
+            if (visitorUsername) {
+                this.loadInitialPostData(visitorUsername)
+            }
+            else {
+                this.loadInitialPostData(null)
+            }
         }
         else {
-            throw new Error("No profile or post matched");
+            throw new Error("No profile or post was considered valid input");
         }
     }
 
     componentDidUpdate() {
-        if (!this.state.fail && this.props.match.params.username !== this.state.targetUser.username) {
-            AxiosHelper
-                .returnUser(this.state.targetUser.username)
-                .then(
-                    this.handleLoadUser(this.props.firebase.returnUsername(), this.props.match.params.username)
-                )
-
+        const isNewURL = !this.state.fail &&
+            this.props.match.params.username !== this.state.targetUser.username;
+        if (isNewURL) {
+            this.handleLoadUser(
+                this.state.visitorUsername,
+                this.props.match.params.username
+            );
         }
     }
 
@@ -129,18 +140,19 @@ class ProfilePage extends React.Component {
         this._isMounted = false;
     }
 
-    loadInitialProfileData(user, targetUsername) {
-        if (user) {
-            this.handleLoadUser(user.displayName, targetUsername)
+    loadInitialProfileData(visitorUsername, targetUsername) {
+        if (visitorUsername) {
+            this.handleLoadUser(visitorUsername, targetUsername)
         }
         else {
             AxiosHelper
                 .returnUser(targetUsername)
                 .then(response =>
-                    this.handleResponseData(user, response.data, null)
+                    this.handleResponseData(null, response.data, null)
                 )
                 .catch(error => {
-                    console.log(error)
+                    console.log(error);
+                    this.setState({ fail: true })
                 });
         }
     }
@@ -162,21 +174,18 @@ class ProfilePage extends React.Component {
     }
 
     loadInitialPostData(username) {
+        const indexUser = this.props.authUser?.indexUserInfo;
         if (username) {
-            return Promise.all([
-                AxiosHelper
-                    .retrievePost(this.props.match.params.postID, false),
-                AxiosHelper
-                    .returnIndexUser(username)
-            ])
+            return AxiosHelper
+                .retrievePost(this.props.match.params.postID, false)
                 .then(result => {
-                    const pursuitData = createPusuitArray(result[1].data.pursuits);
+                    const pursuitData = createPusuitArray(indexUser.pursuits);
                     this.setInitialPostData(
                         result[0].data,
                         pursuitData.names,
                         username,
-                        result[1].data._id,
-                        result[1].data.user_profile_id,
+                        indexUser._id,
+                        indexUser.user_profile_id,
                         result[0].data.labels
                     )
                 })
@@ -330,9 +339,8 @@ class ProfilePage extends React.Component {
         const followerStatus = followerStatusResponse ?
             this.handleFollowerStatusResponse(followerStatusResponse) : null;
         const pursuitData = createPusuitArray(targetUserInfo.pursuits);
-        const isOwner = targetUserInfo ? targetUserInfo.username === displayName : true;
+        const isOwner = targetUserInfo ? targetUserInfo.username === displayName : false;
 
-        //set visitor user info and targetUserinfo
         this.setState({
             visitorUsername: displayName ? displayName : null,
             targetUser: targetUserInfo,
@@ -367,33 +375,35 @@ class ProfilePage extends React.Component {
 
     renderHeroContent() {
         return this.state.mediaType === POST ?
-            (<PostController
-                feedID={this.state.feedID}
-                targetProfileID={this.state.targetUser._id}
-                targetIndexUserID={this.state.targetUser.index_user_id}
-                feedIDList={this.state.feedIDList}
-                isOwnProfile={this.state.visitorUsername === this.state.targetUser.username}
-                visitorUsername={this.state.visitorUsername}
-                targetUsername={this.state.targetUser.username}
-                postIndex={this.state.selectedPostIndex}
-                visitorDisplayPhoto={this.state.smallCroppedDisplayPhoto}
-                preferredPostPrivacy={this.state.preferredPostPrivacy}
-                postType={this.state.postType}
-                pursuitNames={this.state.pursuitNames}
-                eventData={this.state.selectedEvent}
-                textData={this.state.textData}
-                hasMore={this.state.hasMore}
-                nextOpenPostIndex={this.state.nextOpenPostIndex}
-                shouldPull={this.shouldPull}
-                loadedFeed={this.state.loadedFeed}
-                updateFeedData={this.updateFeedData}
-                labels={this.state.targetUser.labels}
+            (
+                <PostController
+                    feedID={this.state.feedID}
+                    targetProfileID={this.state.targetUser._id}
+                    targetIndexUserID={this.state.targetUser.index_user_id}
+                    feedIDList={this.state.feedIDList}
+                    isOwnProfile={this.state.isOwner}
+                    visitorUsername={this.state.visitorUsername}
+                    targetUsername={this.state.targetUser.username}
+                    postIndex={this.state.selectedPostIndex}
+                    visitorDisplayPhoto={this.state.smallCroppedDisplayPhoto}
+                    preferredPostPrivacy={this.state.preferredPostPrivacy}
+                    postType={this.state.postType}
+                    pursuitNames={this.state.pursuitNames}
+                    eventData={this.state.selectedEvent}
+                    textData={this.state.textData}
+                    hasMore={this.state.hasMore}
+                    nextOpenPostIndex={this.state.nextOpenPostIndex}
+                    shouldPull={this.shouldPull}
+                    loadedFeed={this.state.loadedFeed}
+                    updateFeedData={this.updateFeedData}
+                    labels={this.state.targetUser.labels}
 
-                returnModalStructure={this.props.returnModalStructure}
-                modalState={this.props.modalState}
-                openMasterModal={this.props.openMasterModal}
-                closeMasterModal={this.props.closeMasterModal}
-            />)
+                    returnModalStructure={this.props.returnModalStructure}
+                    modalState={this.props.modalState}
+                    openMasterModal={this.props.openMasterModal}
+                    closeMasterModal={this.props.closeMasterModal}
+                />
+            )
             :
             (<ProjectController
                 targetUsername={this.state.targetUser.username}
@@ -454,6 +464,7 @@ class ProfilePage extends React.Component {
                 })
             .catch((error) => {
                 console.log(error);
+                this.setState({})
             });
     }
 
@@ -474,10 +485,15 @@ class ProfilePage extends React.Component {
         const hideFromUnauthorized = (!this.state.isOwner && this.state.isPrivate)
             && (this.state.followerStatus !== "FOLLOWING" &&
                 this.state.followerStatus !== "REQUEST_ACCEPTED");
-
-        if (hideFromAll || hideFromUnauthorized) {
-            return (<p>This profile is private. To see
-                these posts, please request access. </p>);
+        if (this.state.fail) {
+            return (
+                <p>The user you're looking for does not exist.</p>)
+        }
+        else if (hideFromAll || hideFromUnauthorized) {
+            return (
+                <p>This profile is private. To see
+                    these posts, please request access. </p>
+            );
         }
         else {
             return this.renderHeroContent();
@@ -487,7 +503,6 @@ class ProfilePage extends React.Component {
     render() {
         let index = 0;
         const pursuitHolderArray = [];
-        if (this.state.fail) return NoMatch;
         if (this.state.pursuits) {
             for (const pursuit of this.state.pursuits) {
                 pursuitHolderArray.push(
@@ -507,7 +522,7 @@ class ProfilePage extends React.Component {
                     targetProfileID={this.state.targetUser._id}
                     targetIndexUserID={this.state.targetUser.index_user_id}
                     key={this.state.selectedEvent._id}
-                    isOwnProfile={this.state.visitorUsername === this.state.selectedEvent.username}
+                    isOwnProfile={this.state.isOwner}
                     visitorUsername={this.state.visitorUsername}
                     largeViewMode={true}
                     isPostOnlyView={this.state.isPostOnlyView}

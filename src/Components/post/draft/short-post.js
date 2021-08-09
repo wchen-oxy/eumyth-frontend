@@ -21,7 +21,6 @@ class ShortPost extends React.Component {
       postDisabled: true,
       window: INITIAL_STATE,
       previewTitle: null,
-      // selectedTemplate: null,
       tinyPhotos: null,
 
       //new draft stuff
@@ -137,48 +136,9 @@ class ShortPost extends React.Component {
     });
   }
 
-  // returnOptions() {
-  //   let pursuitOptions = [<option key={"0"} value={null}></option>];
-  //   for (const pursuit of this.props.pursuitNames) {
-  //     if (this.props.pursuitTemplates && this.props.pursuitTemplates[pursuit])
-  //       pursuitOptions.push(
-  //         <option key={pursuit} value={pursuit}>{pursuit}</option>
-  //       );
-  //   }
-  //   return pursuitOptions;
-  // }
-
   handleIndexChange(value) {
     this.setState({ imageIndex: value });
   }
-
-  // handleTemplateSelect(pursuit) {
-  //   this.setState({
-  //     selectedTemplate: pursuit ? pursuit : null
-  //   });
-  // }
-
-
-  // handleTemplateInjection() {
-  //   let newState;
-  //   if (!this.state.isPaginated) {
-  //     newState = (this.props.pursuitTemplates[this.state.selectedTemplate]
-  //       + "\n"
-  //       + this.state.textData);
-  //   }
-  //   else {
-  //     if (this.state.isPaginated) {
-  //       let updatedArray = this.state.textData;
-  //       updatedArray[this.state.imageIndex] = (this.props.pursuitTemplates[this.state.selectedTemplate]
-  //         + "\n"
-  //         + updatedArray[this.state.imageIndex]);
-  //       newState = updatedArray;
-  //     }
-  //   }
-  //   this.setState(({
-  //     textData: newState
-  //   }))
-  // }
 
   handlePaginatedChange() {
     if (this.state.isPaginated === false) {
@@ -300,9 +260,7 @@ class ShortPost extends React.Component {
     this.setValidFiles(filteredArr);
   }
 
-
   handleSortEnd({ oldIndex, newIndex }) {
-
     const items = Array.from(this.state.validFiles);
     const [reorderedItem] = items.splice(oldIndex, 1);
     items.splice(newIndex, 0, reorderedItem);
@@ -312,18 +270,11 @@ class ShortPost extends React.Component {
 
   render() {
     if (this.state.window === INITIAL_STATE) {
-      // const pursuitOptions = this.returnOptions();
       return (
         <div id="shortpost-window">
           <h2>Short Post</h2>
           <div className="shortpost-button-container">
             <span >
-              {/* <button
-                value={NONE}
-                onClick={e => this.props.onPostTypeSet(e.target.value, false)}
-              >
-                Return
-                  </button> */}
             </span>
             {this.state.isCompressing ? <p>Compressing Photos</p> : null}
             <span>
@@ -333,35 +284,15 @@ class ShortPost extends React.Component {
                 onClick={e => this.handleClick(e.target.value)}
               >
                 Review Post
-                  </button>
+              </button>
             </span>
           </div>
-          
+
           <div className="shortpost-special-button-container">
-            {/* <button
-              id="shortpost-long-draft-button"
-              onClick={() => this.toggleLongDraft(this.state.isLongDraftButtonToggled)}
-            >
-              Switch To Long Draft
-              </button> */}
             <div id="shortpost-long-draft-options" ref={this.longDraftOptionsRef}>
               <button value={NEW_LONG} onClick={this.confirmDraftDiscard}>New Draft</button>
               <button value={OLD_LONG} onClick={() => this.props.onPostTypeSet(OLD_LONG)}>Continue Previous Draft</button>
             </div>
-            {/* <select
-              onChange={(e) => {
-                return this.handleTemplateSelect(e.target.value)
-              }}
-              value={this.state.selectedTemplate}
-            >
-              {pursuitOptions}
-            </select>
-            <button
-              disabled={this.state.selectedTemplate === null}
-              onClick={this.handleTemplateInjection}
-            >
-              Inject Template
-            </button> */}
           </div>
           <div id="shortpost-title-container">
             <TextareaAutosize
@@ -398,6 +329,7 @@ class ShortPost extends React.Component {
       );
     }
     else {
+      const authUser = this.props.authUser;
       return (
         <div id="shortpost-review-window">
           <ReviewPost
@@ -405,7 +337,7 @@ class ShortPost extends React.Component {
             difficulty={0}
             progression={1}
             previousState={INITIAL_STATE}
-            displayPhoto={this.props.displayPhoto}
+            displayPhoto={authUser.displayPhoto}
             isPaginated={this.state.isPaginated}
             previewTitle={this.state.previewTitle}
             closeModal={this.props.closeModal}
@@ -413,10 +345,10 @@ class ShortPost extends React.Component {
             imageArray={this.state.tinyPhotos}
             coverPhoto={this.state.coverPhoto}
             textData={this.state.textData}
-            username={this.props.username}
-            preferredPostPrivacy={this.props.preferredPostPrivacy}
-            pursuitNames={this.props.pursuitNames}
-            labels={this.props.labels}
+            username={authUser.username}
+            preferredPostPrivacy={authUser.preferredPostPrivacy}
+            pursuitNames={authUser.pursuitNames}
+            labels={authUser.labels}
             handlePreferredPostPrivacyChange={this.props.handlePreferredPostPrivacyChange}
             setPostStage={this.handleClick}
           />

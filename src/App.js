@@ -8,7 +8,7 @@ import ProfilePage from './Components/profile';
 import Test from "./Components/test";
 import './App.scss';
 
-
+ 
 
 const App = (props) => {
       const [modalState, setModalState] = useState(null);
@@ -45,7 +45,7 @@ const App = (props) => {
             );
 
       };
-      return (
+       return (
             <Router>
                   <Navbar
                         returnModalStructure={returnModalStructure}
@@ -91,8 +91,6 @@ const App = (props) => {
 
                               />
                         } />
-
-                        {/* <Route exact path = '/:username/pursuit/:pursuit' component={DetailedPursuit} /> */}
                   </Switch>
                   <div className="modal" ref={masterModalRef} >
                   </div>

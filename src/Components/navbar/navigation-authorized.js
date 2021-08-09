@@ -4,7 +4,6 @@ import { withFirebase } from '../../Firebase';
 import { Link, withRouter } from 'react-router-dom';
 import { NEW_ENTRY_MODAL_STATE, RELATION_MODAL_STATE } from "../constants/flags";
 import { returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../constants/urls";
-import AxiosHelper from '../../Axios/axios';
 import ModalController from './sub-components/modal-controller';
 import OptionalLinks from './sub-components/optional-links';
 import './navigation-authorized.scss';
@@ -13,10 +12,7 @@ class NavigationAuthorized extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: this.props.firebase.returnUsername(),
-            tinyDisplayPhoto: null,
-            previousLongDraft: null,
-            existingUserLoading: true,
+            isUserStillLoading: true,
             isExistingUser: false,
             isPostModalShowing: false,
             isRequestModalShowing: false,
@@ -24,32 +20,31 @@ class NavigationAuthorized extends React.Component {
 
         this.clearModal = this.clearModal.bind(this);
         this.setModal = this.setModal.bind(this);
+        this.setBasicInfo = this.setBasicInfo.bind(this);
         this.displayOptionalsDecider = this.displayOptionalsDecider.bind(this);
         this.linkDecider = this.linkDecider.bind(this);
 
     }
     componentDidMount() {
-        let isUserStillLoading = true;
-        let isExistingUser = false;
-        this.props.firebase.checkIsExistingUser().then(
-            (result) => {
-                isUserStillLoading = false;
-                if (result) {
-                    isExistingUser = true;
-                }
-                return AxiosHelper.returnTinyDisplayPhoto(this.state.username);
-            }
-        )
+        this.props.firebase.checkIsExistingUser()
             .then((result) => {
-                this.setState({
-                    isExistingUser: isExistingUser,
-                    existingUserLoading: isUserStillLoading,
-                    tinyDisplayPhoto: result.data ? returnUserImageURL(result.data) : TEMP_PROFILE_PHOTO_URL
-                });
-            })
-            ;
+                const rawDisplayPhoto = this.props.authUser.tiny_cropped_display_photo_key;
+                const displayPhoto = rawDisplayPhoto ?
+                    returnUserImageURL(rawDisplayPhoto) : TEMP_PROFILE_PHOTO_URL;
+                this.setBasicInfo(
+                    !!result,
+                    false,
+                    displayPhoto
+                )
+            });
     }
-
+    setBasicInfo(isExistingUser, isUserStillLoading, tinyDisplayPhoto) {
+        this.setState({
+            isExistingUser,
+            isUserStillLoading,
+            tinyDisplayPhoto
+        })
+    }
     setModal(postType) {
         this.clearModal();
         this.props.openMasterModal(postType);
@@ -61,11 +56,11 @@ class NavigationAuthorized extends React.Component {
 
     displayOptionalsDecider(component) {
         const shouldShowLinks =
-            this.state.existingUserLoading
-            || !this.state.existingUserLoading && this.state.isExistingUser;
+            this.state.isUserStillLoading
+            || !this.state.isUserStillLoading
+            && this.state.isExistingUser;
         return (shouldShowLinks && component);
     }
-
 
     linkDecider() {
         if (window.location.pathname !== "/") {
@@ -75,12 +70,11 @@ class NavigationAuthorized extends React.Component {
             window.location.reload()
         }
         else {
-            throw new Error("Navbar link went wrong for some reason");
+            throw new Error("Navbar's inputted url doesn't work for some reason");
         }
     }
 
     render() {
-
         return (
             <>
                 <nav>
@@ -95,7 +89,7 @@ class NavigationAuthorized extends React.Component {
                         </Link>
                         {this.displayOptionalsDecider(
                             <OptionalLinks
-                                username={this.state.username}
+                                username={this.props.authUser.username}
                                 linkType={NEW_ENTRY_MODAL_STATE}
                                 setModal={this.setModal}
                             />)}
@@ -103,13 +97,16 @@ class NavigationAuthorized extends React.Component {
                     <div id="navbar-right-container">
                         {this.displayOptionalsDecider(
                             <OptionalLinks
-                                username={this.state.username}
+                                username={this.props.authUser.username}
                                 linkType={RELATION_MODAL_STATE}
                                 tinyDisplayPhoto={this.state.tinyDisplayPhoto}
                                 setModal={this.setModal}
                             />)}
-                        <OptionsMenu shouldHideFriendsTab={!this.state.existingUserLoading
-                            && !this.state.isExistingUser} />
+                        <OptionsMenu
+                            shouldHideFriendsTab={
+                                !this.state.isUserStillLoading && !this.state.isExistingUser
+                            }
+                        />
                     </div>
                 </nav>
                 {
@@ -117,7 +114,7 @@ class NavigationAuthorized extends React.Component {
                     this.props.returnModalStructure(
                         <ModalController
                             modalState={this.props.modalState}
-                            username={this.state.username}
+                            username={this.props.authUser.username}
                             closeModal={this.clearModal}
                         />,
                         this.clearModal)

@@ -12,9 +12,10 @@ const HomePage = (props) => {
         <>
             <AuthUserContext.Consumer>
                 {
-                    authUser =>
-                        authUser && authUser.emailVerified ?
+                    authUser => {
+                        return (authUser && authUser.emailVerified ?
                             <LandingBase
+                                authUser={authUser}
                                 returnModalStructure={props.returnModalStructure}
                                 openMasterModal={props.openMasterModal}
                                 closeMasterModal={props.closeMasterModal}
@@ -23,7 +24,8 @@ const HomePage = (props) => {
                             /> :
                             <WelcomePageBase
                                 emailVerifiedStatus={false}
-                            />
+                            />)
+                    }
                 }
             </AuthUserContext.Consumer>
         </>

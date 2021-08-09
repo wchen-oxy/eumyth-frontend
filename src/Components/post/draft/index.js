@@ -5,6 +5,7 @@ import LongPost from './long-post';
 import AxiosHelper from '../../../Axios/axios';
 import { withFirebase } from '../../../Firebase';
 import { NONE, SHORT, LONG, NEW_LONG, OLD_LONG } from "../../constants/flags";
+import { AuthUserContext } from '../../session';
 
 class PostDraftController extends React.Component {
   _isMounted = false;
@@ -237,21 +238,26 @@ class PostDraftController extends React.Component {
             onPostTypeSet={this.handlePostTypeSet} />
         );
       case (SHORT):
+        
         return (
-          <ShortPost
-            onlineDraft
-            displayPhoto={this.state.displayPhoto}
-            username={this.props.username}
-            closeModal={this.props.closeModal}
-            pursuitNames={this.state.pursuitNames}
-            pursuitTemplates={this.state.pursuitTemplates}
-            disablePost={this.handleDisablePost}
-            setImageArray={this.setImageArray}
-            onPostTypeSet={this.handlePostTypeSet}
-            preferredPostPrivacy={this.state.indexUserData.preferred_post_privacy}
-            handlePreferredPostPrivacyChange={this.onPreferredPostPrivacyChange}
-            labels={this.state.labels}
-          />
+          <AuthUserContext.Consumer>
+            {authUser =>
+              <ShortPost
+                onlineDraft
+                authUser={authUser.indexUserInfo}
+                displayPhoto={this.state.displayPhoto}
+                username={this.props.username}
+                closeModal={this.props.closeModal}
+                pursuitNames={this.state.pursuitNames}
+                pursuitTemplates={this.state.pursuitTemplates}
+                disablePost={this.handleDisablePost}
+                setImageArray={this.setImageArray}
+                onPostTypeSet={this.handlePostTypeSet}
+                preferredPostPrivacy={this.state.indexUserData.preferred_post_privacy}
+                handlePreferredPostPrivacyChange={this.onPreferredPostPrivacyChange}
+                labels={this.state.labels}
+              />}
+          </AuthUserContext.Consumer>
         );
       case (LONG):
         console.log(this.state.draftTitle);

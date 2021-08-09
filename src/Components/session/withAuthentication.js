@@ -1,6 +1,7 @@
 import React from 'react';
-import AuthUserContext from './context';
+import { AuthUserContext } from './context';
 import { withFirebase } from '../../Firebase/context';
+import AxiosHelper from '../../Axios/axios';
 
 const withAuthentication = Component => {
   class WithAuthentication extends React.Component {
@@ -10,20 +11,46 @@ const withAuthentication = Component => {
         authUser: null,
         isLoading: true,
       };
+      this.createUserInfoObject = this.createUserInfoObject.bind(this);
+      this.saveUserInfoObject = this.saveUserInfoObject.bind(this);
     }
 
     componentDidMount() {
       this.listener = this.props.firebase.auth.onAuthStateChanged(
         authUser => {
-          authUser
-            ? this.setState({ authUser, isLoading: false })
-            : this.setState({ authUser: null, isLoading: false });
-        },
+          authUser ?
+            this.createUserInfoObject(authUser.displayName, authUser)
+            :
+            this.saveUserInfoObject(false);
+        }
       );
     }
 
     componentWillUnmount() {
       this.listener();
+    }
+
+    createUserInfoObject(username, authUser) {
+      return AxiosHelper.returnIndexUser(username)
+        .then(result => {
+          const combined = {
+            email: authUser.email,
+            emailVerified: authUser.emailVerified,
+            uid: authUser.uid,
+            ...result.data
+          }
+          this.saveUserInfoObject(true, combined)
+        })
+
+    }
+
+    saveUserInfoObject(doesUserExist, object) {
+      if (doesUserExist) {
+        this.setState({ authUser: object, isLoading: false })
+      }
+      else {
+        this.setState({ authUser: null, isLoading: false });
+      }
     }
 
     render() {

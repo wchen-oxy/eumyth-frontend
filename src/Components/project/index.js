@@ -151,21 +151,6 @@ class ProjectController extends React.Component {
         });
     }
 
-    // openModal() {
-    //     this.modalRef.current.style.display = "block";
-    //     document.body.style.overflow = "hidden";
-    //     this.setState({
-    //         isModalShowing: true
-    //     });
-    // }
-
-    // closeModal() {
-    //     this.modalRef.current.style.display = "none";
-    //     document.body.style.overflow = "visible";
-    //     this.setState({
-    //         isModalShowing: false
-    //     });
-    // }
 
 
     handleEventClick(selectedEvent, postIndex, columnIndex) {
@@ -174,19 +159,6 @@ class ProjectController extends React.Component {
             selectedEvent: selectedEvent,
             textData: selectedEvent.text_data,
         }, this.setModal(selectedEvent._id));
-        // return AxiosHelper
-        //     .retrievePost(selectedEvent._id, true)
-        //     .then(
-        //         (result) =>
-        //             this.setState({
-        //                 selectedEvent: selectedEvent,
-        //                 // selectedPostIndex: postIndex,
-        //                 // selectedPostColumnIndex: columnIndex,
-        //                 textData: result.data,
-        //                 // postType: selectedEvent.post_format
-        //             }, this.setModal(selectedEvent._id))
-        //     )
-        //     .catch(error => console.log(error));
     }
 
 
@@ -321,7 +293,7 @@ class ProjectController extends React.Component {
     }
 
     render() {
-         switch (this.state.window) {
+        switch (this.state.window) {
             case (MAIN):
                 const requiresBackButton = this.props.newProjectState || this.state.projectSelected;
                 return (

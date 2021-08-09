@@ -1,5 +1,4 @@
 import React from 'react';
-import OptionsMenu from "./sub-components/options-menu";
 import { AuthUserContext } from '../../Components/session/'
 import NavigationAuthorized from './navigation-authorized';
 import NavigationUnauthorized from './navigation-unauthorized';
@@ -10,6 +9,7 @@ const NavBar = (props) => {
       {authUser =>
         authUser && authUser.emailVerified ?
           <NavigationAuthorized
+            authUser={authUser}
             returnModalStructure={props.returnModalStructure}
             openMasterModal={props.openMasterModal}
             closeMasterModal={props.closeMasterModal}
