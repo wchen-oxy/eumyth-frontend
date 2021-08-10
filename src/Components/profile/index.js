@@ -129,6 +129,7 @@ class ProfilePageAuthenticated extends React.Component {
         const isNewURL = !this.state.fail &&
             this.props.match.params.username !== this.state.targetUser.username;
         if (isNewURL) {
+            console.log("ads");
             this.handleLoadUser(
                 this.state.visitorUsername,
                 this.props.match.params.username
@@ -174,21 +175,22 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     loadInitialPostData(username) {
-        const indexUser = this.props.authUser?.indexUserInfo;
+        const indexUser = this.props.authUser;
         if (username) {
             return AxiosHelper
                 .retrievePost(this.props.match.params.postID, false)
                 .then(result => {
                     const pursuitData = createPusuitArray(indexUser.pursuits);
                     this.setInitialPostData(
-                        result[0].data,
+                        result.data,
                         pursuitData.names,
                         username,
                         indexUser._id,
                         indexUser.user_profile_id,
-                        result[0].data.labels
+                        result.data.labels
                     )
                 })
+                .catch(error => console.log(error))
         }
         else {
             return AxiosHelper
@@ -202,6 +204,7 @@ class ProfilePageAuthenticated extends React.Component {
                         )
                     })
                 )
+                .catch(error => console.log(error))
         }
     }
 
@@ -480,7 +483,6 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     decideHeroContentVisibility() {
-        console.log(this.state.visitorUsername === null);
         const hideFromAll = this.state.visitorUsername === null && this.state.isPrivate;
         const hideFromUnauthorized = (!this.state.isOwner && this.state.isPrivate)
             && (this.state.followerStatus !== "FOLLOWING" &&
@@ -501,6 +503,7 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     render() {
+        console.log(this.props.modalState);
         let index = 0;
         const pursuitHolderArray = [];
         if (this.state.pursuits) {

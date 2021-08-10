@@ -111,9 +111,6 @@ class ProjectController extends React.Component {
         this.handlePost = this.handlePost.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.updateFeedData = this.updateFeedData.bind(this);
-        // this.openModal = this.openModal.bind(this);
-        // this.closeModal = this.closeModal.bind(this);
-
         this.setModal = this.setModal.bind(this);
         this.clearModal = this.clearModal.bind(this);
 
@@ -125,7 +122,6 @@ class ProjectController extends React.Component {
 
     handleBackClick() {
         if (this.state.projectSelected) {
-            console.log("Back");
             this.setState({ projectSelected: null },
                 () => {
                     this.props.clearLoadedFeed();
