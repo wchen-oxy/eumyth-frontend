@@ -9,7 +9,7 @@ const ModalController = (props) => {
             return (
                 <PostDraftController
                     username={props.username}
-                    closeModal={props.clearModal}
+                    closeModal={props.closeModal}
                 />);
         case (RELATION_MODAL_STATE):
             return (

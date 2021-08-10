@@ -10,7 +10,7 @@ import './App.scss';
 
  
 
-const App = (props) => {
+const App = () => {
       const [modalState, setModalState] = useState(null);
       const masterModalRef = useRef(null);
 

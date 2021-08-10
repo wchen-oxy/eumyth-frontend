@@ -22,18 +22,9 @@ class ShortPost extends React.Component {
       window: INITIAL_STATE,
       previewTitle: null,
       tinyPhotos: null,
-
-      //new draft stuff
-      isLongDraftButtonToggled: false,
-
     };
-    // this.handleTemplateInjection = this.handleTemplateInjection.bind(this);
-    this.confirmDraftDiscard = this.confirmDraftDiscard.bind(this);
-    this.longDraftOptionsRef = React.createRef(null);
+
     this.handleIndexChange = this.handleIndexChange.bind(this);
-    this.toggleLongDraft = this.toggleLongDraft.bind(this);
-    // this.handleTemplateSelect = this.handleTemplateSelect.bind(this);
-    // this.returnOptions = this.returnOptions.bind(this);
     this.setSelectedFiles = this.setSelectedFiles.bind(this);
     this.setValidFiles = this.setValidFiles.bind(this);
     this.setUnsupportedFiles = this.setUnsupportedFiles.bind(this);
@@ -42,7 +33,7 @@ class ShortPost extends React.Component {
     this.handleUnsupportedFileChange = this.handleUnsupportedFileChange.bind(this);
     this.handleSelectedFileChange = this.handleSelectedFileChange.bind(this);
     this.handleDisablePost = this.handleDisablePost.bind(this);
-    this.handleClick = this.handleClick.bind(this);
+    this.setPostStage = this.setPostStage.bind(this);
     this.generateValidFiles = this.generateValidFiles.bind(this);
     this.handlePaginatedChange = this.handlePaginatedChange.bind(this);
     this.handleSortEnd = this.handleSortEnd.bind(this);
@@ -51,52 +42,25 @@ class ShortPost extends React.Component {
     this.createTinyFiles = this.createTinyFiles.bind(this);
     this.handleArrowPress = this.handleArrowPress.bind(this);
 
-    this.newLongPost = this.newLongPost.bind(this);
-  }
-
-  confirmDraftDiscard() {
-    this.props.onlineDraft ? (
-      window.confirm(`Starting a new Long Post will
-                      erase your saved draft. Continue anyway?`)
-      && this.props.onPostTypeSet(NEW_LONG)
-    ) : (
-      this.props.onPostTypeSet(NEW_LONG));
-  }
-
-  toggleLongDraft(isShowing) {
-    console.log(this.longDraftOptionsRef.current)
-
-    if (isShowing) {
-      this.longDraftOptionsRef.current.style.visibility = "hidden";
-    }
-    else {
-      this.longDraftOptionsRef.current.style.visibility = "visible";
-    }
-    this.setState({ isLongDraftButtonToggled: !isShowing });
-  }
-
-  newLongPost(e) {
-    !!this.props.onlineDraft ? (
-      window.confirm(`Starting a new Long Post will
-                        erase your saved draft. Continue anyway?`)
-      && this.props.onPostTypeSet(e.target.value, null)
-    ) : (
-      this.props.onPostTypeSet(e.target.value, null));
   }
 
   transformImageProp(validFiles) {
     let imageArray = validFiles;
-    Promise.all(imageArray.map((file) => this.loadImage(file)))
-      .then(result => {
-        this.setState({
-          imageArray: result,
-          displayedItemCount: result.length,
-          validFiles: validFiles,
-          isCompressing: true
-        },
-          this.createTinyFiles(validFiles)
-        )
-      });
+    Promise
+      .all(
+        imageArray.map((file) => this.loadImage(file))
+      )
+      .then(
+        result => {
+          this.setState({
+            imageArray: result,
+            displayedItemCount: result.length,
+            validFiles: validFiles,
+            isCompressing: true
+          },
+            this.createTinyFiles(validFiles)
+          )
+        });
   }
 
   createTinyFiles(files) {
@@ -242,10 +206,9 @@ class ShortPost extends React.Component {
     this.setState({ postDisabled: disabled });
   }
 
-  handleClick(value) {
+  setPostStage(value) {
     this.setState({ window: value });
   }
-
 
   generateValidFiles() {
     let selectedFiles = this.state.selectedFiles;
@@ -267,7 +230,6 @@ class ShortPost extends React.Component {
     this.transformImageProp(items);
   }
 
-
   render() {
     if (this.state.window === INITIAL_STATE) {
       return (
@@ -276,24 +238,18 @@ class ShortPost extends React.Component {
           <div className="shortpost-button-container">
             <span >
             </span>
-            {this.state.isCompressing ? <p>Compressing Photos</p> : null}
+            {this.state.isCompressing && <p>Compressing Photos</p>}
             <span>
               <button
                 value={REVIEW_STATE}
                 disabled={this.state.postDisabled}
-                onClick={e => this.handleClick(e.target.value)}
+                onClick={e => this.setPostStage(e.target.value)}
               >
                 Review Post
               </button>
             </span>
           </div>
 
-          <div className="shortpost-special-button-container">
-            <div id="shortpost-long-draft-options" ref={this.longDraftOptionsRef}>
-              <button value={NEW_LONG} onClick={this.confirmDraftDiscard}>New Draft</button>
-              <button value={OLD_LONG} onClick={() => this.props.onPostTypeSet(OLD_LONG)}>Continue Previous Draft</button>
-            </div>
-          </div>
           <div id="shortpost-title-container">
             <TextareaAutosize
               id='textcontainer-text-input'
@@ -304,17 +260,16 @@ class ShortPost extends React.Component {
           </div>
 
           <ShortEditor
-            username={this.props.username}
             selectedFiles={this.state.selectedFiles}
             validFiles={this.state.validFiles}
             imageArray={this.state.imageArray}
             unsupportedFiles={this.state.unsupportedFiles}
             isPaginated={this.state.isPaginated}
+
             textPageText={this.state.textData}
             onSortEnd={this.handleSortEnd}
             setImageArray={this.setImageArray}
             onPaginatedChange={this.handlePaginatedChange}
-            // onIndexChange={this.handleIndexChange}
             imageIndex={this.state.imageIndex}
             handleArrowPress={this.handleArrowPress}
             onTextChange={this.handleTextChange}
@@ -333,11 +288,15 @@ class ShortPost extends React.Component {
       return (
         <div id="shortpost-review-window">
           <ReviewPost
-            date={new Date().toISOString().substr(0, 10)}
+            date={
+              new Date()
+                .toISOString()
+                .substr(0, 10)
+            }
             difficulty={0}
             progression={1}
             previousState={INITIAL_STATE}
-            displayPhoto={authUser.displayPhoto}
+            displayPhoto={authUser.small_cropped_display_photo}
             isPaginated={this.state.isPaginated}
             previewTitle={this.state.previewTitle}
             closeModal={this.props.closeModal}
@@ -346,11 +305,12 @@ class ShortPost extends React.Component {
             coverPhoto={this.state.coverPhoto}
             textData={this.state.textData}
             username={authUser.username}
-            preferredPostPrivacy={authUser.preferredPostPrivacy}
-            pursuitNames={authUser.pursuitNames}
+            preferredPostPrivacy={authUser.preferred_post_privacy}
+            pursuitNames={authUser.pursuits.map(pursuit => pursuit.name)}
             labels={authUser.labels}
             handlePreferredPostPrivacyChange={this.props.handlePreferredPostPrivacyChange}
-            setPostStage={this.handleClick}
+            setPostStage={this.setPostStage}
+            handleTitleChange={this.handleTextChange}
           />
         </div>
 

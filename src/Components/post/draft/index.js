@@ -1,10 +1,7 @@
 import React from 'react';
-import NewPost from './new-post';
 import ShortPost from './short-post';
-import LongPost from './long-post';
-import AxiosHelper from '../../../Axios/axios';
 import { withFirebase } from '../../../Firebase';
-import { NONE, SHORT, LONG, NEW_LONG, OLD_LONG } from "../../constants/flags";
+import { SHORT } from "../../constants/flags";
 import { AuthUserContext } from '../../session';
 
 class PostDraftController extends React.Component {
@@ -15,7 +12,6 @@ class PostDraftController extends React.Component {
       onlineDraftRetrieved: false,
       localDraft: null,
       onlineDraft: null,
-      displayPhoto: null,
       isSavePending: false,
       updatingOnlineDraft: true,
       postType: SHORT,
@@ -28,23 +24,15 @@ class PostDraftController extends React.Component {
 
     this.handleDisablePost = this.handleDisablePost.bind(this);
     this.handleSubmitPost = this.handleSubmitPost.bind(this);
-    this.setLocalDraft = this.setLocalDraft.bind(this);
     this.setSavePending = this.setSavePending.bind(this);
-    this.handleLocalSync = this.handleLocalSync.bind(this);
-    this.handleLocalOnlineSync = this.handleLocalOnlineSync.bind(this);
+
     this.handlePostTypeSet = this.handlePostTypeSet.bind(this);
-    this.handleDraftRetrieval = this.handleDraftRetrieval.bind(this);
-    this.handleIndexUserDataSet = this.handleIndexUserDataSet.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
     this.onPreferredPostPrivacyChange = this.onPreferredPostPrivacyChange.bind(this);
-    this.renderWindow = this.renderWindow.bind(this);
   }
 
   componentDidMount() {
     this._isMounted = true;
-    if (this._isMounted && this.props.username) {
-      this.handleIndexUserDataSet();
-    }
   }
   componentWillUnmount() {
     this._isMounted = false;
@@ -55,144 +43,15 @@ class PostDraftController extends React.Component {
   }
 
   handleModalClose() {
-    if (this.state.postType === LONG) {
-      if (this.state.isSavePending
-        && !window.confirm("Do you want to leave while changes are being saved?")) {
-        this.handleLocalOnlineSync(this.state.localDraft)
-          .then((result) => {
-            if (result) {
-              this.setSavePending(false);
-            }
-            else {
-              alert("Save unsucessful");
-            }
-          });
-      }
-      else this.props.closeModal();
-    }
-    else if (this.state.postType === SHORT) {
+    if (this.state.postType === SHORT) {
       if (window.confirm("Do you want to discard this post?")) {
         this.props.closeModal();
       }
     }
+  }
 
-  }
-  setLocalDraft(draft) {
-    this.setState({ localDraft: draft });
-  }
   onPreferredPostPrivacyChange(type) {
     this.setState({ preferredPostPrivacy: type });
-  }
-
-  handleInitialPageLaunch(e, postType, clearLongDraft) {
-    e.preventDefault();
-    if (clearLongDraft) {
-      this.setState({ onlineDraft: null });
-    }
-    this.setState({ postType: postType })
-  }
-
-  handleLocalSync(draft) {
-    this.setState({ onlineDraft: draft });
-  }
-
-  handleLocalOnlineSync(localDraft) {
-    if (localDraft !== this.state.onlineDraft) {
-      this.setState({ updatingOnlineDraft: true });
-      return AxiosHelper.saveDraft(this.props.username, localDraft).then(
-        (result) => {
-          if (result.status !== 200) {
-            console.log("Error");
-            this.setState({ errorSaving: true });
-          }
-          this.setState({
-            onlineDraft: localDraft,
-            updatingOnlineDraft: false
-          });
-          return true;
-        }
-      )
-        .catch(
-          (err) => {
-            console.log(err);
-            this.setState({ updatingOnlineDraft: false });
-          }
-        );
-    }
-    else {
-      return Promise.resolve(false);
-    }
-  }
-
-  handleIndexUserDataSet() {
-    AxiosHelper.returnIndexUser(this.props.username)
-      .then(
-        (result) => {
-          const draft = JSON.parse(result.data.draft.text);
-          let pursuitArray = [];
-          let pursuitTemplates = {};
-          for (const pursuit of result.data.pursuits) {
-            pursuitTemplates[pursuit.name] = pursuit.meta_template ?
-              pursuit.meta_template : "";
-            pursuitArray.push(pursuit.name);
-          }
-          this.setState({
-            updatingOnlineDraft: false,
-            onlineDraftRetrieved: true,
-            pursuitNames: pursuitArray,
-            pursuitTemplates: pursuitTemplates,
-            indexUserData: result.data,
-            displayPhoto: result.data.small_cropped_display_photo_key,
-            onlineDraft: result.data.draft,
-            draftTitle: result.data.draft.title,
-            localDraft: draft,
-            labels: result.data.labels.length > 0 ? result.data.labels : null
-          });
-        }).catch(
-          (result) => {
-            console.log(result);
-            this.setState({
-              onlineDraftRetrieved: true,
-              updatingOnlineDraft: false,
-              errorRetrievingDraft: true
-            });
-            alert(
-              `Something went wrong retrieving your long post draft. 
-              Please do not edit your old draft or you will your saved data. 
-              Refresh your page or contact support for more help.`
-            )
-          }
-        );
-  }
-
-  handleDraftRetrieval(isInitial) {
-    this.setState({ updatingOnlineDraft: true });
-    AxiosHelper.retrieveNewPostInfo(this.props.username).then(
-      (response) => {
-        if (response.status === 200) {
-          if (isInitial) this.setState({ onlineDraftRetrieved: true });
-          this.setState({
-            displayPhoto: response.data.smallDisplayPhoto,
-            onlineDraft: JSON.parse(response.data.draft),
-            updatingOnlineDraft: false
-          });
-        }
-        else {
-          this.setState({
-            onlineDraftRetrieved: true,
-            updatingOnlineDraft: false,
-            errorRetrievingDraft: true
-          });
-          alert(
-            `Something went wrong retrieving your long post draft. 
-            Please do not edit your old draft or you will your saved data. 
-            Refresh your page or contact support for more help.`
-          )
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      })
   }
 
   handleSubmitPost(e) {
@@ -204,96 +63,28 @@ class PostDraftController extends React.Component {
 
   handlePostTypeSet(postType, localDraft) {
     switch (postType) {
-      case (NONE):
-        if (localDraft) {
-          this.setState({
-            postType: postType,
-            onlineDraft: localDraft
-          });
-        }
-        else {
-          this.setState({ postType: postType })
-        }
-        break;
       case (SHORT):
         this.setState({ postType: postType });
-        break;
-      case (NEW_LONG):
-        this.setState({ postType: LONG, onlineDraft: null });
-        break;
-      case (OLD_LONG):
-        this.setState({ postType: LONG });
         break;
       default:
         throw Error("No postType options matched :(");
     }
   }
 
-  renderWindow(postType) {
-    switch (postType) {
-      case (NONE):
-        return (
-          <NewPost
-            onlineDraft
-            onPostTypeSet={this.handlePostTypeSet} />
-        );
-      case (SHORT):
-        
-        return (
-          <AuthUserContext.Consumer>
-            {authUser =>
-              <ShortPost
-                onlineDraft
-                authUser={authUser.indexUserInfo}
-                displayPhoto={this.state.displayPhoto}
-                username={this.props.username}
-                closeModal={this.props.closeModal}
-                pursuitNames={this.state.pursuitNames}
-                pursuitTemplates={this.state.pursuitTemplates}
-                disablePost={this.handleDisablePost}
-                setImageArray={this.setImageArray}
-                onPostTypeSet={this.handlePostTypeSet}
-                preferredPostPrivacy={this.state.indexUserData.preferred_post_privacy}
-                handlePreferredPostPrivacyChange={this.onPreferredPostPrivacyChange}
-                labels={this.state.labels}
-              />}
-          </AuthUserContext.Consumer>
-        );
-      case (LONG):
-        console.log(this.state.draftTitle);
-        return (
-          <LongPost
-            displayPhoto={this.state.displayPhoto}
-            username={this.props.username}
-            onlineDraft={this.state.onlineDraft}
-            draftTitle={this.state.draftTitle}
-            pursuitNames={this.state.pursuitNames}
-            onlineDraftRetrieved={this.state.onlineDraftRetrieved}
-            preferredPostPrivacy={this.state.indexUserData.preferred_post_privacy}
-            updatingOnlineDraft={this.state.updatingOnlineDraft}
-            onLocalDraftChange={this.handleLocalDraftChange}
-            localDraft={this.state.localDraft}
-            setLocalDraft={this.setLocalDraft}
-            onLocalOnlineSync={this.handleLocalOnlineSync}
-            onLocalSync={this.handleLocalSync}
-            onPostTypeSet={this.handlePostTypeSet}
-            setSavePending={this.setSavePending}
-            isSavePending={this.state.isSavePending}
-            disablePost={this.handleDisablePost}
-            handlePreferredPostPrivacyChange={this.onPreferredPostPrivacyChange}
-            closeModal={this.props.closeModal}
-          />
-        );
-      default:
-        throw Error("No postType options matched :(");
-    }
-  }
   render() {
-    if (!this.state.indexUserData) return (<>updatingOnlineDraft...</>)
     return (
-      <>
-        {this.renderWindow(this.state.postType)}
-      </>
+      <AuthUserContext.Consumer>
+        {authUser =>
+          <ShortPost
+            onlineDraft
+            authUser={authUser}
+            closeModal={this.props.closeModal}
+            setImageArray={this.setImageArray}         
+            handlePreferredPostPrivacyChange={this.onPreferredPostPrivacyChange}
+            onPostTypeSet={this.handlePostTypeSet}
+            disablePost={this.handleDisablePost}
+          />}
+      </AuthUserContext.Consumer>
     );
   }
 }

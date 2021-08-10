@@ -11,7 +11,7 @@ const TitleInput = (props) => {
                 name="title"
                 placeholder='Create an Optional Preview Title Text'
                 value={props.title ? props.title : null}
-                onChange={(e) => props.setTitle(e.target.value)}
+                onChange={(e) => props.setTitle(e.target.value, true)}
                 maxLength={100}
             />
             {props.postType === PROJECT ?
@@ -19,7 +19,7 @@ const TitleInput = (props) => {
                     name="subtitle"
                     id='review-post-text'
                     placeholder='Create an Optional Description'
-                    onChange={(e) => props.setSubtitle(e.target.value)}
+                    onChange={(e) => props.setSubtitle(e.target.value,)}
                     maxLength={140} /> : null}
 
         </div>

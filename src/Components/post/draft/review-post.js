@@ -44,7 +44,6 @@ const ReviewPost = (props) => {
     const [date, setDate] = useState(props.date);
     const [minDuration, setMinDuration] = useState(null);
     const [progression, setProgression] = useState(props.progression);
-    const [title, setTitle] = useState(props.previewTitle);
     const [subtitle, setSubtitle] = useState('');
     const [postPrivacyType, setPostPrivacyType] = useState(props.preferredPostPrivacy);
     const [pursuit, setPursuit] = useState(
@@ -186,7 +185,7 @@ const ReviewPost = (props) => {
         formData.append(DIFFICULTY_FIELD, difficulty);
         if (props.targetIndexUserID) formData.append(INDEX_USER_ID_FIELD, props.targetIndexUserID);
         if (props.displayPhoto) formData.append(DISPLAY_PHOTO_FIELD, props.displayPhoto);
-        if (title) formData.append(TITLE_FIELD, _.trim(title));
+        if (props.previewTitle) formData.append(TITLE_FIELD, _.trim(props.previewTitle));
         if (postPrivacyType) formData.append(POST_PRIVACY_TYPE_FIELD, postPrivacyType);
         if (pursuit) formData.append(PURSUIT_FIELD, pursuit);
         if (minDuration) formData.append(MIN_DURATION_FIELD, minDuration);
@@ -261,8 +260,8 @@ const ReviewPost = (props) => {
                 <div className="reviewpost-button-container">
                     <TitleInput
                         postType={props.postType}
-                        title={props.title}
-                        setTitle={setTitle}
+                        title={props.previewTitle}
+                        setTitle={props.handleTitleChange}
                         setSubtitle={setSubtitle}
                     />
                     <CoverPhotoControls
