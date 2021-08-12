@@ -4,15 +4,11 @@
     float: right;
 }
 
-#project-info-button {
-    float: right;
-}
-
 .projectcontroller-event-container {
     display: inline-block;
 }
 
-#projectcontroller-submit-container{
+#projectcontroller-submit-container {
     @include flex-display-column;
 }
 

@@ -1,12 +1,12 @@
 import React from 'react';
-import ProjectText from "./sub-components/project-text";
+import ProjectText from "./sub-components/project-header-input";
 import Timeline from "../profile/timeline/index";
 import ProfileModal from '../profile/profile-modal';
 import TextareaAutosize from 'react-textarea-autosize';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import AxiosHelper from '../../Axios/axios';
 import { withRouter } from 'react-router-dom';
-import { POST, POST_VIEWER_MODAL_STATE, PROJECT_EVENT } from "../constants/flags";
+import { POST, POST_VIEWER_MODAL_STATE, PROJECT_EVENT, PROJECT_MACRO_VIEW_STATE, PROJECT_MICRO_VIEW_STATE, PROJECT_SELECT_VIEW_STATE } from "../constants/flags";
 import { returnUsernameURL, returnPostURL } from "../constants/urls";
 import "./index.scss";
 import {
@@ -25,8 +25,10 @@ import {
     USER_ID_FIELD
 } from '../constants/form-data';
 import EventController from '../profile/timeline/timeline-event-controller';
+import MainDisplay from './main-display';
 
 const MAIN = "MAIN";
+const INNER_MAIN = "INNER_MAIN"
 const EDIT = "EDIT";
 const REVIEW = "REVIEW";
 const TITLE = "TITLE";
@@ -85,6 +87,7 @@ class ProjectController extends React.Component {
         super(props);
         this.state = {
             window: MAIN,
+            barType: PROJECT_MACRO_VIEW_STATE,
             selectedPosts: [],
             title: "",
             overview: "",
@@ -96,7 +99,6 @@ class ProjectController extends React.Component {
             coverPhoto: null,
             projectSelected: null,
             feedData: [[]],
-
             selectedEvent: null,
 
 
@@ -112,7 +114,9 @@ class ProjectController extends React.Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.updateFeedData = this.updateFeedData.bind(this);
         this.setModal = this.setModal.bind(this);
+        this.copyToClipboard = this.copyToClipboard.bind(this);
         this.clearModal = this.clearModal.bind(this);
+        this.handleNewProjectSelect = this.handleNewProjectSelect.bind(this);
 
     }
 
@@ -122,14 +126,20 @@ class ProjectController extends React.Component {
 
     handleBackClick() {
         if (this.state.projectSelected) {
-            this.setState({ projectSelected: null },
+            this.setState({ projectSelected: null, barType: PROJECT_MACRO_VIEW_STATE },
                 () => {
                     this.props.clearLoadedFeed();
                     this.props.shouldPull(true)
                 });
         }
         else {
-            this.props.onNewBackProjectClick();
+            if (this.props.newProjectState) {
+                this.setState({ barType: PROJECT_MACRO_VIEW_STATE },
+                    this.props.onNewBackProjectClick)
+            }
+            else {
+                this.props.onNewBackProjectClick();
+            }
         }
 
     }
@@ -222,7 +232,9 @@ class ProjectController extends React.Component {
             eventData.isChecked = true;
             updatedProjectData.push(eventData);
         }
-        this.setState({ selectedPosts: updatedProjectData });
+        this.setState({
+            selectedPosts: updatedProjectData
+        });
     }
 
 
@@ -282,16 +294,28 @@ class ProjectController extends React.Component {
     handleProjectClick(projectData) {
         this.setState({
             projectSelected: projectData,
+            barType: PROJECT_MICRO_VIEW_STATE,
         }, () => {
             this.props.shouldPull(true);
             this.props.clearLoadedFeed();
         });
     }
 
+    copyToClipboard(value) {
+        navigator.clipboard.writeText(value);
+    }
+
+    handleNewProjectSelect() {
+        this.setState({ barType: PROJECT_SELECT_VIEW_STATE },
+            () => this.props.onNewBackProjectClick())
+    }
     render() {
+        console.log(this.state.projectSelected ? (
+            this.state.projectSelected.post_ids
+        ) : (
+            this.props.feedIDList));
         switch (this.state.window) {
             case (MAIN):
-                const requiresBackButton = this.props.newProjectState || this.state.projectSelected;
                 return (
                     <>
                         <ProfileModal
@@ -309,80 +333,41 @@ class ProjectController extends React.Component {
                             closeModal={this.clearModal}
                             disableCommenting={true}
                             returnModalStructure={this.props.returnModalStructure}
-
                         />
-                        <div className="">
-                            {requiresBackButton ? (
-                                <button
-                                    onClick={this.handleBackClick}
-                                >
-                                    Back
-                                </button>)
-                                :
-                                <button
-                                    onClick={this.props.onNewBackProjectClick}
-                                >
-                                    New
-                                </button>
+                        <MainDisplay
+                            feedID={this.props.feedID}
+                            selectedProjectID={this.state.projectSelected?._id}
+                            barType={this.state.barType}
+                            titleValue={this.state.title}
+                            descriptionValue={this.state.overview}
+                            handleInputChange={this.handleInputChange}
+                            window={this.state.window}
+                            nextOpenPostIndex={this.props.nextOpenPostIndex}
+                            mediaType={this.props.newProjectState || this.state.projectSelected ?
+                                PROJECT_EVENT : this.props.mediaType}
+                            selectedPosts={this.state.selectedPosts}
+                            header={{
+                                title: this.state.projectSelected?.title,
+                                overview: this.state.projectSelected?.overview
                             }
-                            {this.props.newProjectState ?
-                                <button
-                                    id="project-info-button"
-                                    onClick={() => this.handleWindowSwitch(EDIT)}
-                                >
-                                    Next Step
-                                </button>
-                                :
-                                <></>
                             }
-                        </div>
-                        <div className="">
-                            {this.props.newProjectState ?
-                                <ProjectText
-                                    titleValue={this.state.title}
-                                    descriptionValue={this.state.overview}
-                                    onTextChange={this.handleInputChange}
-                                />
-                                : (<></>)
-                            }
-                            {this.props.newProjectState ?
-                                <p>Select the posts you want to include in this project!</p>
-                                : <></>}
-                            {
-                                this.props.feedIDList.length > 0 ?
-                                    <Timeline
-                                        nextOpenPostIndex={this.props.nextOpenPostIndex}
-                                        mediaType={this.props.newProjectState || this.state.projectSelected ?
-                                            PROJECT_EVENT : this.props.mediaType}
-                                        selectedPosts={this.state.selectedPosts}
-                                        newProjectView={this.props.newProjectState}
-                                        onProjectEventSelect={this.handleProjectEventSelect}
-                                        onProjectClick={this.handleProjectClick}
-                                        allPosts={this.state.projectSelected ? (
-                                            this.state.projectSelected.post_ids
-                                        ) : (
-                                            this.props.feedIDList)}
-                                        onEventClick={this.handleEventClick}
-                                        loadedFeed={this.props.loadedFeed}
-                                        updateFeedData={this.props.updateFeedData}
-                                        targetProfileID={this.props.targetProfileID}
-                                        shouldPull={this.props.shouldPull}
-                                        hasMore={this.props.hasMore}
-                                    />
-                                    :
-                                    <div>
-                                        <br />
-                                        <p>You haven't made any projects yet. Feel free to make one!</p>
-                                        <br />
-                                        <br />
-                                        <br />
-                                        <br />
-                                        <br />
-                                        <br />
-                                    </div>
-
-                            }
-                        </div>
+                            newProjectView={this.props.newProjectState}
+                            onProjectEventSelect={this.handleProjectEventSelect}
+                            onProjectClick={this.handleProjectClick}
+                            allPosts={this.state.projectSelected ? (
+                                this.state.projectSelected.post_ids
+                            ) : (
+                                this.props.feedIDList)}
+                            handleWindowSwitch={this.handleWindowSwitch}
+                            onEventClick={this.handleEventClick}
+                            onBackClick={this.handleBackClick}
+                            loadedFeed={this.props.loadedFeed}
+                            updateFeedData={this.props.updateFeedData}
+                            targetProfileID={this.props.targetProfileID}
+                            onNewBackProjectClick={this.handleNewProjectSelect}
+                            shouldPull={this.props.shouldPull}
+                            hasMore={this.props.hasMore}
+                        />
                     </>
                 );
             case (EDIT):
@@ -423,7 +408,7 @@ class ProjectController extends React.Component {
                     <div >
                         <div className="">
                             <button
-                                onClick={() => this.handleWindowSwitch(MAIN)}
+                                onClick={() => this.handleWindowSwitch(EDIT)}
                             >
                                 Return
                             </button>

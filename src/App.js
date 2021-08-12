@@ -8,7 +8,7 @@ import ProfilePage from './Components/profile';
 import Test from "./Components/test";
 import './App.scss';
 
- 
+
 
 const App = () => {
       const [modalState, setModalState] = useState(null);
@@ -45,14 +45,13 @@ const App = () => {
             );
 
       };
-       return (
+      return (
             <Router>
                   <Navbar
                         returnModalStructure={returnModalStructure}
                         openMasterModal={openModal}
                         closeMasterModal={closeModal}
                         modalState={modalState}
-
                   />
                   <Switch>
                         <Route exact path='/'

@@ -27,7 +27,6 @@ class Timeline extends React.Component {
         }
     }
 
-
     createTimelineRow(inputArray, mediaType) {
         let masterArray = this.props.loadedFeed;
         let index = masterArray.length - 1; //index position of array in masterArray
@@ -144,9 +143,7 @@ class Timeline extends React.Component {
             </div>
         );
         return (
-            <div
-                key={this.props.feedID}
-            >
+            <div key={this.props.feedID}   >
                 {this.props.allPosts && this.props.allPosts.length > 0 ?
                     (<InfiniteScroll
                         dataLength={this.props.nextOpenPostIndex}

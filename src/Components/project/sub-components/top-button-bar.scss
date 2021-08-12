@@ -1,0 +1,20 @@
+@import "../../../partials";
+
+#topbuttonbar-button-bar {
+    @include flex-display-row;
+    justify-content: space-between;
+
+    #topbuttonbar-left-button-container {
+    }
+    #topbuttonbar-right-button-container {
+        float: right;
+        p {
+            font-size: 12px;
+            margin: 0;
+        }
+    }
+}
+
+.topbuttonbar-info-button {
+    float: right;
+}

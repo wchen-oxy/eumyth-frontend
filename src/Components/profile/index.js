@@ -440,7 +440,10 @@ class ProfilePageAuthenticated extends React.Component {
             this.setState((state) => ({
                 newProjectState: !state.newProjectState,
                 feedID: NEW_PROJECT,
-                feedIDList: state.allPosts.map(item => item.post_id)
+                feedIDList: state.allPosts.map(item => item.post_id),
+                hasMore: true,
+                loadedFeed: [[]],
+                nextOpenPostIndex: 0
             }));
         }
         else {

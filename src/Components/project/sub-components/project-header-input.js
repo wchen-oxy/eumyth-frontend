@@ -1,20 +1,20 @@
 import React from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-import "./project-text.scss";
+import "./project-header-input.scss";
 
 
-const ProjectText = (props) => {
+const ProjectHeaderInput = (props) => {
     return (
-        <div id="project-hero-title-overview-container">
+        <div id="projectheaderinput-hero-title-overview-container">
             <TextareaAutosize
-                id="project-title"
+                id="projectheaderinput-title"
                 placeholder='Write a Title for your Post!'
                 maxLength={140}
                 onChange={(e) => props.onTextChange("TITLE", e.target.value)}
                 value={props.titleValue}
             />
             <TextareaAutosize
-                id="project-overview"
+                id="projectheaderinput-overview"
                 placeholder="Write an Overview for your Project!"
                 maxLength={140}
                 onChange={(e) => props.onTextChange("OVERVIEW", e.target.value)}
@@ -25,4 +25,4 @@ const ProjectText = (props) => {
 
 }
 
-export default ProjectText;
+export default ProjectHeaderInput;
