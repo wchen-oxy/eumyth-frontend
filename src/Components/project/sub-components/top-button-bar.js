@@ -1,5 +1,5 @@
 import React from 'react';
-import { PROJECT_MACRO_VIEW_STATE, PROJECT_MICRO_VIEW_STATE, PROJECT_SELECT_VIEW_STATE } from '../../constants/flags';
+import { PROJECT_MACRO_VIEW_STATE, PROJECT_MICRO_VIEW_STATE, PROJECT_REARRANGE_STATE, PROJECT_SELECT_VIEW_STATE } from '../../constants/flags';
 import "./top-button-bar.scss";
 
 
@@ -55,8 +55,21 @@ const TopButtonBar = (props) => {
                         </button>
                     </div>
                 </div >
-            )
+            );
+        case (PROJECT_REARRANGE_STATE):
+            return (
+                <div className="">
+                    <button onClick={props.onBackClick}>
 
+                        Back
+                    </button>
+                    <button
+                        onClick={() => props.handleWindowSwitch("REVIEW")}
+                    >
+                        Finalize
+                    </button>
+                </div>
+            );
         default:
             throw new Error("No matching barType");
     }

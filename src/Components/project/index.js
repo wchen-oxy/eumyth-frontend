@@ -6,7 +6,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import AxiosHelper from '../../Axios/axios';
 import { withRouter } from 'react-router-dom';
-import { POST, POST_VIEWER_MODAL_STATE, PROJECT_EVENT, PROJECT_MACRO_VIEW_STATE, PROJECT_MICRO_VIEW_STATE, PROJECT_SELECT_VIEW_STATE } from "../constants/flags";
+import { POST, POST_VIEWER_MODAL_STATE, PROJECT_EVENT, PROJECT_MACRO_VIEW_STATE, PROJECT_MICRO_VIEW_STATE, PROJECT_REARRANGE_STATE, PROJECT_SELECT_VIEW_STATE } from "../constants/flags";
 import { returnUsernameURL, returnPostURL } from "../constants/urls";
 import "./index.scss";
 import {
@@ -26,6 +26,7 @@ import {
 } from '../constants/form-data';
 import EventController from '../profile/timeline/timeline-event-controller';
 import MainDisplay from './main-display';
+import TopButtonBar from './sub-components/top-button-bar';
 
 const MAIN = "MAIN";
 const INNER_MAIN = "INNER_MAIN"
@@ -134,8 +135,14 @@ class ProjectController extends React.Component {
         }
         else {
             if (this.props.newProjectState) {
-                this.setState({ barType: PROJECT_MACRO_VIEW_STATE },
-                    this.props.onNewBackProjectClick)
+                if (this.state.barType === PROJECT_SELECT_VIEW_STATE) {
+                    this.setState({ barType: PROJECT_MACRO_VIEW_STATE },
+                        this.props.onNewBackProjectClick)
+                }
+                else if (this.state.barType === PROJECT_REARRANGE_STATE) {
+                    this.setState({ window: MAIN, barType: PROJECT_SELECT_VIEW_STATE })
+                }
+
             }
             else {
                 this.props.onNewBackProjectClick();
@@ -157,10 +164,7 @@ class ProjectController extends React.Component {
         });
     }
 
-
-
     handleEventClick(selectedEvent, postIndex, columnIndex) {
-        console.log(selectedEvent);
         this.setState({
             selectedEvent: selectedEvent,
             textData: selectedEvent.text_data,
@@ -201,7 +205,10 @@ class ProjectController extends React.Component {
 
     handleWindowSwitch(window) {
         let min = 0
-        if (window === REVIEW) {
+        if (window === EDIT) {
+            return this.setState({ window: window, barType: PROJECT_REARRANGE_STATE })
+        }
+        else if (window === REVIEW) {
             for (const selectedPost of this.state.selectedPosts) {
                 if (selectedPost.min_duration) {
                     min += selectedPost.min_duration;
@@ -314,6 +321,8 @@ class ProjectController extends React.Component {
             this.state.projectSelected.post_ids
         ) : (
             this.props.feedIDList));
+        console.log(this.state.title);
+
         switch (this.state.window) {
             case (MAIN):
                 return (
@@ -372,19 +381,16 @@ class ProjectController extends React.Component {
                 );
             case (EDIT):
                 return (
+
                     <div >
-                        <div className="">
-                            <button
-                                onClick={() => this.handleWindowSwitch(MAIN)}
-                            >
-                                Return
-                            </button>
-                            <button
-                                onClick={() => this.handleWindowSwitch(REVIEW)}
-                            >
-                                Finalize
-                            </button>
-                        </div>
+                        <TopButtonBar
+                            barType={this.state.barType}
+                            selectedProjectID={this.state.projectSelected?._id}
+                            onBackClick={this.handleBackClick}
+                            onNewBackProjectClick={this.handleNewProjectSelect}
+                            handleWindowSwitch={this.handleWindowSwitch}
+                        />
+
                         <div id="projectcontroller-sortable-list-container">
                             <SortableList
                                 mediaType={POST}

@@ -17,7 +17,7 @@ const MainDisplay = (props) => {
 
             {props.newProjectView &&
                 <ProjectHeaderInput
-                    titleValue={props.title}
+                    titleValue={props.header.title}
                     descriptionValue={props.descriptionValue}
                     onTextChange={props.handleInputChange}
                 />
