@@ -154,6 +154,13 @@ export default class AxiosHelper {
             }
         })
     }
+    static retrieveProject(projectID) {
+        return axios.get(urls.PROJECT_BASE_URL, {
+            params: {
+                projectID: projectID
+            }
+        })
+    }
 
     static retrievePost(postID, textOnly) {
         return axios.get(urls.SINGLE_POST_TEXT_DATA_URL, {

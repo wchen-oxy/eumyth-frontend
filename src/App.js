@@ -90,6 +90,16 @@ const App = () => {
 
                               />
                         } />
+                        <Route exact path='/c/:projectID' render={(props) =>
+                              <ProfilePage
+                                    {...props}
+                                    returnModalStructure={returnModalStructure}
+                                    openMasterModal={openModal}
+                                    closeMasterModal={closeModal}
+                                    modalState={modalState}
+
+                              />
+                        } />
                   </Switch>
                   <div className="modal" ref={masterModalRef} >
                   </div>

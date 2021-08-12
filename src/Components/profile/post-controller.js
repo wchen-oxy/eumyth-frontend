@@ -10,7 +10,6 @@ class PostController extends React.Component {
         super(props);
         this.state = {
             feedKey: 0,
-
             selectedEvent: null,
             selectedPostIndex: null,
             isModalShowing: false,
@@ -20,7 +19,6 @@ class PostController extends React.Component {
         this.clearModal = this.clearModal.bind(this);
         this.setModal = this.setModal.bind(this);
     }
-
 
     setModal(postID) {
         this.props.history.replace(returnPostURL(postID));

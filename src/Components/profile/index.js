@@ -88,8 +88,10 @@ class ProfilePageAuthenticated extends React.Component {
         }
         this.decideHeroContentVisibility = this.decideHeroContentVisibility.bind(this);
         this.loadInitialProfileData = this.loadInitialProfileData.bind(this);
+        this.loadInitialProjectData = this.loadInitialProjectData.bind(this);
         this.loadInitialPostData = this.loadInitialPostData.bind(this);
         this.setInitialPostData = this.setInitialPostData.bind(this);
+        this.setInitialProjectData = this.setInitialProjectData.bind(this);
         this.clearLoadedFeed = this.clearLoadedFeed.bind(this);
         this.renderHeroContent = this.renderHeroContent.bind(this);
         this.handleLoadUser = this.handleLoadUser.bind(this);
@@ -107,18 +109,17 @@ class ProfilePageAuthenticated extends React.Component {
     componentDidMount() {
         this._isMounted = true;
         const targetUsername = this.props.match.params.username;
-        const visitorUsername = this.props.authUser?.username;
+        const visitorUsername = this.props.authUser?.username ?? null;
         const requestedPostID = this.props.match.params.postID;
+        const requestedProjectID = this.props.match.params.projectID;
         if (this._isMounted && targetUsername) {
             this.loadInitialProfileData(visitorUsername, targetUsername);
         }
         else if (this._isMounted && requestedPostID) {
-            if (visitorUsername) {
-                this.loadInitialPostData(visitorUsername)
-            }
-            else {
-                this.loadInitialPostData(null)
-            }
+            this.loadInitialPostData(visitorUsername, requestedPostID)
+        }
+        else if (this._isMounted && requestedProjectID) {
+            this.loadInitialProjectData(visitorUsername, requestedProjectID)
         }
         else {
             throw new Error("No profile or post was considered valid input");
@@ -174,11 +175,26 @@ class ProfilePageAuthenticated extends React.Component {
         })
     }
 
-    loadInitialPostData(username) {
+    setInitialProjectData() {
+        const indexUser = this.props.authUser;
+        this.setState({
+
+        })
+
+    }
+
+    loadInitialProjectData(username, projectID) {
+        return AxiosHelper
+            .retrieveProject(projectID)
+            .then((result) => this.setInitialProjectData(username, result.data))
+
+    }
+
+    loadInitialPostData(username, postID) {
         const indexUser = this.props.authUser;
         if (username) {
             return AxiosHelper
-                .retrievePost(this.props.match.params.postID, false)
+                .retrievePost(postID, false)
                 .then(result => {
                     const pursuitData = createPusuitArray(indexUser.pursuits);
                     this.setInitialPostData(
@@ -194,7 +210,7 @@ class ProfilePageAuthenticated extends React.Component {
         }
         else {
             return AxiosHelper
-                .retrievePost(this.props.match.params.postID, false)
+                .retrievePost(postID, false)
                 .then(
                     (result => {
                         this.setInitialPostData(
