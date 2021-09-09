@@ -231,6 +231,7 @@ class ShortPost extends React.Component {
   }
 
   render() {
+    console.log(this.props.authUser)
     if (this.state.window === INITIAL_STATE) {
       return (
         <div id="shortpost-window">
@@ -285,7 +286,7 @@ class ShortPost extends React.Component {
     }
     else {
       const authUser = this.props.authUser;
-      return (
+       return (
         <div id="shortpost-review-window">
           <ReviewPost
             date={
@@ -296,7 +297,7 @@ class ShortPost extends React.Component {
             difficulty={0}
             progression={1}
             previousState={INITIAL_STATE}
-            displayPhoto={authUser.small_cropped_display_photo}
+            displayPhoto={authUser.smallCroppedDisplayPhotoKey}
             isPaginated={this.state.isPaginated}
             previewTitle={this.state.previewTitle}
             closeModal={this.props.closeModal}
@@ -305,7 +306,7 @@ class ShortPost extends React.Component {
             coverPhoto={this.state.coverPhoto}
             textData={this.state.textData}
             username={authUser.username}
-            preferredPostPrivacy={authUser.preferred_post_privacy}
+            preferredPostPrivacy={authUser.preferredPostType}
             pursuitNames={authUser.pursuits.map(pursuit => pursuit.name)}
             labels={authUser.labels}
             handlePreferredPostPrivacyChange={this.props.handlePreferredPostPrivacyChange}

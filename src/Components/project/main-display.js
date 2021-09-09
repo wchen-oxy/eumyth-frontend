@@ -3,17 +3,20 @@ import Timeline from '../profile/timeline';
 import TopButtonBar from './sub-components/top-button-bar';
 import ProjectHeaderInput from './sub-components/project-header-input';
 import ProjectHeader from './project-header';
+import { NONE } from '../constants/flags';
 
 const MainDisplay = (props) => {
     return (
         <>
-            <TopButtonBar
-                barType={props.barType}
-                onBackClick={props.onBackClick}
-                onNewBackProjectClick={props.onNewBackProjectClick}
-                selectedProjectID={props.selectedProjectID}
-                handleWindowSwitch={props.handleWindowSwitch}
-            />
+            {props.barType !== NONE ?
+                <TopButtonBar
+                    barType={props.barType}
+                    onBackClick={props.onBackClick}
+                    onNewBackProjectClick={props.onNewBackProjectClick}
+                    selectedProjectID={props.selectedProjectID}
+                    handleWindowSwitch={props.handleWindowSwitch}
+                /> : null
+            }
 
             {props.newProjectView &&
                 <ProjectHeaderInput
@@ -23,19 +26,20 @@ const MainDisplay = (props) => {
                 />
 
             }
+
             {props.selectedProjectID &&
                 <ProjectHeader
                     titleValue={props.header.title}
                     descriptionValue={props.header.overview}
                 />
-
             }
+            
             {
                 props.allPosts.length > 0 ?
                     <Timeline
                         feedID={props.feedID}
                         nextOpenPostIndex={props.nextOpenPostIndex}
-                        mediaType={props.mediaType}
+                        contentType={props.contentType}
                         selectedPosts={props.selectedPosts}
                         newProjectView={props.newProjectView}
                         onProjectEventSelect={props.onProjectEventSelect}

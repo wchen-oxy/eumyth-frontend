@@ -8,23 +8,14 @@ import ProfilePage from './Components/profile';
 import Test from "./Components/test";
 import './App.scss';
 
-
-
 const App = () => {
       const [modalState, setModalState] = useState(null);
-      const masterModalRef = useRef(null);
-
-      const openModal = (type) => {
-            console.log(type);
-            if (masterModalRef.current) {
-                  masterModalRef.current.style.display = "block";
-            }
+      const openModal = (type) => {      
             document.body.style.overflow = "hidden";
             setModalState(type);
       };
 
       const closeModal = () => {
-            masterModalRef.current.style.display = "none";
             document.body.style.overflow = "visible";
             setModalState(null);
       };
@@ -43,7 +34,6 @@ const App = () => {
                         {content}
                   </div>
             );
-
       };
       return (
             <Router>
@@ -101,8 +91,7 @@ const App = () => {
                               />
                         } />
                   </Switch>
-                  <div className="modal" ref={masterModalRef} >
-                  </div>
+
             </Router>
       )
 }

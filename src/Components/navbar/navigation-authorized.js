@@ -80,6 +80,7 @@ class NavigationAuthorized extends React.Component {
                 <nav>
                     <div id="navbar-left-container">
                         <Link
+                            to={""}
                             className="navbar-navigation-link"
                             onClick={() => this.linkDecider()}
                         >

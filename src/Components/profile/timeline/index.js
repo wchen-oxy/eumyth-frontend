@@ -19,6 +19,7 @@ class Timeline extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
+        console.log(this.props.allPosts)
         if (this.props.allPosts.length > 0 && this.props.hasMore) {
             this.fetchNextPosts();
         }
@@ -27,7 +28,7 @@ class Timeline extends React.Component {
         }
     }
 
-    createTimelineRow(inputArray, mediaType) {
+    createTimelineRow(inputArray, contentType) {
         let masterArray = this.props.loadedFeed;
         let index = masterArray.length - 1; //index position of array in masterArray
         let nextOpenPostIndex = this.props.nextOpenPostIndex;
@@ -45,10 +46,10 @@ class Timeline extends React.Component {
                     }
                 }
                 masterArray[index].push(
-                    <div>
+                    <div key={k}>
                         <EventController
                             columnIndex={k}
-                            mediaType={mediaType}
+                            contentType={contentType}
                             isSelected={isSelected}
                             newProjectView={this.props.newProjectView}
                             key={nextOpenPostIndex}
@@ -79,12 +80,11 @@ class Timeline extends React.Component {
             >= this.props.allPosts.length) {
             this.props.shouldPull(false);
         }
-        if (this.props.mediaType === PROJECT) {
+        if (this.props.contentType === PROJECT) {
             const slicedObjectIDs = this.props.allPosts.slice(
                 this.props.nextOpenPostIndex,
                 this.props.nextOpenPostIndex + this.state.fixedDataLoadLength).map(
                     (item) => {
-                        console.log(item.post_id);
                         return item.post_id;
                     });
             return AxiosHelper.returnMultipleProjects(slicedObjectIDs)
@@ -92,12 +92,13 @@ class Timeline extends React.Component {
                     if (this._isMounted) {
                         this.createTimelineRow(
                             result.data.projects,
-                            this.props.mediaType);
+                            this.props.contentType);
                     }
                 })
                 .catch((error) => console.log(error));
         }
-        else if (this.props.mediaType === PROJECT_EVENT) {
+        else if (this.props.contentType === PROJECT_EVENT) {
+            console.log("PROJECT EVENT");
             const slicedObjectIDs = this.props.allPosts.slice(
                 this.props.nextOpenPostIndex,
                 this.props.nextOpenPostIndex + this.state.fixedDataLoadLength);
@@ -107,7 +108,7 @@ class Timeline extends React.Component {
                     if (this._isMounted) {
                         this.createTimelineRow(
                             result.data.posts,
-                            this.props.mediaType);
+                            this.props.contentType);
                     }
                 })
                 .catch((error) => console.log(error));
@@ -121,7 +122,7 @@ class Timeline extends React.Component {
                     if (this._isMounted) {
                         this.createTimelineRow(
                             result.data.posts,
-                            this.props.mediaType);
+                            this.props.contentType);
                     }
                 })
                 .catch((error) => console.log(error));

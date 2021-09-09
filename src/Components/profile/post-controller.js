@@ -4,20 +4,42 @@ import Timeline from "./timeline/index";
 import ProfileModal from './profile-modal';
 import { withRouter } from 'react-router-dom';
 import { returnUsernameURL, returnPostURL } from "../constants/urls";
+import AxiosHelper from '../../Axios/axios';
+
+const defaultFeed = [[]];
 
 class PostController extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            feedKey: 0,
             selectedEvent: null,
+            selectedPostColumnIndex: null,
             selectedPostIndex: null,
             isModalShowing: false,
+
+            hasMore: true,
+            nextOpenPostIndex: 0,
+            loadedFeed: [[]],
+            selectedPursuitIndex: this.props.selectedPursuitIndex
+
         }
         this.handleEventClick = this.handleEventClick.bind(this);
         this.handleCommentIDInjection = this.handleCommentIDInjection.bind(this)
         this.clearModal = this.clearModal.bind(this);
         this.setModal = this.setModal.bind(this);
+        this.shouldPull = this.shouldPull.bind(this);
+        this.updateFeedData = this.updateFeedData.bind(this);
+    }
+
+    componentDidUpdate() {
+        if (this.props.selectedPursuitIndex !== this.state.selectedPursuitIndex) {
+            this.setState({
+                selectedPursuitIndex: this.props.selectedPursuitIndex,
+                loadedFeed: [[]],
+                hasMore: true,
+                nextOpenPostIndex: 0,
+            })
+        }
     }
 
     setModal(postID) {
@@ -34,13 +56,13 @@ class PostController extends React.Component {
     }
 
     handleCommentIDInjection(postIndex, rootCommentsArray, feedType) {
-        let currentFeed = this.props.loadedFeed;
+        let currentFeed = this.state.loadedFeed;
         const row = Math.floor(this.state.selectedPostIndex / 4);
         const columnIndex = this.state.selectedPostColumnIndex;
-        currentFeed[row][columnIndex].props.eventData.comments = rootCommentsArray;
-        currentFeed[row][columnIndex].props.eventData.comment_count
-            = currentFeed[row][columnIndex].props.eventData.comment_count + 1;
-        this.props.updateFeedData(currentFeed);
+        const current = currentFeed[row][columnIndex].props.children.props.eventData;
+        current.comments = rootCommentsArray;
+        current.comment_count = current.comment_count + 1;
+        this.updateFeedData(currentFeed);
 
     }
 
@@ -54,13 +76,22 @@ class PostController extends React.Component {
         }, this.setModal(selectedEvent._id))
     }
 
-    renderModal() {
-        if (this.props.modalState === POST_VIEWER_MODAL_STATE)
-            return (
+    shouldPull(value) {
+        this.setState({ hasMore: value });
+    }
+    updateFeedData(masterArray, nextOpenPostIndex) {
+        this.setState({
+            loadedFeed: masterArray,
+            nextOpenPostIndex: nextOpenPostIndex
+        })
+    }
+
+    render() {
+        return (
+            <>
                 <ProfileModal
+                    modalState={this.props.modalState}
                     labels={this.props.labels}
-                    targetProfileID={this.props.targetProfileID}
-                    targetIndexUserID={this.props.targetIndexUserID}
                     isOwnProfile={this.props.isOwnProfile}
                     visitorUsername={this.props.visitorUsername}
                     postIndex={this.state.selectedPostIndex}
@@ -73,24 +104,17 @@ class PostController extends React.Component {
                     closeModal={this.clearModal}
                     onCommentIDInjection={this.handleCommentIDInjection}
                     returnModalStructure={this.props.returnModalStructure}
-                />);
-    }
-
-    render() {
-        return (
-            <>
-                {this.renderModal()}
+                />
                 <Timeline
-                    mediaType={POST}
-                    feedID={this.props.feedID}
-                    allPosts={this.props.feedIDList}
-                    targetProfileID={this.props.targetProfileID}
-                    loadedFeed={this.props.loadedFeed}
+                    contentType={POST}
+                    feedID={this.props.selectedPursuitIndex}
+                    allPosts={this.props.feedData}
+                    loadedFeed={this.state.loadedFeed}
                     onEventClick={this.handleEventClick}
-                    shouldPull={this.props.shouldPull}
-                    hasMore={this.props.hasMore}
-                    updateFeedData={this.props.updateFeedData}
-                    nextOpenPostIndex={this.props.nextOpenPostIndex}
+                    shouldPull={this.shouldPull}
+                    hasMore={this.state.hasMore}
+                    updateFeedData={this.updateFeedData}
+                    nextOpenPostIndex={this.state.nextOpenPostIndex}
                 />
             </>
         );

@@ -24,29 +24,20 @@ class Comments extends React.Component {
     componentDidMount() {
         if (this.props.commentIDArray.length > 0) {
             if (this.props.visitorUsername) {
-                return Promise.all([
-                    AxiosHelper.getComments(
-                        JSON.stringify(this.props.commentIDArray),
-                        this.state.windowType
-                    ),
-                    AxiosHelper.getUserPreviewID(this.props.visitorUsername)
-                ])
+                return AxiosHelper.getComments(
+                    JSON.stringify(this.props.commentIDArray),
+                    this.state.windowType)
                     .then(
                         (result) => {
                             this.setState({
-                                visitorProfilePreviewID: result[1].data.userPreviewID,
                                 loadingComments: false,
 
                             }, () => {
                                 if (this.props.postType === SHORT) {
-                                    this.props.passAnnotationData(
-                                        result[0].data.rootComments,
-                                        result[1].data.userPreviewID)
+                                    this.props.passAnnotationData(result.data.rootComments)
                                 }
                                 else {
-                                    this.props.passAnnotationData(
-                                        result[0].data.rootComments,
-                                        null)
+                                    this.props.passAnnotationData(result.data.rootComments)
                                 }
                             });
                         }
@@ -62,53 +53,21 @@ class Comments extends React.Component {
                             this.setState({
                                 loadingComments: false,
                             }, () => {
-                                if (this.props.postType === SHORT) {
-                                    this.props.passAnnotationData(
-                                        result.data.rootComments,
-                                        null)
-                                }
-                                else {
-                                    this.props.passAnnotationData(
-                                        result[0].data.rootComments,
-                                        null)
-                                }
+                                this.props.passAnnotationData(result.data.rootComments)
+
                             });
                         }
                     );
             }
         }
         else {
-            if (this.props.visitorUsername) {
-                return AxiosHelper.getUserPreviewID(this.props.visitorUsername)
-                    .then((result) => {
-                        this.setState({
-                            visitorProfilePreviewID: result.data.userPreviewID,
-                            loadingComments: false,
-
-                        }, () => {
-                            if (this.props.postType === SHORT) {
-                                this.props.passAnnotationData(
-                                    null,
-                                    result.data.userPreviewID
-                                );
-                            }
-                        });
-                    })
-            }
-            else {
-                this.setState({
-                    loadingComments: false,
-
-                }, () => {
-                    if (this.props.postType === SHORT) {
-                        this.props.passAnnotationData(
-                            null,
-                            null
-                        );
-                    }
-                });
-            }
-
+            return (
+                this.setState({ loadingComments: false, },
+                    () => {
+                        if (this.props.postType === SHORT) {
+                            this.props.passAnnotationData(null);
+                        }
+                    }));
         }
     }
 
@@ -119,7 +78,7 @@ class Comments extends React.Component {
     handleCommentPost() {
         return AxiosHelper
             .postComment(
-                this.state.visitorProfilePreviewID,
+                this.props.visitorProfilePreviewID,
                 this.state.commentText,
                 this.props.postID,
                 0)
@@ -170,7 +129,7 @@ class Comments extends React.Component {
                     hasAnnotation={!!annotation}
                     level={currentLevel}
                     postID={this.props.postID}
-                    visitorProfilePreviewID={this.state.visitorProfilePreviewID}
+                    visitorProfilePreviewID={this.props.visitorProfilePreviewID}
                     commentID={commentData._id}
                     ancestors={commentData.ancestor_post_ids}
                     username={commentData.username}
@@ -206,7 +165,7 @@ class Comments extends React.Component {
                     <SingleComment
                         level={currentLevel}
                         postID={this.props.postID}
-                        visitorProfilePreviewID={this.state.visitorProfilePreviewID}
+                        visitorProfilePreviewID={this.props.visitorProfilePreviewID}
                         visitorUsername={this.props.visitorUsername}
                         commentID={commentData._id}
                         ancestors={commentData.ancestor_post_ids}

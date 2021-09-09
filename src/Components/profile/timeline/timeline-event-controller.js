@@ -50,7 +50,7 @@ const EventController = (props) => {
             </div>
         );
     }
-    else if (props.mediaType === POST || props.mediaType === PROJECT_EVENT) {
+    else if (props.contentType === POST || props.contentType === PROJECT_EVENT) {
         return (
             <div className={props.columnIndex !== null ?
                 selectClassStyle(props.columnIndex) : "event-middle-container"}>
@@ -73,7 +73,7 @@ const EventController = (props) => {
             </div>
         );
     }
-    else if (props.mediaType === PROJECT) {
+    else if (props.contentType === PROJECT) {
         return (
             <div
                 onClick={props.disableModalPreview ?
@@ -87,7 +87,7 @@ const EventController = (props) => {
         );
     }
     else {
-        throw new Error("No props.mediaType matched");
+        throw new Error("No props.contentType matched");
     }
 
 }

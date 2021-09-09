@@ -6,8 +6,8 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import AxiosHelper from '../../Axios/axios';
 import { withRouter } from 'react-router-dom';
-import { POST, POST_VIEWER_MODAL_STATE, PROJECT_EVENT, PROJECT_MACRO_VIEW_STATE, PROJECT_MICRO_VIEW_STATE, PROJECT_REARRANGE_STATE, PROJECT_SELECT_VIEW_STATE } from "../constants/flags";
-import { returnUsernameURL, returnPostURL } from "../constants/urls";
+import { NONE, POST, POST_VIEWER_MODAL_STATE, PROJECT_EVENT, PROJECT_MACRO_VIEW_STATE, PROJECT_MICRO_VIEW_STATE, PROJECT_REARRANGE_STATE, PROJECT_SELECT_VIEW_STATE } from "../constants/flags";
+import { returnUsernameURL, returnPostURL, returnProjectURL } from "../constants/urls";
 import "./index.scss";
 import {
     COVER_PHOTO_FIELD,
@@ -41,6 +41,8 @@ const IS_COMPLETE = "IS_COMPLETE";
 const MINUTES = "MINUTES";
 const COVER_PHOTO = "COVER_PHOTO";
 
+const defaultFeed = [[]];
+
 const handleIndexUpdate = (index) => {
     index++;
     if (index === 4) return 0;
@@ -49,11 +51,11 @@ const handleIndexUpdate = (index) => {
     }
 }
 
-const SortableItem = SortableElement(({ mediaType, value, classColumnIndex }) =>
+const SortableItem = SortableElement(({ contentType, value, classColumnIndex }) =>
 (<div className="projectcontroller-event-container">
     <EventController
         columnIndex={classColumnIndex}
-        mediaType={mediaType}
+        contentType={contentType}
         eventData={value}
         newProjectView={false}
         key={value._id}
@@ -62,7 +64,7 @@ const SortableItem = SortableElement(({ mediaType, value, classColumnIndex }) =>
 </div>
 ));
 
-const SortableList = SortableContainer(({ mediaType, items, onSortEnd }) => {
+const SortableList = SortableContainer(({ contentType, items, onSortEnd }) => {
     let classColumnIndex = 0;
     return (
         <ul>
@@ -74,7 +76,7 @@ const SortableList = SortableContainer(({ mediaType, items, onSortEnd }) => {
                         index={index}
                         classColumnIndex={classColumnIndex++}
                         value={value}
-                        mediaType={mediaType}
+                        contentType={contentType}
                         onSortEnd={onSortEnd}
                     />
                 )
@@ -88,7 +90,8 @@ class ProjectController extends React.Component {
         super(props);
         this.state = {
             window: MAIN,
-            barType: PROJECT_MACRO_VIEW_STATE,
+            barType: this.props.isContentOnlyView ?
+                NONE : PROJECT_MACRO_VIEW_STATE,
             selectedPosts: [],
             title: "",
             overview: "",
@@ -98,15 +101,22 @@ class ProjectController extends React.Component {
             isComplete: false,
             minDuration: null,
             coverPhoto: null,
-            projectSelected: null,
-            feedData: [[]],
+            selectedProject: this.props.isContentOnlyView && this.props.feedData ? this.props.feedData : null,
             selectedEvent: null,
 
+            hasMore: true,
+            nextOpenPostIndex: 0,
+            loadedFeed: [[]],
+
+            newProjectState: false,
+            feedID: 0,
 
         }
+
         this.modalRef = React.createRef(null);
         this.handleBackClick = this.handleBackClick.bind(this);
         this.handleProjectClick = this.handleProjectClick.bind(this);
+        this.setNewURL = this.setNewURL.bind(this);
         this.handleEventClick = this.handleEventClick.bind(this);
         this.handleProjectEventSelect = this.handleProjectEventSelect.bind(this);
         this.handleWindowSwitch = this.handleWindowSwitch.bind(this);
@@ -118,26 +128,45 @@ class ProjectController extends React.Component {
         this.copyToClipboard = this.copyToClipboard.bind(this);
         this.clearModal = this.clearModal.bind(this);
         this.handleNewProjectSelect = this.handleNewProjectSelect.bind(this);
+        this.handleNewBackProjectClick = this.handleNewBackProjectClick.bind(this);
+        this.shouldPull = this.shouldPull.bind(this);
+        this.clearLoadedFeed = this.clearLoadedFeed.bind(this);
+    }
 
+    clearLoadedFeed() {
+        console.log("feed cleared")
+        this.setState({
+            loadedFeed: [[]],
+            nextOpenPostIndex: 0,
+            hasMore: true,
+            feedID: this.state.feedID + 1
+        });
+    }
+
+    shouldPull(value) {
+        this.setState({ hasMore: value });
     }
 
     updateFeedData(masterArray) {
-        this.setState({ feedData: masterArray })
+        this.setState({ loadedFeed: masterArray })
     }
 
     handleBackClick() {
-        if (this.state.projectSelected) {
-            this.setState({ projectSelected: null, barType: PROJECT_MACRO_VIEW_STATE },
-                () => {
-                    this.props.clearLoadedFeed();
-                    this.props.shouldPull(true)
-                });
+        if (this.state.selectedProject) {
+            this.setState({
+                selectedProject: null,
+                barType: PROJECT_MACRO_VIEW_STATE,
+                loadedFeed: [[]],
+                nextOpenPostIndex: 0,
+                hasMore: true,
+                feedID: this.state.feedID + 1,
+            }, () => this.setNewURL(returnUsernameURL(this.props.targetUsername)))
         }
         else {
             if (this.props.newProjectState) {
                 if (this.state.barType === PROJECT_SELECT_VIEW_STATE) {
                     this.setState({ barType: PROJECT_MACRO_VIEW_STATE },
-                        this.props.onNewBackProjectClick)
+                        this.handleNewBackProjectClick)
                 }
                 else if (this.state.barType === PROJECT_REARRANGE_STATE) {
                     this.setState({ window: MAIN, barType: PROJECT_SELECT_VIEW_STATE })
@@ -145,12 +174,10 @@ class ProjectController extends React.Component {
 
             }
             else {
-                this.props.onNewBackProjectClick();
+                this.handleNewBackProjectClick();
             }
         }
-
     }
-
 
     setModal(postID) {
         this.props.history.replace(returnPostURL(postID));
@@ -159,7 +186,9 @@ class ProjectController extends React.Component {
 
     clearModal() {
         this.setState({ selectedEvent: null }, () => {
-            this.props.history.replace(returnUsernameURL(this.props.targetUsername));
+
+            this.setNewURL(returnProjectURL(this.state.selectedProject._id));
+
             this.props.closeMasterModal();
         });
     }
@@ -170,7 +199,6 @@ class ProjectController extends React.Component {
             textData: selectedEvent.text_data,
         }, this.setModal(selectedEvent._id));
     }
-
 
     handleInputChange(id, value) {
         switch (id) {
@@ -244,7 +272,6 @@ class ProjectController extends React.Component {
         });
     }
 
-
     handleSortEnd({ oldIndex, newIndex }) {
         const items = this.state.selectedPosts;
         const [reorderedItem] = items.splice(oldIndex, 1);
@@ -259,7 +286,7 @@ class ProjectController extends React.Component {
 
     handlePost() {
         let formData = new FormData();
-        formData.append(USERNAME_FIELD, this.props.username);
+        formData.append(USERNAME_FIELD, this.props.targetUsername);
         formData.append(DISPLAY_PHOTO_FIELD, this.props.displayPhoto)
         formData.append(USER_ID_FIELD, this.props.targetProfileID);
         formData.append(INDEX_USER_ID_FIELD, this.props.targetIndexUserID);
@@ -298,13 +325,18 @@ class ProjectController extends React.Component {
             .catch(err => console.log(err));
     }
 
+    setNewURL(projectID) {
+        this.props.history.replace(projectID);
+    }
+
     handleProjectClick(projectData) {
         this.setState({
-            projectSelected: projectData,
+            selectedProject: projectData,
             barType: PROJECT_MICRO_VIEW_STATE,
         }, () => {
-            this.props.shouldPull(true);
-            this.props.clearLoadedFeed();
+            this.setNewURL(returnProjectURL(projectData._id));
+            this.shouldPull(true);
+            this.clearLoadedFeed();
         });
     }
 
@@ -312,26 +344,34 @@ class ProjectController extends React.Component {
         navigator.clipboard.writeText(value);
     }
 
+    handleNewBackProjectClick() {
+        if (!this.state.newProjectState) {
+            this.setState((state) => ({
+                newProjectState: !state.newProjectState,
+                feedIDList: state.allPosts.map(item => item.post_id),
+                hasMore: true,
+            }));
+        }
+        else {
+            this.setState({ newProjectState: false })
+        }
+    }
+
     handleNewProjectSelect() {
         this.setState({ barType: PROJECT_SELECT_VIEW_STATE },
-            () => this.props.onNewBackProjectClick())
+            () => this.handleNewBackProjectClick())
     }
-    render() {
-        console.log(this.state.projectSelected ? (
-            this.state.projectSelected.post_ids
-        ) : (
-            this.props.feedIDList));
-        console.log(this.state.title);
 
+    render() {
         switch (this.state.window) {
             case (MAIN):
                 return (
                     <>
                         <ProfileModal
-                            targetProfileID={this.props.targetProfileID}
-                            targetIndexUserID={this.props.targetIndexUserID}
-                            isOwnProfile={this.props.isOwnProfile}
+                            modalState={this.props.modalState}
+                            labels={this.props.labels}
                             visitorUsername={this.props.visitorUsername}
+                            targetUsername={this.props.targetUsername}
                             postIndex={this.state.selectedPostIndex}
                             visitorDisplayPhoto={this.props.visitorDisplayPhoto}
                             preferredPostPrivacy={this.props.preferredPostPrivacy}
@@ -344,48 +384,45 @@ class ProjectController extends React.Component {
                             returnModalStructure={this.props.returnModalStructure}
                         />
                         <MainDisplay
-                            feedID={this.props.feedID}
-                            selectedProjectID={this.state.projectSelected?._id}
+                            feedID={this.state.feedID + this.props.selectedPursuitIndex}
+                            selectedProjectID={this.state.selectedProject?._id}
                             barType={this.state.barType}
                             titleValue={this.state.title}
                             descriptionValue={this.state.overview}
                             handleInputChange={this.handleInputChange}
                             window={this.state.window}
-                            nextOpenPostIndex={this.props.nextOpenPostIndex}
-                            mediaType={this.props.newProjectState || this.state.projectSelected ?
-                                PROJECT_EVENT : this.props.mediaType}
+                            nextOpenPostIndex={this.state.nextOpenPostIndex}
+                            contentType={this.props.newProjectState || this.state.selectedProject ?
+                                PROJECT_EVENT : this.props.contentType}
                             selectedPosts={this.state.selectedPosts}
                             header={{
-                                title: this.state.projectSelected?.title,
-                                overview: this.state.projectSelected?.overview
-                            }
-                            }
+                                title: this.state.selectedProject?.title,
+                                overview: this.state.selectedProject?.overview
+                            }}
                             newProjectView={this.props.newProjectState}
                             onProjectEventSelect={this.handleProjectEventSelect}
                             onProjectClick={this.handleProjectClick}
-                            allPosts={this.state.projectSelected ? (
-                                this.state.projectSelected.post_ids
-                            ) : (
-                                this.props.feedIDList)}
+                            allPosts={this.state.selectedProject ? (
+                                this.state.selectedProject.post_ids
+                            ) : (this.props.feedData)}
                             handleWindowSwitch={this.handleWindowSwitch}
                             onEventClick={this.handleEventClick}
                             onBackClick={this.handleBackClick}
-                            loadedFeed={this.props.loadedFeed}
-                            updateFeedData={this.props.updateFeedData}
+                            loadedFeed={this.state.loadedFeed}
+                            updateFeedData={this.updateFeedData}
                             targetProfileID={this.props.targetProfileID}
                             onNewBackProjectClick={this.handleNewProjectSelect}
-                            shouldPull={this.props.shouldPull}
-                            hasMore={this.props.hasMore}
+                            shouldPull={this.shouldPull}
+                            hasMore={this.state.hasMore}
                         />
                     </>
                 );
             case (EDIT):
                 return (
-
                     <div >
                         <TopButtonBar
                             barType={this.state.barType}
-                            selectedProjectID={this.state.projectSelected?._id}
+                            selectedProjectID={this.state.selectedProject?._id}
                             onBackClick={this.handleBackClick}
                             onNewBackProjectClick={this.handleNewProjectSelect}
                             handleWindowSwitch={this.handleWindowSwitch}
@@ -393,7 +430,7 @@ class ProjectController extends React.Component {
 
                         <div id="projectcontroller-sortable-list-container">
                             <SortableList
-                                mediaType={POST}
+                                contentType={POST}
                                 items={this.state.selectedPosts}
                                 onSortEnd={this.handleSortEnd}
                                 axis="xy"

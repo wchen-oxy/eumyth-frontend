@@ -30,7 +30,6 @@ class ShortPostViewer extends React.Component {
             annotations: null,
             activeAnnotations: [],
             fullCommentData: [],
-            visitorProfilePreviewID: '',
             areAnnotationsHidden: true,
             selectedAnnotationIndex: null,
             imageIndex: 0,
@@ -45,7 +44,12 @@ class ShortPostViewer extends React.Component {
             progression: this.props.eventData.progression,
             postDisabled: true,
             window: INITIAL_STATE,
-            tempTextForEdit: this.props.textData
+            tempTextForEdit: this.props.textData,
+
+            visitorProfilePreviewID: this.props.authUser?.userPreviewID ?? null,
+            visitorUsername: this.props.authUser?.username ?? null,
+            targetIndexUserID: this.props.authUser?.indexProfileID ?? null,
+            displayPhoto: this.props.authUser?.small_cropped_display_photo_key ?? null
         };
 
         this.heroRef = React.createRef();
@@ -94,7 +98,7 @@ class ShortPostViewer extends React.Component {
         }
     }
 
-    passAnnotationData(rawComments, visitorProfilePreviewID) {
+    passAnnotationData(rawComments) {
         let annotations = this.state.annotations;
         if (rawComments) {
             for (const comment of rawComments) {
@@ -113,7 +117,6 @@ class ShortPostViewer extends React.Component {
         this.setState({
             fullCommentData: rawComments ? rawComments : [],
             annotations: annotations,
-            visitorProfilePreviewID: visitorProfilePreviewID
         })
     }
 
@@ -140,10 +143,10 @@ class ShortPostViewer extends React.Component {
                     fullCommentData={this.state.fullCommentData}
                     isImageOnly={isImageOnly}
                     windowType={windowType}
-                    visitorUsername={this.props.visitorUsername}
+                    visitorUsername={this.state.visitorUsername}
+                    visitorProfilePreviewID={this.state.visitorProfilePreviewID}
                     postID={this.props.postID}
                     postIndex={this.props.postIndex}
-                    onCommentIDInjection={this.props.onCommentIDInjection}
                     onCommentDataInjection={this.handleCommentDataInjection}
                     selectedPostFeedType={this.props.selectedPostFeedType}
                     onPromptAnnotation={this.handlePromptAnnotation}
@@ -569,6 +572,7 @@ class ShortPostViewer extends React.Component {
             )
         }
         else if (this.state.window === REVIEW_STATE) {
+            const authUser = this.props.authUser;
             let formattedDate = null;
             if (this.props.eventData.date) {
                 formattedDate =
@@ -576,20 +580,20 @@ class ShortPostViewer extends React.Component {
                         .toISOString()
                         .substring(0, 10);
             }
-            console.log(this.props.targetIndexUserID);
+            console.log(authUser.username)
             return (
                 <div className="shortpostviewer-window">
                     <ReviewPost
                         isUpdateToPost
                         isPostOnlyView={this.props.isPostOnlyView}
-                        targetIndexUserID={this.props.targetIndexUserID}
-                        labels={this.props.labels}
+                        targetIndexUserID={this.state.targetIndexUserID}
+                        labels={authUser.labels}
                         selectedLabels={this.props.eventData.labels}
                         difficulty={this.props.eventData.difficulty}
                         progression={this.props.eventData.progression}
                         previousState={EDIT_STATE}
                         postID={this.props.eventData._id}
-                        displayPhoto={this.props.visitorDisplayPhoto}
+                        displayPhoto={authUser.displayPhoto}
                         coverPhoto={this.state.coverPhoto}
                         coverPhotoKey={this.props.eventData.cover_photo_key ?
                             this.props.eventData.cover_photo_key : null
@@ -600,11 +604,11 @@ class ShortPostViewer extends React.Component {
                         date={formattedDate}
                         min={this.props.eventData.min_duration}
                         selectedPursuit={this.props.eventData.pursuit_category}
-                        pursuitNames={this.props.pursuitNames}
+                        pursuitNames={authUser.pursuits.map(pursuit => pursuit.name)}
                         closeModal={this.props.closeModal}
                         postType={SHORT}
                         textData={this.state.tempTextForEdit}
-                        username={this.props.visitorUsername}
+                        username={authUser.username}
                         preferredPostPrivacy={this.props.preferredPostPrivacy}
                         handlePreferredPostPrivacyChange={this.handlePreferredPostPrivacyChange}
                         setPostStage={this.handleWindowChange}

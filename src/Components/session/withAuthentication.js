@@ -31,7 +31,7 @@ const withAuthentication = Component => {
     }
 
     createUserInfoObject(username, authUser) {
-      return AxiosHelper.returnIndexUser(username)
+      return AxiosHelper.returnIndexUser(username, true)
         .then(result => {
           const combined = {
             email: authUser.email,

@@ -76,10 +76,10 @@ class PostDraftController extends React.Component {
       <AuthUserContext.Consumer>
         {authUser =>
           <ShortPost
-            onlineDraft
             authUser={authUser}
+            onlineDraft
             closeModal={this.props.closeModal}
-            setImageArray={this.setImageArray}         
+            setImageArray={this.setImageArray}
             handlePreferredPostPrivacyChange={this.onPreferredPostPrivacyChange}
             onPostTypeSet={this.handlePostTypeSet}
             disablePost={this.handleDisablePost}

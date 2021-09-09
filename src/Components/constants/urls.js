@@ -2,6 +2,7 @@
 const BUCKET_NAME = 'eumyth-bucket-1';
 const REGION = 'us-west-1';
 const returnPostURL = (post) => ("/p/" + post);
+const returnProjectURL = (project) => ("/c/" + project);
 const returnUsernameURL = (username) => ("/u/" + username);
 const returnUserImageURL = (key) => ("http://" + BUCKET_NAME + ".s3." + REGION + ".amazonaws.com/" + key);
 const returnUsernameObject = (username) => {
@@ -64,6 +65,7 @@ const SINGLE_POST_TEXT_DATA_URL = POST_BASE_URL + "/single"
 
 //project
 const PROJECT_BASE_URL = ROOT_URL + "/project";
+const SINGLE_PROJECT_URL = PROJECT_BASE_URL + "/single";
 const MULTIPLE_PROJECTS_URL = PROJECT_BASE_URL + "/multiple";
 
 //index
@@ -84,6 +86,7 @@ module.exports = {
     returnUsernameURL,
     returnUserImageURL,
     returnPostURL,
+    returnProjectURL,
     ROOT_URL,
     IMAGE_BASE_URL,
     MULTIPLE_IMAGES_URL,
@@ -106,6 +109,7 @@ module.exports = {
     RELATION_SET_FOLLOWER_URL,
     POST_BASE_URL,
     PROJECT_BASE_URL,
+    SINGLE_PROJECT_URL,
     MULTIPLE_PROJECTS_URL,
     MULTIPLE_POSTS_URL,
     WITH_IMAGE_POST_URL,

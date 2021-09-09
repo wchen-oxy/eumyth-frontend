@@ -4,6 +4,7 @@ import LongPostViewer from "./long-post";
 import { SHORT, LONG } from "../../constants/flags";
 import { withFirebase } from "../../../Firebase/index";
 import AxiosHelper from "../../../Axios/axios";
+import { AuthUserContext } from '../../session';
 
 const parsePossibleTitle = (data) => {
     const titleBlock = data.blocks[0];
@@ -56,33 +57,40 @@ const PostViewerController = (props) => {
         }
     }
 
-    const isOwnProfile = (props.eventData.username === props.visitorUsername);
     const textData = props.textData && props.eventData.is_paginated ?
         JSON.parse(props.textData) : props.textData;
     switch (props.eventData.post_format) {
         case (SHORT):
             return (
-                <ShortPostViewer
-                    postID={props.eventData._id}
-                    postIndex={props.postIndex}
-                    displayPhoto={props.visitorDisplayPhoto}
-                    targetIndexUserID={props.targetIndexUserID}
-                    visitorUsername={props.visitorUsername}
-                    pursuitNames={props.pursuitNames}
-                    preferredPostPrivacy={props.preferredPostPrivacy}
-                    textData={textData}
-                    largeViewMode={props.largeViewMode}
-                    isOwnProfile={isOwnProfile}
-                    isPostOnlyView={props.isPostOnlyView}
-                    eventData={props.eventData}
-                    onDeletePost={handleDeletePost}
-                    closeModal={props.closeModal}
-                    passDataToModal={props.passDataToModal}
-                    onCommentIDInjection={props.onCommentIDInjection}
-                    selectedPostFeedType={props.selectedPostFeedType}
-                    disableCommenting={props.disableCommenting}
-                    labels={props.labels}
-                />
+
+                <AuthUserContext.Consumer>
+                    {
+                        authUser =>
+                            <ShortPostViewer
+                                postID={props.eventData._id}
+                                postIndex={props.postIndex}
+                                targetIndexUserID={props.targetIndexUserID}
+                                preferredPostPrivacy={props.preferredPostPrivacy}
+                                textData={textData}
+                                largeViewMode={props.largeViewMode}
+                                isOwnProfile={props.isOwnProfile}
+                                isPostOnlyView={props.isPostOnlyView}
+                                eventData={props.eventData}
+                                onDeletePost={handleDeletePost}
+                                closeModal={props.closeModal}
+                                passDataToModal={props.passDataToModal}
+                                onCommentIDInjection={props.onCommentIDInjection}
+                                selectedPostFeedType={props.selectedPostFeedType}
+                                disableCommenting={props.disableCommenting}
+                                labels={props.labels}
+
+                                {...props}
+                                authUser={authUser}
+                            />
+                    }
+                </AuthUserContext.Consumer>
+
+
             );
         case (LONG):
             const title = props.eventData.title;
@@ -97,7 +105,7 @@ const PostViewerController = (props) => {
                     largeViewMode={props.largeViewMode}
                     title={title}
                     textData={JSON.parse(props.textData)}
-                    isOwnProfile={isOwnProfile}
+                    isOwnProfile={this.state.isOwnProfile}
                     isPostOnlyView={props.isPostOnlyView}
                     eventData={props.eventData}
                     onDeletePost={handleDeletePost}

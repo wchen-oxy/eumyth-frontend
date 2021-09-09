@@ -112,8 +112,13 @@ export default class AxiosHelper {
     //     return axios.get(urls.INDEX_USER_PURSUITS_URL, urls.returnUsernameObject(username));
     // }
 
-    static returnIndexUser(username) {
-        return axios.get(urls.INDEX_BASE_URL, urls.returnUsernameObject(username))
+    static returnIndexUser(username, isTruncated) {
+        return axios.get(urls.INDEX_BASE_URL, {
+            params: {
+                username: username,
+                isTruncated: isTruncated
+            }
+        })
     }
 
     static returnUser(username) {
@@ -125,6 +130,14 @@ export default class AxiosHelper {
             params: {
                 visitorUsername: visitorUsername,
                 userRelationArrayID: userRelationArrayID,
+            }
+        })
+    }
+
+    static returnSingleProject(projectID) {
+        return axios.get(urls.SINGLE_PROJECT_URL, {
+            params: {
+                projectID: projectID
             }
         })
     }
