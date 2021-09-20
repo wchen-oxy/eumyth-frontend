@@ -98,7 +98,6 @@ class Timeline extends React.Component {
                 .catch((error) => console.log(error));
         }
         else if (this.props.contentType === PROJECT_EVENT) {
-            console.log("PROJECT EVENT");
             const slicedObjectIDs = this.props.allPosts.slice(
                 this.props.nextOpenPostIndex,
                 this.props.nextOpenPostIndex + this.state.fixedDataLoadLength);

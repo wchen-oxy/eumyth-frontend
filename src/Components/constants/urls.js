@@ -4,7 +4,7 @@ const REGION = 'us-west-1';
 const returnPostURL = (post) => ("/p/" + post);
 const returnProjectURL = (project) => ("/c/" + project);
 const returnUsernameURL = (username) => ("/u/" + username);
-const returnUserImageURL = (key) => ("http://" + BUCKET_NAME + ".s3." + REGION + ".amazonaws.com/" + key);
+const returnUserImageURL = (key) => key ? ("http://" + BUCKET_NAME + ".s3." + REGION + ".amazonaws.com/" + key) : TEMP_PROFILE_PHOTO_URL;
 const returnUsernameObject = (username) => {
     return {
         params: {
@@ -67,6 +67,7 @@ const SINGLE_POST_TEXT_DATA_URL = POST_BASE_URL + "/single"
 const PROJECT_BASE_URL = ROOT_URL + "/project";
 const SINGLE_PROJECT_URL = PROJECT_BASE_URL + "/single";
 const MULTIPLE_PROJECTS_URL = PROJECT_BASE_URL + "/multiple";
+const PROJECT_FORK_URL = PROJECT_BASE_URL + "/fork";
 
 //index
 const INDEX_BASE_URL = ROOT_URL + "/index-user";
@@ -109,6 +110,7 @@ module.exports = {
     RELATION_SET_FOLLOWER_URL,
     POST_BASE_URL,
     PROJECT_BASE_URL,
+    PROJECT_FORK_URL,
     SINGLE_PROJECT_URL,
     MULTIPLE_PROJECTS_URL,
     MULTIPLE_POSTS_URL,

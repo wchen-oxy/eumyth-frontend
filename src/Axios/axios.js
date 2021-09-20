@@ -104,6 +104,16 @@ export default class AxiosHelper {
         );
     }
 
+    static createFork(userID, indexUserID, username, projectData) {
+        return axios.put(urls.PROJECT_FORK_URL, {
+                userID: userID,
+                indexUserID: indexUserID,
+                username: username,
+                projectData: projectData
+           
+        })
+    }
+
     // static setDraftPreviewTitle(previewTitle) {
     //     return axios.post(urls.DRAFT_BASE_URL, { previewTitle: previewTitle });
     // }

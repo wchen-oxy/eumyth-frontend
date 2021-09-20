@@ -342,6 +342,18 @@ class ProjectController extends React.Component {
 
     copyToClipboard(value) {
         navigator.clipboard.writeText(value);
+
+        return AxiosHelper.createFork(
+            this.props.visitorProfileID,
+            this.props.indexUserID,
+            this.props.visitorUsername,
+            this.state.selectedProject
+        )
+            .then((res) => {
+                alert("Done!");
+                console.log(res);
+            })
+            .catch(err => console.log(err));
     }
 
     handleNewBackProjectClick() {
@@ -397,7 +409,9 @@ class ProjectController extends React.Component {
                             selectedPosts={this.state.selectedPosts}
                             header={{
                                 title: this.state.selectedProject?.title,
-                                overview: this.state.selectedProject?.overview
+                                overview: this.state.selectedProject?.overview,
+                                username: this.state.selectedProject?.username,
+                                displayPhoto: this.state.selectedProject?.display_photo_key
                             }}
                             newProjectView={this.props.newProjectState}
                             onProjectEventSelect={this.handleProjectEventSelect}
@@ -412,6 +426,7 @@ class ProjectController extends React.Component {
                             updateFeedData={this.updateFeedData}
                             targetProfileID={this.props.targetProfileID}
                             onNewBackProjectClick={this.handleNewProjectSelect}
+                            copyToClipboard={this.copyToClipboard}
                             shouldPull={this.shouldPull}
                             hasMore={this.state.hasMore}
                         />

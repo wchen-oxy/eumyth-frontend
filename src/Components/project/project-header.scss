@@ -1,0 +1,17 @@
+@import "../../partials";
+
+#projectheader-hero-text {
+    padding-top: 20px;
+    text-align: center;
+}
+
+#projectheader-user-info-container {
+    @include flex-display-row;
+    align-items: center;
+    justify-content: center;
+    img {
+        @include tiny-profile-photo;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+}

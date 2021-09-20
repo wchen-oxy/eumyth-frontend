@@ -3,13 +3,12 @@ import { withFirebase } from '../../Firebase';
 import PursuitHolder from './sub-components/pursuit-holder';
 import AxiosHelper from '../../Axios/axios';
 import { AuthUserContext } from '../session';
-import NoMatch from '../no-match';
 import PostViewerController from "../post/viewer/post-viewer-controller";
 import FollowButton from "./sub-components/follow-buttons";
 import ProjectController from "../project/index";
 import PostController from './post-controller';
 import CoverPhoto from './sub-components/cover-photo';
-import { returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../constants/urls";
+import { returnUserImageURL } from "../constants/urls";
 import {
     POST,
     PROJECT,
@@ -66,6 +65,7 @@ class ProfilePageAuthenticated extends React.Component {
         super(props);
         this.state = {
             visitorUsername: this.props.authUser?.username ?? null,
+            visitorProfileID: this.props.authUser?.profileID ?? null,
             isPrivate: true,
             croppedDisplayPhoto: null,
             coverPhoto: "",
@@ -407,6 +407,8 @@ class ProfilePageAuthenticated extends React.Component {
         else if (this.state.contentType === PROJECT) {
             return (
                 <ProjectController
+                    indexUserID={this.state.targetUser.index_user_id}
+                    visitorProfileID={this.state.visitorProfileID}
                     targetUsername={this.state.targetUser.username}
                     visitorUsername={this.state.visitorUsername}
                     contentType={this.state.contentType}
@@ -482,6 +484,7 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     render() {
+        console.log(this.props.authUser);
         let index = 0;
         const pursuitHolderArray = [];
         if (this.state.pursuits) {
@@ -519,25 +522,28 @@ class ProfilePageAuthenticated extends React.Component {
             }
             else if (this.state.contentType === PROJECT) {
                 return (
-                    <ProjectController
-                        targetUsername={this.state.targetUser.username}
-                        visitorUsername={this.state.visitorUsername}
-                        contentType={this.state.contentType}
-                        onNewBackProjectClick={this.handleNewBackProjectClick}
-                        pursuitNames={this.state.pursuitNames}
-                        selectedPursuitIndex={0}
+                    <div id="profile-main-container">
+                        <ProjectController
+                            indexUserID={this.state.targetUser.index_user_id}
+                            targetUsername={this.state.targetUser.username}
+                            visitorProfileID={this.state.visitorProfileID}
+                            visitorUsername={this.state.visitorUsername}
+                            contentType={this.state.contentType}
+                            onNewBackProjectClick={this.handleNewBackProjectClick}
+                            pursuitNames={this.state.pursuitNames}
+                            selectedPursuitIndex={0}
 
-                        isOwnProfile={this.state.isOwner}
-                        returnModalStructure={this.props.returnModalStructure}
-                        modalState={this.props.modalState}
-                        openMasterModal={this.props.openMasterModal}
-                        closeMasterModal={this.props.closeMasterModal}
-                        feedData={this.state.selectedContent}
-                        labels={this.state.targetUser.labels}
-
-                        isContentOnlyView={this.state.isContentOnlyView}
-
-                    />)
+                            isOwnProfile={this.state.isOwner}
+                            returnModalStructure={this.props.returnModalStructure}
+                            modalState={this.props.modalState}
+                            openMasterModal={this.props.openMasterModal}
+                            closeMasterModal={this.props.closeMasterModal}
+                            feedData={this.state.selectedContent}
+                            labels={this.state.targetUser.labels}
+                            isContentOnlyView={this.state.isContentOnlyView}
+                        />
+                    </div>
+                )
             }
             else {
                 throw new Error("No Content Type Matched");
@@ -545,12 +551,7 @@ class ProfilePageAuthenticated extends React.Component {
         }
         else if (!this.state.isContentOnlyView) {
             const targetUsername = this.state.targetUser ? this.state.targetUser.username : "";
-            const targetProfilePhoto =
-                this.state.croppedDisplayPhoto ?
-                    returnUserImageURL(
-                        this.state.croppedDisplayPhoto)
-                    :
-                    TEMP_PROFILE_PHOTO_URL;
+            const targetProfilePhoto = returnUserImageURL(this.state.croppedDisplayPhoto);
 
             return (
                 <div>

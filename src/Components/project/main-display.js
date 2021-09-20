@@ -7,7 +7,7 @@ import { NONE } from '../constants/flags';
 
 const MainDisplay = (props) => {
     return (
-        <>
+        <div>
             {props.barType !== NONE ?
                 <TopButtonBar
                     barType={props.barType}
@@ -15,6 +15,7 @@ const MainDisplay = (props) => {
                     onNewBackProjectClick={props.onNewBackProjectClick}
                     selectedProjectID={props.selectedProjectID}
                     handleWindowSwitch={props.handleWindowSwitch}
+                    copyToClipboard={props.copyToClipboard}
                 /> : null
             }
 
@@ -31,9 +32,11 @@ const MainDisplay = (props) => {
                 <ProjectHeader
                     titleValue={props.header.title}
                     descriptionValue={props.header.overview}
+                    username={props.header.username}
+                    displayPhoto={props.header.displayPhoto}
                 />
             }
-            
+
             {
                 props.allPosts.length > 0 ?
                     <Timeline
@@ -65,7 +68,7 @@ const MainDisplay = (props) => {
                     </div>
 
             }
-        </>
+        </div>
     )
 }
 
