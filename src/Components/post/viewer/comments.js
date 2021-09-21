@@ -125,24 +125,26 @@ class Comments extends React.Component {
             commentData.comment : annotation.text;
         if (!commentData.replies) {
             return (
-                <SingleComment
-                    hasAnnotation={!!annotation}
-                    level={currentLevel}
-                    postID={this.props.postID}
-                    visitorProfilePreviewID={this.props.visitorProfilePreviewID}
-                    commentID={commentData._id}
-                    ancestors={commentData.ancestor_post_ids}
-                    username={commentData.username}
-                    commentText={text}
-                    likes={commentData.likes}
-                    dislikes={commentData.dislikes}
-                    displayPhoto={commentData.display_photo_key}
-                    score={commentData.score}
-                    annotation={annotation}
-                    onMouseOver={this.props.onMouseOver}
-                    onMouseOut={this.props.onMouseOut}
-                    onMouseClick={this.props.onMouseClick}
-                />
+                <div key={commentData._id}>
+                    <SingleComment
+                        hasAnnotation={!!annotation}
+                        level={currentLevel}
+                        postID={this.props.postID}
+                        visitorProfilePreviewID={this.props.visitorProfilePreviewID}
+                        commentID={commentData._id}
+                        ancestors={commentData.ancestor_post_ids}
+                        username={commentData.username}
+                        commentText={text}
+                        likes={commentData.likes}
+                        dislikes={commentData.dislikes}
+                        displayPhoto={commentData.display_photo_key}
+                        score={commentData.score}
+                        annotation={annotation}
+                        onMouseOver={this.props.onMouseOver}
+                        onMouseOut={this.props.onMouseOut}
+                        onMouseClick={this.props.onMouseClick}
+                    />
+                </div>
             );
         }
         else {
@@ -161,7 +163,7 @@ class Comments extends React.Component {
                 replies.push(this.recursiveRenderComments(reply, currentLevel));
             }
             return (
-                <div>
+                <div key={commentData._id}>
                     <SingleComment
                         level={currentLevel}
                         postID={this.props.postID}

@@ -23,7 +23,6 @@ class Timeline extends React.Component {
             this.fetchNextPosts();
         }
         else {
-            console.log("SHOULD NOT PULL")
             this.props.shouldPull(false);
         }
     }
@@ -76,12 +75,11 @@ class Timeline extends React.Component {
     }
 
     fetchNextPosts() {
-         if (this.props.nextOpenPostIndex + this.state.fixedDataLoadLength
+        if (this.props.nextOpenPostIndex + this.state.fixedDataLoadLength
             >= this.props.allPosts.length) {
             this.props.shouldPull(false);
         }
         if (this.props.contentType === PROJECT) {
-            console.log(this.props.allPosts)
             const slicedObjectIDs = this.props.allPosts.slice(
                 this.props.nextOpenPostIndex,
                 this.props.nextOpenPostIndex + this.state.fixedDataLoadLength).map(
@@ -108,7 +106,6 @@ class Timeline extends React.Component {
             return AxiosHelper.returnMultiplePosts(slicedObjectIDs, false)
                 .then((result) => {
                     if (this._isMounted) {
-                        console.log(result.data.posts);
                         this.createTimelineRow(
                             result.data.posts,
                             this.props.contentType);

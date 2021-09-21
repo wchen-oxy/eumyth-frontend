@@ -101,7 +101,6 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props.authUser)
         this._isMounted = true;
         const targetUsername = this.props.match.params.username;
         const params = this.props.match.params;
@@ -483,7 +482,6 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     render() {
-        // console.log(this.props.authUser);
         let index = 0;
         const pursuitHolderArray = [];
         if (this.state.pursuits) {

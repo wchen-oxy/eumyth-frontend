@@ -375,7 +375,6 @@ class ProjectController extends React.Component {
     }
 
     render() {
-        console.log(this.state.barType)
         switch (this.state.window) {
             case (MAIN):
                 return (

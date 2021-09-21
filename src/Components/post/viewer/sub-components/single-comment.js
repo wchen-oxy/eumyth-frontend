@@ -137,7 +137,9 @@ class SingleComment extends React.Component {
         let threadIndicatorArray = [];
         for (let i = 0; i < levels; i++)
             threadIndicatorArray.push(
-                <div className="singlecomment-thread-indicator"></div>
+                <div key={this.props.commentID + "inner"}
+                    className="singlecomment-thread-indicator">
+                </div>
             )
         return threadIndicatorArray;
     }
@@ -174,7 +176,7 @@ class SingleComment extends React.Component {
                                 : null
                             }
                             <div className="singlecomment-comment-container"
-                                key={this.props.commentID}
+
                                 onMouseOver={() => (
                                     this.props.onMouseOver(this.props.commentID))}
                                 onMouseOut={() => (
