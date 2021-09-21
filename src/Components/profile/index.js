@@ -358,8 +358,6 @@ class ProfilePageAuthenticated extends React.Component {
             this.handleFollowerStatusResponse(followerStatusResponse) : null;
         const pursuitData = createPusuitArray(targetUserInfo.pursuits);
         const isOwner = targetUserInfo ? targetUserInfo.username === displayName : false;
-        console.log(targetUserInfo.private);
-
         this.setState({
             visitorUsername: displayName ? displayName : null,
             targetUser: targetUserInfo,
@@ -407,6 +405,7 @@ class ProfilePageAuthenticated extends React.Component {
         else if (this.state.contentType === PROJECT) {
             return (
                 <ProjectController
+                    allPosts={this.state.pursuits[0].posts}
                     indexUserID={this.state.targetUser.index_user_id}
                     visitorProfileID={this.state.visitorProfileID}
                     targetUsername={this.state.targetUser.username}
@@ -484,7 +483,7 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     render() {
-        console.log(this.props.authUser);
+        // console.log(this.props.authUser);
         let index = 0;
         const pursuitHolderArray = [];
         if (this.state.pursuits) {
@@ -524,6 +523,7 @@ class ProfilePageAuthenticated extends React.Component {
                 return (
                     <div id="profile-main-container">
                         <ProjectController
+                            allPosts={this.state.pursuits[0].posts}
                             indexUserID={this.state.targetUser.index_user_id}
                             targetUsername={this.state.targetUser.username}
                             visitorProfileID={this.state.visitorProfileID}

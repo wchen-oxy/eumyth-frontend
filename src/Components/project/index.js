@@ -1,6 +1,4 @@
 import React from 'react';
-import ProjectText from "./sub-components/project-header-input";
-import Timeline from "../profile/timeline/index";
 import ProfileModal from '../profile/profile-modal';
 import TextareaAutosize from 'react-textarea-autosize';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
@@ -29,7 +27,6 @@ import MainDisplay from './main-display';
 import TopButtonBar from './sub-components/top-button-bar';
 
 const MAIN = "MAIN";
-const INNER_MAIN = "INNER_MAIN"
 const EDIT = "EDIT";
 const REVIEW = "REVIEW";
 const TITLE = "TITLE";
@@ -40,8 +37,6 @@ const END_DATE = "END_DATE";
 const IS_COMPLETE = "IS_COMPLETE";
 const MINUTES = "MINUTES";
 const COVER_PHOTO = "COVER_PHOTO";
-
-const defaultFeed = [[]];
 
 const handleIndexUpdate = (index) => {
     index++;
@@ -128,13 +123,12 @@ class ProjectController extends React.Component {
         this.copyToClipboard = this.copyToClipboard.bind(this);
         this.clearModal = this.clearModal.bind(this);
         this.handleNewProjectSelect = this.handleNewProjectSelect.bind(this);
-        this.handleNewBackProjectClick = this.handleNewBackProjectClick.bind(this);
         this.shouldPull = this.shouldPull.bind(this);
         this.clearLoadedFeed = this.clearLoadedFeed.bind(this);
+        this.selectFeedData = this.selectFeedData.bind(this);
     }
 
     clearLoadedFeed() {
-        console.log("feed cleared")
         this.setState({
             loadedFeed: [[]],
             nextOpenPostIndex: 0,
@@ -147,8 +141,11 @@ class ProjectController extends React.Component {
         this.setState({ hasMore: value });
     }
 
-    updateFeedData(masterArray) {
-        this.setState({ loadedFeed: masterArray })
+    updateFeedData(masterArray, nextOpenPostIndex) {
+        this.setState({
+            loadedFeed: masterArray,
+            nextOpenPostIndex
+        })
     }
 
     handleBackClick() {
@@ -163,18 +160,21 @@ class ProjectController extends React.Component {
             }, () => this.setNewURL(returnUsernameURL(this.props.targetUsername)))
         }
         else {
-            if (this.props.newProjectState) {
+            if (this.state.newProjectState) {
                 if (this.state.barType === PROJECT_SELECT_VIEW_STATE) {
-                    this.setState({ barType: PROJECT_MACRO_VIEW_STATE },
-                        this.handleNewBackProjectClick)
+                    this.setState({
+                        barType: PROJECT_MACRO_VIEW_STATE,
+                        newProjectState: false,
+                        hasMore: true,
+                    },
+                        this.clearLoadedFeed)
                 }
                 else if (this.state.barType === PROJECT_REARRANGE_STATE) {
                     this.setState({ window: MAIN, barType: PROJECT_SELECT_VIEW_STATE })
                 }
-
             }
             else {
-                this.handleNewBackProjectClick();
+                throw new Error("No Back Click done");
             }
         }
     }
@@ -356,25 +356,26 @@ class ProjectController extends React.Component {
             .catch(err => console.log(err));
     }
 
-    handleNewBackProjectClick() {
-        if (!this.state.newProjectState) {
-            this.setState((state) => ({
-                newProjectState: !state.newProjectState,
-                feedIDList: state.allPosts.map(item => item.post_id),
-                hasMore: true,
-            }));
-        }
-        else {
-            this.setState({ newProjectState: false })
-        }
+    handleNewProjectSelect() {
+        this.setState({
+            barType: PROJECT_SELECT_VIEW_STATE,
+            newProjectState: true,
+            hasMore: true,
+        },
+            this.clearLoadedFeed)
     }
 
-    handleNewProjectSelect() {
-        this.setState({ barType: PROJECT_SELECT_VIEW_STATE },
-            () => this.handleNewBackProjectClick())
+    selectFeedData() {
+        if (this.state.newProjectState) {
+            return this.props.allPosts.map((item) => item.post_id);
+        }
+        else {
+            return this.props.feedData;
+        }
     }
 
     render() {
+        console.log(this.state.barType)
         switch (this.state.window) {
             case (MAIN):
                 return (
@@ -404,7 +405,7 @@ class ProjectController extends React.Component {
                             handleInputChange={this.handleInputChange}
                             window={this.state.window}
                             nextOpenPostIndex={this.state.nextOpenPostIndex}
-                            contentType={this.props.newProjectState || this.state.selectedProject ?
+                            contentType={this.state.newProjectState || this.state.selectedProject ?
                                 PROJECT_EVENT : this.props.contentType}
                             selectedPosts={this.state.selectedPosts}
                             header={{
@@ -413,12 +414,12 @@ class ProjectController extends React.Component {
                                 username: this.state.selectedProject?.username,
                                 displayPhoto: this.state.selectedProject?.display_photo_key
                             }}
-                            newProjectView={this.props.newProjectState}
+                            newProjectView={this.state.newProjectState}
                             onProjectEventSelect={this.handleProjectEventSelect}
                             onProjectClick={this.handleProjectClick}
                             allPosts={this.state.selectedProject ? (
                                 this.state.selectedProject.post_ids
-                            ) : (this.props.feedData)}
+                            ) : (this.selectFeedData())}
                             handleWindowSwitch={this.handleWindowSwitch}
                             onEventClick={this.handleEventClick}
                             onBackClick={this.handleBackClick}

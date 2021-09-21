@@ -408,6 +408,8 @@ class ShortPostViewer extends React.Component {
     }
 
     render() {
+
+        console.log(new Date().toISOString().substr(0, 10));
         if (this.state.window === INITIAL_STATE) {
             if (!this.props.eventData.image_data.length) {
                 if (this.props.largeViewMode) {
@@ -573,14 +575,13 @@ class ShortPostViewer extends React.Component {
         }
         else if (this.state.window === REVIEW_STATE) {
             const authUser = this.props.authUser;
-            let formattedDate = null;
+            let formattedDate = new Date().toISOString().substr(0, 10);
             if (this.props.eventData.date) {
                 formattedDate =
                     new Date(this.props.eventData.date)
                         .toISOString()
                         .substring(0, 10);
             }
-            console.log(authUser.username)
             return (
                 <div className="shortpostviewer-window">
                     <ReviewPost

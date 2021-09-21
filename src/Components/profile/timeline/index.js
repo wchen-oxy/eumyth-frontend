@@ -19,11 +19,11 @@ class Timeline extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
-        console.log(this.props.allPosts)
         if (this.props.allPosts.length > 0 && this.props.hasMore) {
             this.fetchNextPosts();
         }
         else {
+            console.log("SHOULD NOT PULL")
             this.props.shouldPull(false);
         }
     }
@@ -76,11 +76,12 @@ class Timeline extends React.Component {
     }
 
     fetchNextPosts() {
-        if (this.props.nextOpenPostIndex + this.state.fixedDataLoadLength
+         if (this.props.nextOpenPostIndex + this.state.fixedDataLoadLength
             >= this.props.allPosts.length) {
             this.props.shouldPull(false);
         }
         if (this.props.contentType === PROJECT) {
+            console.log(this.props.allPosts)
             const slicedObjectIDs = this.props.allPosts.slice(
                 this.props.nextOpenPostIndex,
                 this.props.nextOpenPostIndex + this.state.fixedDataLoadLength).map(
@@ -101,10 +102,13 @@ class Timeline extends React.Component {
             const slicedObjectIDs = this.props.allPosts.slice(
                 this.props.nextOpenPostIndex,
                 this.props.nextOpenPostIndex + this.state.fixedDataLoadLength);
-
+            this.props.allPosts.slice(
+                this.props.nextOpenPostIndex,
+                this.props.nextOpenPostIndex + this.state.fixedDataLoadLength);
             return AxiosHelper.returnMultiplePosts(slicedObjectIDs, false)
                 .then((result) => {
                     if (this._isMounted) {
+                        console.log(result.data.posts);
                         this.createTimelineRow(
                             result.data.posts,
                             this.props.contentType);
@@ -143,7 +147,7 @@ class Timeline extends React.Component {
             </div>
         );
         return (
-            <div key={this.props.feedID}   >
+            <div key={this.props.feedID}>
                 {this.props.allPosts && this.props.allPosts.length > 0 ?
                     (<InfiniteScroll
                         dataLength={this.props.nextOpenPostIndex}
