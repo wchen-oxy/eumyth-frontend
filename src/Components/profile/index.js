@@ -218,15 +218,15 @@ class ProfilePageAuthenticated extends React.Component {
             });
     }
 
-    setContentOnlyData(contentType, post, pursuitNames, username, indexUserID, completeUserID, labels) {
+    setContentOnlyData(contentType, content, pursuitNames, username, indexUserID, completeUserID, labels) {
         this.setState({
             contentType: contentType,
-            selectedContent: post,
+            selectedContent: content,
             isContentOnlyView: true,
             visitorUsername: username,
             pursuitNames: pursuitNames,
             targetUser: {
-                username: post.username,
+                username: content.username,
                 _id: completeUserID,
                 index_user_id: indexUserID,
                 labels: labels
@@ -521,7 +521,7 @@ class ProfilePageAuthenticated extends React.Component {
                 return (
                     <div id="profile-main-container">
                         <ProjectController
-                            allPosts={this.state.pursuits[0].posts}
+                            allPosts={this.state.pursuits ? this.state.pursuits[0].posts : null}
                             indexUserID={this.state.targetUser.index_user_id}
                             targetUsername={this.state.targetUser.username}
                             visitorProfileID={this.state.visitorProfileID}
@@ -539,6 +539,10 @@ class ProfilePageAuthenticated extends React.Component {
                             feedData={this.state.selectedContent}
                             labels={this.state.targetUser.labels}
                             isContentOnlyView={this.state.isContentOnlyView}
+                            priorProjectID={this.state.selectedContent?.ancestors.length > 0 ?
+                                this.state.selectedContent.ancestors[this.state.selectedContent.ancestors.length - 1]
+                                : null
+                            }
                         />
                     </div>
                 )

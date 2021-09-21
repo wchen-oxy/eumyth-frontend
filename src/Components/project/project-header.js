@@ -8,6 +8,9 @@ const ProjectHeader = (props) => {
                 <h1>{props.titleValue}</h1>
                 <h4>{props.descriptionValue}</h4>
             </div>
+            <div id="projectheader-user-fork">
+                {props.priorProjectID && <a href={'/c/' + props.priorProjectID}>See Predecessor Project</a>}
+            </div>
             <div id="projectheader-user-info-container">
                 <h5>{props.username}</h5>
                 <img src={returnUserImageURL(props.displayPhoto)}></img>

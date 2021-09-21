@@ -97,6 +97,8 @@ class ProjectController extends React.Component {
             minDuration: null,
             coverPhoto: null,
             selectedProject: this.props.isContentOnlyView && this.props.feedData ? this.props.feedData : null,
+            priorProjectID: this.props.priorProjectID ? this.props.priorProjectID  : null,
+
             selectedEvent: null,
 
             hasMore: true,
@@ -126,6 +128,7 @@ class ProjectController extends React.Component {
         this.shouldPull = this.shouldPull.bind(this);
         this.clearLoadedFeed = this.clearLoadedFeed.bind(this);
         this.selectFeedData = this.selectFeedData.bind(this);
+        this.onPriorForkClick = this.onPriorForkClick.bind(this);
     }
 
     clearLoadedFeed() {
@@ -332,6 +335,7 @@ class ProjectController extends React.Component {
     handleProjectClick(projectData) {
         this.setState({
             selectedProject: projectData,
+            priorProjectID: projectData.ancestors.length > 0 ? projectData.ancestors[projectData.ancestors.length - 1] : null,
             barType: PROJECT_MICRO_VIEW_STATE,
         }, () => {
             this.setNewURL(returnProjectURL(projectData._id));
@@ -372,6 +376,10 @@ class ProjectController extends React.Component {
         else {
             return this.props.feedData;
         }
+    }
+
+    onPriorForkClick() {
+
     }
 
     render() {
@@ -429,6 +437,7 @@ class ProjectController extends React.Component {
                             copyToClipboard={this.copyToClipboard}
                             shouldPull={this.shouldPull}
                             hasMore={this.state.hasMore}
+                            priorProjectID={this.state.priorProjectID}
                         />
                     </>
                 );

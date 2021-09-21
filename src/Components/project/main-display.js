@@ -34,6 +34,8 @@ const MainDisplay = (props) => {
                     descriptionValue={props.header.overview}
                     username={props.header.username}
                     displayPhoto={props.header.displayPhoto}
+                    onPriorForkClick={props.onPriorForkClick}
+                    priorProjectID={props.priorProjectID}
                 />
             }
 

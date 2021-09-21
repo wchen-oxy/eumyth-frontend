@@ -5,6 +5,12 @@
     text-align: center;
 }
 
+#projectheader-user-fork{
+    @include flex-display-row;
+    align-items: center;
+    justify-content: center;
+}
+
 #projectheader-user-info-container {
     @include flex-display-row;
     align-items: center;
