@@ -1,17 +1,26 @@
 import React from 'react';
-import { PROJECT_MACRO_VIEW_STATE, PROJECT_MICRO_VIEW_STATE, PROJECT_REARRANGE_STATE, PROJECT_SELECT_VIEW_STATE } from '../../constants/flags';
+import { PROJECT_CONTENT_ONLY_VIEW_STATE, PROJECT_MACRO_VIEW_STATE, PROJECT_MICRO_VIEW_STATE, PROJECT_REARRANGE_STATE, PROJECT_SELECT_VIEW_STATE } from '../../constants/flags';
+import RightManageButtons from './right-manage-buttons';
 import "./top-button-bar.scss";
 
 
 const TopButtonBar = (props) => {
     switch (props.barType) {
+        case (PROJECT_CONTENT_ONLY_VIEW_STATE):
+            return (
+                <div id="topbuttonbar-right-only-button-bar">
+                    <RightManageButtons
+                        copyToClipboard={props.copyToClipboard}
+                        selectedProjectID={props.selectedProjectID}
+                        onEditExistingProject={props.onEditExistingProject}
+                    />
+                </div>
+            )
         case (PROJECT_MACRO_VIEW_STATE):
             return (
-                <div id="topbuttonbar-button-bar">
+                <div >
                     <div id="topbuttonbar-left-button-container">
-                        <button
-                            onClick={props.onNewBackProjectClick}
-                        >
+                        <button onClick={props.onNewProjectSelect} >
                             New
                         </button>
                     </div>
@@ -19,7 +28,7 @@ const TopButtonBar = (props) => {
             );
         case (PROJECT_MICRO_VIEW_STATE):
             return (
-                <div id="topbuttonbar-button-bar">
+                <div id="topbuttonbar-dual-button-bar">
                     <div id="topbuttonbar-left-button-container">
                         <button onClick={props.onBackClick}>
                             Back
@@ -27,19 +36,17 @@ const TopButtonBar = (props) => {
                     </div>
 
                     <div id="topbuttonbar-right-button-container">
-                        <button
-                            id="topbuttonbar-right-button"
-                            onClick={() => props.copyToClipboard(props.selectedProjectID)}
-                        >
-                            Copy Post ID
-                        </button>
-                        <p>  {props.selectedProjectID}</p>
+                        <RightManageButtons
+                            copyToClipboard={props.copyToClipboard}
+                            selectedProjectID={props.selectedProjectID}
+                            onEditExistingProject={props.onEditExistingProject}
+                        />
                     </div>
                 </div>
             );
         case (PROJECT_SELECT_VIEW_STATE):
             return (
-                <div id="topbuttonbar-button-bar">
+                <div id="topbuttonbar-dual-button-bar">
                     <div id="topbuttonbar-left-button-container">
                         <button onClick={props.onBackClick}>
                             Back
@@ -60,7 +67,6 @@ const TopButtonBar = (props) => {
             return (
                 <div className="">
                     <button onClick={props.onBackClick}>
-
                         Back
                     </button>
                     <button

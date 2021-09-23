@@ -26,6 +26,9 @@ class Timeline extends React.Component {
             this.props.shouldPull(false);
         }
     }
+    componentDidUpdate() {
+        console.log("changed")
+    }
 
     createTimelineRow(inputArray, contentType) {
         let masterArray = this.props.loadedFeed;
@@ -75,6 +78,10 @@ class Timeline extends React.Component {
     }
 
     fetchNextPosts() {
+        console.log("shouldpull")
+        if (this.props.allPosts.every(i => (typeof i !== "string"))) {
+            throw new Error('Feed is not just ObjectIDs');
+        }
         if (this.props.nextOpenPostIndex + this.state.fixedDataLoadLength
             >= this.props.allPosts.length) {
             this.props.shouldPull(false);
@@ -82,10 +89,7 @@ class Timeline extends React.Component {
         if (this.props.contentType === PROJECT) {
             const slicedObjectIDs = this.props.allPosts.slice(
                 this.props.nextOpenPostIndex,
-                this.props.nextOpenPostIndex + this.state.fixedDataLoadLength).map(
-                    (item) => {
-                        return item.post_id;
-                    });
+                this.props.nextOpenPostIndex + this.state.fixedDataLoadLength);
             return AxiosHelper.returnMultipleProjects(slicedObjectIDs)
                 .then((result) => {
                     if (this._isMounted) {
@@ -116,7 +120,8 @@ class Timeline extends React.Component {
         else {
             const slicedObjectIDs = this.props.allPosts.slice(
                 this.props.nextOpenPostIndex,
-                this.props.nextOpenPostIndex + this.state.fixedDataLoadLength).map((item) => item.post_id)
+                this.props.nextOpenPostIndex + this.state.fixedDataLoadLength);
+
             return AxiosHelper.returnMultiplePosts(slicedObjectIDs, false)
                 .then((result) => {
                     if (this._isMounted) {
@@ -130,6 +135,9 @@ class Timeline extends React.Component {
     }
 
     render() {
+        console.log(this.props.hasMore);
+        console.log(this.props.feedID);
+
         const endMessage = (
             <div>
                 <br />
@@ -166,6 +174,10 @@ class Timeline extends React.Component {
                     :
                     <p>There doesn't seem to be anything here</p>
                 }
+                {this.props.loadedFeed.length > 1 ? null : <div style={{ height: '100px' }}></div>}
+                <br />
+                <br />
+                <br />
                 <br />
                 <br />
                 <br />

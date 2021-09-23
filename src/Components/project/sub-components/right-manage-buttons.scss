@@ -1,0 +1,13 @@
+@import "../../../partials";
+
+.rightmanagebuttons-centered-container {
+    @include flex-display-column;
+    align-items: center;
+    button {
+        width: fit-content;
+    }
+    p {
+        font-size: 12px;
+        margin: 0;
+    }
+}

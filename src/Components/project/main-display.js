@@ -3,21 +3,20 @@ import Timeline from '../profile/timeline';
 import TopButtonBar from './sub-components/top-button-bar';
 import ProjectHeaderInput from './sub-components/project-header-input';
 import ProjectHeader from './project-header';
-import { NONE } from '../constants/flags';
 
 const MainDisplay = (props) => {
+    console.log(props.feedID);
     return (
         <div>
-            {props.barType !== NONE ?
-                <TopButtonBar
-                    barType={props.barType}
-                    onBackClick={props.onBackClick}
-                    onNewBackProjectClick={props.onNewBackProjectClick}
-                    selectedProjectID={props.selectedProjectID}
-                    handleWindowSwitch={props.handleWindowSwitch}
-                    copyToClipboard={props.copyToClipboard}
-                /> : null
-            }
+
+            <TopButtonBar
+                barType={props.barType}
+                onBackClick={props.onBackClick}
+                onNewProjectSelect={props.onNewProjectSelect}
+                selectedProjectID={props.selectedProjectID}
+                onEditExistingProject={props.onEditExistingProject}
+                copyToClipboard={props.copyToClipboard}
+            />
 
             {props.newProjectView &&
                 <ProjectHeaderInput
@@ -25,7 +24,6 @@ const MainDisplay = (props) => {
                     descriptionValue={props.descriptionValue}
                     onTextChange={props.handleInputChange}
                 />
-
             }
 
             {props.selectedProjectID &&

@@ -1,11 +1,14 @@
 @import "../../../partials";
 
-#topbuttonbar-button-bar {
+#topbuttonbar-right-only-button-bar {
+    @include flex-display-column;
+    align-items: flex-end;
+    padding-top: 20px;
+}
+
+#topbuttonbar-dual-button-bar {
     @include flex-display-row;
     justify-content: space-between;
-
-    #topbuttonbar-left-button-container {
-    }
     #topbuttonbar-right-button-container {
         float: right;
         p {
@@ -15,6 +18,3 @@
     }
 }
 
-.topbuttonbar-info-button {
-    float: right;
-}

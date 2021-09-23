@@ -1,125 +1,72 @@
-import React from 'react';
-import ShortPostViewer from "./short-post";
-import LongPostViewer from "./long-post";
-import { SHORT, LONG } from "../../constants/flags";
-import { withFirebase } from "../../../Firebase/index";
-import AxiosHelper from "../../../Axios/axios";
-import { AuthUserContext } from '../../session';
+// import React from 'react';
+// import ShortPostViewer from "./short-post";
+// import LongPostViewer from "./long-post";
+// import { SHORT, LONG } from "../../constants/flags";
+// import { withFirebase } from "../../../Firebase/index";
+// import { AuthUserContext } from '../../session';
 
-const parsePossibleTitle = (data) => {
-    const titleBlock = data.blocks[0];
-    const isTitle = titleBlock.type === "header-one"
-        || titleBlock.type === "header-two"
-        || titleBlock.type === "header-three";
-    if (titleBlock
-        && isTitle) {
-        return data.blocks[0].text;
-    }
-    else {
-        return null;
-    }
-}
+// const PostViewerController = (props) => {
+//     const textData = props.textData && props.eventData.is_paginated ?
+//         JSON.parse(props.textData) : props.textData;
+//     switch (props.eventData.post_format) {
+//         case (SHORT):
+//             return (
+//                 <AuthUserContext.Consumer>
+//                     {
+//                         authUser =>
+//                             <ShortPostViewer
+//                                 projectID={props.projectID}
+//                                 postID={props.eventData._id}
+//                                 postIndex={props.postIndex}
+//                                 targetIndexUserID={props.targetIndexUserID}
+//                                 preferredPostPrivacy={props.preferredPostPrivacy}
+//                                 textData={textData}
+//                                 largeViewMode={props.largeViewMode}
+//                                 isOwnProfile={props.isOwnProfile}
+//                                 isPostOnlyView={props.isPostOnlyView}
+//                                 eventData={props.eventData}
+//                                 closeModal={props.closeModal}
+//                                 passDataToModal={props.passDataToModal}
+//                                 onCommentIDInjection={props.onCommentIDInjection}
+//                                 selectedPostFeedType={props.selectedPostFeedType}
+//                                 disableCommenting={props.disableCommenting}
+//                                 labels={props.labels}
 
-const removeTitleFromBody = (data) => {
-    data.blocks = data.blocks.splice(1);
-    return data;
-}
-
-const PostViewerController = (props) => {
-    const deletePostCallback = () => {
-        return AxiosHelper
-            .deletePost(
-                props.targetProfileID,
-                props.targetIndexUserID,
-                props.eventData._id,
-                props.eventData.pursuit_category,
-                props.eventData.min_duration,
-                props.eventData.is_milestone
-            )
-            .then((result) => console.log(result))
-            .catch((err) => {
-                console.log(err);
-                alert("Something went wrong during deletion");
-            });
-    }
-
-    const handleDeletePost = () => {
-        if (props.eventData.image_data.length) {
-            let imageArray = props.eventData.image_data;
-            if (props.eventData.cover_photo_key) {
-                imageArray.push(props.eventData.cover_photo_key)
-            }
-            return AxiosHelper.deleteManyPhotosByKey(imageArray)
-                .then((results) => deletePostCallback());
-        }
-        else {
-            return deletePostCallback();
-        }
-    }
-
-    const textData = props.textData && props.eventData.is_paginated ?
-        JSON.parse(props.textData) : props.textData;
-    switch (props.eventData.post_format) {
-        case (SHORT):
-            return (
-
-                <AuthUserContext.Consumer>
-                    {
-                        authUser =>
-                            <ShortPostViewer
-                                postID={props.eventData._id}
-                                postIndex={props.postIndex}
-                                targetIndexUserID={props.targetIndexUserID}
-                                preferredPostPrivacy={props.preferredPostPrivacy}
-                                textData={textData}
-                                largeViewMode={props.largeViewMode}
-                                isOwnProfile={props.isOwnProfile}
-                                isPostOnlyView={props.isPostOnlyView}
-                                eventData={props.eventData}
-                                onDeletePost={handleDeletePost}
-                                closeModal={props.closeModal}
-                                passDataToModal={props.passDataToModal}
-                                onCommentIDInjection={props.onCommentIDInjection}
-                                selectedPostFeedType={props.selectedPostFeedType}
-                                disableCommenting={props.disableCommenting}
-                                labels={props.labels}
-
-                                {...props}
-                                authUser={authUser}
-                            />
-                    }
-                </AuthUserContext.Consumer>
+//                                 {...props}
+//                                 authUser={authUser}
+//                             />
+//                     }
+//                 </AuthUserContext.Consumer>
 
 
-            );
-        case (LONG):
-            const title = props.eventData.title;
-            return (
-                <LongPostViewer
-                    postID={props.eventData._id}
-                    postIndex={props.postIndex}
-                    displayPhoto={props.visitorDisplayPhoto}
-                    visitorUsername={props.visitorUsername}
-                    pursuitNames={props.pursuitNames}
-                    preferredPostPrivacy={props.preferredPostPrivacy}
-                    largeViewMode={props.largeViewMode}
-                    title={title}
-                    textData={JSON.parse(props.textData)}
-                    isOwnProfile={this.state.isOwnProfile}
-                    isPostOnlyView={props.isPostOnlyView}
-                    eventData={props.eventData}
-                    onDeletePost={handleDeletePost}
-                    closeModal={props.closeModal}
-                    passDataToModal={props.passDataToModal}
-                    onCommentIDInjection={props.onCommentIDInjection}
-                    selectedPostFeedType={props.selectedPostFeedType}
-                    disableCommenting={props.disableCommenting}
+//             );
+//         case (LONG):
+//             const title = props.eventData.title;
+//             return (
+//                 <LongPostViewer
+//                     postID={props.eventData._id}
+//                     postIndex={props.postIndex}
+//                     displayPhoto={props.visitorDisplayPhoto}
+//                     visitorUsername={props.visitorUsername}
+//                     pursuitNames={props.pursuitNames}
+//                     preferredPostPrivacy={props.preferredPostPrivacy}
+//                     largeViewMode={props.largeViewMode}
+//                     title={title}
+//                     textData={JSON.parse(props.textData)}
+//                     isOwnProfile={this.state.isOwnProfile}
+//                     isPostOnlyView={props.isPostOnlyView}
+//                     eventData={props.eventData}
+//                     closeModal={props.closeModal}
+//                     passDataToModal={props.passDataToModal}
+//                     onCommentIDInjection={props.onCommentIDInjection}
+//                     selectedPostFeedType={props.selectedPostFeedType}
+//                     disableCommenting={props.disableCommenting}
 
-                />
-            );
-        default:
-            throw new Error("No content type matched in event-modal.js");
-    }
-}
+//                 />
+//             );
+//         default:
+//             throw new Error("No content type matched in event-modal.js");
+//     }
+// }
 
-export default withFirebase(PostViewerController);
+// export default withFirebase(PostViewerController);

@@ -70,6 +70,18 @@ const App = () => {
                                     />
                               }
                         />
+                        <Route exact path='/u/:username/project'
+                              render={(props) =>
+                                    <ProfilePage
+                                          {...props}
+                                          returnModalStructure={returnModalStructure}
+                                          openMasterModal={openModal}
+                                          closeMasterModal={closeModal}
+                                          modalState={modalState}
+                                          isProjectView={true}
+                                    />
+                              }
+                        />
                         <Route exact path='/p/:postID' render={(props) =>
                               <ProfilePage
                                     {...props}
@@ -77,6 +89,7 @@ const App = () => {
                                     openMasterModal={openModal}
                                     closeMasterModal={closeModal}
                                     modalState={modalState}
+                                    isProjectView={false}
 
                               />
                         } />
@@ -87,7 +100,7 @@ const App = () => {
                                     openMasterModal={openModal}
                                     closeMasterModal={closeModal}
                                     modalState={modalState}
-
+                                    isProjectView={false}
                               />
                         } />
                   </Switch>

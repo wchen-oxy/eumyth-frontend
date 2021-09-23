@@ -1,14 +1,14 @@
 import React from 'react';
 import { withFirebase } from '../../Firebase';
+import { withRouter } from 'react-router-dom';
 import PursuitHolder from './sub-components/pursuit-holder';
 import AxiosHelper from '../../Axios/axios';
 import { AuthUserContext } from '../session';
-import PostViewerController from "../post/viewer/post-viewer-controller";
 import FollowButton from "./sub-components/follow-buttons";
 import ProjectController from "../project/index";
 import PostController from './post-controller';
 import CoverPhoto from './sub-components/cover-photo';
-import { returnUserImageURL } from "../constants/urls";
+import { returnUserImageURL, returnUsernameURL } from "../constants/urls";
 import {
     POST,
     PROJECT,
@@ -20,6 +20,7 @@ import {
     FOLLOWED_STATE
 } from "../constants/flags";
 import './index.scss';
+import ShortPostViewer from '../post/viewer/short-post';
 
 const createPusuitArray = (pursuits) => {
     let pursuitNameArray = [];
@@ -49,10 +50,11 @@ const ProfilePage = (props) =>
 (
     <AuthUserContext.Consumer>
         {
-            authUser => <ProfilePageAuthenticated
-                {...props}
-                authUser={authUser}
-            />
+            authUser =>
+                <ProfilePageAuthenticated
+                    {...props}
+                    authUser={authUser}
+                />
 
         }
     </AuthUserContext.Consumer>
@@ -79,7 +81,7 @@ class ProfilePageAuthenticated extends React.Component {
             userRelationID: null,
             followerStatus: null,
             feedIDList: null,
-            contentType: POST,
+            contentType: null,
             selectedPursuit: "ALL",
             selectedPursuitIndex: 0,
             preferredPostPrivacy: null,
@@ -87,8 +89,9 @@ class ProfilePageAuthenticated extends React.Component {
         }
 
         this.decideHeroContentVisibility = this.decideHeroContentVisibility.bind(this);
-        this.loadInitialProjectData = this.loadInitialProjectData.bind(this);
-        this.loadInitialPostData = this.loadInitialPostData.bind(this);
+        this.loadMacroProjectData = this.loadMacroProjectData.bind(this);
+        this.loadMicroProjectData = this.loadMicroProjectData.bind(this);
+        this.loadMicroPostData = this.loadMicroPostData.bind(this);
         this.setContentOnlyData = this.setContentOnlyData.bind(this);
         this.renderHeroContent = this.renderHeroContent.bind(this);
         this.handleFollowClick = this.handleFollowClick.bind(this);
@@ -98,6 +101,7 @@ class ProfilePageAuthenticated extends React.Component {
         this.loadProfile = this.loadProfile.bind(this);
         this.setProfileData = this.setProfileData.bind(this);
         this.loadFollowerStatus = this.loadFollowerStatus.bind(this);
+        this.loadedContentCallback = this.loadedContentCallback.bind(this);
     }
 
     componentDidMount() {
@@ -106,16 +110,21 @@ class ProfilePageAuthenticated extends React.Component {
         const params = this.props.match.params;
         const requestedPostID = params.postID;
         const requestedProjectID = params.projectID;
-        const isPost = requestedPostID ? POST : null;
-        const isProject = requestedProjectID ? PROJECT : null;
-        if (this._isMounted && targetUsername) {
-            return this.loadProfile(targetUsername);
+        const isPostMicroView = requestedPostID ? POST : null;
+        const isProjectMacroView = this.props.isProjectView;
+        const isProjectMicroView = requestedProjectID ? PROJECT : null;
+
+        if (this._isMounted && isProjectMacroView) {
+            return this.loadProfile(targetUsername, PROJECT);
         }
-        else if (this._isMounted && isPost) {
-            return this.loadInitialPostData(requestedPostID)
+        else if (this._isMounted && targetUsername) {
+            return this.loadProfile(targetUsername, POST);
         }
-        else if (this._isMounted && isProject) {
-            return this.loadInitialProjectData(requestedProjectID);
+        else if (this._isMounted && isPostMicroView) {
+            return this.loadMicroPostData(requestedPostID)
+        }
+        else if (this._isMounted && isProjectMicroView) {
+            return this.loadMicroProjectData(requestedProjectID);
         }
     }
 
@@ -135,8 +144,7 @@ class ProfilePageAuthenticated extends React.Component {
         this._isMounted = false;
     }
 
-    //full Profile
-    loadProfile(username) {
+    loadMacroProjectData(username) {
         const isOwner = this.state.visitorUsername === username;
         let userData = null;
         return AxiosHelper
@@ -148,11 +156,27 @@ class ProfilePageAuthenticated extends React.Component {
                     userData.private,
                     isOwner)
             })
-            .then((result) => this.setProfileData(
-                userData,
-                result?.data ?? null,
-                isOwner
-            ))
+    }
+    //full Profile
+    loadProfile(username, contentType) {
+        const isOwner = this.state.visitorUsername === username;
+        let userData = null;
+        return AxiosHelper
+            .returnUser(username)
+            .then((result) => {
+                userData = result.data;
+                return this.loadFollowerStatus(
+                    userData.user_relation_id,
+                    userData.private,
+                    isOwner)
+            })
+            .then((result) =>
+                this.setProfileData(
+                    userData,
+                    result?.data ?? null,
+                    isOwner,
+                    contentType
+                ))
             .catch((err) => {
                 console.log(err);
                 this.setState({ fail: true });
@@ -175,7 +199,34 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
 
-    setProfileData(userData, rawFollowerState, isOwner) {
+    loadedContentCallback(contentType, data) {
+        if (this.state.visitorUsername) {
+            const authUser = this.props.authUser;
+            const pursuitData = createPusuitArray(authUser.pursuits);
+            this.setContentOnlyData(
+                contentType,
+                data.project,
+                pursuitData.names,
+                authUser.username,
+                authUser.indexProfileID,
+                authUser.profileID,
+                data.labels
+            )
+        }
+        else {
+            this.setContentOnlyData(
+                contentType,
+                data.project,
+                null,
+                null,
+                null,
+                null,
+                data.labels
+            )
+        }
+    }
+
+    setProfileData(userData, rawFollowerState, isOwner, contentType) {
         const pursuitData = createPusuitArray(userData.pursuits);
         const followerStatus = this.handleFollowerStatusResponse(rawFollowerState);
         this.setState({
@@ -188,7 +239,7 @@ class ProfilePageAuthenticated extends React.Component {
             pursuitNames: pursuitData.names,
             userRelationID: userData.user_relation_id,
             followerStatus: followerStatus,
-            contentType: POST,
+            contentType: contentType,
             isContentOnlyView: false,
             isOwner: isOwner,
             targetUser: {
@@ -200,22 +251,10 @@ class ProfilePageAuthenticated extends React.Component {
         })
     }
     //PROJECT
-    loadInitialProjectData(projectID) {
+    loadMicroProjectData(projectID) {
         return AxiosHelper
             .returnSingleProject(projectID)
-            .then(result => {
-                const authUser = this.props.authUser;
-                const pursuitData = createPusuitArray(authUser.pursuits);
-                this.setContentOnlyData(
-                    PROJECT,
-                    result.data.project,
-                    pursuitData.names,
-                    authUser.username,
-                    authUser.indexProfileID,
-                    authUser.profileID,
-                    result.data.labels
-                )
-            });
+            .then(result => this.loadedContentCallback(PROJECT, result.data));
     }
 
     setContentOnlyData(contentType, content, pursuitNames, username, indexUserID, completeUserID, labels) {
@@ -234,41 +273,11 @@ class ProfilePageAuthenticated extends React.Component {
         })
     }
 
-    loadInitialPostData(postID) {
-        const authUser = this.props.authUser;
-        const username = this.state.visitorUsername;
-        if (username) {
-            return AxiosHelper
-                .retrievePost(postID, false)
-                .then(result => {
-                    const pursuitData = createPusuitArray(authUser.pursuits);
-                    this.setContentOnlyData(
-                        POST,
-                        result.data,
-                        pursuitData.names,
-                        username,
-                        authUser.indexProfileID,
-                        authUser.profileID,
-                        result.data.labels
-                    )
-                })
-                .catch(error => console.log(error))
-        }
-        else {
-            return AxiosHelper
-                .retrievePost(postID, false)
-                .then(
-                    (result => {
-                        this.setContentOnlyData(
-                            POST,
-                            result.data,
-                            [],
-                            null
-                        )
-                    })
-                )
-                .catch(error => console.log(error))
-        }
+    loadMicroPostData(postID) {
+        return AxiosHelper
+            .retrievePost(postID, false)
+            .then(result => this.loadedContentCallback(POST, result.data))
+            .catch(error => console.log(error))
     }
 
     handleMediaTypeSwitch(contentType) {
@@ -303,7 +312,15 @@ class ProfilePageAuthenticated extends React.Component {
             hasMore: true,
             contentType: contentType,
             feedIDList: feedIDList
-        });
+        }, () => {
+            if (contentType === PROJECT) {
+                this.props.history.replace(returnUsernameURL(this.state.targetUser.username) + '/' + PROJECT.toLowerCase())
+            }
+            else {
+                this.props.history.replace(returnUsernameURL(this.state.targetUser.username));
+            }
+        }
+        );
     }
 
     handleFeedSwitch(index) {
@@ -327,13 +344,11 @@ class ProfilePageAuthenticated extends React.Component {
                 if (followerStatusResponse.data.success === FOLLOWED_STATE) {
                     return FOLLOWED_STATE;
                 }
-
                 else if (followerStatusResponse.data.success === FOLLOW_REQUESTED_STATE) {
                     return FOLLOW_REQUESTED_STATE;
                 }
-
                 else {
-                    throw Error;
+                    throw new Error("No Follow State Matched");
                 }
             }
             else if (followerStatusResponse.data.error) {
@@ -348,63 +363,27 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
 
-
-    handleResponseData(displayName, targetUserInfo, followerStatusResponse) {
-        const currentPagePosts = targetUserInfo.pursuits[0].posts ? targetUserInfo.pursuits[0].posts : [];
-        const postsArray = displayName === targetUserInfo.username ?
-            currentPagePosts : filterPublicPosts(currentPagePosts);
-        const followerStatus = followerStatusResponse ?
-            this.handleFollowerStatusResponse(followerStatusResponse) : null;
-        const pursuitData = createPusuitArray(targetUserInfo.pursuits);
-        const isOwner = targetUserInfo ? targetUserInfo.username === displayName : false;
-        this.setState({
-            visitorUsername: displayName ? displayName : null,
-            targetUser: targetUserInfo,
-            targetIndexUserID: targetUserInfo.index_user_id,
-            fail: targetUserInfo ? false : true,
-            isOwner: isOwner,
-            isPrivate: targetUserInfo.private,
-            coverPhoto: targetUserInfo.cover_photo_key,
-            croppedDisplayPhoto: targetUserInfo.cropped_display_photo_key,
-            bio: targetUserInfo.bio,
-            pinned: targetUserInfo.pinned,
-            pursuits: targetUserInfo.pursuits,
-            pursuitNames: pursuitData.names,
-            allPosts: postsArray,
-            allProjects: pursuitData.projects,
-            feedIDList: postsArray,
-            contentType: POST,
-            userRelationID: targetUserInfo.user_relation_id,
-            followerStatus: followerStatus,
-            isContentOnlyView: false,
-        });
-    }
-
-
     renderHeroContent() {
         const selectedPursuit = this.state.pursuits[this.state.selectedPursuitIndex];
         if (this.state.contentType === POST) {
             return (
                 <PostController
-                    targetUsername={this.state.targetUser.username}
+                    targetUser={this.state.targetUser}
                     returnModalStructure={this.props.returnModalStructure}
                     modalState={this.props.modalState}
                     openMasterModal={this.props.openMasterModal}
                     closeMasterModal={this.props.closeMasterModal}
                     pursuitNames={this.state.pursuitNames}
                     isOwner={this.state.isOwner}
-
                     selectedPursuitIndex={this.state.selectedPursuitIndex}
-                    feedData={selectedPursuit.posts}
-                    labels={this.state.targetUser.labels}
-
+                    feedData={selectedPursuit.posts.map((item) => item.post_id)}
                 />
             )
         }
         else if (this.state.contentType === PROJECT) {
             return (
                 <ProjectController
-                    allPosts={this.state.pursuits[0].posts}
+                    allPosts={this.state.pursuits[0].projects}
                     indexUserID={this.state.targetUser.index_user_id}
                     visitorProfileID={this.state.visitorProfileID}
                     targetUsername={this.state.targetUser.username}
@@ -500,7 +479,7 @@ class ProfilePageAuthenticated extends React.Component {
         if (this.state.isContentOnlyView) {
             if (this.state.contentType === POST) {
                 return (
-                    <PostViewerController
+                    <ShortPostViewer
                         targetProfileID={this.state.targetUser._id}
                         targetIndexUserID={this.state.targetUser.index_user_id}
                         key={this.state.selectedContent._id}
@@ -552,7 +531,7 @@ class ProfilePageAuthenticated extends React.Component {
             }
         }
         else if (!this.state.isContentOnlyView) {
-            const targetUsername = this.state.targetUser ? this.state.targetUser.username : "";
+            const targetUsername = this.state.targetUser?.username ?? "";
             const targetProfilePhoto = returnUserImageURL(this.state.croppedDisplayPhoto);
 
             return (
@@ -615,4 +594,4 @@ class ProfilePageAuthenticated extends React.Component {
     }
 }
 
-export default withFirebase(ProfilePage);
+export default withRouter(withFirebase(ProfilePage));

@@ -8,6 +8,7 @@ import ShortReEditor from '../editor/short-re-editor';
 import ReviewPost from "../draft/review-post";
 import AxiosHelper from "../../../Axios/axios";
 import CustomImageSlider from '../../image-carousel/custom-image-slider';
+import { AuthUserContext } from '../../session';
 import {
     EXPANDED,
     COLLAPSED,
@@ -22,7 +23,41 @@ import 'slick-carousel/slick/slick-theme.css';
 import "../../image-carousel/index.scss";
 import "./short-post.scss";
 
-class ShortPostViewer extends React.Component {
+
+const ShortPostViewer = (props) => {
+    const textData = props.textData && props.eventData.is_paginated ?
+        JSON.parse(props.textData) : props.textData;
+    return (
+        <AuthUserContext.Consumer>
+            {
+                authUser =>
+                    <ShortPostViewerWithAuth
+                        projectID={props.projectID}
+                        postID={props.eventData._id}
+                        postIndex={props.postIndex}
+                        targetIndexUserID={props.targetIndexUserID}
+                        preferredPostPrivacy={props.preferredPostPrivacy}
+                        textData={textData}
+                        largeViewMode={props.largeViewMode}
+                        isOwnProfile={props.isOwnProfile}
+                        isPostOnlyView={props.isPostOnlyView}
+                        eventData={props.eventData}
+                        closeModal={props.closeModal}
+                        passDataToModal={props.passDataToModal}
+                        onCommentIDInjection={props.onCommentIDInjection}
+                        selectedPostFeedType={props.selectedPostFeedType}
+                        disableCommenting={props.disableCommenting}
+                        labels={props.labels}
+
+                        {...props}
+                        authUser={authUser}
+                    />
+            }
+        </AuthUserContext.Consumer>
+    )
+}
+
+class ShortPostViewerWithAuth extends React.Component {
 
     constructor(props) {
         super(props);
@@ -71,6 +106,8 @@ class ShortPostViewer extends React.Component {
         this.handlePaginatedChange = this.handlePaginatedChange.bind(this);
         this.handleModalLaunch = this.handleModalLaunch.bind(this);
         this.handleCommentDataInjection = this.handleCommentDataInjection.bind(this);
+        this.deletePostCallback = this.deletePostCallback.bind(this);
+        this.handleDeletePost = this.handleDeletePost.bind(this);
     }
 
     componentDidMount() {
@@ -79,6 +116,44 @@ class ShortPostViewer extends React.Component {
             annotationArray.push([]);
         }
         this.setState({ annotations: annotationArray });
+    }
+
+    deletePostCallback() {
+        return AxiosHelper
+            .deletePost(
+                this.props.authUser.profileID,
+                this.props.authUser.indexProfileID,
+                this.props.eventData._id,
+                this.props.eventData.pursuit_category,
+                this.props.eventData.min_duration,
+                this.props.eventData.progression,
+            )
+            .then((result) => {
+                if (this.props.projectID) {
+                    window.location.replace('/c/' + this.props.projectID);
+                }
+                else {
+                    window.location.replace('/u/' + this.props.eventData.username)
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                alert("Something went wrong during deletion");
+            });
+    }
+
+    handleDeletePost() {
+        if (this.props.eventData.image_data.length) {
+            let imageArray = this.props.eventData.image_data;
+            if (this.props.eventData.cover_photo_key) {
+                imageArray.push(this.props.eventData.cover_photo_key)
+            }
+            return AxiosHelper.deleteManyPhotosByKey(imageArray)
+                .then((results) => this.deletePostCallback());
+        }
+        else {
+            return this.deletePostCallback();
+        }
     }
 
     toggleAnnotations() {
@@ -408,6 +483,7 @@ class ShortPostViewer extends React.Component {
     }
 
     render() {
+        console.log(this.props.authUser);
         if (this.state.window === INITIAL_STATE) {
             if (!this.props.eventData.image_data.length) {
                 if (this.props.largeViewMode) {
@@ -420,7 +496,7 @@ class ShortPostViewer extends React.Component {
                                     date={this.state.date}
                                     displayPhoto={this.props.eventData.display_photo_key}
                                     onEditClick={this.handleWindowChange}
-                                    onDeletePost={this.props.onDeletePost}
+                                    onDeletePost={this.handleDeletePost}
                                 />
                             </div>
                             <ShortPostMetaInfo
@@ -495,7 +571,7 @@ class ShortPostViewer extends React.Component {
                                         date={this.state.date}
                                         displayPhoto={this.props.eventData.display_photo_key}
                                         onEditClick={this.handleWindowChange}
-                                        onDeletePost={this.props.onDeletePost}
+                                        onDeletePost={this.handleDeletePost}
                                     />
                                     <ShortPostMetaInfo
                                         index={this.state.imageIndex}

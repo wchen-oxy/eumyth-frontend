@@ -2,12 +2,12 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import EventController from '../../profile/timeline/timeline-event-controller';
 import AxiosHelper from '../../../Axios/axios';
-import PostViewerController from "../../post/viewer/post-viewer-controller";
 import { Link } from "react-router-dom";
 import { withAuthorization } from '../../session';
 import { withFirebase } from '../../../Firebase';
 import { returnUsernameURL, returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../../constants/urls";
-import { POST, SHORT, RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE } from "../../constants/flags";
+import { POST, RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE } from "../../constants/flags";
+import ShortPostViewer from '../../post/viewer/short-post';
 import './returning-user.scss';
 
 class ReturningUserPage extends React.Component {
@@ -75,34 +75,27 @@ class ReturningUserPage extends React.Component {
                 .then((result) => {
                     const indexUser = result.data;
                     const slicedFeed =
-                        result.data.following_feed.slice(
+                        indexUser.following_feed.slice(
                             this.state.nextOpenPostIndex,
                             this.state.nextOpenPostIndex +
                             this.state.fixedDataLoadLength
                         );
                     labels = indexUser.labels;
-                    followedUserPostIDs =
-                        indexUser.following_feed;
-                    preferredPostPrivacy =
-                        indexUser.preferred_post_privacy
-                    croppedDisplayPhoto =
-                        indexUser.cropped_display_photo_key;
-                    smallCroppedDisplayPhoto =
-                        indexUser.small_cropped_display_photo_key;
-                    indexUserDataID =
-                        indexUser._id;
-                    fullUserDataID =
-                        indexUser.user_profile_id;
-                    pursuits =
-                        result.data.pursuits;
+                    followedUserPostIDs = indexUser.following_feed;
+                    preferredPostPrivacy = indexUser.preferred_post_privacy
+                    croppedDisplayPhoto = indexUser.cropped_display_photo_key;
+                    smallCroppedDisplayPhoto = indexUser.small_cropped_display_photo_key;
+                    indexUserDataID = indexUser._id;
+                    fullUserDataID = indexUser.user_profile_id;
+                    pursuits = indexUser.pursuits;
                     isMoreFollowedUserPosts = (
                         !followedUserPostIDs ||
                         followedUserPostIDs.length === 0)
                         ? false : true;
 
-                    if (result.data.pursuits) {
+                    if (indexUser.pursuits) {
                         const pursuitObjects =
-                            this.createPursuits(result.data.pursuits);
+                            this.createPursuits(indexUser.pursuits);
                         pursuitNames =
                             pursuitObjects.pursuitNames;
                         pursuitInfoArray =
@@ -112,15 +105,15 @@ class ReturningUserPage extends React.Component {
                     }
 
                     if (isMoreFollowedUserPosts === false) {
-                        if (result.data.recent_posts.length > 0) {
+                        if (indexUser.recent_posts.length > 0) {
                             return AxiosHelper
                                 .returnMultiplePosts(
-                                    result.data.recent_posts,
+                                    indexUser.recent_posts,
                                     true)
                                 .then((result) => {
                                     return {
                                         isRecentPostsOnly: true,
-                                        recentPosts: result.data.posts
+                                        recentPosts: indexUser.posts
                                     }
                                 });
                         }
@@ -132,11 +125,11 @@ class ReturningUserPage extends React.Component {
                         }
                     }
                     else {
-                        if (result.data.recent_posts.length > 0) {
+                        if (indexUser.recent_posts.length > 0) {
                             return Promise.all([
                                 AxiosHelper
                                     .returnMultiplePosts(
-                                        result.data.recent_posts,
+                                        indexUser.recent_posts,
                                         true),
                                 AxiosHelper
                                     .returnMultiplePosts(
@@ -265,7 +258,7 @@ class ReturningUserPage extends React.Component {
 
 
             masterArray.push(
-                <PostViewerController
+                <ShortPostViewer
                     labels={this.state.labels}
                     targetProfileID={this.state.fullUserDataID}
                     targetIndexUserID={this.state.indexUserDataID}
@@ -282,7 +275,10 @@ class ReturningUserPage extends React.Component {
                     passDataToModal={this.passDataToModal}
                     largeViewMode={false}
                     onCommentIDInjection={this.handleCommentIDInjection}
-                />);
+                />
+
+
+            );
         }
         return masterArray;
 
@@ -410,7 +406,7 @@ class ReturningUserPage extends React.Component {
         if (this.props.modalState === POST_VIEWER_MODAL_STATE &&
             this.state.selectedEvent) {
             const content = (
-                <PostViewerController
+                <ShortPostViewer
                     labels={this.state.labels}
                     targetProfileID={this.state.fullUserDataID}
                     targetIndexUserID={this.state.indexUserDataID}

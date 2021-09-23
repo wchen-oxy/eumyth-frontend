@@ -1,12 +1,10 @@
 import React from 'react';
-import { POST, POST_VIEWER_MODAL_STATE } from '../constants/flags';
 import Timeline from "./timeline/index";
 import ProfileModal from './profile-modal';
 import { withRouter } from 'react-router-dom';
 import { returnUsernameURL, returnPostURL } from "../constants/urls";
-import AxiosHelper from '../../Axios/axios';
+import { POST, POST_VIEWER_MODAL_STATE } from '../constants/flags';
 
-const defaultFeed = [[]];
 
 class PostController extends React.Component {
     constructor(props) {
@@ -21,7 +19,6 @@ class PostController extends React.Component {
             nextOpenPostIndex: 0,
             loadedFeed: [[]],
             selectedPursuitIndex: this.props.selectedPursuitIndex
-
         }
         this.handleEventClick = this.handleEventClick.bind(this);
         this.handleCommentIDInjection = this.handleCommentIDInjection.bind(this)
@@ -50,7 +47,7 @@ class PostController extends React.Component {
     clearModal() {
         this.setState(
             { selectedEvent: null }, () => {
-                this.props.history.replace(returnUsernameURL(this.props.targetUsername));
+                this.props.history.replace(returnUsernameURL(this.props.targetUser.username));
                 this.props.closeMasterModal();
             });
     }
@@ -85,13 +82,12 @@ class PostController extends React.Component {
             nextOpenPostIndex: nextOpenPostIndex
         })
     }
-
     render() {
         return (
             <>
                 <ProfileModal
                     modalState={this.props.modalState}
-                    labels={this.props.labels}
+                    labels={this.props.targetUser.labels}
                     isOwnProfile={this.props.isOwnProfile}
                     visitorUsername={this.props.visitorUsername}
                     postIndex={this.state.selectedPostIndex}

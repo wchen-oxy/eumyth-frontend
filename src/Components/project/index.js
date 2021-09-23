@@ -4,7 +4,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import AxiosHelper from '../../Axios/axios';
 import { withRouter } from 'react-router-dom';
-import { NONE, POST, POST_VIEWER_MODAL_STATE, PROJECT_EVENT, PROJECT_MACRO_VIEW_STATE, PROJECT_MICRO_VIEW_STATE, PROJECT_REARRANGE_STATE, PROJECT_SELECT_VIEW_STATE } from "../constants/flags";
+import { PROJECT_CONTENT_ONLY_VIEW_STATE, POST, POST_VIEWER_MODAL_STATE, PROJECT_EVENT, PROJECT_MACRO_VIEW_STATE, PROJECT_MICRO_VIEW_STATE, PROJECT_REARRANGE_STATE, PROJECT_SELECT_VIEW_STATE } from "../constants/flags";
 import { returnUsernameURL, returnPostURL, returnProjectURL } from "../constants/urls";
 import "./index.scss";
 import {
@@ -86,7 +86,7 @@ class ProjectController extends React.Component {
         this.state = {
             window: MAIN,
             barType: this.props.isContentOnlyView ?
-                NONE : PROJECT_MACRO_VIEW_STATE,
+                PROJECT_CONTENT_ONLY_VIEW_STATE : PROJECT_MACRO_VIEW_STATE,
             selectedPosts: [],
             title: "",
             overview: "",
@@ -97,14 +97,11 @@ class ProjectController extends React.Component {
             minDuration: null,
             coverPhoto: null,
             selectedProject: this.props.isContentOnlyView && this.props.feedData ? this.props.feedData : null,
-            priorProjectID: this.props.priorProjectID ? this.props.priorProjectID  : null,
-
-            selectedEvent: null,
-
+            priorProjectID: this.props.priorProjectID ? this.props.priorProjectID : null,
+            selectedContent: null,
             hasMore: true,
             nextOpenPostIndex: 0,
             loadedFeed: [[]],
-
             newProjectState: false,
             feedID: 0,
 
@@ -128,7 +125,17 @@ class ProjectController extends React.Component {
         this.shouldPull = this.shouldPull.bind(this);
         this.clearLoadedFeed = this.clearLoadedFeed.bind(this);
         this.selectFeedData = this.selectFeedData.bind(this);
-        this.onPriorForkClick = this.onPriorForkClick.bind(this);
+        this.onEditExistingProject = this.onEditExistingProject.bind(this);
+    }
+
+    onEditExistingProject() {
+        this.setState({
+            barType: PROJECT_SELECT_VIEW_STATE,
+            newProjectState: true,
+            hasMore: true,
+        },
+            this.clearLoadedFeed)
+        //except it should select all the events
     }
 
     clearLoadedFeed() {
@@ -188,19 +195,17 @@ class ProjectController extends React.Component {
     }
 
     clearModal() {
-        this.setState({ selectedEvent: null }, () => {
-
+        this.setState({ selectedContent: null }, () => {
             this.setNewURL(returnProjectURL(this.state.selectedProject._id));
-
             this.props.closeMasterModal();
         });
     }
 
-    handleEventClick(selectedEvent, postIndex, columnIndex) {
+    handleEventClick(selectedContent, postIndex, columnIndex) {
         this.setState({
-            selectedEvent: selectedEvent,
-            textData: selectedEvent.text_data,
-        }, this.setModal(selectedEvent._id));
+            selectedContent: selectedContent,
+            textData: selectedContent.text_data,
+        }, this.setModal(selectedContent._id));
     }
 
     handleInputChange(id, value) {
@@ -355,7 +360,6 @@ class ProjectController extends React.Component {
         )
             .then((res) => {
                 alert("Done!");
-                console.log(res);
             })
             .catch(err => console.log(err));
     }
@@ -371,15 +375,14 @@ class ProjectController extends React.Component {
 
     selectFeedData() {
         if (this.state.newProjectState) {
+            if (this.props.isContentOnlyView) {
+                return this.props.feedData.post_ids.map((item) => item.post_id);
+            }
             return this.props.allPosts.map((item) => item.post_id);
         }
         else {
-            return this.props.feedData;
+            return this.props.feedData.map((item) => item.post_id);
         }
-    }
-
-    onPriorForkClick() {
-
     }
 
     render() {
@@ -388,6 +391,7 @@ class ProjectController extends React.Component {
                 return (
                     <>
                         <ProfileModal
+                            projectID={this.state.selectedProject?._id}
                             modalState={this.props.modalState}
                             labels={this.props.labels}
                             visitorUsername={this.props.visitorUsername}
@@ -397,11 +401,12 @@ class ProjectController extends React.Component {
                             preferredPostPrivacy={this.props.preferredPostPrivacy}
                             postType={this.state.postType}
                             pursuitNames={this.props.pursuitNames}
-                            eventData={this.state.selectedEvent}
+                            eventData={this.state.selectedContent}
                             textData={this.state.textData}
-                            closeModal={this.clearModal}
                             disableCommenting={true}
                             returnModalStructure={this.props.returnModalStructure}
+                            closeModal={this.clearModal}
+                            isOwnProfile={this.props.isOwnProfile}
                         />
                         <MainDisplay
                             feedID={this.state.feedID + this.props.selectedPursuitIndex}
@@ -433,9 +438,10 @@ class ProjectController extends React.Component {
                             loadedFeed={this.state.loadedFeed}
                             updateFeedData={this.updateFeedData}
                             targetProfileID={this.props.targetProfileID}
-                            onNewBackProjectClick={this.handleNewProjectSelect}
+                            onNewProjectSelect={this.handleNewProjectSelect}
                             copyToClipboard={this.copyToClipboard}
                             shouldPull={this.shouldPull}
+                            onEditExistingProject={this.onEditExistingProject}
                             hasMore={this.state.hasMore}
                             priorProjectID={this.state.priorProjectID}
                         />
@@ -448,7 +454,7 @@ class ProjectController extends React.Component {
                             barType={this.state.barType}
                             selectedProjectID={this.state.selectedProject?._id}
                             onBackClick={this.handleBackClick}
-                            onNewBackProjectClick={this.handleNewProjectSelect}
+                            onNewProjectSelect={this.handleNewProjectSelect}
                             handleWindowSwitch={this.handleWindowSwitch}
                         />
 
