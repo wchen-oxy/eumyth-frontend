@@ -43,7 +43,7 @@ const EventController = (props) => {
                 {props.newProjectView &&
                     <EventCheckbox
                         post={post}
-                        isChecked={post.isChecked}
+                        isChecked={props.isSelected}
                         onProjectEventSelect={props.onProjectEventSelect}
                     />
                 }
@@ -66,7 +66,7 @@ const EventController = (props) => {
                 {props.newProjectView &&
                     <EventCheckbox
                         post={post}
-                        isChecked={post.isChecked}
+                        isChecked={props.isSelected}
                         onProjectEventSelect={props.onProjectEventSelect}
 
                     />}

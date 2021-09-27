@@ -3,12 +3,11 @@ import Timeline from '../profile/timeline';
 import TopButtonBar from './sub-components/top-button-bar';
 import ProjectHeaderInput from './sub-components/project-header-input';
 import ProjectHeader from './project-header';
+import ProjectUtilityButtons from './sub-components/project-utility-buttons';
 
 const MainDisplay = (props) => {
-    console.log(props.feedID);
     return (
         <div>
-
             <TopButtonBar
                 barType={props.barType}
                 onBackClick={props.onBackClick}
@@ -16,6 +15,7 @@ const MainDisplay = (props) => {
                 selectedProjectID={props.selectedProjectID}
                 onEditExistingProject={props.onEditExistingProject}
                 copyToClipboard={props.copyToClipboard}
+                handleWindowSwitch={props.handleWindowSwitch}
             />
 
             {props.newProjectView &&
@@ -36,7 +36,11 @@ const MainDisplay = (props) => {
                     priorProjectID={props.priorProjectID}
                 />
             }
-
+            {props.newProjectView &&
+                <ProjectUtilityButtons
+                    onSelectAll={props.onSelectAll}
+                />
+            }
             {
                 props.allPosts.length > 0 ?
                     <Timeline

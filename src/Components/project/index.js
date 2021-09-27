@@ -87,6 +87,8 @@ class ProjectController extends React.Component {
             window: MAIN,
             barType: this.props.isContentOnlyView ?
                 PROJECT_CONTENT_ONLY_VIEW_STATE : PROJECT_MACRO_VIEW_STATE,
+
+            rawFeed: [],
             selectedPosts: [],
             title: "",
             overview: "",
@@ -101,6 +103,7 @@ class ProjectController extends React.Component {
             selectedContent: null,
             hasMore: true,
             nextOpenPostIndex: 0,
+
             loadedFeed: [[]],
             newProjectState: false,
             feedID: 0,
@@ -126,6 +129,50 @@ class ProjectController extends React.Component {
         this.clearLoadedFeed = this.clearLoadedFeed.bind(this);
         this.selectFeedData = this.selectFeedData.bind(this);
         this.onEditExistingProject = this.onEditExistingProject.bind(this);
+        this.onSelectAll = this.onSelectAll.bind(this);
+    }
+
+    onSelectAll(isSelected) {
+        let updatedFeed = [[]];
+        let updatedNewProject = [];
+        let index = 0, nextOpenPostIndex = 0, j = 0, k = 0;
+        let event = null;
+        while (j < this.state.rawFeed.length) {
+
+            while (k < 4) {
+                event = this.state.rawFeed[j];
+                if (!event) break; //if we finish...
+                updatedFeed[index].push(
+                    <div key={k}>
+                        <EventController
+                            columnIndex={k}
+                            contentType={this.state.newProjectState || this.state.selectedProject ?
+                                PROJECT_EVENT : this.props.contentType}
+                            isSelected={isSelected}
+                            newProjectView={this.state.newProjectState}
+                            key={nextOpenPostIndex}
+                            eventIndex={nextOpenPostIndex}
+                            eventData={event}
+                            onEventClick={this.props.onEventClick}
+                            onProjectClick={this.props.onProjectClick}
+                            onProjectEventSelect={this.props.onProjectEventSelect}
+                        />
+                    </div>
+                );
+                updatedNewProject.push(event);
+                nextOpenPostIndex++;
+                k++;
+                j++;
+            }
+            if (k === 4) updatedFeed.push([]);
+            if (!updatedFeed[j]) break;
+            index++;
+            k = 0;
+        }
+        this.setState({
+            loadedFeed: updatedFeed,
+            selectedPosts: updatedNewProject
+        });
     }
 
     onEditExistingProject() {
@@ -151,15 +198,18 @@ class ProjectController extends React.Component {
         this.setState({ hasMore: value });
     }
 
-    updateFeedData(masterArray, nextOpenPostIndex) {
+    updateFeedData(loadedFeed, nextOpenPostIndex, incomingFeed) {
+        const newFeed = incomingFeed ? incomingFeed : [];
+        const feed = this.state.rawFeed.length > 0 ? this.state.rawFeed.concat(newFeed) : newFeed;
         this.setState({
-            loadedFeed: masterArray,
-            nextOpenPostIndex
+            loadedFeed,
+            nextOpenPostIndex,
+            rawFeed: feed
         })
     }
 
     handleBackClick() {
-        if (this.state.selectedProject) {
+        if (this.state.selectedProject && this.state.barType === PROJECT_MICRO_VIEW_STATE) {
             this.setState({
                 selectedProject: null,
                 barType: PROJECT_MACRO_VIEW_STATE,
@@ -172,12 +222,18 @@ class ProjectController extends React.Component {
         else {
             if (this.state.newProjectState) {
                 if (this.state.barType === PROJECT_SELECT_VIEW_STATE) {
+                    let barType = null;
+                    if (this.props.isContentOnlyView) {
+                        barType = PROJECT_CONTENT_ONLY_VIEW_STATE;
+                    }
+                    else {
+                        barType = PROJECT_MICRO_VIEW_STATE;
+                    }
                     this.setState({
-                        barType: PROJECT_MACRO_VIEW_STATE,
+                        barType: barType,
                         newProjectState: false,
                         hasMore: true,
-                    },
-                        this.clearLoadedFeed)
+                    }, this.clearLoadedFeed)
                 }
                 else if (this.state.barType === PROJECT_REARRANGE_STATE) {
                     this.setState({ window: MAIN, barType: PROJECT_SELECT_VIEW_STATE })
@@ -444,6 +500,7 @@ class ProjectController extends React.Component {
                             onEditExistingProject={this.onEditExistingProject}
                             hasMore={this.state.hasMore}
                             priorProjectID={this.state.priorProjectID}
+                            onSelectAll={this.onSelectAll}
                         />
                     </>
                 );

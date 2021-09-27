@@ -307,6 +307,7 @@ class ProfilePageAuthenticated extends React.Component {
                     throw new Error("Nothing matched for feed type");
             }
         }
+
         this.setState({
             nextOpenPostIndex: 0,
             hasMore: true,
@@ -328,7 +329,7 @@ class ProfilePageAuthenticated extends React.Component {
             this.state.pursuits[index].posts
             :
             this.state.pursuits[index].projects;
-
+        console.log(feedIDList);
         this.setState((state) => ({
             selectedPursuitIndex: index,
             selectedPursuit: state.pursuits[index].name,

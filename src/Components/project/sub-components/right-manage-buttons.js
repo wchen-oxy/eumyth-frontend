@@ -6,8 +6,6 @@ const RightManageButtons = (props) => {
     const toggleButton = () => {
         setButtonShow(!areButtonsShowing);
     }
-    console.log("adsfasdf");
-
     return (
         <div>
             <div className="rightmanagebuttons-centered-container">

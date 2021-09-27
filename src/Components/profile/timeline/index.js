@@ -26,9 +26,6 @@ class Timeline extends React.Component {
             this.props.shouldPull(false);
         }
     }
-    componentDidUpdate() {
-        console.log("changed")
-    }
 
     createTimelineRow(inputArray, contentType) {
         let masterArray = this.props.loadedFeed;
@@ -62,7 +59,6 @@ class Timeline extends React.Component {
                             onProjectEventSelect={this.props.onProjectEventSelect}
                         />
                     </div>
-
                 );
                 nextOpenPostIndex++;
                 k++;
@@ -73,8 +69,12 @@ class Timeline extends React.Component {
             index++;
             k = 0;
         }
-        this.props.updateFeedData(masterArray, nextOpenPostIndex);
-
+        if (this.props.newProjectView) {
+            this.props.updateFeedData(masterArray, nextOpenPostIndex, inputArray);
+        }
+        else {
+            this.props.updateFeedData(masterArray, nextOpenPostIndex);
+        }
     }
 
     fetchNextPosts() {
@@ -135,9 +135,6 @@ class Timeline extends React.Component {
     }
 
     render() {
-        console.log(this.props.hasMore);
-        console.log(this.props.feedID);
-
         const endMessage = (
             <div>
                 <br />
@@ -174,7 +171,7 @@ class Timeline extends React.Component {
                     :
                     <p>There doesn't seem to be anything here</p>
                 }
-                {this.props.loadedFeed.length > 1 ? null : <div style={{ height: '100px' }}></div>}
+                {this.props.loadedFeed.length > 1 ? null : <div style={{ height: '200px' }}></div>}
                 <br />
                 <br />
                 <br />
