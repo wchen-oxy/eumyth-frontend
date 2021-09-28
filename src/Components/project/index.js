@@ -52,7 +52,7 @@ const SortableItem = SortableElement(({ contentType, value, classColumnIndex }) 
         columnIndex={classColumnIndex}
         contentType={contentType}
         eventData={value}
-        newProjectView={false}
+        editProjectState={false}
         key={value._id}
         disableModalPreview={true}
     />
@@ -87,12 +87,12 @@ class ProjectController extends React.Component {
             window: MAIN,
             barType: this.props.isContentOnlyView ?
                 PROJECT_CONTENT_ONLY_VIEW_STATE : PROJECT_MACRO_VIEW_STATE,
-
+            loadedFeed: [[]],
             rawFeed: [],
             selectedPosts: [],
             title: "",
             overview: "",
-            pursuitCategory: this.props.pursuitNames ? this.props.pursuitNames[0] : null,
+            pursuitCategory: this.props.pursuitNames ? this.props.pursuitNames[0] : "",
             startDate: "",
             endDate: "",
             isComplete: false,
@@ -103,9 +103,8 @@ class ProjectController extends React.Component {
             selectedContent: null,
             hasMore: true,
             nextOpenPostIndex: 0,
-
-            loadedFeed: [[]],
-            newProjectState: false,
+            isUpdate: false,
+            editProjectState: false,
             feedID: 0,
 
         }
@@ -138,7 +137,6 @@ class ProjectController extends React.Component {
         let index = 0, nextOpenPostIndex = 0, j = 0, k = 0;
         let event = null;
         while (j < this.state.rawFeed.length) {
-
             while (k < 4) {
                 event = this.state.rawFeed[j];
                 if (!event) break; //if we finish...
@@ -146,10 +144,10 @@ class ProjectController extends React.Component {
                     <div key={k}>
                         <EventController
                             columnIndex={k}
-                            contentType={this.state.newProjectState || this.state.selectedProject ?
+                            contentType={this.state.editProjectState || this.state.selectedProject ?
                                 PROJECT_EVENT : this.props.contentType}
                             isSelected={isSelected}
-                            newProjectView={this.state.newProjectState}
+                            editProjectState={this.state.editProjectState}
                             key={nextOpenPostIndex}
                             eventIndex={nextOpenPostIndex}
                             eventData={event}
@@ -178,8 +176,9 @@ class ProjectController extends React.Component {
     onEditExistingProject() {
         this.setState({
             barType: PROJECT_SELECT_VIEW_STATE,
-            newProjectState: true,
+            editProjectState: true,
             hasMore: true,
+            isUpdate: true,
         },
             this.clearLoadedFeed)
         //except it should select all the events
@@ -220,18 +219,15 @@ class ProjectController extends React.Component {
             }, () => this.setNewURL(returnUsernameURL(this.props.targetUsername)))
         }
         else {
-            if (this.state.newProjectState) {
+            if (this.state.editProjectState) {
                 if (this.state.barType === PROJECT_SELECT_VIEW_STATE) {
-                    let barType = null;
-                    if (this.props.isContentOnlyView) {
-                        barType = PROJECT_CONTENT_ONLY_VIEW_STATE;
-                    }
-                    else {
-                        barType = PROJECT_MICRO_VIEW_STATE;
-                    }
+                    let barType = this.props.isContentOnlyView ?
+                        PROJECT_CONTENT_ONLY_VIEW_STATE :
+                        PROJECT_MICRO_VIEW_STATE;
                     this.setState({
                         barType: barType,
-                        newProjectState: false,
+                        editProjectState: false,
+                        isUpdate: false,
                         hasMore: true,
                     }, this.clearLoadedFeed)
                 }
@@ -350,43 +346,39 @@ class ProjectController extends React.Component {
 
     handlePost() {
         let formData = new FormData();
-        formData.append(USERNAME_FIELD, this.props.targetUsername);
-        formData.append(DISPLAY_PHOTO_FIELD, this.props.displayPhoto)
-        formData.append(USER_ID_FIELD, this.props.targetProfileID);
-        formData.append(INDEX_USER_ID_FIELD, this.props.targetIndexUserID);
-        formData.append(TITLE_FIELD, this.state.title);
-        if (this.state.overview) {
-            formData.append(OVERVIEW_FIELD, this.state.overview);
-        }
-        if (this.state.pursuitCategory) {
-            formData.append(PURSUIT_FIELD, this.state.pursuitCategory);
-        }
-        if (this.state.startDate) {
-            formData.append(START_DATE_FIELD, this.state.startDate);
-        }
-        if (this.state.endDate) {
-            formData.append(END_DATE_FIELD, this.state.endDate);
-        }
-        if (this.state.isComplete) {
-            formData.append(IS_COMPLETE_FIELD, this.state.isComplete);
-        }
-        if (this.state.minDuration) {
-            formData.append(MIN_DURATION_FIELD, this.state.minDuration);
-        }
-        if (this.state.coverPhoto) {
-            formData.append(COVER_PHOTO_FIELD, this.state.coverPhoto);
-        }
+
+        if (this.state.overview) formData.append(OVERVIEW_FIELD, this.state.overview);
+        if (this.state.pursuitCategory) formData.append(PURSUIT_FIELD, this.state.pursuitCategory);
+        if (this.state.startDate) formData.append(START_DATE_FIELD, this.state.startDate);
+        if (this.state.endDate) formData.append(END_DATE_FIELD, this.state.endDate);
+        if (this.state.isComplete) formData.append(IS_COMPLETE_FIELD, this.state.isComplete);
+        if (this.state.minDuration) formData.append(MIN_DURATION_FIELD, this.state.minDuration);
+        if (this.state.coverPhoto) formData.append(COVER_PHOTO_FIELD, this.state.coverPhoto);
         if (this.state.selectedPosts) {
             const stringArray = JSON.stringify(this.state.selectedPosts);
             formData.append(SELECTED_POSTS_FIELD, stringArray);
         }
 
-        return AxiosHelper.createProject(formData)
-            .then((result) => {
-                alert("Success!");
-                window.location.reload();
-            })
-            .catch(err => console.log(err));
+        if (this.state.isUpdate) {
+            return AxiosHelper.updateProject(formData)
+                .then((result => {
+
+                }))
+        }
+        else {
+            formData.append(USERNAME_FIELD, this.props.targetUsername);
+            formData.append(DISPLAY_PHOTO_FIELD, this.props.displayPhoto)
+            formData.append(USER_ID_FIELD, this.props.targetProfileID);
+            formData.append(INDEX_USER_ID_FIELD, this.props.targetIndexUserID);
+            formData.append(TITLE_FIELD, this.state.title);
+            return AxiosHelper.createProject(formData)
+
+                .then((result) => {
+                    alert("Success!");
+                    window.location.reload();
+                })
+                .catch(err => console.log(err));
+        }
     }
 
     setNewURL(projectID) {
@@ -407,7 +399,6 @@ class ProjectController extends React.Component {
 
     copyToClipboard(value) {
         navigator.clipboard.writeText(value);
-
         return AxiosHelper.createFork(
             this.props.visitorProfileID,
             this.props.indexUserID,
@@ -423,14 +414,14 @@ class ProjectController extends React.Component {
     handleNewProjectSelect() {
         this.setState({
             barType: PROJECT_SELECT_VIEW_STATE,
-            newProjectState: true,
+            editProjectState: true,
             hasMore: true,
         },
             this.clearLoadedFeed)
     }
 
     selectFeedData() {
-        if (this.state.newProjectState) {
+        if (this.state.editProjectState) {
             if (this.props.isContentOnlyView) {
                 return this.props.feedData.post_ids.map((item) => item.post_id);
             }
@@ -450,15 +441,11 @@ class ProjectController extends React.Component {
                             projectID={this.state.selectedProject?._id}
                             modalState={this.props.modalState}
                             labels={this.props.labels}
-                            visitorUsername={this.props.visitorUsername}
-                            targetUsername={this.props.targetUsername}
                             postIndex={this.state.selectedPostIndex}
-                            visitorDisplayPhoto={this.props.visitorDisplayPhoto}
                             preferredPostPrivacy={this.props.preferredPostPrivacy}
                             postType={this.state.postType}
                             pursuitNames={this.props.pursuitNames}
                             eventData={this.state.selectedContent}
-                            textData={this.state.textData}
                             disableCommenting={true}
                             returnModalStructure={this.props.returnModalStructure}
                             closeModal={this.clearModal}
@@ -473,7 +460,7 @@ class ProjectController extends React.Component {
                             handleInputChange={this.handleInputChange}
                             window={this.state.window}
                             nextOpenPostIndex={this.state.nextOpenPostIndex}
-                            contentType={this.state.newProjectState || this.state.selectedProject ?
+                            contentType={this.state.editProjectState || this.state.selectedProject ?
                                 PROJECT_EVENT : this.props.contentType}
                             selectedPosts={this.state.selectedPosts}
                             header={{
@@ -482,7 +469,7 @@ class ProjectController extends React.Component {
                                 username: this.state.selectedProject?.username,
                                 displayPhoto: this.state.selectedProject?.display_photo_key
                             }}
-                            newProjectView={this.state.newProjectState}
+                            editProjectState={this.state.editProjectState}
                             onProjectEventSelect={this.handleProjectEventSelect}
                             onProjectClick={this.handleProjectClick}
                             allPosts={this.state.selectedProject ? (

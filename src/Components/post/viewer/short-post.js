@@ -25,8 +25,8 @@ import "./short-post.scss";
 
 
 const ShortPostViewer = (props) => {
-    const textData = props.textData && props.eventData.is_paginated ?
-        JSON.parse(props.textData) : props.textData;
+    const textData = props.eventData?.text_data && props.eventData.is_paginated ?
+        JSON.parse(props.eventData.text_data) : props.eventData.text_data;
     return (
         <AuthUserContext.Consumer>
             {

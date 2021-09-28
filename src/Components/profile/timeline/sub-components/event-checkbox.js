@@ -5,7 +5,7 @@ const EventCheckbox = (props) => {
         <input
             type="checkbox"
             checked={props.isChecked}
-            onClick={(e) => {
+            onChange={(e) => {
                 props.onProjectEventSelect(props.post, e.target.value)
             }} />
     )

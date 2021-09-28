@@ -18,7 +18,7 @@ const MainDisplay = (props) => {
                 handleWindowSwitch={props.handleWindowSwitch}
             />
 
-            {props.newProjectView &&
+            {props.editProjectState &&
                 <ProjectHeaderInput
                     titleValue={props.header.title}
                     descriptionValue={props.descriptionValue}
@@ -36,7 +36,7 @@ const MainDisplay = (props) => {
                     priorProjectID={props.priorProjectID}
                 />
             }
-            {props.newProjectView &&
+            {props.editProjectState &&
                 <ProjectUtilityButtons
                     onSelectAll={props.onSelectAll}
                 />
@@ -48,7 +48,7 @@ const MainDisplay = (props) => {
                         nextOpenPostIndex={props.nextOpenPostIndex}
                         contentType={props.contentType}
                         selectedPosts={props.selectedPosts}
-                        newProjectView={props.newProjectView}
+                        editProjectState={props.editProjectState}
                         onProjectEventSelect={props.onProjectEventSelect}
                         onProjectClick={props.onProjectClick}
                         allPosts={props.allPosts}

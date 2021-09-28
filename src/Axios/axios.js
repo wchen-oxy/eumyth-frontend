@@ -27,6 +27,10 @@ export default class AxiosHelper {
         return axios.post(urls.PROJECT_BASE_URL, projectInfo)
     }
 
+    static updateProject(projectInfo) {
+        return axios.put(urls.PROJECT_BASE_URL, projectInfo);
+    }
+
     static createUserProfile(formData) {
         return axios.post(urls.USER_BASE_URL, formData);
     }
@@ -106,11 +110,11 @@ export default class AxiosHelper {
 
     static createFork(userID, indexUserID, username, projectData) {
         return axios.put(urls.PROJECT_FORK_URL, {
-                userID: userID,
-                indexUserID: indexUserID,
-                username: username,
-                projectData: projectData
-           
+            userID: userID,
+            indexUserID: indexUserID,
+            username: username,
+            projectData: projectData
+
         })
     }
 

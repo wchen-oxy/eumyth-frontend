@@ -50,7 +50,7 @@ class Timeline extends React.Component {
                             columnIndex={k}
                             contentType={contentType}
                             isSelected={isSelected}
-                            newProjectView={this.props.newProjectView}
+                            editProjectState={this.props.editProjectState}
                             key={nextOpenPostIndex}
                             eventIndex={nextOpenPostIndex}
                             eventData={inputArray[j]}
@@ -69,7 +69,7 @@ class Timeline extends React.Component {
             index++;
             k = 0;
         }
-        if (this.props.newProjectView) {
+        if (this.props.editProjectState) {
             this.props.updateFeedData(masterArray, nextOpenPostIndex, inputArray);
         }
         else {

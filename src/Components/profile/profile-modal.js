@@ -15,13 +15,11 @@ const ProfileModal = (props) => {
                     isOwnProfile={props.isOwnProfile}
                     isPostOnlyView={false}
                     postIndex={props.selectedPostIndex}
-                    visitorDisplayPhoto={props.smallCroppedDisplayPhoto}
                     preferredPostPrivacy={props.preferredPostPrivacy}
                     postType={props.postType}
                     largeViewMode={true}
                     pursuitNames={props.pursuitNames}
                     eventData={props.eventData}
-                    textData={props.textData}
                     closeModal={props.closeModal}
                     onCommentIDInjection={props.onCommentIDInjection}
                 />

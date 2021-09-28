@@ -200,28 +200,29 @@ class ProfilePageAuthenticated extends React.Component {
 
 
     loadedContentCallback(contentType, data) {
+        const content = contentType === POST ? data : data.project;
         if (this.state.visitorUsername) {
             const authUser = this.props.authUser;
             const pursuitData = createPusuitArray(authUser.pursuits);
             this.setContentOnlyData(
                 contentType,
-                data.project,
+                content,
                 pursuitData.names,
                 authUser.username,
                 authUser.indexProfileID,
                 authUser.profileID,
-                data.labels
+                content.labels
             )
         }
         else {
             this.setContentOnlyData(
                 contentType,
-                data.project,
+                content,
                 null,
                 null,
                 null,
                 null,
-                data.labels
+                content
             )
         }
     }
@@ -258,6 +259,7 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     setContentOnlyData(contentType, content, pursuitNames, username, indexUserID, completeUserID, labels) {
+        console.log(content);
         this.setState({
             contentType: contentType,
             selectedContent: content,
