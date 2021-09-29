@@ -27,6 +27,9 @@ class PostController extends React.Component {
         this.shouldPull = this.shouldPull.bind(this);
         this.updateFeedData = this.updateFeedData.bind(this);
     }
+    componentDidMount(){
+        console.log("mounted post controller");
+    }
 
     componentDidUpdate() {
         if (this.props.selectedPursuitIndex !== this.state.selectedPursuitIndex) {
@@ -83,16 +86,14 @@ class PostController extends React.Component {
         })
     }
     render() {
+        console.log(this.props.feedData);
+        console.log("asdfa");
         return (
             <>
                 <ProfileModal
+                    authUser={this.props.authUser}
                     modalState={this.props.modalState}
-                    labels={this.props.targetUser.labels}
-                    isOwnProfile={this.props.isOwnProfile}
-                    visitorUsername={this.props.visitorUsername}
                     postIndex={this.state.selectedPostIndex}
-                    visitorDisplayPhoto={this.props.visitorDisplayPhoto}
-                    preferredPostPrivacy={this.props.preferredPostPrivacy}
                     postType={this.state.postType}
                     pursuitNames={this.props.pursuitNames}
                     eventData={this.state.selectedEvent}

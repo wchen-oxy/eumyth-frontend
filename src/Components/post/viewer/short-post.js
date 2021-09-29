@@ -8,7 +8,6 @@ import ShortReEditor from '../editor/short-re-editor';
 import ReviewPost from "../draft/review-post";
 import AxiosHelper from "../../../Axios/axios";
 import CustomImageSlider from '../../image-carousel/custom-image-slider';
-import { AuthUserContext } from '../../session';
 import {
     EXPANDED,
     COLLAPSED,
@@ -24,40 +23,7 @@ import "../../image-carousel/index.scss";
 import "./short-post.scss";
 
 
-const ShortPostViewer = (props) => {
-    const textData = props.eventData?.text_data && props.eventData.is_paginated ?
-        JSON.parse(props.eventData.text_data) : props.eventData.text_data;
-    return (
-        <AuthUserContext.Consumer>
-            {
-                authUser =>
-                    <ShortPostViewerWithAuth
-                        projectID={props.projectID}
-                        postID={props.eventData._id}
-                        postIndex={props.postIndex}
-                        targetIndexUserID={props.targetIndexUserID}
-                        preferredPostPrivacy={props.preferredPostPrivacy}
-                        textData={textData}
-                        largeViewMode={props.largeViewMode}
-                        isOwnProfile={props.isOwnProfile}
-                        isPostOnlyView={props.isPostOnlyView}
-                        eventData={props.eventData}
-                        closeModal={props.closeModal}
-                        passDataToModal={props.passDataToModal}
-                        onCommentIDInjection={props.onCommentIDInjection}
-                        selectedPostFeedType={props.selectedPostFeedType}
-                        disableCommenting={props.disableCommenting}
-                        labels={props.labels}
-
-                        {...props}
-                        authUser={authUser}
-                    />
-            }
-        </AuthUserContext.Consumer>
-    )
-}
-
-class ShortPostViewerWithAuth extends React.Component {
+class ShortPostViewer extends React.Component {
 
     constructor(props) {
         super(props);
@@ -80,11 +46,6 @@ class ShortPostViewerWithAuth extends React.Component {
             postDisabled: true,
             window: INITIAL_STATE,
             tempTextForEdit: this.props.textData,
-
-            visitorProfilePreviewID: this.props.authUser?.userPreviewID ?? null,
-            visitorUsername: this.props.authUser?.username ?? null,
-            targetIndexUserID: this.props.authUser?.indexProfileID ?? null,
-            displayPhoto: this.props.authUser?.small_cropped_display_photo_key ?? null
         };
 
         this.heroRef = React.createRef();
@@ -218,8 +179,8 @@ class ShortPostViewerWithAuth extends React.Component {
                     fullCommentData={this.state.fullCommentData}
                     isImageOnly={isImageOnly}
                     windowType={windowType}
-                    visitorUsername={this.state.visitorUsername}
-                    visitorProfilePreviewID={this.state.visitorProfilePreviewID}
+                    visitorUsername={this.props.authUser?.username}
+                    visitorProfilePreviewID={this.props.authUser?.userPreviewID}
                     postID={this.props.postID}
                     postIndex={this.props.postIndex}
                     onCommentDataInjection={this.handleCommentDataInjection}
@@ -268,7 +229,7 @@ class ShortPostViewerWithAuth extends React.Component {
                     onAnnotationSubmit={this.handleAnnotationSubmit}
                     toggleAnnotations={this.toggleAnnotations}
                     handleArrowPress={this.handleArrowPress}
-                    visitorProfilePreviewID={this.state.visitorProfilePreviewID}
+                    visitorProfilePreviewID={this.props.authUser?.userPreviewID}
                 />
             </div>)
     }
@@ -367,7 +328,7 @@ class ShortPostViewerWithAuth extends React.Component {
         const { geometry, data } = annotation;
         AxiosHelper
             .postAnnotation(
-                this.state.visitorProfilePreviewID,
+                this.props.authUser?.userPreviewID,
                 this.props.eventData._id,
                 this.state.imageIndex,
                 JSON.stringify(data),
@@ -483,7 +444,6 @@ class ShortPostViewerWithAuth extends React.Component {
     }
 
     render() {
-        console.log(this.props.authUser);
         if (this.state.window === INITIAL_STATE) {
             if (!this.props.eventData.image_data.length) {
                 if (this.props.largeViewMode) {
@@ -661,14 +621,14 @@ class ShortPostViewerWithAuth extends React.Component {
                     <ReviewPost
                         isUpdateToPost
                         isPostOnlyView={this.props.isPostOnlyView}
-                        targetIndexUserID={this.state.targetIndexUserID}
+                        targetIndexUserID={authUser?.indexProfileID}
                         labels={authUser.labels}
                         selectedLabels={this.props.eventData.labels}
                         difficulty={this.props.eventData.difficulty}
                         progression={this.props.eventData.progression}
                         previousState={EDIT_STATE}
                         postID={this.props.eventData._id}
-                        displayPhoto={authUser.displayPhoto}
+                        displayPhoto={authUser?.smallCroppedDisplayPhotoKey}
                         coverPhoto={this.state.coverPhoto}
                         coverPhotoKey={this.props.eventData.cover_photo_key ?
                             this.props.eventData.cover_photo_key : null
@@ -684,7 +644,7 @@ class ShortPostViewerWithAuth extends React.Component {
                         postType={SHORT}
                         textData={this.state.tempTextForEdit}
                         username={authUser.username}
-                        preferredPostPrivacy={this.props.preferredPostPrivacy}
+                        preferredPostPrivacy={authUser.preferredPostPrivacy}
                         handlePreferredPostPrivacyChange={this.handlePreferredPostPrivacyChange}
                         setPostStage={this.handleWindowChange}
                     />

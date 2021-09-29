@@ -25,6 +25,7 @@ import {
 import EventController from '../profile/timeline/timeline-event-controller';
 import MainDisplay from './main-display';
 import TopButtonBar from './sub-components/top-button-bar';
+import CustomMultiSelect from '../custom-clickables/createable-single';
 
 const MAIN = "MAIN";
 const EDIT = "EDIT";
@@ -181,7 +182,6 @@ class ProjectController extends React.Component {
             isUpdate: true,
         },
             this.clearLoadedFeed)
-        //except it should select all the events
     }
 
     clearLoadedFeed() {
@@ -208,6 +208,7 @@ class ProjectController extends React.Component {
     }
 
     handleBackClick() {
+        const username = this.state.selectedProject.username;
         if (this.state.selectedProject && this.state.barType === PROJECT_MICRO_VIEW_STATE) {
             this.setState({
                 selectedProject: null,
@@ -216,7 +217,7 @@ class ProjectController extends React.Component {
                 nextOpenPostIndex: 0,
                 hasMore: true,
                 feedID: this.state.feedID + 1,
-            }, () => this.setNewURL(returnUsernameURL(this.props.targetUsername)))
+            }, () => this.setNewURL(returnUsernameURL(username)))
         }
         else {
             if (this.state.editProjectState) {
@@ -366,7 +367,7 @@ class ProjectController extends React.Component {
                 }))
         }
         else {
-            formData.append(USERNAME_FIELD, this.props.targetUsername);
+            formData.append(USERNAME_FIELD, this.props.feedData.username);
             formData.append(DISPLAY_PHOTO_FIELD, this.props.displayPhoto)
             formData.append(USER_ID_FIELD, this.props.targetProfileID);
             formData.append(INDEX_USER_ID_FIELD, this.props.targetIndexUserID);
@@ -400,9 +401,9 @@ class ProjectController extends React.Component {
     copyToClipboard(value) {
         navigator.clipboard.writeText(value);
         return AxiosHelper.createFork(
-            this.props.visitorProfileID,
-            this.props.indexUserID,
-            this.props.visitorUsername,
+            this.props.authUser.profileID,
+            this.props.authUser.indexProfileID,
+            this.props.authUser.username,
             this.state.selectedProject
         )
             .then((res) => {
@@ -438,18 +439,16 @@ class ProjectController extends React.Component {
                 return (
                     <>
                         <ProfileModal
+                            authUser={this.props.authUser}
                             projectID={this.state.selectedProject?._id}
                             modalState={this.props.modalState}
-                            labels={this.props.labels}
                             postIndex={this.state.selectedPostIndex}
-                            preferredPostPrivacy={this.props.preferredPostPrivacy}
                             postType={this.state.postType}
                             pursuitNames={this.props.pursuitNames}
                             eventData={this.state.selectedContent}
                             disableCommenting={true}
                             returnModalStructure={this.props.returnModalStructure}
                             closeModal={this.clearModal}
-                            isOwnProfile={this.props.isOwnProfile}
                         />
                         <MainDisplay
                             feedID={this.state.feedID + this.props.selectedPursuitIndex}
@@ -594,6 +593,16 @@ class ProjectController extends React.Component {
                                     this.handleInputChange(COVER_PHOTO, e.target.files[0])
                                 )}
                             />
+                            {/* <div>
+                                <label>Tags</label>
+                                <CustomMultiSelect
+                                    options={this.props.eventData.labels}
+                                    selectedLabels={this.props.eventData.labels}
+                                    name={"Tags"}
+                                    onSelect={setLabels}
+                                />
+
+                            </div> */}
                             <button
                                 onClick={this.handlePost}
                             >

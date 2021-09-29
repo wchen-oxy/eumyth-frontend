@@ -66,8 +66,6 @@ class ProfilePageAuthenticated extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            visitorUsername: this.props.authUser?.username ?? null,
-            visitorProfileID: this.props.authUser?.profileID ?? null,
             isPrivate: true,
             croppedDisplayPhoto: null,
             coverPhoto: "",
@@ -86,6 +84,10 @@ class ProfilePageAuthenticated extends React.Component {
             selectedPursuitIndex: 0,
             preferredPostPrivacy: null,
             isContentOnlyView: null,
+            loading: true,
+            target: {
+                username: this.props.match?.params?.username ?? null,
+            }
         }
 
         this.decideHeroContentVisibility = this.decideHeroContentVisibility.bind(this);
@@ -102,6 +104,7 @@ class ProfilePageAuthenticated extends React.Component {
         this.setProfileData = this.setProfileData.bind(this);
         this.loadFollowerStatus = this.loadFollowerStatus.bind(this);
         this.loadedContentCallback = this.loadedContentCallback.bind(this);
+        this.isOwner = this.isOwner.bind(this);
     }
 
     componentDidMount() {
@@ -130,13 +133,13 @@ class ProfilePageAuthenticated extends React.Component {
 
     componentDidUpdate() {
         const username = this.props.match.params.username;
-        const isSamePage = username !== this.state.targetUser?.username;
+        const isSamePage = username !== this.state.target?.username;
         const isViewingPost = this.props.match.params.postID ? true : false;
         const isViewingProject = this.props.match.params.projectID ? true : false;
 
         const isNewURL = !this.state.fail && isSamePage && !isViewingPost && !isViewingProject;
         if (isNewURL) {
-            return this.loadProfile(username);
+            return this.loadProfile(username, POST);
         }
     }
 
@@ -145,7 +148,6 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     loadMacroProjectData(username) {
-        const isOwner = this.state.visitorUsername === username;
         let userData = null;
         return AxiosHelper
             .returnUser(username)
@@ -153,13 +155,20 @@ class ProfilePageAuthenticated extends React.Component {
                 userData = result.data;
                 return this.loadFollowerStatus(
                     userData.user_relation_id,
-                    userData.private,
-                    isOwner)
+                    userData.private)
             })
+    }
+
+    isOwner() {
+        if (!this.props.authUser) return false;
+        if (this.state.isContentOnlyView) {
+            console.log("hits")
+            return this.state.selectedContent.username === this.props.authUser.username;
+        }
+        else return this.props.authUser.username === this.state.target.username;
     }
     //full Profile
     loadProfile(username, contentType) {
-        const isOwner = this.state.visitorUsername === username;
         let userData = null;
         return AxiosHelper
             .returnUser(username)
@@ -167,14 +176,12 @@ class ProfilePageAuthenticated extends React.Component {
                 userData = result.data;
                 return this.loadFollowerStatus(
                     userData.user_relation_id,
-                    userData.private,
-                    isOwner)
+                    userData.private)
             })
             .then((result) =>
                 this.setProfileData(
                     userData,
                     result?.data ?? null,
-                    isOwner,
                     contentType
                 ))
             .catch((err) => {
@@ -183,8 +190,8 @@ class ProfilePageAuthenticated extends React.Component {
             });
     }
 
-    loadFollowerStatus(userRelationID, isPrivate, isOwner) {
-        if (isOwner) {
+    loadFollowerStatus(userRelationID, isPrivate) {
+        if (this.isOwner()) {
             return null;
         }
         else if (!isPrivate) {
@@ -193,7 +200,7 @@ class ProfilePageAuthenticated extends React.Component {
         else if (isPrivate) {
             return AxiosHelper
                 .returnFollowerStatus(
-                    this.state.visitorUsername,
+                    this.props.authUser.username,
                     userRelationID);
         }
     }
@@ -201,7 +208,7 @@ class ProfilePageAuthenticated extends React.Component {
 
     loadedContentCallback(contentType, data) {
         const content = contentType === POST ? data : data.project;
-        if (this.state.visitorUsername) {
+        if (this.props.authUser.username) {
             const authUser = this.props.authUser;
             const pursuitData = createPusuitArray(authUser.pursuits);
             this.setContentOnlyData(
@@ -227,7 +234,7 @@ class ProfilePageAuthenticated extends React.Component {
         }
     }
 
-    setProfileData(userData, rawFollowerState, isOwner, contentType) {
+    setProfileData(userData, rawFollowerState, contentType) {
         const pursuitData = createPusuitArray(userData.pursuits);
         const followerStatus = this.handleFollowerStatusResponse(rawFollowerState);
         this.setState({
@@ -242,8 +249,8 @@ class ProfilePageAuthenticated extends React.Component {
             followerStatus: followerStatus,
             contentType: contentType,
             isContentOnlyView: false,
-            isOwner: isOwner,
-            targetUser: {
+            loading: false,
+            target: {
                 username: userData.username,
                 _id: userData._id,
                 index_user_id: userData.index_user_id,
@@ -259,19 +266,12 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     setContentOnlyData(contentType, content, pursuitNames, username, indexUserID, completeUserID, labels) {
-        console.log(content);
         this.setState({
             contentType: contentType,
             selectedContent: content,
             isContentOnlyView: true,
             visitorUsername: username,
             pursuitNames: pursuitNames,
-            targetUser: {
-                username: content.username,
-                _id: completeUserID,
-                index_user_id: indexUserID,
-                labels: labels
-            }
         })
     }
 
@@ -317,10 +317,10 @@ class ProfilePageAuthenticated extends React.Component {
             feedIDList: feedIDList
         }, () => {
             if (contentType === PROJECT) {
-                this.props.history.replace(returnUsernameURL(this.state.targetUser.username) + '/' + PROJECT.toLowerCase())
+                this.props.history.replace(returnUsernameURL(this.state.target.username) + '/' + PROJECT.toLowerCase())
             }
             else {
-                this.props.history.replace(returnUsernameURL(this.state.targetUser.username));
+                this.props.history.replace(returnUsernameURL(this.state.target.username));
             }
         }
         );
@@ -331,7 +331,6 @@ class ProfilePageAuthenticated extends React.Component {
             this.state.pursuits[index].posts
             :
             this.state.pursuits[index].projects;
-        console.log(feedIDList);
         this.setState((state) => ({
             selectedPursuitIndex: index,
             selectedPursuit: state.pursuits[index].name,
@@ -367,17 +366,18 @@ class ProfilePageAuthenticated extends React.Component {
 
 
     renderHeroContent() {
+        console.log(this.state.contentType);
+        if (this.state.contentType === null) return <p>Loading</p>;
         const selectedPursuit = this.state.pursuits[this.state.selectedPursuitIndex];
         if (this.state.contentType === POST) {
             return (
                 <PostController
-                    targetUser={this.state.targetUser}
+                    authUser={this.props.authUser}
                     returnModalStructure={this.props.returnModalStructure}
                     modalState={this.props.modalState}
                     openMasterModal={this.props.openMasterModal}
                     closeMasterModal={this.props.closeMasterModal}
                     pursuitNames={this.state.pursuitNames}
-                    isOwner={this.state.isOwner}
                     selectedPursuitIndex={this.state.selectedPursuitIndex}
                     feedData={selectedPursuit.posts.map((item) => item.post_id)}
                 />
@@ -386,23 +386,17 @@ class ProfilePageAuthenticated extends React.Component {
         else if (this.state.contentType === PROJECT) {
             return (
                 <ProjectController
+                    authUser={this.props.authUser}
                     allPosts={this.state.pursuits[0].projects}
-                    indexUserID={this.state.targetUser.index_user_id}
-                    visitorProfileID={this.state.visitorProfileID}
-                    targetUsername={this.state.targetUser.username}
-                    visitorUsername={this.state.visitorUsername}
                     contentType={this.state.contentType}
                     onNewBackProjectClick={this.handleNewBackProjectClick}
                     pursuitNames={this.state.pursuitNames}
                     selectedPursuitIndex={this.state.selectedPursuitIndex}
-
-                    isOwnProfile={this.state.isOwner}
                     returnModalStructure={this.props.returnModalStructure}
                     modalState={this.props.modalState}
                     openMasterModal={this.props.openMasterModal}
                     closeMasterModal={this.props.closeMasterModal}
                     feedData={selectedPursuit.projects}
-                    labels={this.state.targetUser.labels}
                 />)
         }
 
@@ -410,9 +404,9 @@ class ProfilePageAuthenticated extends React.Component {
 
     handleFollowerStatusChange(action) {
         AxiosHelper.setFollowerStatus(
-            this.state.visitorUsername,
+            this.props.authUser.username,
             this.state.userRelationID,
-            this.state.targetUser.user_preview_id,
+            this.state.target.user_preview_id,
             this.state.isPrivate,
             action)
             .then(
@@ -445,7 +439,7 @@ class ProfilePageAuthenticated extends React.Component {
 
     decideHeroContentVisibility() {
         const hideFromAll = !this.props.authUser?.username && this.state.isPrivate;
-        const hideFromUnauthorized = (!this.state.isOwner && this.state.isPrivate)
+        const hideFromUnauthorized = (!this.isOwner() && this.state.isPrivate)
             && (this.state.followerStatus !== "FOLLOWING" &&
                 this.state.followerStatus !== "REQUEST_ACCEPTED");
         if (this.state.fail) {
@@ -481,21 +475,19 @@ class ProfilePageAuthenticated extends React.Component {
         }
         if (this.state.isContentOnlyView) {
             if (this.state.contentType === POST) {
+                const formattedTextData = this.state.selectedContent?.text_data && this.state.selectedContent.is_paginated ?
+                    JSON.parse(this.state.selectedContent.text_data) : this.state.selectedContent.text_data;
                 return (
                     <ShortPostViewer
-                        targetProfileID={this.state.targetUser._id}
-                        targetIndexUserID={this.state.targetUser.index_user_id}
+                        authUser={this.props.authUser}
                         key={this.state.selectedContent._id}
-                        isOwnProfile={this.state.isOwner}
-                        visitorUsername={this.state.visitorUsername}
                         largeViewMode={true}
                         isPostOnlyView={this.state.isContentOnlyView}
                         preferredPostPrivacy={this.state.preferredPostPrivacy}
                         postType={this.state.postType}
                         pursuitNames={this.state.pursuitNames}
                         eventData={this.state.selectedContent}
-                        textData={this.state.selectedContent.text_data}
-                        labels={this.state.targetUser.labels}
+                        textData={formattedTextData}
                     />
                 )
             }
@@ -503,23 +495,18 @@ class ProfilePageAuthenticated extends React.Component {
                 return (
                     <div id="profile-main-container">
                         <ProjectController
+                            authUser={this.props.authUser}
                             allPosts={this.state.pursuits ? this.state.pursuits[0].posts : null}
-                            indexUserID={this.state.targetUser.index_user_id}
-                            targetUsername={this.state.targetUser.username}
-                            visitorProfileID={this.state.visitorProfileID}
-                            visitorUsername={this.state.visitorUsername}
                             contentType={this.state.contentType}
                             onNewBackProjectClick={this.handleNewBackProjectClick}
                             pursuitNames={this.state.pursuitNames}
                             selectedPursuitIndex={0}
 
-                            isOwnProfile={this.state.isOwner}
                             returnModalStructure={this.props.returnModalStructure}
                             modalState={this.props.modalState}
                             openMasterModal={this.props.openMasterModal}
                             closeMasterModal={this.props.closeMasterModal}
                             feedData={this.state.selectedContent}
-                            labels={this.state.targetUser.labels}
                             isContentOnlyView={this.state.isContentOnlyView}
                             priorProjectID={this.state.selectedContent?.ancestors.length > 0 ?
                                 this.state.selectedContent.ancestors[this.state.selectedContent.ancestors.length - 1]
@@ -534,9 +521,8 @@ class ProfilePageAuthenticated extends React.Component {
             }
         }
         else if (!this.state.isContentOnlyView) {
-            const targetUsername = this.state.targetUser?.username ?? "";
+            const targetUsername = this.state.target?.username ?? "";
             const targetProfilePhoto = returnUserImageURL(this.state.croppedDisplayPhoto);
-
             return (
                 <div>
                     <div id="profile-main-container">
