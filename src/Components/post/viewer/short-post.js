@@ -129,7 +129,6 @@ class ShortPostViewer extends React.Component {
                 areAnnotationsHidden: true,
                 selectedAnnotationIndex: null,
                 annotateButtonPressed: false
-
             }));
         }
     }
@@ -201,35 +200,28 @@ class ShortPostViewer extends React.Component {
     }
 
     renderImageSlider(windowType) {
-        const validAnnotations = this.returnValidAnnotations();
         const sliderClassName = this.props.largeViewMode ?
             "shortpostviewer-large-hero-image-container" :
             "shortpostviewer-inline-hero-container";
-
         let imageArray = this.props.eventData.image_data.map((key, i) =>
             returnUserImageURL(key)
         );
-
-        if (!this.state.annotations) {
-            return (<></>);
-        }
-
         return (
             <div className={sliderClassName}>
                 <CustomImageSlider
                     windowType={windowType}
                     hideAnnotations={this.state.areAnnotationsHidden}
                     imageArray={imageArray}
-                    annotations={validAnnotations}
                     activeAnnotations={this.state.activeAnnotations}
                     imageIndex={this.state.imageIndex}
                     showPromptOverlay={this.state.showPromptOverlay}
                     annotateButtonPressed={this.state.annotateButtonPressed}
                     areAnnotationsHidden={this.state.areAnnotationsHidden}
+                    visitorProfilePreviewID={this.props.authUser?.userPreviewID}
+                    annotations={this.returnValidAnnotations()}
                     onAnnotationSubmit={this.handleAnnotationSubmit}
                     toggleAnnotations={this.toggleAnnotations}
                     handleArrowPress={this.handleArrowPress}
-                    visitorProfilePreviewID={this.props.authUser?.userPreviewID}
                 />
             </div>)
     }
@@ -422,7 +414,6 @@ class ShortPostViewer extends React.Component {
         }
     }
 
-
     retrieveThumbnail() {
         if (this.props.eventData.image_data.length > 0) {
             return AxiosHelper.returnImage(this.props.eventData.image_data[0])
@@ -444,6 +435,8 @@ class ShortPostViewer extends React.Component {
     }
 
     render() {
+        const isOwnProfile = this.props.authUser.username === this.props.eventData.username;
+        console.log(isOwnProfile);
         if (this.state.window === INITIAL_STATE) {
             if (!this.props.eventData.image_data.length) {
                 if (this.props.largeViewMode) {
@@ -451,7 +444,7 @@ class ShortPostViewer extends React.Component {
                         <div className="shortpostviewer-window">
                             <div id="shortpostviewer-large-inline-header-container">
                                 <PostHeader
-                                    isOwnProfile={this.props.isOwnProfile}
+                                    isOwnProfile={isOwnProfile}
                                     username={this.props.eventData.username}
                                     date={this.state.date}
                                     displayPhoto={this.props.eventData.display_photo_key}
@@ -484,7 +477,7 @@ class ShortPostViewer extends React.Component {
 
                                 <div className="shortpostviewer-inline-side-container">
                                     <PostHeader
-                                        isOwnProfile={this.props.isOwnProfile}
+                                        isOwnProfile={isOwnProfile}
                                         username={this.props.eventData.username}
                                         date={this.state.date}
                                         displayPhoto={this.props.eventData.display_photo_key}
@@ -520,13 +513,13 @@ class ShortPostViewer extends React.Component {
                             <div id="shortpostviewer-large-main-container"
                                 className="with-image"
                             >
-                                {this.renderImageSlider(EXPANDED)}
+                                {this.state.annotations && this.renderImageSlider(EXPANDED)}
                                 <div
                                     className="shortpostviewer-large-side-container"
                                     ref={this.heroRef}
                                 >
                                     <PostHeader
-                                        isOwnProfile={this.props.isOwnProfile}
+                                        isOwnProfile={isOwnProfile}
                                         username={this.props.eventData.username}
                                         date={this.state.date}
                                         displayPhoto={this.props.eventData.display_photo_key}
@@ -572,7 +565,7 @@ class ShortPostViewer extends React.Component {
                                         textData={this.props.textData}
                                     />
                                 </div>
-                                {this.renderImageSlider(COLLAPSED)}
+                                {this.state.annotations && this.renderImageSlider(COLLAPSED)}
                             </div>
                             {this.renderComments(COLLAPSED)}
                         </>
@@ -608,7 +601,7 @@ class ShortPostViewer extends React.Component {
             )
         }
         else if (this.state.window === REVIEW_STATE) {
-            const authUser = this.props.authUser;
+
             let formattedDate = new Date().toISOString().substr(0, 10);
             if (this.props.eventData.date) {
                 formattedDate =
@@ -620,15 +613,16 @@ class ShortPostViewer extends React.Component {
                 <div className="shortpostviewer-window">
                     <ReviewPost
                         isUpdateToPost
+                        authUser={this.props.authUser}
                         isPostOnlyView={this.props.isPostOnlyView}
-                        targetIndexUserID={authUser?.indexProfileID}
-                        labels={authUser.labels}
+                        targetIndexUserID={this.props.authUser?.indexProfileID}
+
                         selectedLabels={this.props.eventData.labels}
                         difficulty={this.props.eventData.difficulty}
                         progression={this.props.eventData.progression}
                         previousState={EDIT_STATE}
                         postID={this.props.eventData._id}
-                        displayPhoto={authUser?.smallCroppedDisplayPhotoKey}
+
                         coverPhoto={this.state.coverPhoto}
                         coverPhotoKey={this.props.eventData.cover_photo_key ?
                             this.props.eventData.cover_photo_key : null
@@ -639,12 +633,9 @@ class ShortPostViewer extends React.Component {
                         date={formattedDate}
                         min={this.props.eventData.min_duration}
                         selectedPursuit={this.props.eventData.pursuit_category}
-                        pursuitNames={authUser.pursuits.map(pursuit => pursuit.name)}
                         closeModal={this.props.closeModal}
                         postType={SHORT}
                         textData={this.state.tempTextForEdit}
-                        username={authUser.username}
-                        preferredPostPrivacy={authUser.preferredPostPrivacy}
                         handlePreferredPostPrivacyChange={this.handlePreferredPostPrivacyChange}
                         setPostStage={this.handleWindowChange}
                     />

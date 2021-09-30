@@ -3,6 +3,18 @@ import _ from 'lodash';
 import { SHORT, LONG } from "../../constants/flags";
 import imageCompression from 'browser-image-compression';
 import AxiosHelper from '../../../Axios/axios';
+
+import CustomMultiSelect from '../../custom-clickables/createable-single';
+import CoverPhotoControls from './sub-components/cover-photo-controls';
+import PrePostControls from './sub-components/pre-post-controls';
+import PostTypeTitle from './sub-components/post-type-title';
+import DateInput from './sub-components/data-input';
+import PursuitCategoryInput from './sub-components/pursuit-categoy-input';
+import DifficultyInput from './sub-components/difficulty-input';
+import ProgressInput from './sub-components/progress-input';
+import MinutesInput from './sub-components/minutes-input';
+import TitleInput from './sub-components/title-input';
+import { displayDifficulty, } from "../../constants/ui-text";
 import {
     COVER_PHOTO_FIELD,
     DATE_FIELD,
@@ -24,19 +36,7 @@ import {
     USERNAME_FIELD,
     INDEX_USER_ID_FIELD
 } from "../../constants/form-data";
-import { displayDifficulty, } from "../../constants/ui-text";
-import CustomMultiSelect from '../../custom-clickables/createable-single';
-import CoverPhotoControls from './sub-components/cover-photo-controls';
-import PrePostControls from './sub-components/pre-post-controls';
-import PostTypeTitle from './sub-components/post-type-title';
-import DateInput from './sub-components/data-input';
-import PursuitCategoryInput from './sub-components/pursuit-categoy-input';
-import DifficultyInput from './sub-components/difficulty-input';
-import ProgressInput from './sub-components/progress-input';
-import MinutesInput from './sub-components/minutes-input';
-import TitleInput from './sub-components/title-input';
 import "./review-post.scss";
-
 
 
 const ReviewPost = (props) => {
@@ -54,7 +54,6 @@ const ReviewPost = (props) => {
     const [useCoverPhoto, setUseCoverPhoto] = useState(props.coverPhotoKey !== null && props.isUpdateToPost);
     const [useImageForThumbnail, setUseImageForThumbnail] = useState(props.coverPhotoKey);
     const [shouldRemoveSavedCoverPhoto, setShouldRemoveSavedCoverPhoto] = useState(false);
-    const [randomKey, setRandomKey] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [labels, setLabels] = useState(null);
 
@@ -179,16 +178,18 @@ const ReviewPost = (props) => {
         let formData = new FormData();
         formData.append(DATE_FIELD, date);
         formData.append(POST_TYPE_FIELD, props.postType);
-        formData.append(USERNAME_FIELD, props.username);
+        formData.append(USERNAME_FIELD, props.authUser.username);
         formData.append(IS_PAGINATED_FIELD, props.isPaginated);
         formData.append(PROGRESSION_FIELD, (progression));
         formData.append(DIFFICULTY_FIELD, difficulty);
-        if (props.targetIndexUserID) formData.append(INDEX_USER_ID_FIELD, props.targetIndexUserID);
-        if (props.displayPhoto) formData.append(DISPLAY_PHOTO_FIELD, props.displayPhoto);
+        if (props.authUser.indexProfileID) formData.append(INDEX_USER_ID_FIELD, props.targetIndexUserID);
         if (props.previewTitle) formData.append(TITLE_FIELD, _.trim(props.previewTitle));
         if (postPrivacyType) formData.append(POST_PRIVACY_TYPE_FIELD, postPrivacyType);
         if (pursuit) formData.append(PURSUIT_FIELD, pursuit);
         if (minDuration) formData.append(MIN_DURATION_FIELD, minDuration);
+        if (props.authUser.smallCroppedDisplayPhotoKey) {
+            formData.append(DISPLAY_PHOTO_FIELD, props.authUser.smallCroppedDisplayPhotoKey);
+        }
         if (subtitle) {
             formData.append(SUBTITLE_FIELD, _.trim(subtitle));
         }
@@ -274,7 +275,7 @@ const ReviewPost = (props) => {
                     />
                     <DateInput date={date} setDate={setDate} />
                     <PursuitCategoryInput
-                        pursuitNames={props.pursuitNames}
+                        pursuitNames={props.authUser.pursuits.map(pursuit => pursuit.name)}
                         pursuit={props.pursuit}
                         setPursuit={setPursuit}
                     />
@@ -295,7 +296,7 @@ const ReviewPost = (props) => {
                 <div>
                     <label>Tags</label>
                     <CustomMultiSelect
-                        options={props.labels}
+                        options={props.authUser.labels}
                         selectedLabels={props.selectedLabels}
                         name={"Tags"}
                         onSelect={setLabels}
@@ -304,7 +305,7 @@ const ReviewPost = (props) => {
                 </div>
                 <div className="reviewpost-button-container">
                     <PrePostControls
-                        preferredPostPrivacy={props.preferredPostPrivacy}
+                        preferredPostPrivacy={props.authUser.preferredPostType}
                         setPostPrivacyType={setPostPrivacyType}
                         handleFormAppend={handleFormAppend}
                         disabled={isSubmitting}

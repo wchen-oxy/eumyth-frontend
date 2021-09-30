@@ -84,7 +84,6 @@ class ProfilePageAuthenticated extends React.Component {
             selectedPursuitIndex: 0,
             preferredPostPrivacy: null,
             isContentOnlyView: null,
-            loading: true,
             target: {
                 username: this.props.match?.params?.username ?? null,
             }
@@ -136,7 +135,6 @@ class ProfilePageAuthenticated extends React.Component {
         const isSamePage = username !== this.state.target?.username;
         const isViewingPost = this.props.match.params.postID ? true : false;
         const isViewingProject = this.props.match.params.projectID ? true : false;
-
         const isNewURL = !this.state.fail && isSamePage && !isViewingPost && !isViewingProject;
         if (isNewURL) {
             return this.loadProfile(username, POST);
@@ -167,7 +165,7 @@ class ProfilePageAuthenticated extends React.Component {
         }
         else return this.props.authUser.username === this.state.target.username;
     }
-    //full Profile
+
     loadProfile(username, contentType) {
         let userData = null;
         return AxiosHelper
@@ -215,20 +213,11 @@ class ProfilePageAuthenticated extends React.Component {
                 contentType,
                 content,
                 pursuitData.names,
-                authUser.username,
-                authUser.indexProfileID,
-                authUser.profileID,
-                content.labels
             )
         }
         else {
             this.setContentOnlyData(
                 contentType,
-                content,
-                null,
-                null,
-                null,
-                null,
                 content
             )
         }
@@ -238,6 +227,7 @@ class ProfilePageAuthenticated extends React.Component {
         const pursuitData = createPusuitArray(userData.pursuits);
         const followerStatus = this.handleFollowerStatusResponse(rawFollowerState);
         this.setState({
+            target: userData,
             coverPhotoKey: userData.cover_photo_key,
             croppedDisplayPhotoKey: userData.croppedDisplayPhotoKey,
             smallCroppedDisplayPhotoKey: userData.smallCroppedDisplayPhotoKey,
@@ -249,13 +239,6 @@ class ProfilePageAuthenticated extends React.Component {
             followerStatus: followerStatus,
             contentType: contentType,
             isContentOnlyView: false,
-            loading: false,
-            target: {
-                username: userData.username,
-                _id: userData._id,
-                index_user_id: userData.index_user_id,
-                labels: userData.labels
-            }
         })
     }
     //PROJECT
@@ -265,13 +248,12 @@ class ProfilePageAuthenticated extends React.Component {
             .then(result => this.loadedContentCallback(PROJECT, result.data));
     }
 
-    setContentOnlyData(contentType, content, pursuitNames, username, indexUserID, completeUserID, labels) {
+    setContentOnlyData(contentType, content, pursuitNames) {
         this.setState({
             contentType: contentType,
             selectedContent: content,
-            isContentOnlyView: true,
-            visitorUsername: username,
             pursuitNames: pursuitNames,
+            isContentOnlyView: true,
         })
     }
 
@@ -322,8 +304,7 @@ class ProfilePageAuthenticated extends React.Component {
             else {
                 this.props.history.replace(returnUsernameURL(this.state.target.username));
             }
-        }
-        );
+        });
     }
 
     handleFeedSwitch(index) {
@@ -366,8 +347,7 @@ class ProfilePageAuthenticated extends React.Component {
 
 
     renderHeroContent() {
-        console.log(this.state.contentType);
-        if (this.state.contentType === null) return <p>Loading</p>;
+        if (this.state.contentType === null) return null;
         const selectedPursuit = this.state.pursuits[this.state.selectedPursuitIndex];
         if (this.state.contentType === POST) {
             return (
@@ -541,7 +521,7 @@ class ProfilePageAuthenticated extends React.Component {
                                 </div>
                                 <div id="profile-follow-actions-container">
                                     <FollowButton
-                                        isOwner={this.state.isOwner}
+                                        isOwner={this.isOwner()}
                                         followerStatus={this.state.followerStatus}
                                         onFollowClick={this.handleFollowClick}
                                         onOptionsClick={this.handleOptionsClick}

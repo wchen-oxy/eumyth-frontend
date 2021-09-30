@@ -2,7 +2,6 @@ import React from 'react';
 import ShortPost from './short-post';
 import { withFirebase } from '../../../Firebase';
 import { SHORT } from "../../constants/flags";
-import { AuthUserContext } from '../../session';
 
 class PostDraftController extends React.Component {
   _isMounted = false;
@@ -25,7 +24,6 @@ class PostDraftController extends React.Component {
     this.handleDisablePost = this.handleDisablePost.bind(this);
     this.handleSubmitPost = this.handleSubmitPost.bind(this);
     this.setSavePending = this.setSavePending.bind(this);
-
     this.handlePostTypeSet = this.handlePostTypeSet.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
     this.onPreferredPostPrivacyChange = this.onPreferredPostPrivacyChange.bind(this);
@@ -73,18 +71,15 @@ class PostDraftController extends React.Component {
 
   render() {
     return (
-      <AuthUserContext.Consumer>
-        {authUser =>
-          <ShortPost
-            authUser={authUser}
-            onlineDraft
-            closeModal={this.props.closeModal}
-            setImageArray={this.setImageArray}
-            handlePreferredPostPrivacyChange={this.onPreferredPostPrivacyChange}
-            onPostTypeSet={this.handlePostTypeSet}
-            disablePost={this.handleDisablePost}
-          />}
-      </AuthUserContext.Consumer>
+      <ShortPost
+        onlineDraft
+        authUser={this.props.authUser}
+        closeModal={this.props.closeModal}
+        setImageArray={this.setImageArray}
+        handlePreferredPostPrivacyChange={this.onPreferredPostPrivacyChange}
+        onPostTypeSet={this.handlePostTypeSet}
+        disablePost={this.handleDisablePost}
+      />
     );
   }
 }

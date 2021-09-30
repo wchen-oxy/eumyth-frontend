@@ -3,7 +3,7 @@ import ShortEditor from '../editor/short-editor';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import ReviewPost from './review-post';
-import { INITIAL_STATE, REVIEW_STATE, SHORT, NONE, NEW_LONG, OLD_LONG } from "../../constants/flags";
+import { INITIAL_STATE, REVIEW_STATE, SHORT } from "../../constants/flags";
 import "./short-post.scss";
 import imageCompression from 'browser-image-compression';
 
@@ -20,7 +20,7 @@ class ShortPost extends React.Component {
       isPaginated: false,
       postDisabled: true,
       window: INITIAL_STATE,
-      previewTitle: null,
+      previewTitle: '',
       tinyPhotos: null,
     };
 
@@ -194,13 +194,11 @@ class ShortPost extends React.Component {
     }));
   }
 
-
   handleSelectedFileChange(file) {
     this.setState((state) => ({
       selectedFiles: state.selectedFiles.concat(file)
     }), this.generateValidFiles);
   }
-
 
   handleDisablePost(disabled) {
     this.setState({ postDisabled: disabled });
@@ -231,14 +229,11 @@ class ShortPost extends React.Component {
   }
 
   render() {
-    console.log(this.props.authUser)
     if (this.state.window === INITIAL_STATE) {
       return (
         <div id="shortpost-window">
           <h2>Short Post</h2>
           <div className="shortpost-button-container">
-            <span >
-            </span>
             {this.state.isCompressing && <p>Compressing Photos</p>}
             <span>
               <button
@@ -250,7 +245,6 @@ class ShortPost extends React.Component {
               </button>
             </span>
           </div>
-
           <div id="shortpost-title-container">
             <TextareaAutosize
               id='textcontainer-text-input'
@@ -259,14 +253,12 @@ class ShortPost extends React.Component {
               minRows={1}
               value={this.state.previewTitle} />
           </div>
-
           <ShortEditor
             selectedFiles={this.state.selectedFiles}
             validFiles={this.state.validFiles}
             imageArray={this.state.imageArray}
             unsupportedFiles={this.state.unsupportedFiles}
             isPaginated={this.state.isPaginated}
-
             textPageText={this.state.textData}
             onSortEnd={this.handleSortEnd}
             setImageArray={this.setImageArray}
@@ -285,8 +277,7 @@ class ShortPost extends React.Component {
       );
     }
     else {
-      const authUser = this.props.authUser;
-       return (
+      return (
         <div id="shortpost-review-window">
           <ReviewPost
             date={
@@ -297,7 +288,7 @@ class ShortPost extends React.Component {
             difficulty={0}
             progression={1}
             previousState={INITIAL_STATE}
-            displayPhoto={authUser.smallCroppedDisplayPhotoKey}
+            authUser={this.props.authUser}
             isPaginated={this.state.isPaginated}
             previewTitle={this.state.previewTitle}
             closeModal={this.props.closeModal}
@@ -305,10 +296,6 @@ class ShortPost extends React.Component {
             imageArray={this.state.tinyPhotos}
             coverPhoto={this.state.coverPhoto}
             textData={this.state.textData}
-            username={authUser.username}
-            preferredPostPrivacy={authUser.preferredPostType}
-            pursuitNames={authUser.pursuits.map(pursuit => pursuit.name)}
-            labels={authUser.labels}
             handlePreferredPostPrivacyChange={this.props.handlePreferredPostPrivacyChange}
             setPostStage={this.setPostStage}
             handleTitleChange={this.handleTextChange}

@@ -113,8 +113,8 @@ class NavigationAuthorized extends React.Component {
                     this.props.modalState &&
                     this.props.returnModalStructure(
                         <ModalController
+                            authUser={this.props.authUser}
                             modalState={this.props.modalState}
-                            username={this.props.authUser.username}
                             closeModal={this.clearModal}
                         />,
                         this.clearModal)

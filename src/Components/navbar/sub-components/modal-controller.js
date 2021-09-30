@@ -8,13 +8,14 @@ const ModalController = (props) => {
         case (NEW_ENTRY_MODAL_STATE):
             return (
                 <PostDraftController
-                    username={props.username}
+                    authUser={props.authUser}
+                    username={props.authUser.username}
                     closeModal={props.closeModal}
                 />);
         case (RELATION_MODAL_STATE):
             return (
                 <RelationModal
-                    username={props.username}
+                    username={props.authUser.username}
                     closeModal={props.clearModal} />);
         case (POST_VIEWER_MODAL_STATE):
             return (null);

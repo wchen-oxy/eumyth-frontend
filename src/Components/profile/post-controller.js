@@ -27,7 +27,7 @@ class PostController extends React.Component {
         this.shouldPull = this.shouldPull.bind(this);
         this.updateFeedData = this.updateFeedData.bind(this);
     }
-    componentDidMount(){
+    componentDidMount() {
         console.log("mounted post controller");
     }
 
@@ -48,9 +48,10 @@ class PostController extends React.Component {
     }
 
     clearModal() {
+        const username = this.state.selectedEvent.username;
         this.setState(
             { selectedEvent: null }, () => {
-                this.props.history.replace(returnUsernameURL(this.props.targetUser.username));
+                this.props.history.replace(returnUsernameURL(username));
                 this.props.closeMasterModal();
             });
     }
@@ -86,8 +87,6 @@ class PostController extends React.Component {
         })
     }
     render() {
-        console.log(this.props.feedData);
-        console.log("asdfa");
         return (
             <>
                 <ProfileModal
