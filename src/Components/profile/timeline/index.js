@@ -33,9 +33,7 @@ class Timeline extends React.Component {
         let nextOpenPostIndex = this.props.nextOpenPostIndex;
         let j = 0;
         let k = masterArray[index].length; //length of last array 
-        //while input array is not empty
         while (j < inputArray.length) {
-            //while the last sub array is not empty
             while (k < 4) {
                 let isSelected = false;
                 if (!inputArray[j]) break; //if we finish...
@@ -78,7 +76,11 @@ class Timeline extends React.Component {
     }
 
     fetchNextPosts() {
-        console.log("shouldpull")
+        const returnContent = (contentType) => (
+            contentType === PROJECT ?
+                AxiosHelper.returnMultipleProjects(slicedObjectIDs)
+                : AxiosHelper.returnMultiplePosts(slicedObjectIDs, true)
+        );
         if (this.props.allPosts.every(i => (typeof i !== "string"))) {
             throw new Error('Feed is not just ObjectIDs');
         }
@@ -86,52 +88,21 @@ class Timeline extends React.Component {
             >= this.props.allPosts.length) {
             this.props.shouldPull(false);
         }
-        if (this.props.contentType === PROJECT) {
-            const slicedObjectIDs = this.props.allPosts.slice(
-                this.props.nextOpenPostIndex,
-                this.props.nextOpenPostIndex + this.state.fixedDataLoadLength);
-            return AxiosHelper.returnMultipleProjects(slicedObjectIDs)
-                .then((result) => {
-                    if (this._isMounted) {
-                        this.createTimelineRow(
-                            result.data.projects,
-                            this.props.contentType);
-                    }
-                })
-                .catch((error) => console.log(error));
-        }
-        else if (this.props.contentType === PROJECT_EVENT) {
-            const slicedObjectIDs = this.props.allPosts.slice(
-                this.props.nextOpenPostIndex,
-                this.props.nextOpenPostIndex + this.state.fixedDataLoadLength);
-            this.props.allPosts.slice(
-                this.props.nextOpenPostIndex,
-                this.props.nextOpenPostIndex + this.state.fixedDataLoadLength);
-            return AxiosHelper.returnMultiplePosts(slicedObjectIDs, false)
-                .then((result) => {
-                    if (this._isMounted) {
-                        this.createTimelineRow(
-                            result.data.posts,
-                            this.props.contentType);
-                    }
-                })
-                .catch((error) => console.log(error));
-        }
-        else {
-            const slicedObjectIDs = this.props.allPosts.slice(
-                this.props.nextOpenPostIndex,
-                this.props.nextOpenPostIndex + this.state.fixedDataLoadLength);
 
-            return AxiosHelper.returnMultiplePosts(slicedObjectIDs, false)
-                .then((result) => {
-                    if (this._isMounted) {
-                        this.createTimelineRow(
-                            result.data.posts,
-                            this.props.contentType);
-                    }
-                })
-                .catch((error) => console.log(error));
-        }
+        const slicedObjectIDs = this.props.allPosts.slice(
+            this.props.nextOpenPostIndex,
+            this.props.nextOpenPostIndex + this.state.fixedDataLoadLength);
+        return returnContent(this.props.contentType)
+            .then((result) => {
+                if (this._isMounted) {
+                    const data = this.props.contentType === PROJECT ? result.data.projects : result.data.posts;
+                    this.props.createTimelineRow(
+                        data,
+                        this.props.contentType,
+                        slicedObjectIDs);
+                }
+            })
+            .catch((error) => console.log(error));
     }
 
     render() {
@@ -171,7 +142,7 @@ class Timeline extends React.Component {
                     :
                     <p>There doesn't seem to be anything here</p>
                 }
-                {this.props.loadedFeed.length > 1 ? null : <div style={{ height: '200px' }}></div>}
+                {this.props.loadedFeed.length > 1 ? null : <div style={{ height: this.props.editProjectState ? '500px' : '200px' }}></div>}
                 <br />
                 <br />
                 <br />

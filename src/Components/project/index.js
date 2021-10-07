@@ -1,43 +1,22 @@
 import React from 'react';
 import ProfileModal from '../profile/profile-modal';
-import TextareaAutosize from 'react-textarea-autosize';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import AxiosHelper from '../../Axios/axios';
 import { withRouter } from 'react-router-dom';
-import { PROJECT_CONTENT_ONLY_VIEW_STATE, POST, POST_VIEWER_MODAL_STATE, PROJECT_EVENT, PROJECT_MACRO_VIEW_STATE, PROJECT_MICRO_VIEW_STATE, PROJECT_REARRANGE_STATE, PROJECT_SELECT_VIEW_STATE } from "../constants/flags";
+import { PROJECT_CONTENT_ONLY_VIEW_STATE, POST, POST_VIEWER_MODAL_STATE, PROJECT_EVENT, PROJECT_MACRO_VIEW_STATE, PROJECT_MICRO_VIEW_STATE, PROJECT_REARRANGE_STATE, PROJECT_SELECT_VIEW_STATE, PROJECT } from "../constants/flags";
 import { returnUsernameURL, returnPostURL, returnProjectURL } from "../constants/urls";
 import "./index.scss";
-import {
-    COVER_PHOTO_FIELD,
-    DISPLAY_PHOTO_FIELD,
-    END_DATE_FIELD,
-    INDEX_USER_ID_FIELD,
-    IS_COMPLETE_FIELD,
-    MIN_DURATION_FIELD,
-    OVERVIEW_FIELD,
-    PURSUIT_FIELD,
-    SELECTED_POSTS_FIELD,
-    START_DATE_FIELD,
-    TITLE_FIELD,
-    USERNAME_FIELD,
-    USER_ID_FIELD
-} from '../constants/form-data';
+
 import EventController from '../profile/timeline/timeline-event-controller';
 import MainDisplay from './main-display';
 import TopButtonBar from './sub-components/top-button-bar';
-import CustomMultiSelect from '../custom-clickables/createable-single';
+import ProjectReview from './review';
 
 const MAIN = "MAIN";
 const EDIT = "EDIT";
 const REVIEW = "REVIEW";
 const TITLE = "TITLE";
 const OVERVIEW = "OVERVIEW";
-const PURSUIT = "PURSUIT";
-const START_DATE = "START_DATE";
-const END_DATE = "END_DATE";
-const IS_COMPLETE = "IS_COMPLETE";
-const MINUTES = "MINUTES";
-const COVER_PHOTO = "COVER_PHOTO";
 
 const handleIndexUpdate = (index) => {
     index++;
@@ -85,29 +64,30 @@ class ProjectController extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            contentViewOnlyAllPosts: [],
             window: MAIN,
+            selectStage: 1,
             barType: this.props.isContentOnlyView ?
                 PROJECT_CONTENT_ONLY_VIEW_STATE : PROJECT_MACRO_VIEW_STATE,
-            loadedFeed: [[]],
-            rawFeed: [],
+            feedData: [],
             selectedPosts: [],
+            semiFinalData: [],
+            feedIndex: new Map(),
             title: "",
             overview: "",
-            pursuitCategory: this.props.pursuitNames ? this.props.pursuitNames[0] : "",
             startDate: "",
             endDate: "",
             isComplete: false,
             minDuration: null,
             coverPhoto: null,
-            selectedProject: this.props.isContentOnlyView && this.props.feedData ? this.props.feedData : null,
+            selectedProject: this.props.content.post_ids ? { post_ids: this.props.content.post_ids } : null,
             priorProjectID: this.props.priorProjectID ? this.props.priorProjectID : null,
-            selectedContent: null,
+            selectedPost: null,
             hasMore: true,
             nextOpenPostIndex: 0,
             isUpdate: false,
             editProjectState: false,
             feedID: 0,
-
         }
 
         this.modalRef = React.createRef(null);
@@ -118,9 +98,7 @@ class ProjectController extends React.Component {
         this.handleProjectEventSelect = this.handleProjectEventSelect.bind(this);
         this.handleWindowSwitch = this.handleWindowSwitch.bind(this);
         this.handleSortEnd = this.handleSortEnd.bind(this);
-        this.handlePost = this.handlePost.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.updateFeedData = this.updateFeedData.bind(this);
         this.setModal = this.setModal.bind(this);
         this.copyToClipboard = this.copyToClipboard.bind(this);
         this.clearModal = this.clearModal.bind(this);
@@ -130,63 +108,111 @@ class ProjectController extends React.Component {
         this.selectFeedData = this.selectFeedData.bind(this);
         this.onEditExistingProject = this.onEditExistingProject.bind(this);
         this.onSelectAll = this.onSelectAll.bind(this);
+        this.createTimelineRow = this.createTimelineRow.bind(this);
+        this.createRenderedPosts = this.createRenderedPosts.bind(this);
     }
 
-    onSelectAll(isSelected) {
-        let updatedFeed = [[]];
-        let updatedNewProject = [];
-        let index = 0, nextOpenPostIndex = 0, j = 0, k = 0;
-        let event = null;
-        while (j < this.state.rawFeed.length) {
+    createTimelineRow(inputArray, contentType, objectIDs) {
+        const feedData = this.state.feedData
+            .concat(inputArray)
+            .sort((a, b) => objectIDs.indexOf(a._id) - objectIDs.indexOf(b._id));
+
+        this.setState({
+            feedData,
+            nextOpenPostIndex: this.state.nextOpenPostIndex + inputArray.length
+        });
+    }
+
+    createRenderedPosts(contentType) {
+        const shouldMarkNewPosts = this.state.isUpdate && this.state.selectStage === 2;
+        let masterArray = [[]];
+        let index = masterArray.length - 1; //index position of array in masterArray
+        let nextOpenPostIndex = this.state.nextOpenPostIndex;
+        let k = masterArray[index].length; //length of last array 
+        let usedPostsLength = this.state.selectedPosts.length;
+        for (let j = 0; j < this.state.feedData.length; j++) {
             while (k < 4) {
-                event = this.state.rawFeed[j];
-                if (!event) break; //if we finish...
-                updatedFeed[index].push(
-                    <div key={k}>
+                if (!this.state.feedData[j]) break; //if we finish...
+                const event = this.state.feedData[j];
+                masterArray[index].push(
+                    <div key={event._id}>
                         <EventController
                             columnIndex={k}
-                            contentType={this.state.editProjectState || this.state.selectedProject ?
-                                PROJECT_EVENT : this.props.contentType}
-                            isSelected={isSelected}
+                            contentType={this.state.barType === PROJECT_MACRO_VIEW_STATE
+                                ? PROJECT :
+                                PROJECT_EVENT}
+                            shouldMarkAsNew={shouldMarkNewPosts ? j < usedPostsLength : false}
+                            isSelected={this.state.feedIndex.get(event._id)}
                             editProjectState={this.state.editProjectState}
                             key={nextOpenPostIndex}
                             eventIndex={nextOpenPostIndex}
                             eventData={event}
-                            onEventClick={this.props.onEventClick}
-                            onProjectClick={this.props.onProjectClick}
-                            onProjectEventSelect={this.props.onProjectEventSelect}
+                            onEventClick={this.handleEventClick}
+                            onProjectClick={this.handleProjectClick}
+                            onProjectEventSelect={this.handleProjectEventSelect}
                         />
                     </div>
                 );
-                updatedNewProject.push(event);
                 nextOpenPostIndex++;
                 k++;
                 j++;
             }
-            if (k === 4) updatedFeed.push([]);
-            if (!updatedFeed[j]) break;
+            if (k === 4) masterArray.push([]);
             index++;
             k = 0;
         }
-        this.setState({
-            loadedFeed: updatedFeed,
-            selectedPosts: updatedNewProject
-        });
+        return masterArray;
+    }
+
+    onSelectAll(isSelected) {
+        let newFeedIndex = this.state.feedIndex;
+        let selectedPosts = [];
+        for (const post of this.state.feedData) {
+            newFeedIndex.set(post._id, isSelected);
+        }
+        if (isSelected) {
+            selectedPosts = this.state.feedData;
+        }
+
+        this.setState({ feedIndex: newFeedIndex, selectedPosts });
     }
 
     onEditExistingProject() {
-        this.setState({
+        const sharedState = {
             barType: PROJECT_SELECT_VIEW_STATE,
             editProjectState: true,
             hasMore: true,
             isUpdate: true,
-        },
-            this.clearLoadedFeed)
+            feedID: this.state.feedID + 1,
+        }
+        if (this.props.isContentOnlyView) {
+            return AxiosHelper
+                .allPosts(this.props.authUser.profileID)
+                .then((result => {
+                    console.log(result.data);
+                    this.setState({
+                        contentViewOnlyAllPosts: { post_ids: result.data.map(item => item.post_id) },
+                        ...sharedState
+                    },
+                        this.clearLoadedFeed)
+                }))
+                .catch(err => {
+                    console.log(err);
+                    throw new Error("Nothing returned for all posts");
+                })
+        }
+        else {
+            this.setState({
+                ...sharedState
+            },
+                this.clearLoadedFeed)
+        }
+
     }
 
     clearLoadedFeed() {
         this.setState({
-            loadedFeed: [[]],
+            feedData: [],
             nextOpenPostIndex: 0,
             hasMore: true,
             feedID: this.state.feedID + 1
@@ -197,48 +223,58 @@ class ProjectController extends React.Component {
         this.setState({ hasMore: value });
     }
 
-    updateFeedData(loadedFeed, nextOpenPostIndex, incomingFeed) {
-        const newFeed = incomingFeed ? incomingFeed : [];
-        const feed = this.state.rawFeed.length > 0 ? this.state.rawFeed.concat(newFeed) : newFeed;
-        this.setState({
-            loadedFeed,
-            nextOpenPostIndex,
-            rawFeed: feed
-        })
-    }
-
     handleBackClick() {
-        const username = this.state.selectedProject.username;
-        if (this.state.selectedProject && this.state.barType === PROJECT_MICRO_VIEW_STATE) {
-            this.setState({
-                selectedProject: null,
-                barType: PROJECT_MACRO_VIEW_STATE,
-                loadedFeed: [[]],
-                nextOpenPostIndex: 0,
-                hasMore: true,
-                feedID: this.state.feedID + 1,
-            }, () => this.setNewURL(returnUsernameURL(username)))
-        }
-        else {
-            if (this.state.editProjectState) {
-                if (this.state.barType === PROJECT_SELECT_VIEW_STATE) {
-                    let barType = this.props.isContentOnlyView ?
-                        PROJECT_CONTENT_ONLY_VIEW_STATE :
-                        PROJECT_MICRO_VIEW_STATE;
+        switch (this.state.barType) {
+            case (PROJECT_MICRO_VIEW_STATE): //inner project step
+                const username = this.state.selectedProject.username;
+                this.setState({
+                    selectedProject: null,
+                    barType: PROJECT_MACRO_VIEW_STATE,
+                    nextOpenPostIndex: 0,
+                    hasMore: true,
+                    feedID: this.state.feedID + 1,
+                }, () => {
+                    this.setNewURL(returnUsernameURL(username));
+                    this.clearLoadedFeed();
+                })
+                break;
+            case (PROJECT_SELECT_VIEW_STATE): //editting
+                if (this.state.isUpdate) {
+                    if (this.state.selectStage === 1) {
+                        this.setState({
+                            barType: this.props.isContentOnlyView ?
+                                PROJECT_CONTENT_ONLY_VIEW_STATE : PROJECT_MICRO_VIEW_STATE,
+                            editProjectState: false,
+                            isUpdate: false,
+                            hasMore: true,
+                        }, this.clearLoadedFeed)
+                    }
+                    else if (this.state.selectStage === 2) {
+                        this.setState({
+                            selectStage: 1,
+                            hasMore: true,
+
+                        }, this.clearLoadedFeed)
+                    }
+                }
+                else {
                     this.setState({
-                        barType: barType,
+                        barType: this.props.isContentOnlyView ?
+                            PROJECT_CONTENT_ONLY_VIEW_STATE : PROJECT_MACRO_VIEW_STATE,
                         editProjectState: false,
                         isUpdate: false,
                         hasMore: true,
                     }, this.clearLoadedFeed)
                 }
-                else if (this.state.barType === PROJECT_REARRANGE_STATE) {
-                    this.setState({ window: MAIN, barType: PROJECT_SELECT_VIEW_STATE })
-                }
-            }
-            else {
-                throw new Error("No Back Click done");
-            }
+                break;
+            case (PROJECT_REARRANGE_STATE):
+                this.setState({
+                    window: MAIN,
+                    barType: PROJECT_SELECT_VIEW_STATE
+                })
+                break;
+            default:
+                throw new Error("Nothing Matched");
         }
     }
 
@@ -248,17 +284,17 @@ class ProjectController extends React.Component {
     }
 
     clearModal() {
-        this.setState({ selectedContent: null }, () => {
+        this.setState({ selectedPost: null }, () => {
             this.setNewURL(returnProjectURL(this.state.selectedProject._id));
             this.props.closeMasterModal();
         });
     }
 
-    handleEventClick(selectedContent, postIndex, columnIndex) {
+    handleEventClick(selectedPost, postIndex, columnIndex) {
         this.setState({
-            selectedContent: selectedContent,
-            textData: selectedContent.text_data,
-        }, this.setModal(selectedContent._id));
+            selectedPost: selectedPost,
+            textData: selectedPost.text_data,
+        }, this.setModal(selectedPost._id));
     }
 
     handleInputChange(id, value) {
@@ -269,24 +305,6 @@ class ProjectController extends React.Component {
             case (OVERVIEW):
                 this.setState({ overview: value })
                 break;
-            case (PURSUIT):
-                this.setState({ pursuitCategory: value });
-                break;
-            case (START_DATE):
-                this.setState({ startDate: value });
-                break;
-            case (END_DATE):
-                this.setState({ endDate: value });
-                break;
-            case (IS_COMPLETE):
-                this.setState({ isComplete: value });
-                break;
-            case (MINUTES):
-                this.setState({ minDuration: value });
-                break;
-            case (COVER_PHOTO):
-                this.setState({ coverPhoto: value });
-                break;
             default:
                 throw new Error("NO TEXT ID'S Matched in POST")
         }
@@ -294,8 +312,30 @@ class ProjectController extends React.Component {
 
     handleWindowSwitch(window) {
         let min = 0
+        if (window === 2) {
+            let newIndex = this.state.feedIndex;
+            let selectedPosts = this.state.selectedPosts;
+            selectedPosts
+                .forEach(item => newIndex.set(item.post_id, true));
+            this.state.selectedProject
+                .post_ids
+                .forEach(item => newIndex.set(item, true));
+
+            return this.setState({
+                selectStage: 2,
+                selectedPosts,
+                feedIndex: newIndex
+            }, this.clearLoadedFeed);
+        }
+
         if (window === EDIT) {
-            return this.setState({ window: window, barType: PROJECT_REARRANGE_STATE })
+            const semiFinalData = this.state.feedData.filter(item => this.state.feedIndex.get(item._id));
+            return this.setState({
+                semiFinalData,
+                window: window,
+                barType: PROJECT_REARRANGE_STATE
+            },
+                this.clearLoadedFeed)
         }
         else if (window === REVIEW) {
             for (const selectedPost of this.state.selectedPosts) {
@@ -308,78 +348,33 @@ class ProjectController extends React.Component {
     }
 
     handleProjectEventSelect(eventData) {
-        let updatedProjectData = [];
-        let postExistsAlready = false;
-        let index = -1;
-        for (let postData of this.state.selectedPosts) {
-            if (postData._id !== eventData._id) {
-                index = handleIndexUpdate(index);
-                postData.column_index = index;
-                updatedProjectData.push(postData);
-            }
-            else {
-                eventData.isChecked = false;
-                postExistsAlready = true;
-            }
+        const feedIndex = this.state.feedIndex;
+        if (this.state.selectStage === 1) {
+            const selectedPosts = this.state.selectedPosts;
+            feedIndex.set(eventData._id, !feedIndex.get(eventData._id));
+            selectedPosts.push({ post_id: eventData._id });
+            this.setState({ selectedPosts, feedIndex })
         }
-        if (!postExistsAlready) {
-            index = handleIndexUpdate(index);
-            eventData.column_index = index;
-            eventData.isChecked = true;
-            updatedProjectData.push(eventData);
+        else if (this.state.selectStage === 2) {
+            feedIndex.set(eventData._id, !feedIndex.get(eventData._id));
+            this.setState({ feedIndex })
         }
-        this.setState({
-            selectedPosts: updatedProjectData
-        });
+        else {
+            throw new Error("Something weird happend")
+        }
+
     }
 
     handleSortEnd({ oldIndex, newIndex }) {
-        const items = this.state.selectedPosts;
-        const [reorderedItem] = items.splice(oldIndex, 1);
+        const semiFinalData = this.state.semiFinalData;
+        const [reorderedItem] = semiFinalData.splice(oldIndex, 1);
         let index = -1;
-        items.splice(newIndex, 0, reorderedItem);
-        for (let item of items) {
+        semiFinalData.splice(newIndex, 0, reorderedItem);
+        for (let item of semiFinalData) {
             index = handleIndexUpdate(index);
             item.column_index = index;
         }
-        this.setState({ selectedPosts: items });
-    }
-
-    handlePost() {
-        let formData = new FormData();
-
-        if (this.state.overview) formData.append(OVERVIEW_FIELD, this.state.overview);
-        if (this.state.pursuitCategory) formData.append(PURSUIT_FIELD, this.state.pursuitCategory);
-        if (this.state.startDate) formData.append(START_DATE_FIELD, this.state.startDate);
-        if (this.state.endDate) formData.append(END_DATE_FIELD, this.state.endDate);
-        if (this.state.isComplete) formData.append(IS_COMPLETE_FIELD, this.state.isComplete);
-        if (this.state.minDuration) formData.append(MIN_DURATION_FIELD, this.state.minDuration);
-        if (this.state.coverPhoto) formData.append(COVER_PHOTO_FIELD, this.state.coverPhoto);
-        if (this.state.selectedPosts) {
-            const stringArray = JSON.stringify(this.state.selectedPosts);
-            formData.append(SELECTED_POSTS_FIELD, stringArray);
-        }
-
-        if (this.state.isUpdate) {
-            return AxiosHelper.updateProject(formData)
-                .then((result => {
-
-                }))
-        }
-        else {
-            formData.append(USERNAME_FIELD, this.props.feedData.username);
-            formData.append(DISPLAY_PHOTO_FIELD, this.props.displayPhoto)
-            formData.append(USER_ID_FIELD, this.props.targetProfileID);
-            formData.append(INDEX_USER_ID_FIELD, this.props.targetIndexUserID);
-            formData.append(TITLE_FIELD, this.state.title);
-            return AxiosHelper.createProject(formData)
-
-                .then((result) => {
-                    alert("Success!");
-                    window.location.reload();
-                })
-                .catch(err => console.log(err));
-        }
+        this.setState({ semiFinalData });
     }
 
     setNewURL(projectID) {
@@ -398,8 +393,7 @@ class ProjectController extends React.Component {
         });
     }
 
-    copyToClipboard(value) {
-        navigator.clipboard.writeText(value);
+    copyToClipboard() {
         return AxiosHelper.createFork(
             this.props.authUser.profileID,
             this.props.authUser.indexProfileID,
@@ -422,70 +416,94 @@ class ProjectController extends React.Component {
     }
 
     selectFeedData() {
-        if (this.state.editProjectState) {
-            if (this.props.isContentOnlyView) {
-                return this.props.feedData.post_ids.map((item) => item.post_id);
-            }
-            return this.props.allPosts.map((item) => item.post_id);
-        }
-        else {
-            return this.props.feedData.map((item) => item.post_id);
+        switch (this.state.barType) {
+            case (PROJECT_CONTENT_ONLY_VIEW_STATE):
+                return this.props.content.post_ids;
+            case (PROJECT_MACRO_VIEW_STATE):
+                return this.props.content.projects.map((item) => item.post_id);
+            case (PROJECT_MICRO_VIEW_STATE):
+                return this.state.selectedProject.post_ids;
+            case (PROJECT_SELECT_VIEW_STATE):
+                if (this.state.isUpdate) {
+                    const postIDs = this.state.selectedProject.post_ids;
+                    if (this.state.selectStage === 1) {
+                        const feed = this.props.isContentOnlyView ?
+                            this.state.contentViewOnlyAllPosts.post_ids
+                            : this.props.content.posts.map((item) => item.post_id);
+                        return feed.filter(item => !postIDs.includes(item));
+                    }
+                    else if (this.state.selectStage === 2) {
+                        return this.state.selectedPosts
+                            .map((item) => item.post_id)
+                            .concat(postIDs);
+                    }
+                }
+                else {
+                    return this.props.content.posts.map((item) => item.post_id);
+                }
+            default:
+                throw new Error("Nothing Matched");
         }
     }
 
     render() {
+        const sourceContent = this.props.isContentOnlyView ? this.props.content : this.state.selectedProject;
         switch (this.state.window) {
             case (MAIN):
                 return (
                     <>
                         <ProfileModal
                             authUser={this.props.authUser}
-                            projectID={this.state.selectedProject?._id}
+                            projectID={sourceContent?._id}
                             modalState={this.props.modalState}
                             postIndex={this.state.selectedPostIndex}
                             postType={this.state.postType}
                             pursuitNames={this.props.pursuitNames}
-                            eventData={this.state.selectedContent}
+                            eventData={this.state.selectedPost}
                             disableCommenting={true}
                             returnModalStructure={this.props.returnModalStructure}
                             closeModal={this.clearModal}
                         />
                         <MainDisplay
-                            feedID={this.state.feedID + this.props.selectedPursuitIndex}
-                            selectedProjectID={this.state.selectedProject?._id}
+                            selectStage={this.state.selectStage}
+                            feedID={this.state.feedID}
+                            selectedProjectID={sourceContent?._id}
                             barType={this.state.barType}
                             titleValue={this.state.title}
                             descriptionValue={this.state.overview}
-                            handleInputChange={this.handleInputChange}
                             window={this.state.window}
                             nextOpenPostIndex={this.state.nextOpenPostIndex}
-                            contentType={this.state.editProjectState || this.state.selectedProject ?
-                                PROJECT_EVENT : this.props.contentType}
+                            contentType={
+                                this.state.editProjectState
+                                    || sourceContent
+                                    || this.props.isContentOnlyView
+                                    ?
+                                    PROJECT_EVENT : PROJECT}
                             selectedPosts={this.state.selectedPosts}
                             header={{
-                                title: this.state.selectedProject?.title,
-                                overview: this.state.selectedProject?.overview,
-                                username: this.state.selectedProject?.username,
-                                displayPhoto: this.state.selectedProject?.display_photo_key
+                                title: sourceContent?.title,
+                                overview: sourceContent?.overview,
+                                username: sourceContent?.username,
+                                displayPhoto: sourceContent?.display_photo_key
                             }}
                             editProjectState={this.state.editProjectState}
+                            allPosts={this.selectFeedData()}
+                            loadedFeed={this.createRenderedPosts()}
+                            targetProfileID={this.props.targetProfileID}
+                            hasMore={this.state.hasMore}
+                            priorProjectID={this.state.priorProjectID}
+                            createTimelineRow={this.createTimelineRow}
                             onProjectEventSelect={this.handleProjectEventSelect}
                             onProjectClick={this.handleProjectClick}
-                            allPosts={this.state.selectedProject ? (
-                                this.state.selectedProject.post_ids
-                            ) : (this.selectFeedData())}
                             handleWindowSwitch={this.handleWindowSwitch}
                             onEventClick={this.handleEventClick}
                             onBackClick={this.handleBackClick}
-                            loadedFeed={this.state.loadedFeed}
                             updateFeedData={this.updateFeedData}
-                            targetProfileID={this.props.targetProfileID}
+                            handleInputChange={this.handleInputChange}
+                            onEditExistingProject={this.onEditExistingProject}
                             onNewProjectSelect={this.handleNewProjectSelect}
                             copyToClipboard={this.copyToClipboard}
                             shouldPull={this.shouldPull}
-                            onEditExistingProject={this.onEditExistingProject}
-                            hasMore={this.state.hasMore}
-                            priorProjectID={this.state.priorProjectID}
                             onSelectAll={this.onSelectAll}
                         />
                     </>
@@ -495,7 +513,7 @@ class ProjectController extends React.Component {
                     <div >
                         <TopButtonBar
                             barType={this.state.barType}
-                            selectedProjectID={this.state.selectedProject?._id}
+                            selectedProjectID={sourceContent?._id}
                             onBackClick={this.handleBackClick}
                             onNewProjectSelect={this.handleNewProjectSelect}
                             handleWindowSwitch={this.handleWindowSwitch}
@@ -504,7 +522,7 @@ class ProjectController extends React.Component {
                         <div id="projectcontroller-sortable-list-container">
                             <SortableList
                                 contentType={POST}
-                                items={this.state.selectedPosts}
+                                items={this.state.semiFinalData}
                                 onSortEnd={this.handleSortEnd}
                                 axis="xy"
                             />
@@ -519,98 +537,13 @@ class ProjectController extends React.Component {
                         <option key={pursuit} value={pursuit}>{pursuit}</option>
                     );
                 }
-
                 return (
-                    <div >
-                        <div className="">
-                            <button
-                                onClick={() => this.handleWindowSwitch(EDIT)}
-                            >
-                                Return
-                            </button>
-                            <button
-                                onClick={() => this.handlePost()}
-                            >
-                                Post!
-                            </button>
-                        </div>
-                        <div id="projectcontroller-submit-container">
-                            <TextareaAutosize
-                                value={this.state.title}
-                                onChange={(e) => (
-                                    this.handleInputChange(TITLE, e.target.value)
-                                )}
-                            />
-                            <TextareaAutosize
-                                value={this.state.overview}
-                                onChange={(e) => (
-                                    this.handleInputChange(OVERVIEW, e.target.value)
-                                )} />
-                            <label>Pursuit</label>
-                            <select
-                                name="pursuit-category"
-                                value={this.state.pursuitCategory}
-                                onChange={(e) => (
-                                    this.handleInputChange(PURSUIT, e.target.value)
-                                )}
-                            >
-                                {pursuitSelects}
-                            </select>
-                            <label>Start Date</label>
-                            <input
-                                type="date"
-                                value={this.state.startDate}
-                                onChange={(e) => (
-                                    this.handleInputChange(START_DATE, e.target.value))}
-                            />
-                            <label>End Date</label>
-                            <input
-                                type="date"
-                                value={this.state.endDate}
-                                onChange={(e) => (
-                                    this.handleInputChange(END_DATE, e.target.value))}
-                            />
-                            <label>Total Minutes</label>
-                            <input
-                                type="number"
-                                value={this.state.minDuration}
-                                onChange={(e) => (
-                                    this.handleInputChange(MINUTES, e.target.value)
-                                )}
-                            />
-                            <label>Is Complete</label>
-                            <input
-                                type="checkbox"
-                                onClick={() => (
-                                    this.handleInputChange(IS_COMPLETE,
-                                        !this.state.isComplete)
-                                )}
-                            />
-                            <label>Cover Photo</label>
-                            <input
-                                type="file"
-                                onChange={(e) => (
-                                    this.handleInputChange(COVER_PHOTO, e.target.files[0])
-                                )}
-                            />
-                            {/* <div>
-                                <label>Tags</label>
-                                <CustomMultiSelect
-                                    options={this.props.eventData.labels}
-                                    selectedLabels={this.props.eventData.labels}
-                                    name={"Tags"}
-                                    onSelect={setLabels}
-                                />
-
-                            </div> */}
-                            <button
-                                onClick={this.handlePost}
-                            >
-                                Submit
-                            </button>
-                        </div>
-
-                    </div>
+                    <ProjectReview
+                        authUser={this.props.authUser}
+                        title={this.state.title}
+                        overview={this.state.overview}
+                        pursuitSelects={pursuitSelects}
+                    />
                 )
             default:
                 throw new Error("No Window Options Matched in post-project-controller");

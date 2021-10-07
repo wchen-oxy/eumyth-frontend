@@ -9,6 +9,7 @@
 #topbuttonbar-dual-button-bar {
     @include flex-display-row;
     justify-content: space-between;
+    padding-top: 20px;
     #topbuttonbar-right-button-container {
         float: right;
         p {

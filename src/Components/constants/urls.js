@@ -53,8 +53,6 @@ const RELATION_SET_FOLLOWER_URL = RELATION_BASE_URL + "/set";
 
 //post
 const POST_BASE_URL = ROOT_URL + "/post";
-// const UPDATE_POST_URL = POST_BASE_URL + "/update";
-
 const MULTIPLE_POSTS_URL = POST_BASE_URL + "/multiple";
 
 const WITH_IMAGE_POST_URL = POST_BASE_URL + "/with-image";
@@ -68,6 +66,10 @@ const PROJECT_BASE_URL = ROOT_URL + "/project";
 const SINGLE_PROJECT_URL = PROJECT_BASE_URL + "/single";
 const MULTIPLE_PROJECTS_URL = PROJECT_BASE_URL + "/multiple";
 const PROJECT_FORK_URL = PROJECT_BASE_URL + "/fork";
+
+//pursuits
+const PURSUITS_BASE_URL = ROOT_URL + "/pursuit";
+const ALL_POSTS = PURSUITS_BASE_URL + "/all-posts";
 
 //index
 const INDEX_BASE_URL = ROOT_URL + "/index-user";
@@ -89,6 +91,7 @@ module.exports = {
     returnPostURL,
     returnProjectURL,
     ROOT_URL,
+    ALL_POSTS,
     IMAGE_BASE_URL,
     MULTIPLE_IMAGES_URL,
     DISPLAY_PHOTO_URL,

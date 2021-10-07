@@ -182,7 +182,7 @@ const ReviewPost = (props) => {
         formData.append(IS_PAGINATED_FIELD, props.isPaginated);
         formData.append(PROGRESSION_FIELD, (progression));
         formData.append(DIFFICULTY_FIELD, difficulty);
-        if (props.authUser.indexProfileID) formData.append(INDEX_USER_ID_FIELD, props.targetIndexUserID);
+        if (props.authUser.indexProfileID) formData.append(INDEX_USER_ID_FIELD, props.authUser.indexProfileID);
         if (props.previewTitle) formData.append(TITLE_FIELD, _.trim(props.previewTitle));
         if (postPrivacyType) formData.append(POST_PRIVACY_TYPE_FIELD, postPrivacyType);
         if (pursuit) formData.append(PURSUIT_FIELD, pursuit);

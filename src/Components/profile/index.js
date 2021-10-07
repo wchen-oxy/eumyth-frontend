@@ -84,6 +84,7 @@ class ProfilePageAuthenticated extends React.Component {
             selectedPursuitIndex: 0,
             preferredPostPrivacy: null,
             isContentOnlyView: null,
+            loading: true,
             target: {
                 username: this.props.match?.params?.username ?? null,
             }
@@ -97,7 +98,7 @@ class ProfilePageAuthenticated extends React.Component {
         this.renderHeroContent = this.renderHeroContent.bind(this);
         this.handleFollowClick = this.handleFollowClick.bind(this);
         this.handleFollowerStatusChange = this.handleFollowerStatusChange.bind(this);
-        this.handleFeedSwitch = this.handleFeedSwitch.bind(this);
+        this.handlePursuitToggle = this.handlePursuitToggle.bind(this);
         this.handleMediaTypeSwitch = this.handleMediaTypeSwitch.bind(this);
         this.loadProfile = this.loadProfile.bind(this);
         this.setProfileData = this.setProfileData.bind(this);
@@ -239,6 +240,7 @@ class ProfilePageAuthenticated extends React.Component {
             followerStatus: followerStatus,
             contentType: contentType,
             isContentOnlyView: false,
+            loading: false
         })
     }
     //PROJECT
@@ -254,6 +256,7 @@ class ProfilePageAuthenticated extends React.Component {
             selectedContent: content,
             pursuitNames: pursuitNames,
             isContentOnlyView: true,
+            loading: false
         })
     }
 
@@ -307,7 +310,7 @@ class ProfilePageAuthenticated extends React.Component {
         });
     }
 
-    handleFeedSwitch(index) {
+    handlePursuitToggle(index) {
         const feedIDList = this.state.contentType === POST ?
             this.state.pursuits[index].posts
             :
@@ -347,7 +350,6 @@ class ProfilePageAuthenticated extends React.Component {
 
 
     renderHeroContent() {
-        if (this.state.contentType === null) return null;
         const selectedPursuit = this.state.pursuits[this.state.selectedPursuitIndex];
         if (this.state.contentType === POST) {
             return (
@@ -367,16 +369,13 @@ class ProfilePageAuthenticated extends React.Component {
             return (
                 <ProjectController
                     authUser={this.props.authUser}
-                    allPosts={this.state.pursuits[0].projects}
-                    contentType={this.state.contentType}
-                    onNewBackProjectClick={this.handleNewBackProjectClick}
+                    content={this.state.pursuits[this.state.selectedPursuitIndex]}
                     pursuitNames={this.state.pursuitNames}
-                    selectedPursuitIndex={this.state.selectedPursuitIndex}
+                    isContentOnlyView={this.state.isContentOnlyView}
                     returnModalStructure={this.props.returnModalStructure}
                     modalState={this.props.modalState}
                     openMasterModal={this.props.openMasterModal}
                     closeMasterModal={this.props.closeMasterModal}
-                    feedData={selectedPursuit.projects}
                 />)
         }
 
@@ -438,6 +437,7 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     render() {
+        if (this.state.loading) return null;
         let index = 0;
         const pursuitHolderArray = [];
         if (this.state.pursuits) {
@@ -449,7 +449,7 @@ class ProfilePageAuthenticated extends React.Component {
                         numEvents={pursuit.num_posts}
                         key={pursuit.name}
                         value={index++}
-                        onFeedSwitch={this.handleFeedSwitch} />
+                        onPursuitToggle={this.handlePursuitToggle} />
                 );
             }
         }
@@ -476,17 +476,12 @@ class ProfilePageAuthenticated extends React.Component {
                     <div id="profile-main-container">
                         <ProjectController
                             authUser={this.props.authUser}
-                            allPosts={this.state.pursuits ? this.state.pursuits[0].posts : null}
-                            contentType={this.state.contentType}
-                            onNewBackProjectClick={this.handleNewBackProjectClick}
+                            content={this.state.selectedContent}
                             pursuitNames={this.state.pursuitNames}
-                            selectedPursuitIndex={0}
-
                             returnModalStructure={this.props.returnModalStructure}
                             modalState={this.props.modalState}
                             openMasterModal={this.props.openMasterModal}
                             closeMasterModal={this.props.closeMasterModal}
-                            feedData={this.state.selectedContent}
                             isContentOnlyView={this.state.isContentOnlyView}
                             priorProjectID={this.state.selectedContent?.ancestors.length > 0 ?
                                 this.state.selectedContent.ancestors[this.state.selectedContent.ancestors.length - 1]
@@ -550,7 +545,7 @@ class ProfilePageAuthenticated extends React.Component {
                                 Works
                             </button>
                         </div>
-                        {this.decideHeroContentVisibility()}
+                        {this.state.contentType && this.decideHeroContentVisibility()}
                     </div>
 
                 </div>

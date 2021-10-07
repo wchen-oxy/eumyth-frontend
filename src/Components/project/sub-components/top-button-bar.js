@@ -29,7 +29,7 @@ const TopButtonBar = (props) => {
         case (PROJECT_MICRO_VIEW_STATE):
             return (
                 <div id="topbuttonbar-dual-button-bar">
-                    <div id="topbuttonbar-left-button-container">
+                    <div id="toepbuttonbar-left-button-container">
                         <button onClick={props.onBackClick}>
                             Back
                         </button>
@@ -45,6 +45,7 @@ const TopButtonBar = (props) => {
                 </div>
             );
         case (PROJECT_SELECT_VIEW_STATE):
+
             return (
                 <div id="topbuttonbar-dual-button-bar">
                     <div id="topbuttonbar-left-button-container">
@@ -56,7 +57,17 @@ const TopButtonBar = (props) => {
                     <div id="topbuttonbar-right-button-container">
                         <button
                             id="topbuttonbar-right-button"
-                            onClick={() => props.handleWindowSwitch("EDIT")}
+                            onClick={() => {
+                                if (props.selectStage === 1) {
+                                    props.handleWindowSwitch(2)
+                                }
+                                else if (props.selectStage === 2) {
+                                    props.handleWindowSwitch("EDIT")
+                                }
+                                else {
+                                    throw new Error("Missing selectState")
+                                }
+                            }}
                         >
                             Next
                         </button>

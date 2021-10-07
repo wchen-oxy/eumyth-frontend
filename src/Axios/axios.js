@@ -4,6 +4,14 @@ import urls from "../Components/constants/urls";
 
 export default class AxiosHelper {
 
+    static allPosts(profileID) {
+        return axios.get(urls.ALL_POSTS, {
+            params: {
+                profileID: profileID
+            }
+        })
+    }
+
     static changeRelationStatus(action, targetUsername, currentUsername, ID) {
         return axios.put(urls.RELATION_SET_FOLLOWER_URL, {
             action: action,

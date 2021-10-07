@@ -601,7 +601,6 @@ class ShortPostViewer extends React.Component {
             )
         }
         else if (this.state.window === REVIEW_STATE) {
-
             let formattedDate = new Date().toISOString().substr(0, 10);
             if (this.props.eventData.date) {
                 formattedDate =
@@ -615,18 +614,13 @@ class ShortPostViewer extends React.Component {
                         isUpdateToPost
                         authUser={this.props.authUser}
                         isPostOnlyView={this.props.isPostOnlyView}
-                        targetIndexUserID={this.props.authUser?.indexProfileID}
-
                         selectedLabels={this.props.eventData.labels}
                         difficulty={this.props.eventData.difficulty}
                         progression={this.props.eventData.progression}
                         previousState={EDIT_STATE}
                         postID={this.props.eventData._id}
-
                         coverPhoto={this.state.coverPhoto}
-                        coverPhotoKey={this.props.eventData.cover_photo_key ?
-                            this.props.eventData.cover_photo_key : null
-                        }
+                        coverPhotoKey={this.props.eventData?.cover_photo_key ?? null}
                         isPaginated={this.state.isPaginated}
                         previewTitle={this.props.eventData.title}
                         previewSubtitle={this.props.eventData.subtitle}

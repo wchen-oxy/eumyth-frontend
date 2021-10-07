@@ -21,7 +21,7 @@ const RightManageButtons = (props) => {
             <div className="rightmanagebuttons-centered-container">
                 <button
                     id="rightmanagebuttons-right-button"
-                    onClick={() => props.copyToClipboard(props.selectedProjectID)}
+                    onClick={props.copyToClipboard}
                 >
                     Copy Post ID
                 </button>

@@ -22,42 +22,30 @@ const selectClassStyle = (num) => {
 
 const EventController = (props) => {
     const post = props.eventData;
-    const handleRecentEventClick = () => {
-        if (!props.disableModalPreview) {
-            props.onEventClick(post, props.index)
-        }
-        else {
-            console.log("Selected, but disabled")
-        }
-    };
-
-    if (props.isRecentEvents) {
+    if (props.contentType === PROJECT) {
         return (
-            <div className={"event-middle-container"}>
-                <div onClick={handleRecentEventClick}>
-                    <EventHeroContent
-                        post={post}
-                        commentCount={post.comment_count}
-                    />
-                </div>
-                {props.editProjectState &&
-                    <EventCheckbox
-                        post={post}
-                        isChecked={props.isSelected}
-                        onProjectEventSelect={props.onProjectEventSelect}
-                    />
-                }
+            <div
+                onClick={props.disableModalPreview ?
+                    () => console.log("Selected")
+                    :
+                    () => props.onProjectClick(post)}
+                className={props.columnIndex !== null ?
+                    selectClassStyle(props.columnIndex) : "event-middle-container"}>
+                <ProjectEvent post={post} />
             </div>
         );
     }
+
     else if (props.contentType === POST || props.contentType === PROJECT_EVENT) {
+        const eventClickParams = props.isRecentEvents ?
+            [post, props.index] : [post, props.eventIndex, props.columnIndex];
         return (
             <div className={props.columnIndex !== null ?
                 selectClassStyle(props.columnIndex) : "event-middle-container"}>
                 <div onClick={props.disableModalPreview ?
                     () => console.log("Selected")
                     :
-                    () => props.onEventClick(post, props.eventIndex, props.columnIndex)} >
+                    () => props.onEventClick(...eventClickParams)} >
                     <EventHeroContent
                         post={post}
                         commentCount={post.comment_count}
@@ -68,8 +56,13 @@ const EventController = (props) => {
                         post={post}
                         isChecked={props.isSelected}
                         onProjectEventSelect={props.onProjectEventSelect}
-
                     />}
+                {
+                    props.shouldMarkAsNew &&
+                    <div>
+                        <p>To Be Added Post</p>
+                    </div>
+                }
             </div>
         );
     }
