@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import CreatableSelect from 'react-select/creatable';
 import { components } from 'react-select';
-import { checkInputNotNull } from '../../util';
+import { checkInputNotNull } from 'utils/validator';
 
 const formatter = (data) => data.map((value) => ({ label: value, value: value }));
 
-const Menu = props => {
+const Menu = (props) => {
   const optionSelectedLength = props.getValue().length || 0;
   return (
     <components.Menu {...props}>
@@ -18,22 +18,22 @@ const Menu = props => {
   );
 };
 
-export default class CustomMultiSelect extends Component {
-
-  isValidNewOption = (inputValue, selectValue) =>
+const CustomMultiSelect = (props) => {
+  const isValidNewOption = (inputValue, selectValue) =>
     inputValue.length > 0 && selectValue.length < 5;
-  render() {
-    const defaults = checkInputNotNull(this.props.selectedLabels, formatter);
-    const options = checkInputNotNull(this.props.options, formatter);
-    return (
-      <CreatableSelect
-        isMulti
-        onChange={this.props.onSelect}
-        defaultValue={defaults}
-        options={options}
-        components={{ Menu }}
-        isValidNewOption={this.isValidNewOption}
-      />
-    );
-  }
+
+  const defaults = checkInputNotNull(props.selectedLabels, formatter);
+  const options = checkInputNotNull(props.options, formatter);
+  return (
+    <CreatableSelect
+      isMulti
+      onChange={this.props.onSelect}
+      defaultValue={defaults}
+      options={options}
+      components={{ Menu }}
+      isValidNewOption={isValidNewOption}
+    />
+  );
+
 }
+export default CustomMultiSelect;

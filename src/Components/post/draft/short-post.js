@@ -1,11 +1,10 @@
 import React from 'react';
-import ShortEditor from '../editor/short-editor';
-import TextareaAutosize from 'react-textarea-autosize';
-
-import ReviewPost from './review-post';
-import { INITIAL_STATE, REVIEW_STATE, SHORT } from "../../constants/flags";
-import "./short-post.scss";
 import imageCompression from 'browser-image-compression';
+import TextareaAutosize from 'react-textarea-autosize';
+import ShortEditor from '../editor/short-editor';
+import ReviewPost from './review-post';
+import { INITIAL_STATE, REVIEW_STATE, SHORT } from 'utils/constants/flags';
+import './short-post.scss';
 
 class ShortPost extends React.Component {
   constructor(props) {
@@ -73,10 +72,10 @@ class ShortPost extends React.Component {
     );
     Promise.all(promisedCompression)
       .then((results) => {
-        const thumbnail = new File([results[results.length - 1]], "Thumbnail");
+        const thumbnail = new File([results[results.length - 1]], 'Thumbnail');
         let files = [];
         for (let i = 0; i < results.length - 1; i++) {
-          files.push(new File([results[i]], "file"))
+          files.push(new File([results[i]], 'file'))
         }
 
         this.setState({
@@ -231,9 +230,9 @@ class ShortPost extends React.Component {
   render() {
     if (this.state.window === INITIAL_STATE) {
       return (
-        <div id="shortpost-window">
+        <div id='shortpost-window'>
           <h2>Short Post</h2>
-          <div className="shortpost-button-container">
+          <div className='shortpost-button-container'>
             {this.state.isCompressing && <p>Compressing Photos</p>}
             <span>
               <button
@@ -245,7 +244,7 @@ class ShortPost extends React.Component {
               </button>
             </span>
           </div>
-          <div id="shortpost-title-container">
+          <div id='shortpost-title-container'>
             <TextareaAutosize
               id='textcontainer-text-input'
               placeholder='Title'
@@ -278,7 +277,7 @@ class ShortPost extends React.Component {
     }
     else {
       return (
-        <div id="shortpost-review-window">
+        <div id='shortpost-review-window'>
           <ReviewPost
             date={
               new Date()

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "./right-manage-buttons.scss";
+import './right-manage-buttons.scss';
 
 const RightManageButtons = (props) => {
     const [areButtonsShowing, setButtonShow] = useState(false);
@@ -8,9 +8,9 @@ const RightManageButtons = (props) => {
     }
     return (
         <div>
-            <div className="rightmanagebuttons-centered-container">
+            <div className='rightmanagebuttons-centered-container'>
                 {areButtonsShowing ?
-                    (<div className="rightmanagebuttons-centered-container">
+                    (<div className='rightmanagebuttons-centered-container'>
                         <button onClick={toggleButton}> ... </button>
                         <button onClick={() => props.onEditExistingProject()}>Edit</button>
                         <button>Remove</button>
@@ -18,9 +18,9 @@ const RightManageButtons = (props) => {
                     : <button onClick={toggleButton}> ... </button>
                 }
             </div>
-            <div className="rightmanagebuttons-centered-container">
+            <div className='rightmanagebuttons-centered-container'>
                 <button
-                    id="rightmanagebuttons-right-button"
+                    id='rightmanagebuttons-right-button'
                     onClick={props.copyToClipboard}
                 >
                     Copy Post ID

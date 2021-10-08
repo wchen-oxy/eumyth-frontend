@@ -1,8 +1,8 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import EventController from './timeline-event-controller';
-import AxiosHelper from '../../../Axios/axios';
-import { PROJECT, PROJECT_EVENT } from "../../constants/flags";
+import AxiosHelper from 'utils/axios';
+import { PROJECT} from 'utils/constants/flags';
 import './index.scss';
 
 class Timeline extends React.Component {
@@ -81,7 +81,7 @@ class Timeline extends React.Component {
                 AxiosHelper.returnMultipleProjects(slicedObjectIDs)
                 : AxiosHelper.returnMultiplePosts(slicedObjectIDs, true)
         );
-        if (this.props.allPosts.every(i => (typeof i !== "string"))) {
+        if (this.props.allPosts.every(i => (typeof i !== 'string'))) {
             throw new Error('Feed is not just ObjectIDs');
         }
         if (this.props.nextOpenPostIndex + this.state.fixedDataLoadLength
@@ -130,7 +130,7 @@ class Timeline extends React.Component {
                         endMessage={endMessage}>
                         {this.props.loadedFeed.map((row, index) => (
                             <div
-                                className="timeline-infinite-scroll-row"
+                                className='timeline-infinite-scroll-row'
                                 key={index}
                             >
                                 {row}

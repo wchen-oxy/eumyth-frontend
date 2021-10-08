@@ -5,7 +5,7 @@ const MinutesInput = (props) => {
         <div>
             <label>Total Minutes</label>
             <input
-                type="number"
+                type='number'
                 value={props.min}
                 min={0}
                 onChange={(e) => props.setMinDuration(e.target.value)}>

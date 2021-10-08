@@ -1,6 +1,6 @@
 
 import React from 'react';
-import "./event-labels.scss";
+import './event-labels.scss';
 
 const EventLabels = (props) => (
     props.labels && props.labels.length > 0 ?
@@ -8,8 +8,8 @@ const EventLabels = (props) => (
             (value, index) => {
                 return (
                     <span key={index}>
-                        <div className={"eventlabels-outer-label-container"}>
-                            <div className={"eventlabels-inner-label-container"}>
+                        <div className={'eventlabels-outer-label-container'}>
+                            <div className={'eventlabels-inner-label-container'}>
                                 <p>
                                     {value}
                                 </p>

@@ -1,10 +1,10 @@
 import React from 'react';
 import imageCompression from 'browser-image-compression';
-import CustomMultiSelect from "../../custom-clickables/createable-single";
-import AxiosHelper from '../../../Axios/axios';
 import _ from 'lodash';
-import { withFirebase } from '../../../Firebase';
-import ProfilePhotoEditor from '../../profile-photo-editor.js';
+import ProfilePhotoEditor from 'components/profile-photo-editor.js/index.js';
+import CustomMultiSelect from 'components/custom-clickables/createable-single';
+import AxiosHelper from 'utils/axios';
+import { withFirebase } from 'store/firebase';
 import {
     CROPPED_IMAGE_FIELD,
     DISPLAY_PHOTO_FIELD,
@@ -14,9 +14,8 @@ import {
     SMALL_CROPPED_IMAGE_FIELD,
     TINY_CROPPED_IMAGE_FIELD,
     USERNAME_FIELD
-} from "../../constants/form-data";
-import {options as pursuitOptions}  from '../../custom-clickables/options';
-
+} from 'utils/constants/form-data';
+import { options as pursuitOptions } from 'utils/constants/options';
 import './initial-customization.scss';
 
 
@@ -34,6 +33,7 @@ const INITIAL_STATE = {
     imageRotation: 0,
     isSubmitting: false
 }
+
 class InitialCustomizationPage extends React.Component {
     constructor(props) {
         super(props);
@@ -106,7 +106,7 @@ class InitialCustomizationPage extends React.Component {
     handleTextChange(e, isInvalid) {
         e.preventDefault();
         this.setState({ [e.target.name]: e.target.value });
-        if (e.target.name === "username") {
+        if (e.target.name === 'username') {
             const username = e.target.value;
             if (!isInvalid) {
                 this.handleUsernameChange(username);
@@ -119,19 +119,19 @@ class InitialCustomizationPage extends React.Component {
         let experienceSelects = [];
         if (newValue) {
             for (const pursuit of newValue) {
-                pursuitArray.push({ name: pursuit.value, experience: "Beginner" });
+                pursuitArray.push({ name: pursuit.value, experience: 'Beginner' });
                 experienceSelects.push(
                     <span key={pursuit.value}>
                         <label>{pursuit.value}</label>
                         <select
-                            className="initialcustomization-select"
+                            className='initialcustomization-select'
                             name={pursuit.value}
                             onChange={this.handlePursuitExperienceChange}
                         >
-                            <option value="Beginner">Beginner</option>
-                            <option value="Familiar">Familiar</option>
-                            <option value="Experienced">Experienced</option>
-                            <option value="Expert">Expert</option>
+                            <option value='Beginner'>Beginner</option>
+                            <option value='Familiar'>Familiar</option>
+                            <option value='Experienced'>Experienced</option>
+                            <option value='Expert'>Expert</option>
                         </select>
                     </span>
                 );
@@ -163,35 +163,35 @@ class InitialCustomizationPage extends React.Component {
                                 {
                                     maxWidthOrHeight: 250,
                                     maxSizeMB: 1,
-                                    fileType: "image/jpeg"
+                                    fileType: 'image/jpeg'
                                 }),
                             imageCompression(
                                 results[2],
                                 {
                                     maxWidthOrHeight: 125,
                                     maxSizeMB: 1,
-                                    fileType: "image/jpeg"
+                                    fileType: 'image/jpeg'
                                 }),
                             imageCompression(
                                 results[2],
                                 {
                                     maxWidthOrHeight: 62,
                                     maxSizeMB: 1,
-                                    fileType: "image/jpeg"
+                                    fileType: 'image/jpeg'
                                 }),
                         ]);
                     }
                 )
                 .then(
                     (results) => {
-                        const titles = ["normal", "small", "tiny"];
+                        const titles = ['normal', 'small', 'tiny'];
                         let imageArray = [];
                         for (let i = 0; i < 3; i++) {
                             imageArray.push(
                                 new File(
                                     [results[i]],
                                     titles[i],
-                                    { type: "image/jpeg" })
+                                    { type: 'image/jpeg' })
                             );
                         }
                         return imageArray;
@@ -244,14 +244,13 @@ class InitialCustomizationPage extends React.Component {
                 .then(
                     (result) => {
                         if (result.status === 201) window.location.reload();
-                        else { alert("Something unexpected happened: ", result.status) }
+                        else { alert('Something unexpected happened: ', result.status) }
                     }
                 )
                 .catch((error) => {
                     this.handleRegisterFailure(error);
                 });
         }
-
     }
 
     handlePursuitExperienceChange(e) {
@@ -263,7 +262,7 @@ class InitialCustomizationPage extends React.Component {
     }
 
     testForSpecialCharacter(string) {
-        const regexp1 = new RegExp("^[0-9A-Za-z_.]+$");
+        const regexp1 = new RegExp('^[0-9A-Za-z_.]+$');
         return !regexp1.test(string) || /\s/.test(string);
     }
 
@@ -283,18 +282,18 @@ class InitialCustomizationPage extends React.Component {
         const isAvailable =
             this.state.username !== ''
                 && !this.state.isTaken ?
-                "Available" :
-                "Taken";
+                'Available' :
+                'Taken';
         const isUpperCase =
             this.state.username !== this.state.username.toLowerCase() ? true : false;
-        const upperCaseMessage = isUpperCase ? ", But Please Choose Only Lower Case Characters" : "";
+        const upperCaseMessage = isUpperCase ? ', But Please Choose Only Lower Case Characters' : '';
         const specialCharacters = this.testForSpecialCharacter(this.state.username);
         const specialCharMessage =
             specialCharacters ?
-                isUpperCase ? " and No Special Characters Please"
+                isUpperCase ? ' and No Special Characters Please'
                     :
-                    ", But No Special Characters Please" :
-                "";
+                    ', But No Special Characters Please' :
+                '';
         const { username, firstName, lastName, pursuits } = this.state;
         let isInvalid =
             username === '' ||
@@ -309,20 +308,20 @@ class InitialCustomizationPage extends React.Component {
         const pursuitDetails =
             this.state.pursuits.length !== 0 ? (
                 this.state.experienceSelects) :
-                (<></>);
+                null;
 
         return (
-            <div className="initialcustomization-container">
+            <div className='initialcustomization-container'>
                 <form onSubmit={this.handleProfileSubmit}>
                     <h2>Let us know about you!</h2>
                     <label>
                         Don't worry this information won't be public if you don't want it to.
                     </label>
-                    <div className="initialcustomization-content-container">
+                    <div className='initialcustomization-content-container'>
                         <label>Choose a display profile!</label>
                         <input
                             key={this.state.imageKey}
-                            type="file"
+                            type='file'
                             name={DISPLAY_PHOTO_FIELD}
                             onChange={(e) => (
                                 this.handleProfilePhotoChange(e.target.files[0])
@@ -340,37 +339,37 @@ class InitialCustomizationPage extends React.Component {
                                 setEditorRef={this.setEditorRef}
                             />
                             : (
-                                <div id="initialcustomization-display-photo-container">
+                                <div id='initialcustomization-display-photo-container'>
                                 </div>
                             )}
                     </div>
-                    <div className="initialcustomization-content-container">
+                    <div className='initialcustomization-content-container'>
                         <label>
                             <p>Choose a username!</p>
-                            <p>{this.state.username === '' ? "Invalid" : isAvailable + upperCaseMessage + specialCharMessage}</p>
+                            <p>{this.state.username === '' ? 'Invalid' : isAvailable + upperCaseMessage + specialCharMessage}</p>
                         </label>
                         <input
-                            type="text"
+                            type='text'
                             name={USERNAME_FIELD}
-                            placeholder="Username"
+                            placeholder='Username'
                             onChange={(e) => this.handleTextChange(e, isInvalid)}
                         />
                         <label>First Name</label>
                         <input
-                            type="text"
+                            type='text'
                             name={FIRST_NAME_FIELD}
-                            placeholder="First Name"
+                            placeholder='First Name'
                             onChange={this.handleTextChange}
                         />
                         <label>Last Name</label>
                         <input
-                            type="text"
+                            type='text'
                             name={LAST_NAME_FIELD}
-                            placeholder="Last Name"
+                            placeholder='Last Name'
                             onChange={this.handleTextChange}
                         />
                     </div>
-                    <div className="initialcustomization-content-container">
+                    <div className='initialcustomization-content-container'>
                         <label>
                             Tell us what you want to
                             pursue or choose one from the list!
@@ -383,10 +382,10 @@ class InitialCustomizationPage extends React.Component {
                         {pursuitDetails}
                         <button
                             disabled={isInvalid || this.state.isSubmitting}
-                            type="submit"
+                            type='submit'
                         >
                             Submit
-                             </button>
+                        </button>
                     </div>
                 </form>
 

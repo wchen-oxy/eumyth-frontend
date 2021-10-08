@@ -1,11 +1,11 @@
 import React from 'react';
 import DanteEditor from 'Dante2';
 import _ from 'lodash';
-import AxiosHelper from '../../../Axios/axios';
+import AxiosHelper from '../../../utils/axios';
 import { ImageBlockConfig } from 'Dante2/package/es/components/blocks/image.js';
 import { PlaceholderBlockConfig } from 'Dante2/package/es/components/blocks/placeholder';
-import { withFirebase } from '../../../Firebase';
-import { IMAGE_BASE_URL } from '../../constants/urls';
+import { withFirebase } from '../../../store/firebase';
+import { IMAGE_BASE_URL } from '../../../utils/constants/urls';
 
 const SAVE_INTERVAL = 4000;
 class LongEditor extends React.Component {

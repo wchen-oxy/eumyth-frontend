@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import PasswordChangeForm from '../password/change';
 import imageCompression from 'browser-image-compression';
-import AxiosHelper from "../../Axios/axios";
-import { AuthUserContext, withAuthorization } from '../session';
-import { withFirebase } from '../../Firebase';
-import { PUBLIC, PRIVATE, DISPLAY, COVER } from "../constants/flags";
-import "./index.scss";
-import ProfilePhotoEditor from '../profile-photo-editor.js';
+import PasswordChangeForm from './password/change';
+import ProfilePhotoEditor from '../profile-photo-editor.js/index.js';
+import AxiosHelper from 'utils/axios';
+import { AuthUserContext, withAuthorization } from 'store/session';
+import { withFirebase } from 'store/firebase';
+import { PUBLIC, PRIVATE, DISPLAY, COVER } from 'utils/constants/flags';
 import {
   USERNAME_FIELD,
   CROPPED_IMAGE_FIELD,
   SMALL_CROPPED_IMAGE_FIELD,
   TINY_CROPPED_IMAGE_FIELD,
   COVER_PHOTO_FIELD
-} from '../constants/form-data';
+} from 'utils/constants/form-data';
+import './index.scss';
 
 const AccountPage = (props) => {
   const [indexUserID, setIndexUserID] = useState(null);
@@ -60,19 +60,19 @@ const AccountPage = (props) => {
   }
 
   const showPhotoEditor = (ref) => {
-    if (ref.current.style.display === "") { ref.current.style.display = "flex"; }
+    if (ref.current.style.display === '') { ref.current.style.display = 'flex'; }
     else {
-      ref.current.style.display = "";
+      ref.current.style.display = '';
     }
   }
 
   const removePhoto = (photoType) => {
     const username = props.firebase.returnUsername();
-    if (window.confirm("Are you sure you want to remove your photo?")) {
+    if (window.confirm('Are you sure you want to remove your photo?')) {
       AxiosHelper
         .deleteAccountPhoto(username, photoType)
         .then(() => {
-          return AxiosHelper.updatePostDisplayPhotos(username, "")
+          return AxiosHelper.updatePostDisplayPhotos(username, '')
         })
         .then(() => {
           if (photoType === DISPLAY) {
@@ -106,12 +106,12 @@ const AccountPage = (props) => {
         else return;
       })
       .then((results) => {
-        alert("Successfully updated!");
+        alert('Successfully updated!');
         window.location.reload();
       })
       .catch((err) => {
         console.log(err);
-        alert("Something has gone wrong while updating :(")
+        alert('Something has gone wrong while updating :(')
       })
   }
 
@@ -135,13 +135,12 @@ const AccountPage = (props) => {
     return (
       AxiosHelper.updateBio(bio, props.firebase.returnUsername())
         .then(() => {
-          alert("Successfully updated your bio!");
+          alert('Successfully updated your bio!');
           window.location.reload();
         })
         .catch((err) => console.log(err))
     );
   }
-
 
   const handleTemplateTextSubmit = () => {
     return (
@@ -153,7 +152,6 @@ const AccountPage = (props) => {
     )
   }
 
-
   const handleProfilePrivacyChange = (privacySetting) => {
     const isPrivate = privacySetting === PRIVATE ? true : false;
     setIsPrivate(isPrivate);
@@ -162,10 +160,10 @@ const AccountPage = (props) => {
         props.firebase.returnUsername(),
         isPrivate
       )
-      .then((res) => alert("Success!"))
+      .then((res) => alert('Success!'))
       .catch((err) => {
         console.log(err);
-        alert("Unable to update Profile Privacy.");
+        alert('Unable to update Profile Privacy.');
       })
   }
 
@@ -173,7 +171,7 @@ const AccountPage = (props) => {
     let formData = new FormData();
     formData.append(USERNAME_FIELD, props.firebase.returnUsername());
     if (photoType === DISPLAY) {
-      const titles = ["normal", "small", "tiny"];
+      const titles = ['normal', 'small', 'tiny'];
       const canvas = AvatarEditorInstance.getImage();
       const image = imageCompression.canvasToFile(canvas);
       image.then((result) =>
@@ -183,28 +181,28 @@ const AccountPage = (props) => {
             {
               maxWidthOrHeight: 250,
               maxSizeMB: 1,
-              fileType: "image/jpeg"
+              fileType: 'image/jpeg'
             }),
           imageCompression(
             result,
             {
               maxWidthOrHeight: 125,
               maxSizeMB: 1,
-              fileType: "image/jpeg"
+              fileType: 'image/jpeg'
             }),
           imageCompression(
             result,
             {
               maxWidthOrHeight: 62,
               maxSizeMB: 1,
-              fileType: "image/jpeg"
+              fileType: 'image/jpeg'
             })
         ]))
         .then((results) => {
           let imageArray = [];
           for (let i = 0; i < 3; i++) {
             imageArray.push(
-              new File([results[i]], titles[i], { type: "image/jpeg" })
+              new File([results[i]], titles[i], { type: 'image/jpeg' })
             );
           }
           formData.append(CROPPED_IMAGE_FIELD, results[0]);
@@ -217,7 +215,7 @@ const AccountPage = (props) => {
     else if (photoType === COVER) {
       if (coverPhoto.size > 1000000) {
         return (
-          imageCompression(coverPhoto, { maxSizeMB: 1, fileType: "image/jpeg" })
+          imageCompression(coverPhoto, { maxSizeMB: 1, fileType: 'image/jpeg' })
             .then(formattedImage => {
               formData.append(COVER_PHOTO_FIELD, formattedImage);
               handlePhotoSubmit(formData, photoType);
@@ -243,11 +241,9 @@ const AccountPage = (props) => {
       }
       return pursuits;
     }
-
   }
 
   const handleTemplateTextSet = (templateCategory) => {
-    console.log(previousTemplates[templateCategory]);
     setTemplateText(previousTemplates[templateCategory]);
     setTemplateCategory(templateCategory);
   }
@@ -261,49 +257,45 @@ const AccountPage = (props) => {
       {
         authUser => {
           return (
-            <div id="account-container">
+            <div id='account-container'>
               <h1>Account: {authUser.email}</h1>
               <PasswordChangeForm />
-              <div className="account-section-container">
+              <div className='account-section-container'>
                 <label>
                   Choose the privacy of your profile!
                 </label>
                 <select
                   value={isPrivate ? PRIVATE : PUBLIC}
                   onChange={(e) => handleProfilePrivacyChange(e.target.value)}>
-                  <option key="private" value={PRIVATE}>Private</option>
-                  <option key="public" value={PUBLIC}>Public</option>
+                  <option key='private' value={PRIVATE}>Private</option>
+                  <option key='public' value={PUBLIC}>Public</option>
                 </select>
               </div>
-              <div className="account-section-container">
+              <div className='account-section-container'>
                 <button onClick={() => showPhotoEditor(displayPhotoRef)}>
                   Edit your Display Photo
                 </button>
                 <div
                   ref={displayPhotoRef}
-                  className="account-photo-edit-container"
+                  className='account-photo-edit-container'
                 >
                   <label>Change your display photo!</label>
                   <input
-                    name="displayPhoto"
-                    type="file"
+                    name='displayPhoto'
+                    type='file'
                     key={imageKey}
                     onChange={(e) => setDisplayPhoto(e.target.files[0])}
                   />
-                  {displayPhoto ?
-
-                    <ProfilePhotoEditor
-                      clearFile={clearFile}
-                      profilePhoto={displayPhoto}
-                      handleImageDrop={handleImageDrop}
-                      imageScale={displayPhotoScale}
-                      imageRotation={displayPhotoRotation}
-                      scaleImage={setDisplayPhotoScale}
-                      rotateImage={setDisplayPhotoRotation}
-                      setEditorRef={setAvatarEditorInstance}
-                    />
-                    // renderProfilePhotoEditor()
-                    : <div></div>}
+                  {displayPhoto && <ProfilePhotoEditor
+                    clearFile={clearFile}
+                    profilePhoto={displayPhoto}
+                    handleImageDrop={handleImageDrop}
+                    imageScale={displayPhotoScale}
+                    imageRotation={displayPhotoRotation}
+                    scaleImage={setDisplayPhotoScale}
+                    rotateImage={setDisplayPhotoRotation}
+                    setEditorRef={setAvatarEditorInstance}
+                  />}
                   <button
                     disabled={!displayPhoto}
                     onClick={() => submitPhoto(DISPLAY)}>
@@ -314,15 +306,15 @@ const AccountPage = (props) => {
                   </button>
                 </div>
               </div>
-              <div className="account-section-container">
+              <div className='account-section-container'>
 
                 <button onClick={() => showPhotoEditor(coverPhotoRef)}>
                   Edit your Cover Photo
                 </button>
-                <div ref={coverPhotoRef} className="account-photo-edit-container">
+                <div ref={coverPhotoRef} className='account-photo-edit-container'>
                   <label>Change your cover photo!</label>
                   <input
-                    type="file"
+                    type='file'
                     onChange={(e) => {
                       setCoverPhoto(e.target.files[0]);
                     }} />
@@ -337,10 +329,10 @@ const AccountPage = (props) => {
                 </div>
               </div>
 
-              <div id="account-bio-container" className="account-section-container">
+              <div id='account-bio-container' className='account-section-container'>
                 <label>Edit your bio</label>
                 <textarea
-                  type="text"
+                  type='text'
                   onChange={e => setBioText(e.target.value)}
                   value={bio}
                   maxLength={500}
@@ -350,18 +342,18 @@ const AccountPage = (props) => {
                 </button>
               </div>
               <div
-                id="account-template-container"
-                className="account-section-container">
+                id='account-template-container'
+                className='account-section-container'>
                 <label>Add Template for Pursuit</label>
                 <p>Add a predefined text you can add to a post for ease of access</p>
                 <select
-                  name="pursuit-category"
+                  name='pursuit-category'
                   value={templateCategory}
                   onChange={(e) => handleTemplateTextSet(e.target.value)}>
                   {renderPursuitOptions()}
                 </select>
                 <textarea
-                  type="text"
+                  type='text'
                   onChange={e => setTemplateText(e.target.value)}
                   value={templateText}
                 />

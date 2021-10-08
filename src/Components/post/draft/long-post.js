@@ -8,7 +8,7 @@ import {
   NONE,
   LONG,
   SHORT
-} from "../../constants/flags";
+} from "../../../utils/constants/flags";
 import "./long-post.scss";
 import _ from 'lodash';
 

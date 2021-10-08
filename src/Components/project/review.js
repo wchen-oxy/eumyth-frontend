@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import CustomMultiSelect from '../custom-clickables/createable-single';
-import AxiosHelper from '../../Axios/axios';
+import AxiosHelper from '../../utils/axios';
 import {
     COVER_PHOTO_FIELD,
     DISPLAY_PHOTO_FIELD,
@@ -17,19 +17,8 @@ import {
     TITLE_FIELD,
     USERNAME_FIELD,
     USER_ID_FIELD
-} from '../constants/form-data';
-const MAIN = "MAIN";
-const EDIT = "EDIT";
-const REVIEW = "REVIEW";
-const TITLE = "TITLE";
-const OVERVIEW = "OVERVIEW";
-const PURSUIT = "PURSUIT";
-const START_DATE = "START_DATE";
-const END_DATE = "END_DATE";
-const IS_COMPLETE = "IS_COMPLETE";
-const MINUTES = "MINUTES";
-const COVER_PHOTO = "COVER_PHOTO";
-
+} from 'utils/constants/form-data';
+import { EDIT, TITLE, OVERVIEW } from 'utils/constants/flags';
 
 const ProjectReview = (props) => {
     const [pursuit, setPursuit] = useState(props.pursuit);
@@ -82,9 +71,7 @@ const ProjectReview = (props) => {
     return (
         <div >
             <div className="">
-                <button
-                    onClick={() => props.handleWindowSwitch(EDIT)}
-                >
+                <button onClick={() => props.handleWindowSwitch(EDIT)}    >
                     Return
                 </button>
                 <button

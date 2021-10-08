@@ -2,9 +2,9 @@ import React from 'react';
 import Isemail from 'isemail';
 import WelcomeLoginForm from './sub-components/login';
 import WelcomeRegisterForm from './sub-components/register';
-import PasswordForgetPage from "../../password/forget/index";
+import PasswordForgetForm from 'components/account/password/forget/index';
 import VerifyForm from './sub-components/verify';
-import { LOGIN_STATE, PASSWORD_STATE, REGISTER_STATE } from '../../constants/flags';
+import { LOGIN_STATE, PASSWORD_STATE, REGISTER_STATE } from 'utils/constants/flags';
 import './index.scss';
 
 const INITIAL_STATE = {
@@ -105,12 +105,12 @@ export default class WelcomePage extends React.Component {
   handleLoginSubmit(e) {
     e.preventDefault();
     if (!Isemail.validate(this.state.email)) {
-      return alert("This is not a valid email!");
+      return alert('This is not a valid email!');
     }
     this.props.firebase.doSignIn(this.state.email, this.state.password)
       .then((result) => {
         if (result) {
-          if (result.user.emailVerified) this.props.history.push("/");
+          if (result.user.emailVerified) this.props.history.push('/');
           else {
             this.handleVerifiedState(result.user.emailVerified);
           }
@@ -122,10 +122,10 @@ export default class WelcomePage extends React.Component {
   handleRegisterSubmit(e) {
     e.preventDefault();
     if (!Isemail.validate(this.state.email)) {
-      alert("This is not a valid email!")
+      alert('This is not a valid email!')
     }
     else if (this.state.password.length < 6) {
-      alert("Password is too short!");
+      alert('Password is too short!');
     }
     else {
       this.props.firebase.doCreateUser(this.state.email, this.state.password)
@@ -139,7 +139,7 @@ export default class WelcomePage extends React.Component {
   renderLoginRegister(state) {
     if (this.state.currentUser && !this.state.verified) {
       return (
-        <div className="welcome-hero-side-container">
+        <div className='welcome-hero-side-container'>
           <VerifyForm
             onToggleLoginRegisterWindow={this.handleWindowToggle}
             onSendEmailVerification={this.handleSendEmailVerication}
@@ -150,7 +150,7 @@ export default class WelcomePage extends React.Component {
 
     if (state === REGISTER_STATE)
       return (
-        <div className="welcome-hero-side-container">
+        <div className='welcome-hero-side-container'>
           <WelcomeRegisterForm
             onToggleLoginRegisterWindow={this.handleWindowToggle}
             onRegisterEmailChange={this.handleTextChange}
@@ -162,7 +162,7 @@ export default class WelcomePage extends React.Component {
 
     else if (state === LOGIN_STATE) {
       return (
-        <div className="welcome-hero-side-container">
+        <div className='welcome-hero-side-container'>
           <WelcomeLoginForm
             onToggleLoginRegisterWindow={this.handleWindowToggle}
             onLoginEmailChange={this.handleTextChange}
@@ -174,22 +174,19 @@ export default class WelcomePage extends React.Component {
     }
     else if (state === PASSWORD_STATE) {
       return (
-        <div className="welcome-hero-side-container">
-          <PasswordForgetPage
+        <div className='welcome-hero-side-container'>
+          <PasswordForgetForm
             onToggleLoginRegisterWindow={this.handleWindowToggle}
           />
         </div>
       );
-
-
     }
   }
 
   render() {
-
     return (
-      <section className="welcome-login-register-section">
-        <div className="welcome-hero-hero-container">
+      <section className='welcome-login-register-section'>
+        <div className='welcome-hero-hero-container'>
           <p>Welcome to interestHub! Login or sign up to get started!</p>
           <br></br>
           <p>(to try out this without signing up, use this test account)</p>
@@ -198,7 +195,6 @@ export default class WelcomePage extends React.Component {
         </div>
         {this.renderLoginRegister(this.state.window)}
       </section>
-
     )
   }
 }

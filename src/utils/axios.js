@@ -1,6 +1,8 @@
 import axios from 'axios';
-import { COVER } from '../Components/constants/flags';
-import urls from "../Components/constants/urls";
+import { COVER } from 'utils/constants/flags';
+import { returnUsernameObject } from 'utils/url';
+import urls from 'utils/constants/urls';
+
 
 export default class AxiosHelper {
 
@@ -80,15 +82,15 @@ export default class AxiosHelper {
     }
 
     static getUserPreviewID(username) {
-        return axios.get(urls.USER_PREVIEW_ID_URL, urls.returnUsernameObject(username));
+        return axios.get(urls.USER_PREVIEW_ID_URL, returnUsernameObject(username));
     }
 
     static returnUserRelationInfo(username) {
-        return axios.get(urls.RELATION_INFO_URL, urls.returnUsernameObject(username));
+        return axios.get(urls.RELATION_INFO_URL, returnUsernameObject(username));
     }
 
     static returnTinyDisplayPhoto(username) {
-        return axios.get(urls.TINY_DISPLAY_PHOTO_URL, urls.returnUsernameObject(username))
+        return axios.get(urls.TINY_DISPLAY_PHOTO_URL, returnUsernameObject(username))
     }
 
     static setProfilePrivacy(username, isPrivate) {
@@ -131,7 +133,7 @@ export default class AxiosHelper {
     // }
 
     // static returnPursuitNames(username) {
-    //     return axios.get(urls.INDEX_USER_PURSUITS_URL, urls.returnUsernameObject(username));
+    //     return axios.get(urls.INDEX_USER_PURSUITS_URL, returnUsernameObject(username));
     // }
 
     static returnIndexUser(username, isTruncated) {
@@ -144,7 +146,7 @@ export default class AxiosHelper {
     }
 
     static returnUser(username) {
-        return axios.get(urls.USER_BASE_URL, urls.returnUsernameObject(username));
+        return axios.get(urls.USER_BASE_URL, returnUsernameObject(username));
     }
 
     static returnFollowerStatus(visitorUsername, userRelationArrayID) {
@@ -217,7 +219,7 @@ export default class AxiosHelper {
     }
 
     static returnAccountSettingsInfo(username) {
-        return axios.get(urls.USER_ACCOUNT_SETTINGS_INFO_URL, urls.returnUsernameObject(username))
+        return axios.get(urls.USER_ACCOUNT_SETTINGS_INFO_URL, returnUsernameObject(username))
     }
 
     static updateBio(bio, username) {
@@ -232,7 +234,7 @@ export default class AxiosHelper {
     }
 
     static updateAccountImage(formData, photoType) {
-        return axios.post(photoType === "COVER" ? urls.COVER_PHOTO_URL : urls.DISPLAY_PHOTO_URL, formData)
+        return axios.post(photoType === 'COVER' ? urls.COVER_PHOTO_URL : urls.DISPLAY_PHOTO_URL, formData)
     }
 
     static getComments(rootCommentIDArray, viewingMode) {
@@ -275,7 +277,7 @@ export default class AxiosHelper {
     }
 
     static retrieveNewPostInfo(username) {
-        return axios.get(urls.DRAFT_BASE_URL, urls.returnUsernameObject(username))
+        return axios.get(urls.DRAFT_BASE_URL, returnUsernameObject(username))
     }
 
     static returnImage(imageKey) {

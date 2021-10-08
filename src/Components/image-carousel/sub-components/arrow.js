@@ -10,14 +10,14 @@ const Arrow = (props) => {
                 props.direction === 'left' ?
                     {
                         ...style,
-                        display: "block",
+                        display: 'block',
                         left: '5%',
                         zIndex: '1',
                         color: 'brown'
                     } :
                     {
                         ...style,
-                        display: "block",
+                        display: 'block',
                         right: '5%',
                         zIndex: '1'
                     }

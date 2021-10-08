@@ -1,13 +1,14 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import ShortPostViewer from 'components/post/viewer/short-post';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import EventController from '../../profile/timeline/timeline-event-controller';
-import AxiosHelper from '../../../Axios/axios';
-import { Link } from "react-router-dom";
-import { withAuthorization } from '../../session';
-import { withFirebase } from '../../../Firebase';
-import { returnUsernameURL, returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../../constants/urls";
-import { POST, RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE } from "../../constants/flags";
-import ShortPostViewer from '../../post/viewer/short-post';
+import EventController from 'components/profile/timeline/timeline-event-controller';
+import AxiosHelper from 'utils/axios';
+import { withAuthorization } from 'store/session';
+import { withFirebase } from 'store/firebase';
+import { returnUsernameURL, returnUserImageURL } from 'utils/url';
+import { TEMP_PROFILE_PHOTO_URL } from 'utils/constants/urls';
+import { POST, RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
 import './returning-user.scss';
 
 class ReturningUserPage extends React.Component {
@@ -61,8 +62,8 @@ class ReturningUserPage extends React.Component {
             let labels = null;
             let followedUserPostIDs = null;
             let preferredPostPrivacy = null;
-            let croppedDisplayPhoto = "";
-            let smallCroppedDisplayPhoto = "";
+            let croppedDisplayPhoto = '';
+            let smallCroppedDisplayPhoto = '';
             let indexUserDataID = null;
             let fullUserDataID = null;
             let pursuits = null;
@@ -201,7 +202,7 @@ class ReturningUserPage extends React.Component {
                 })
                 .catch((err) => {
                     console.log(err);
-                    alert("Could Not Load Feed." + err);
+                    alert('Could Not Load Feed.' + err);
                 }));
         }
     }
@@ -377,19 +378,19 @@ class ReturningUserPage extends React.Component {
             totalMin += pursuit.total_min;
             pursuitInfoArray.push(
                 <tr key={pursuit.name}>
-                    <th key={pursuit.name + " name"}>
+                    <th key={pursuit.name + ' name'}>
                         {pursuit.name}
                     </th>
-                    <td key={pursuit.name + " experience"}>
+                    <td key={pursuit.name + ' experience'}>
                         {pursuit.experience_level}
                     </td>
-                    <td key={pursuit.total_min + "minutes"}>
+                    <td key={pursuit.total_min + 'minutes'}>
                         {pursuit.total_min}
                     </td>
-                    <td key={pursuit.num_posts + "posts"}>
+                    <td key={pursuit.num_posts + 'posts'}>
                         {pursuit.posts ? pursuit.posts.length : 0}
                     </td>
-                    <td key={pursuit.num_milestones + " milestones"}>
+                    <td key={pursuit.num_milestones + ' milestones'}>
                         {pursuit.num_milestones}
                     </td>
                 </tr>
@@ -447,42 +448,42 @@ class ReturningUserPage extends React.Component {
             this.renderRecentPosts(this.state.recentPosts) : null;
 
         return (
-            <div id="returninguser-body-container">
-                <div id="returninguser-top-title-container" >
-                    <h4 className="returninguser-title">Your Dashboard</h4>
+            <div id='returninguser-body-container'>
+                <div id='returninguser-top-title-container' >
+                    <h4 className='returninguser-title'>Your Dashboard</h4>
                 </div>
                 <div
-                    id="returninguser-profile-container"
-                    className="returninguser-main-row"
+                    id='returninguser-profile-container'
+                    className='returninguser-main-row'
                 >
                     <div
-                        id="returninguser-hero-profile-column"
-                        className="returninguser-profile-column"
+                        id='returninguser-hero-profile-column'
+                        className='returninguser-profile-column'
                     >
                         <Link
                             to={returnUsernameURL(this.state.username)}
                         >
                             <img
-                                alt=""
-                                id="returninguser-profile-photo"
+                                alt=''
+                                id='returninguser-profile-photo'
                                 src={imageURL}>
                             </img>
-                            <div className="returninguser-profile-text-container">
+                            <div className='returninguser-profile-text-container'>
                                 <p>{this.state.username}</p>
                                 <p>{this.state.firstName}</p>
                             </div>
                         </Link>
                     </div>
-                    <div className="returninguser-profile-column">
-                        <div className="returninguser-profile-text-container">
+                    <div className='returninguser-profile-column'>
+                        <div className='returninguser-profile-text-container'>
                             Total Hours Spent: {Math.floor(this.state.totalMin / 60)}
                         </div>
-                        <div className="returninguser-profile-text-container">
+                        <div className='returninguser-profile-text-container'>
                             { }
                         </div>
                     </div>
-                    <div className="returninguser-profile-column">
-                        <table id="returninguser-pursuit-info-table">
+                    <div className='returninguser-profile-column'>
+                        <table id='returninguser-pursuit-info-table'>
                             <tbody>
                                 <tr>
                                     <th></th>
@@ -497,13 +498,13 @@ class ReturningUserPage extends React.Component {
                     </div>
                 </div>
                 <div
-                    id="returninguser-recent-work-container"
-                    className="returninguser-main-row"
+                    id='returninguser-recent-work-container'
+                    className='returninguser-main-row'
                 >
-                    <div className="returninguser-row">
+                    <div className='returninguser-row'>
                         <Link
-                            id="returninguser-recent-work-title"
-                            className="returninguser-title"
+                            id='returninguser-recent-work-title'
+                            className='returninguser-title'
                             to={returnUsernameURL(this.state.username)}
                         >
                             Your Recent Work
@@ -511,17 +512,17 @@ class ReturningUserPage extends React.Component {
                     </div>
                     <div
                         key={this.state.recentPostsKey}
-                        id="returninguser-recent-posts-container"
-                        className="returninguser-row">
+                        id='returninguser-recent-posts-container'
+                        className='returninguser-row'>
                         {renderedRecentPosts}
                     </div>
                 </div>
                 <div
-                    id="returninguser-feed-container"
-                    className="returninguser-main-row"
+                    id='returninguser-feed-container'
+                    className='returninguser-main-row'
                 >
-                    <h4 className="returninguser-title">Your Feed</h4>
-                    <div id="returninguser-infinite-scroll-container" >
+                    <h4 className='returninguser-title'>Your Feed</h4>
+                    <div id='returninguser-infinite-scroll-container' >
                         <InfiniteScroll
                             dataLength={this.state.nextOpenPostIndex}
                             next={this.fetchNextPosts}
@@ -533,7 +534,7 @@ class ReturningUserPage extends React.Component {
                                 </p>}>
                             {renderedFeed ? (
                                 renderedFeed.map((feedItem) =>
-                                    <div className="returninguser-feed-object-container">
+                                    <div className='returninguser-feed-object-container'>
                                         {feedItem}
                                     </div>
                                 )) :

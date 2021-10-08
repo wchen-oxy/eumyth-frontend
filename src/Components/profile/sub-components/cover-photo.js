@@ -1,11 +1,11 @@
 import React from 'react';
-import { returnUserImageURL } from "../../constants/urls";
-import "./cover-photo.scss";
+import { returnUserImageURL } from 'utils/url';
+import './cover-photo.scss';
 
 const CoverPhoto = (props) => {
     if (props.coverPhoto) {
         return (<img
-            alt="cover photo"
+            alt='cover photo'
             src={returnUserImageURL(
                 props.coverPhoto)}
         ></img>
@@ -13,7 +13,7 @@ const CoverPhoto = (props) => {
     }
     else {
         return (
-            <div id="coverphoto-temp-cover"></div>
+            <div id='coverphoto-temp-cover'></div>
         )
     }
 }

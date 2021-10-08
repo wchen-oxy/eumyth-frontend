@@ -1,5 +1,5 @@
 import React from "react";
-import { displayDifficulty, displayProgressionType } from "../../../constants/ui-text";
+import { displayDifficulty, displayProgressionType } from "../../../../utils/constants/ui-text";
 import EventLabels from "../../../profile/timeline/sub-components/event-labels";
 import "./short-post-meta.scss";
 

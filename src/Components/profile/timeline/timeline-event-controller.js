@@ -1,22 +1,22 @@
 import React from 'react';
-import EventHeroContent from "./timeline-event-hero-content";
-import ProjectEvent from "./timeline-project-event";
-import { POST, PROJECT, LONG, SHORT, PROJECT_EVENT } from "../../constants/flags";
+import EventHeroContent from './timeline-event-hero-content';
+import ProjectEvent from './timeline-project-event';
+import { POST, PROJECT, PROJECT_EVENT } from 'utils/constants/flags';
 import EventCheckbox from './sub-components/event-checkbox';
 import './timeline-event.scss';
 
 const selectClassStyle = (num) => {
     switch (num) {
         case (0):
-            return "event-first-container";
+            return 'event-first-container';
         case (1):
-            return "event-middle-container";
+            return 'event-middle-container';
         case (2):
-            return "event-middle-container";
+            return 'event-middle-container';
         case (3):
-            return "event-last-container";
+            return 'event-last-container';
         default:
-            throw new Error("Element Index in Timeline Event is incorrect: ", num);
+            throw new Error('Element Index in Timeline Event is incorrect: ', num);
     }
 }
 
@@ -26,11 +26,11 @@ const EventController = (props) => {
         return (
             <div
                 onClick={props.disableModalPreview ?
-                    () => console.log("Selected")
+                    () => console.log('Selected')
                     :
                     () => props.onProjectClick(post)}
                 className={props.columnIndex !== null ?
-                    selectClassStyle(props.columnIndex) : "event-middle-container"}>
+                    selectClassStyle(props.columnIndex) : 'event-middle-container'}>
                 <ProjectEvent post={post} />
             </div>
         );
@@ -41,9 +41,9 @@ const EventController = (props) => {
             [post, props.index] : [post, props.eventIndex, props.columnIndex];
         return (
             <div className={props.columnIndex !== null ?
-                selectClassStyle(props.columnIndex) : "event-middle-container"}>
+                selectClassStyle(props.columnIndex) : 'event-middle-container'}>
                 <div onClick={props.disableModalPreview ?
-                    () => console.log("Selected")
+                    () => console.log('Selected')
                     :
                     () => props.onEventClick(...eventClickParams)} >
                     <EventHeroContent
@@ -70,17 +70,17 @@ const EventController = (props) => {
         return (
             <div
                 onClick={props.disableModalPreview ?
-                    () => console.log("Selected")
+                    () => console.log('Selected')
                     :
                     () => props.onProjectClick(post)}
                 className={props.columnIndex !== null ?
-                    selectClassStyle(props.columnIndex) : "event-middle-container"}>
+                    selectClassStyle(props.columnIndex) : 'event-middle-container'}>
                 <ProjectEvent post={post} />
             </div>
         );
     }
     else {
-        throw new Error("No props.contentType matched");
+        throw new Error('No props.contentType matched');
     }
 
 }

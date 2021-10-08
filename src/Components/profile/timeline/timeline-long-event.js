@@ -1,18 +1,17 @@
 import React from 'react';
-import { returnUserImageURL } from "../../constants/urls";
-import { returnFormattedDate } from "../../constants/ui-text";
-import "./timeline-long-event.scss";
+import { returnUserImageURL } from 'utils/url';
+import { returnFormattedDate } from 'utils/constants/ui-text';
 import EventTextInfo from './sub-components/event-text-info';
+import './timeline-long-event.scss';
 
 const LongEvent = (props) => {
     if (props.post.text_data === undefined) return (<></>);
     const post = props.post;
     const date = post.date ? returnFormattedDate(post.date) : null;
     const coverPhotoContainerStyle = post.cover_photo_key ?
-        "longevent-with-cover-photo-container"
+        'longevent-with-cover-photo-container'
         :
-        "longevent-no-cover-photo-container";
-
+        'longevent-no-cover-photo-container';
 
     return (
         <div>
@@ -20,8 +19,8 @@ const LongEvent = (props) => {
                 {post.cover_photo_key ?
                     (
                         <img
-                            alt="Cover Photo"
-                            className="longevent-cover-photo"
+                            alt='Cover Photo'
+                            className='longevent-cover-photo'
                             src={returnUserImageURL(post.cover_photo_key)}
                         />)
                     :

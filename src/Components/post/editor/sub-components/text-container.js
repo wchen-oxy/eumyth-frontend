@@ -1,26 +1,21 @@
 import React from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-import "./text-container.scss";
+import './text-container.scss';
 
 const TextContainer = (props) => (
-    <div className="textcontainer-main-container">
+    <div className='textcontainer-main-container'>
         <h4>{props.username}</h4>
-        {props.validFilesLength > 1
-            && !props.isPaginated ? (
-            <button onClick={props.onPaginatedChange}>
-                Caption Photos Individually
-            </button>
-        ) : (
-            <></>
-        )}
-        {props.validFilesLength > 1
-            && props.isPaginated ? (
+        {props.validFilesLength > 1 &&
+            props.isPaginated ? (
             <button onClick={props.onPaginatedChange}>
                 Return to Single Caption
             </button>
         ) : (
-            <></>
+            <button onClick={props.onPaginatedChange}>
+                Caption Photos Individually
+            </button>
         )}
+
         <TextareaAutosize
             id='textcontainer-text-input'
             placeholder='Write something here.'

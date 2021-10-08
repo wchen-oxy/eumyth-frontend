@@ -1,8 +1,8 @@
 import React from 'react';
 import InitialCustomizationPage from './initial-customization'
 import ReturningUserPage from './returning-user';
-import { withAuthorization } from '../../session';
-import { withFirebase } from '../../../Firebase';
+import { withAuthorization } from '../../../store/session';
+import { withFirebase } from '../../../store/firebase';
 
 class UserHomePage extends React.Component {
     _isMounted = false;
@@ -15,14 +15,15 @@ class UserHomePage extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
-        this.props.firebase.checkIsExistingUser().then(
-            result => {
-                if (this._isMounted) {
-                    result ? this.setState({ isNewUser: false })
-                        : this.setState({ isNewUser: true });
+        this.props.firebase.checkIsExistingUser()
+            .then(
+                result => {
+                    if (this._isMounted) {
+                        result ? this.setState({ isNewUser: false })
+                            : this.setState({ isNewUser: true });
+                    }
                 }
-            }
-        );
+            );
     }
 
     componentWillUnmount() {

@@ -4,7 +4,7 @@ import TopButtonBar from './sub-components/top-button-bar';
 import ProjectHeaderInput from './sub-components/project-header-input';
 import ProjectHeader from './project-header';
 import ProjectUtilityButtons from './sub-components/project-utility-buttons';
-import { PROJECT_CONTENT_ONLY_VIEW_STATE, PROJECT_MICRO_VIEW_STATE } from '../constants/flags';
+import { PROJECT_CONTENT_ONLY_VIEW_STATE, PROJECT_MICRO_VIEW_STATE } from 'utils/constants/flags';
 
 const MainDisplay = (props) => {
     return (

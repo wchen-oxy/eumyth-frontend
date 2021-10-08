@@ -1,13 +1,14 @@
 import React from 'react';
-import imageCompression from "browser-image-compression";
-import Comments from "./comments";
+import imageCompression from 'browser-image-compression';
+import Comments from './comments';
 import PostHeader from './sub-components/post-header';
 import ShortHeroText from './sub-components/short-text';
 import ShortPostMetaInfo from './sub-components/short-post-meta';
 import ShortReEditor from '../editor/short-re-editor';
-import ReviewPost from "../draft/review-post";
-import AxiosHelper from "../../../Axios/axios";
-import CustomImageSlider from '../../image-carousel/custom-image-slider';
+import ReviewPost from '../draft/review-post';
+import CustomImageSlider from 'components/image-carousel/custom-image-slider';
+import AxiosHelper from 'utils/axios';
+import { returnUserImageURL } from 'utils/url';
 import {
     EXPANDED,
     COLLAPSED,
@@ -15,12 +16,11 @@ import {
     INITIAL_STATE,
     EDIT_STATE,
     REVIEW_STATE
-} from "../../constants/flags";
-import { returnUserImageURL } from "../../constants/urls";
+} from 'utils/constants/flags';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import "../../image-carousel/index.scss";
-import "./short-post.scss";
+import 'components/image-carousel/index.scss';
+import './short-post.scss';
 
 
 class ShortPostViewer extends React.Component {
@@ -99,7 +99,7 @@ class ShortPostViewer extends React.Component {
             })
             .catch((err) => {
                 console.log(err);
-                alert("Something went wrong during deletion");
+                alert('Something went wrong during deletion');
             });
     }
 
@@ -201,8 +201,8 @@ class ShortPostViewer extends React.Component {
 
     renderImageSlider(windowType) {
         const sliderClassName = this.props.largeViewMode ?
-            "shortpostviewer-large-hero-image-container" :
-            "shortpostviewer-inline-hero-container";
+            'shortpostviewer-large-hero-image-container' :
+            'shortpostviewer-inline-hero-container';
         let imageArray = this.props.eventData.image_data.map((key, i) =>
             returnUserImageURL(key)
         );
@@ -266,7 +266,7 @@ class ShortPostViewer extends React.Component {
     }
 
     handlePromptAnnotation() {
-        this.heroRef.current.scrollIntoView({ block: "center" });
+        this.heroRef.current.scrollIntoView({ block: 'center' });
         this.setState({
             areAnnotationsHidden: false,
             annotateButtonPressed: true,
@@ -305,7 +305,7 @@ class ShortPostViewer extends React.Component {
                             areAnnotationsHidden: false,
                         },
                             this.heroRef.current.scrollIntoView({
-                                block: "center"
+                                block: 'center'
                             }))
                     }
                     annotationIndex++;
@@ -354,7 +354,7 @@ class ShortPostViewer extends React.Component {
             })
             .catch((err) => {
                 console.log(err);
-                alert("Sorry, your annotation could not be added.");
+                alert('Sorry, your annotation could not be added.');
             })
     }
 
@@ -422,7 +422,7 @@ class ShortPostViewer extends React.Component {
                 })
                 .then((result) => result.blob())
                 .then((result) => {
-                    const file = new File([result], "Thumbnail", {
+                    const file = new File([result], 'Thumbnail', {
                         type: result.type
                     });
                     return imageCompression(file, {
@@ -441,8 +441,8 @@ class ShortPostViewer extends React.Component {
             if (!this.props.eventData.image_data.length) {
                 if (this.props.largeViewMode) {
                     return (
-                        <div className="shortpostviewer-window">
-                            <div id="shortpostviewer-large-inline-header-container">
+                        <div className='shortpostviewer-window'>
+                            <div id='shortpostviewer-large-inline-header-container'>
                                 <PostHeader
                                     isOwnProfile={isOwnProfile}
                                     username={this.props.eventData.username}
@@ -462,7 +462,7 @@ class ShortPostViewer extends React.Component {
                                 textData={null}
                             />
 
-                            <div className="shortpostviewer-large-hero-text-container">
+                            <div className='shortpostviewer-large-hero-text-container'>
                                 <ShortHeroText
                                     textData={this.props.textData} />
                             </div>
@@ -473,9 +473,9 @@ class ShortPostViewer extends React.Component {
                 else {
                     return (
                         <div onClick={this.handleModalLaunch}>
-                            <div className="shortpostviewer-inline-main-container" >
+                            <div className='shortpostviewer-inline-main-container' >
 
-                                <div className="shortpostviewer-inline-side-container">
+                                <div className='shortpostviewer-inline-side-container'>
                                     <PostHeader
                                         isOwnProfile={isOwnProfile}
                                         username={this.props.eventData.username}
@@ -493,7 +493,7 @@ class ShortPostViewer extends React.Component {
 
                                     />
                                 </div>
-                                <div className="shortpostviewer-inline-hero-container">
+                                <div className='shortpostviewer-inline-hero-container'>
                                     <ShortHeroText
                                         index={this.state.imageIndex}
                                         isPaginated={this.state.isPaginated}
@@ -509,13 +509,13 @@ class ShortPostViewer extends React.Component {
             else {
                 if (this.props.largeViewMode) {
                     return (
-                        <div className="shortpostviewer-window">
-                            <div id="shortpostviewer-large-main-container"
-                                className="with-image"
+                        <div className='shortpostviewer-window'>
+                            <div id='shortpostviewer-large-main-container'
+                                className='with-image'
                             >
                                 {this.state.annotations && this.renderImageSlider(EXPANDED)}
                                 <div
-                                    className="shortpostviewer-large-side-container"
+                                    className='shortpostviewer-large-side-container'
                                     ref={this.heroRef}
                                 >
                                     <PostHeader
@@ -545,7 +545,7 @@ class ShortPostViewer extends React.Component {
                     return (
                         <>
                             <div
-                                id="shortpostviewer-inline-main-container"
+                                id='shortpostviewer-inline-main-container'
                                 onClick={this.handleModalLaunch}
                             >
                                 <PostHeader
@@ -554,7 +554,7 @@ class ShortPostViewer extends React.Component {
                                     date={this.state.date}
                                     displayPhoto={this.props.eventData.display_photo_key}
                                 />
-                                <div className="shortpostviewer-inline-side-container">
+                                <div className='shortpostviewer-inline-side-container'>
                                     <ShortPostMetaInfo
                                         index={this.state.imageIndex}
                                         isPaginated={this.state.isPaginated}
@@ -575,9 +575,9 @@ class ShortPostViewer extends React.Component {
         }
         else if (this.state.window === EDIT_STATE) {
             return (
-                <div className="shortpostviewer-window" >
+                <div className='shortpostviewer-window' >
                     <h4>Edit your Post!</h4>
-                    <div className="shortpostviewer-button-container">
+                    <div className='shortpostviewer-button-container'>
                         <button
                             onClick={() => (this.handleWindowChange(INITIAL_STATE))}>
                             Return
@@ -609,7 +609,7 @@ class ShortPostViewer extends React.Component {
                         .substring(0, 10);
             }
             return (
-                <div className="shortpostviewer-window">
+                <div className='shortpostviewer-window'>
                     <ReviewPost
                         isUpdateToPost
                         authUser={this.props.authUser}
@@ -637,7 +637,7 @@ class ShortPostViewer extends React.Component {
             );
         }
         else {
-            throw new Error("No stage matched");
+            throw new Error('No stage matched');
         }
     }
 

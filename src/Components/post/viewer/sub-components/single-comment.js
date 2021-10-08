@@ -1,8 +1,9 @@
-import React from "react";
-import { returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../../../constants/urls";
-import CommentInput from "./comment-input";
-import AxiosHelper from "../../../../Axios/axios";
-import "./single-comment.scss";
+import React from 'react';
+import CommentInput from './comment-input';
+import AxiosHelper from 'utils/axios';
+import { TEMP_PROFILE_PHOTO_URL } from 'utils/constants/urls';
+import { returnUserImageURL } from 'utils/url';
+import './single-comment.scss';
 
 class SingleComment extends React.Component {
 
@@ -12,7 +13,7 @@ class SingleComment extends React.Component {
             overallVoteScore: this.props.score,
             previousVote: 0,
             isReplyBoxToggled: false,
-            replyText: ""
+            replyText: ''
         }
         this.toggleReplyBox = this.toggleReplyBox.bind(this);
         this.setReplyText = this.setReplyText.bind(this);
@@ -87,7 +88,7 @@ class SingleComment extends React.Component {
             })
             .catch((err) => {
                 console.log(err);
-                console.log("Something went wrong with the server.");
+                console.log('Something went wrong with the server.');
                 this.setState({
                     overallVoteScore: temporaryOverallVoteScore,
                     previousVote: temporaryPreviousVoteValue
@@ -97,14 +98,14 @@ class SingleComment extends React.Component {
 
     isReplyTextInvalid() {
         return (
-            this.state.replyText.replaceAll("\\s+", "").length === 0
+            this.state.replyText.replaceAll('\\s+', '').length === 0
             || this.state.replyText.length === 0
         );
     }
 
     postReply() {
         if (this.isReplyTextInvalid()) {
-            alert("You need to write something");
+            alert('You need to write something');
         }
         else {
 
@@ -117,7 +118,7 @@ class SingleComment extends React.Component {
                 this.state.replyText
             )
                 .then((result) => {
-                    alert("Comment added! Refresh the page to see!");
+                    alert('Comment added! Refresh the page to see!');
                     this.toggleReplyBox(false);
                 })
         }
@@ -128,7 +129,7 @@ class SingleComment extends React.Component {
             this.setState({ replyText: '', isReplyBoxToggled: false })
             return;
         }
-        if (window.confirm("Are you sure you want discard your comment?")) {
+        if (window.confirm('Are you sure you want discard your comment?')) {
             this.setState({ isReplyBoxToggled: false });
         }
     }
@@ -137,8 +138,8 @@ class SingleComment extends React.Component {
         let threadIndicatorArray = [];
         for (let i = 0; i < levels; i++)
             threadIndicatorArray.push(
-                <div key={this.props.commentID + "inner"}
-                    className="singlecomment-thread-indicator">
+                <div key={this.props.commentID + 'inner'}
+                    className='singlecomment-thread-indicator'>
                 </div>
             )
         return threadIndicatorArray;
@@ -146,36 +147,35 @@ class SingleComment extends React.Component {
 
     render() {
         const masterClassName = this.props.level > 1 ?
-            "singlecomment-multiple-thread-style" : "";
+            'singlecomment-multiple-thread-style' : '';
         const displayPhotoURL = this.props.displayPhoto ? returnUserImageURL(this.props.displayPhoto) : TEMP_PROFILE_PHOTO_URL;
         return (
             <div className={masterClassName}>
-                {this.props.level > 1 ? (
-                    <div className="singlecomment-thread-indicator-container">
+                {this.props.level > 1 && (
+                    <div className='singlecomment-thread-indicator-container'>
                         {this.renderThreadIndicators(this.props.level - 1)}
                     </div>
-                ) : null}
-                <div className="singlecomment-main-container">
-                    <div className="singlecomment-header-container">
-                        <div className="singlecomment-display-photo-container">
+                )}
+                <div className='singlecomment-main-container'>
+                    <div className='singlecomment-header-container'>
+                        <div className='singlecomment-display-photo-container'>
                             <img
-                                alt="Single Comment Display Photo Url"
+                                alt='Single Comment Display Photo Url'
                                 src={displayPhotoURL} />
                         </div>
-                        <div className="singlecomment-username-container">
+                        <div className='singlecomment-username-container'>
                             <p>{this.props.username}</p>
                         </div>
                     </div>
-                    <div className="singlecomment-body-container">
-                        <div className="singlecomment-thread-indicator-container">
+                    <div className='singlecomment-body-container'>
+                        <div className='singlecomment-thread-indicator-container'>
                             {this.renderThreadIndicators(1)}
                         </div>
-                        <div className={"singlecomment-main-content-container"}>
-                            {this.props.hasAnnotation ?
-                                <div className="singlecomment-annotation-indicator">Annotation</div>
-                                : null
+                        <div className={'singlecomment-main-content-container'}>
+                            {this.props.hasAnnotation &&
+                                <div className='singlecomment-annotation-indicator'>Annotation</div>
                             }
-                            <div className="singlecomment-comment-container"
+                            <div className='singlecomment-comment-container'
 
                                 onMouseOver={() => (
                                     this.props.onMouseOver(this.props.commentID))}
@@ -186,7 +186,7 @@ class SingleComment extends React.Component {
                             >
                                 <p>{this.props.commentText}</p>
                             </div>
-                            <div className="singlecomment-management-container">
+                            <div className='singlecomment-management-container'>
                                 <button onClick={() => this.handleVote(1)}>
                                     Upvote
                                 </button>
@@ -199,10 +199,10 @@ class SingleComment extends React.Component {
                                 </button>
                             </div>
                             <div>
-                                {this.state.isReplyBoxToggled ?
+                                {this.state.isReplyBoxToggled &&
                                     <>
                                         <CommentInput
-                                            classStyle={""}
+                                            classStyle={''}
                                             minRows={4}
                                             handleTextChange={this.setReplyText}
                                             commentText={this.state.replyText}
@@ -214,8 +214,6 @@ class SingleComment extends React.Component {
                                             Reply
                                         </button>
                                     </>
-                                    :
-                                    <></>
                                 }
                             </div>
                         </div>

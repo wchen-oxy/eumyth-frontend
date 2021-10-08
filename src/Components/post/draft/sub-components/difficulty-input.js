@@ -1,15 +1,13 @@
 import React from 'react';
 
 const DifficultyInput = (props) => {
-
-
     return (
         <div>
             <label>Difficulty</label>
             <p>{props.displayDifficulty(props.difficulty)}</p>
             <input
                 defaultValue={props.difficulty}
-                type="range"
+                type='range'
                 step={1}
                 min={0}
                 max={2}

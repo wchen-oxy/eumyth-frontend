@@ -1,14 +1,13 @@
 import React from 'react';
 import Annotation from 'react-image-annotation';
-import TextareaAutosize from "react-textarea-autosize";
+import TextareaAutosize from 'react-textarea-autosize';
 
 class Annotator extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      // annotations: [], //finished annotation
       annotation: {}, //current annotation
+      // annotations: [], //finished annotation
       // activeAnnotations: []
 
     }
@@ -78,12 +77,8 @@ class Annotator extends React.Component {
           renderEditor={this.renderEditor}
         />
       </div>
-
-
     )
   }
-
-
 }
 
 export default Annotator;

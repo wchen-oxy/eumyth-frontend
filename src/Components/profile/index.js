@@ -1,14 +1,14 @@
 import React from 'react';
-import { withFirebase } from '../../Firebase';
+import { withFirebase } from '../../store/firebase';
 import { withRouter } from 'react-router-dom';
 import PursuitHolder from './sub-components/pursuit-holder';
-import AxiosHelper from '../../Axios/axios';
-import { AuthUserContext } from '../session';
+import AxiosHelper from '../../utils/axios';
+import { AuthUserContext } from '../../store/session';
 import FollowButton from "./sub-components/follow-buttons";
 import ProjectController from "../project/index";
 import PostController from './post-controller';
 import CoverPhoto from './sub-components/cover-photo';
-import { returnUserImageURL, returnUsernameURL } from "../constants/urls";
+import { returnUserImageURL, returnUsernameURL } from "../../utils/url";
 import {
     POST,
     PROJECT,
@@ -18,7 +18,7 @@ import {
     UNFOLLOWED_STATE,
     FOLLOW_REQUESTED_STATE,
     FOLLOWED_STATE
-} from "../constants/flags";
+} from "../../utils/constants/flags";
 import './index.scss';
 import ShortPostViewer from '../post/viewer/short-post';
 

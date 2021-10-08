@@ -1,5 +1,5 @@
 import React from 'react';
-import { SHORT } from '../../../constants/flags';
+import { SHORT } from 'utils/constants/flags';
 
 const CoverPhotoControls = (props) => {
     if (props.postType === SHORT) {
@@ -9,7 +9,7 @@ const CoverPhotoControls = (props) => {
             (<div>
                 <label>Use First Image For Thumbnail</label>
                 <input
-                    type="checkbox"
+                    type='checkbox'
                     defaultChecked={props.useImageForThumbnail}
                     onChange={() => {
                         props.setUseImageForThumbnail(!props.useImageForThumbnail)
@@ -21,7 +21,7 @@ const CoverPhotoControls = (props) => {
 
     }
     else {
-        throw new Error("No Post Types Matched for Cover Photo Controls");
+        throw new Error('No Post Types Matched for Cover Photo Controls');
     }
 }
 

@@ -1,11 +1,10 @@
 import React from 'react';
+import { compose } from 'recompose';
 import WelcomePage from './unauthenticated/index';
 import UserHomePage from './authenticated/index';
 import { withRouter } from 'react-router-dom';
-import { withFirebase } from '../../Firebase/';
-import { AuthUserContext } from '../session';
-import { compose } from "recompose";
-
+import { withFirebase } from 'store/firebase';
+import { AuthUserContext } from 'store/session';
 
 const HomePage = (props) => {
     return (

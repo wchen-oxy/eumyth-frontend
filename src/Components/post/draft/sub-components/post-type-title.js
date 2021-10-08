@@ -1,6 +1,5 @@
 import React from 'react';
-import { SHORT } from '../../../constants/flags';
-
+import { SHORT } from 'utils/constants/flags';
 
 const PostTypeTitle = (props) =>
 (
@@ -19,4 +18,5 @@ const PostTypeTitle = (props) =>
             </div>
         )
 )
+
 export default PostTypeTitle;

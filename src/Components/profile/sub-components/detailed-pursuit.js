@@ -15,7 +15,7 @@ class DetailedPursuit extends React.Component{
 
     render(){
         return(
-            <div className="detailed-pursuit-container flex-display">
+            <div className='detailed-pursuit-container flex-display'>
                 <p>Test</p>
             </div>
         );

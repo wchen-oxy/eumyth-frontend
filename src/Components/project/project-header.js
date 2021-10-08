@@ -1,8 +1,8 @@
 import React from 'react';
-import { returnUserImageURL } from '../constants/urls';
+import { returnUserImageURL } from 'utils/url';
 import "./project-header.scss";
 const ProjectHeader = (props) => {
-     return (
+    return (
         <div>
             <div id="projectheader-hero-text">
                 <h1>{props.titleValue}</h1>

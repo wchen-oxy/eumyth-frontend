@@ -1,22 +1,22 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import HomePage from './Components/home/index';
-import AccountPage from './Components/account';
-import { withAuthentication } from './Components/session';
-import Navbar from './Components/navbar/index';
-import ProfilePage from './Components/profile';
-import Test from "./Components/test";
+import HomePage from './components/home/index';
+import AccountPage from './components/account';
+import { withAuthentication } from './store/session';
+import Navbar from './components/navbar/index';
+import ProfilePage from './components/profile';
+import Test from './components/test';
 import './App.scss';
 
 const App = () => {
       const [modalState, setModalState] = useState(null);
-      const openModal = (type) => {      
-            document.body.style.overflow = "hidden";
+      const openModal = (type) => {
+            document.body.style.overflow = 'hidden';
             setModalState(type);
       };
 
       const closeModal = () => {
-            document.body.style.overflow = "visible";
+            document.body.style.overflow = 'visible';
             setModalState(null);
       };
 
@@ -24,11 +24,11 @@ const App = () => {
             return (
                   <div>
                         <div
-                              className="overlay"
+                              className='overlay'
                               onClick={closeModalFunction}>
                         </div>
                         <span
-                              className="close"
+                              className='close'
                               onClick={closeModalFunction}>
                               X    </span>
                         {content}

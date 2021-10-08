@@ -1,11 +1,11 @@
 import React from 'react';
-import OptionsMenu from "./sub-components/options-menu";
-import { withFirebase } from '../../Firebase';
 import { Link, withRouter } from 'react-router-dom';
-import { NEW_ENTRY_MODAL_STATE, RELATION_MODAL_STATE } from "../constants/flags";
-import { returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from "../constants/urls";
 import ModalController from './sub-components/modal-controller';
 import OptionalLinks from './sub-components/optional-links';
+import OptionsMenu from './sub-components/options-menu';
+import { withFirebase } from 'store/firebase';
+import { returnUserImageURL } from 'utils/url';
+import { NEW_ENTRY_MODAL_STATE, RELATION_MODAL_STATE } from 'utils/constants/flags';
 import './navigation-authorized.scss';
 
 class NavigationAuthorized extends React.Component {
@@ -62,14 +62,14 @@ class NavigationAuthorized extends React.Component {
     }
 
     linkDecider() {
-        if (window.location.pathname !== "/") {
-            this.props.history.push("")
+        if (window.location.pathname !== '/') {
+            this.props.history.push('')
         }
-        else if (window.location.pathname.toString() === "/") {
+        else if (window.location.pathname.toString() === '/') {
             window.location.reload()
         }
         else {
-            throw new Error("Navbar's inputted url doesn't work for some reason");
+            throw new Error('Navbar inputted url doesnt work for some reason');
         }
     }
 
@@ -77,13 +77,13 @@ class NavigationAuthorized extends React.Component {
         return (
             <>
                 <nav>
-                    <div id="navbar-left-container">
+                    <div id='navbar-left-container'>
                         <Link
-                            to={""}
-                            className="navbar-navigation-link"
+                            to={''}
+                            className='navbar-navigation-link'
                             onClick={() => this.linkDecider()}
                         >
-                            <div id="navbar-logo-container">
+                            <div id='navbar-logo-container'>
                                 <h3>Everfire</h3>
                             </div>
                         </Link>
@@ -94,7 +94,7 @@ class NavigationAuthorized extends React.Component {
                                 setModal={this.setModal}
                             />)}
                     </div>
-                    <div id="navbar-right-container">
+                    <div id='navbar-right-container'>
                         {this.displayOptionalsDecider(
                             <OptionalLinks
                                 username={this.props.authUser.username}

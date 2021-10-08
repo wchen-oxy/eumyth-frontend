@@ -1,10 +1,10 @@
 import React from 'react';
-import { withFirebase } from '../../../Firebase';
 import ImageDrop from './sub-components/image-drop';
 import FileDisplayContainer from './sub-components/file-display-container';
 import TextContainer from './sub-components/text-container';
-import CustomImageSlider from '../../image-carousel/custom-image-slider';
-import { COLLAPSED } from '../../constants/flags';
+import CustomImageSlider from 'components/image-carousel/custom-image-slider';
+import { withFirebase } from 'store/firebase';
+import { COLLAPSED } from 'utils/constants/flags';
 import './short-editor.scss';
 
 var isAdvancedUpload = function () {
@@ -141,7 +141,7 @@ class ShortEditor extends React.Component {
     openImageModal = (file) => {
         const that = this;
         const reader = new FileReader();
-        this.modalRef.current.style.display = "block";
+        this.modalRef.current.style.display = 'block';
         reader.readAsDataURL(file);
         reader.onload = function (e) {
             that
@@ -152,7 +152,7 @@ class ShortEditor extends React.Component {
     }
 
     closeModal = () => {
-        this.modalRef.current.style.display = "none";
+        this.modalRef.current.style.display = 'none';
         this.modalImageRef.current.style.backgroundImage = 'none';
     }
 
@@ -171,13 +171,13 @@ class ShortEditor extends React.Component {
 
     render() {
         if (!isAdvancedUpload) {
-            console.log("Sorry, this is not a modern browser! Try another browser.");
+            console.log('Sorry, this is not a modern browser! Try another browser.');
         }
 
         if (this.props.validFiles.length === 0) {
             return (
                 <>
-                    <div id="shorteditor-text-container">
+                    <div id='shorteditor-text-container'>
                         {this.renderTextContainer()}
 
                     </div>
@@ -198,11 +198,11 @@ class ShortEditor extends React.Component {
         else {
             return (
                 <>
-                    <div id="shorteditor-main-container">
-                        <div id="shorteditor-hero-container">
+                    <div id='shorteditor-main-container'>
+                        <div id='shorteditor-hero-container'>
                             {this.props.unsupportedFiles.length ?
                                 <p>Please remove all unsupported files.</p> : ''}
-                            <div id="shorteditor-image-slider-container">
+                            <div id='shorteditor-image-slider-container'>
                                 <CustomImageSlider
                                     newPost
                                     hideAnnotations
@@ -214,11 +214,11 @@ class ShortEditor extends React.Component {
                                 />
                             </div>
                         </div>
-                        <div id="shorteditor-side-container">
+                        <div id='shorteditor-side-container'>
                             {this.renderTextContainer()}
                         </div>
                     </div>
-                    <div id="shorteditor-file-manager-container">
+                    <div id='shorteditor-file-manager-container'>
                         <ImageDrop
                             reference={this.fileInputRef}
                             dragOver={this.dragOver}

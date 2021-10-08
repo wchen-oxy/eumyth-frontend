@@ -1,15 +1,15 @@
-import { MILESTONE, NEUTRAL, SETBACK } from "./flags";
+import { MILESTONE, NEUTRAL, SETBACK } from './flags';
 
-export const FOLLOW_BUTTON_TEXT = "Follow";
-export const FOLLOWED_BUTTON_TEXT = "Followed";
-export const REQUESTED_BUTTON_TEXT = "Requested";
+export const FOLLOW_BUTTON_TEXT = 'Follow';
+export const FOLLOWED_BUTTON_TEXT = 'Followed';
+export const REQUESTED_BUTTON_TEXT = 'Requested';
 
-export const SETBACK_PROGRESSION_TEXT = "Setback";
-export const NEUTRAL_PROGRESSION_TEXT = "";
-export const MILESTONE_PROGRESSION_TEXT = "Milestone";
+export const SETBACK_PROGRESSION_TEXT = 'Setback';
+export const NEUTRAL_PROGRESSION_TEXT = '';
+export const MILESTONE_PROGRESSION_TEXT = 'Milestone';
 
-export const CHALLENGING_TEXT = "Challenging";
-export const DIFFICULT_TEXT = "Difficult";
+export const CHALLENGING_TEXT = 'Challenging';
+export const DIFFICULT_TEXT = 'Difficult';
 
 
 export const displayDifficulty = (value) => {
@@ -17,13 +17,13 @@ export const displayDifficulty = (value) => {
     if (isnum) value = parseInt(value);
     switch (value) {
         case (0):
-            return "";
+            return '';
         case (1):
             return CHALLENGING_TEXT;
         case (2):
             return DIFFICULT_TEXT;
         default:
-            throw new Error("No Difficulty matched");
+            throw new Error('No Difficulty matched');
     }
 }
 
@@ -44,13 +44,13 @@ export const displayProgressionType = (value) => {
         case (MILESTONE):
             return MILESTONE_PROGRESSION_TEXT;
         default:
-            throw new Error("No Progress Type Matched");
+            throw new Error('No Progress Type Matched');
     }
 }
 
 export const returnFormattedDate = (rawDate) => {
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
     ];
     const date = new Date(rawDate);
     const month = monthNames[date.getMonth()];

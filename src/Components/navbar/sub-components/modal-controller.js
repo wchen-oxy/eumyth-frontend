@@ -1,7 +1,7 @@
 import React from 'react';
-import { NEW_ENTRY_MODAL_STATE, POST_VIEWER_MODAL_STATE, RELATION_MODAL_STATE } from '../../constants/flags';
+import PostDraftController from 'components/post/draft/index';
 import RelationModal from './relation-modal';
-import PostDraftController from "../../post/draft/index";
+import { NEW_ENTRY_MODAL_STATE, POST_VIEWER_MODAL_STATE, RELATION_MODAL_STATE } from 'utils/constants/flags';
 
 const ModalController = (props) => {
     switch (props.modalState) {

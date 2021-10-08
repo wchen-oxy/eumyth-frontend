@@ -1,15 +1,16 @@
 import React from 'react';
 import Annotation from 'react-image-annotation';
-import TextareaAutosize from "react-textarea-autosize";
-import { EXPANDED, COLLAPSED } from "../constants/flags";
-import "./custom-image-slider.scss";
+import TextareaAutosize from 'react-textarea-autosize';
+import ImageControls from './sub-components/image-controls';
+import { EXPANDED, COLLAPSED } from 'utils/constants/flags';
+import './custom-image-slider.scss';
 
 const returnStyleName = (windowType) => {
     if (windowType === EXPANDED) {
-        return "customimageslider-hero-container customimageslider-expanded"
+        return 'customimageslider-hero-container customimageslider-expanded'
     }
     else {
-        return "customimageslider-hero-container"
+        return 'customimageslider-hero-container'
     }
 }
 
@@ -26,7 +27,6 @@ class CustomImageSlider extends React.Component {
         this.onAnnotationSubmit = this.onAnnotationSubmit.bind(this);
         this.renderEditor = this.renderEditor.bind(this);
         this.renderPromptOverlay = this.renderPromptOverlay.bind(this);
-        this.renderImageControls = this.renderImageControls.bind(this);
     }
 
     onAnnotationChange(annotation) {
@@ -36,7 +36,6 @@ class CustomImageSlider extends React.Component {
     onAnnotationSubmit(annotation) {
         this.setState({ annotation: {} },
             this.props.onAnnotationSubmit(annotation));
-
     }
 
     renderEditor(props) {
@@ -89,50 +88,21 @@ class CustomImageSlider extends React.Component {
         return a.data.id === b
     }
 
-    renderImageControls(windowType) {
-        return (
-            <div>
-                {this.props.imageArray.length > 1 ?
-                    (<>
-                        <button
-                            onClick={() => this.props.handleArrowPress(-1)}>
-                            Previous
-                        </button>
-                        <button onClick={() => this.props.handleArrowPress(1)}>
-                            Next
-                        </button>
-                    </>
-                    )
-                    : null
-                }
-                {windowType === EXPANDED ?
-                    <button
-                        onClick={this.props.toggleAnnotations}>
-                        {this.props.areAnnotationsHidden ?
-                            "Show Annotations" :
-                            "Hide Annotations"
-                        }
-                    </button>
-                    : <></>
-                }
-            </div>
-        )
-    }
-
     render() {
         let annotations = !this.props.hideAnnotations && !this.props.annotateButtonPressed
             ? this.props.annotations : [];
         return (
             <>
-                <div className={this.props.newPost ? "customimageslider-new-post-hero-container" : returnStyleName(this.props.windowType)}>
+                <div className={this.props.newPost ?
+                    'customimageslider-new-post-hero-container'
+                    : returnStyleName(this.props.windowType)}>
                     <Annotation
                         src={this.props.imageArray[this.props.imageIndex]}
                         alt='Image Display Goes Here'
                         activeAnnotations={this.props.activeAnnotations}
                         annotations={annotations}
                         disableOverlay={this.props.hideAnnotations
-                            ||
-                            !this.props.visitorProfilePreviewID
+                            || !this.props.visitorProfilePreviewID
                         }
                         disableAnnotation={this.props.windowType === COLLAPSED
                             || !this.props.visitorProfilePreviewID
@@ -145,11 +115,14 @@ class CustomImageSlider extends React.Component {
                         onSubmit={this.onAnnotationSubmit}
                     />
                 </div>
-                {this.props.showPromptOverlay ? (
-                    <p>Click on a point in the image and drag!</p>
-                ) : (null)
-                }
-                {this.renderImageControls(this.props.windowType)}
+                {this.props.showPromptOverlay && (<p>Click on a point in the image and drag!</p>)}
+                <ImageControls
+                    imageArray={this.props.imageArray}
+                    windowType={this.props.windowType}
+                    areAnnotationsHidden={this.props.areAnnotationsHidden}
+                    onArrowPress={this.props.handleArrowPress}
+                    toggleAnnotations={this.props.toggleAnnotations}
+                />
             </>
         )
     }

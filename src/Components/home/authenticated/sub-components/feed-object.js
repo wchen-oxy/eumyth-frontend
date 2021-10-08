@@ -1,11 +1,7 @@
 import React from 'react';
-import LongPostViewer from '../../../post/viewer/long-post';
-import ShortPostViewer from '../../../post/viewer/short-post';
-
-const LARGE_VIEW_MODE = false;
-const IS_OWN_PROFILE = false;
-const SHORT = "SHORT";
-const LONG = "LONG";
+import LongPostViewer from 'components/post/viewer/long-post';
+import ShortPostViewer from 'components/post/viewer/short-post';
+import { SHORT, LONG } from 'utils/constants/flags';
 
 const FeedObject = (props) => {
     const feedItem = props.feedItem;
@@ -18,8 +14,8 @@ const FeedObject = (props) => {
                 preferredPostPrivacy={null}
                 textData={feedItem.is_paginated ?
                     JSON.parse(feedItem.text_data) : feedItem.text_data}
-                largeViewMode={LARGE_VIEW_MODE}
-                isOwnProfile={IS_OWN_PROFILE}
+                largeViewMode={false}
+                isOwnProfile={false}
                 eventData={feedItem}
                 onDeletePost={null}
             />)
@@ -32,7 +28,7 @@ const FeedObject = (props) => {
             pursuits={feedItem.pursuits}
             preferredPostPrivacy={feedItem.preferredPostPrivacy}
             textData={feedItem.textData}
-            isOwnProfile={IS_OWN_PROFILE}
+            isOwnProfile={false}
             eventData={feedItem}
             onDeletePost={null}
         />

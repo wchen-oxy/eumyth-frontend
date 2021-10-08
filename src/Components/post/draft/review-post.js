@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
-import { SHORT, LONG } from "../../constants/flags";
 import imageCompression from 'browser-image-compression';
-import AxiosHelper from '../../../Axios/axios';
+import AxiosHelper from 'utils/axios';
 
 import CustomMultiSelect from '../../custom-clickables/createable-single';
 import CoverPhotoControls from './sub-components/cover-photo-controls';
@@ -14,7 +13,8 @@ import DifficultyInput from './sub-components/difficulty-input';
 import ProgressInput from './sub-components/progress-input';
 import MinutesInput from './sub-components/minutes-input';
 import TitleInput from './sub-components/title-input';
-import { displayDifficulty, } from "../../constants/ui-text";
+import { displayDifficulty, } from 'utils/constants/ui-text';
+import { SHORT, LONG } from 'utils/constants/flags';
 import {
     COVER_PHOTO_FIELD,
     DATE_FIELD,
@@ -35,8 +35,8 @@ import {
     TITLE_FIELD,
     USERNAME_FIELD,
     INDEX_USER_ID_FIELD
-} from "../../constants/form-data";
-import "./review-post.scss";
+} from 'utils/constants/form-data';
+import './review-post.scss';
 
 
 const ReviewPost = (props) => {
@@ -65,7 +65,7 @@ const ReviewPost = (props) => {
             maxWidthOrHeight: 250
         })
             .then((result) => {
-                setCoverPhoto(new File([result], "Cover"))
+                setCoverPhoto(new File([result], 'Cover'))
             })
 
     }
@@ -156,7 +156,7 @@ const ReviewPost = (props) => {
             }
         }
         else {
-            throw new Error("No Content Type matched in reviewpost")
+            throw new Error('No Content Type matched in reviewpost')
         }
 
     }
@@ -216,7 +216,7 @@ const ReviewPost = (props) => {
     }
 
     const handleSuccess = () => {
-        alert("Post Successful! You will see your post soon.");
+        alert('Post Successful! You will see your post soon.');
 
         if (!props.isPostOnlyView) props.closeModal();
         window.location.reload();
@@ -235,13 +235,13 @@ const ReviewPost = (props) => {
             props.setPostStage(stageValue, false)
         }
         else {
-            throw new Error("No value matched for return click.");
+            throw new Error('No value matched for return click.');
         }
     }
 
 
     return (
-        <div id="reviewpost-small-window">
+        <div id='reviewpost-small-window'>
             <div>
                 <div>
                     <PostTypeTitle
@@ -258,7 +258,7 @@ const ReviewPost = (props) => {
                         </span>
                     </div>
                 </div>
-                <div className="reviewpost-button-container">
+                <div className='reviewpost-button-container'>
                     <TitleInput
                         postType={props.postType}
                         title={props.previewTitle}
@@ -298,12 +298,12 @@ const ReviewPost = (props) => {
                     <CustomMultiSelect
                         options={props.authUser.labels}
                         selectedLabels={props.selectedLabels}
-                        name={"Tags"}
+                        name={'Tags'}
                         onSelect={setLabels}
                     />
 
                 </div>
-                <div className="reviewpost-button-container">
+                <div className='reviewpost-button-container'>
                     <PrePostControls
                         preferredPostPrivacy={props.authUser.preferredPostType}
                         setPostPrivacyType={setPostPrivacyType}

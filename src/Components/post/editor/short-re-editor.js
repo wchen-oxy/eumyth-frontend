@@ -1,30 +1,26 @@
 import React from 'react';
-import TextContainer from "./sub-components/text-container";
-import { returnUserImageURL } from "../../constants/urls";
+import TextContainer from './sub-components/text-container';
+import { returnUserImageURL } from '../../../utils/url';
 import CustomImageSlider from '../../image-carousel/custom-image-slider';
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import "./short-re-editor.scss";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import './short-re-editor.scss';
 
 const adjustURLS = (inputArray) => (
     inputArray.map((url) => returnUserImageURL(url))
 )
 
 const ShortReEditor = (props) => {
-    const renderTextContainer = () => (
-        <TextContainer
-            validFilesLength={props.eventData.image_data.length}
-            isPaginated={props.isPaginated}
-            onPaginatedChange={props.onPaginatedChange}
-            onTextChange={props.onTextChange}
-            textPageText={props.textData}
-            imageIndex={props.imageIndex}
-        />
-    );
-
     if (!props.eventData.image_data.length) {
         return (
-            renderTextContainer()
+            <TextContainer
+                validFilesLength={props.eventData.image_data.length}
+                isPaginated={props.isPaginated}
+                onPaginatedChange={props.onPaginatedChange}
+                onTextChange={props.onTextChange}
+                textPageText={props.textData}
+                imageIndex={props.imageIndex}
+            />
         );
     }
     else {
@@ -36,8 +32,8 @@ const ShortReEditor = (props) => {
         }
 
         return (
-            <div className="shortreeditor-main-container">
-                <div className="shortreeditor-hero-container">
+            <div className='shortreeditor-main-container'>
+                <div className='shortreeditor-hero-container'>
                     <CustomImageSlider
                         hideAnnotations
                         handleArrowPress={props.handleArrowPress}
@@ -45,8 +41,15 @@ const ShortReEditor = (props) => {
                         imageArray={newArray}
                     />
                 </div>
-                <div className="shortreeditor-side-container">
-                    {renderTextContainer()}
+                <div className='shortreeditor-side-container'>
+                    <TextContainer
+                        validFilesLength={props.eventData.image_data.length}
+                        isPaginated={props.isPaginated}
+                        onPaginatedChange={props.onPaginatedChange}
+                        onTextChange={props.onTextChange}
+                        textPageText={props.textData}
+                        imageIndex={props.imageIndex}
+                    />
                 </div>
             </div>
 

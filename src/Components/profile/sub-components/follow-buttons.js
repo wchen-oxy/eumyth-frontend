@@ -5,18 +5,17 @@ import {
     FOLLOW_REQUESTED_STATE,
     FOLLOW_ACTION,
     UNFOLLOW_ACTION
-} from "../../constants/flags";
+} from 'utils/constants/flags';
 import {
     FOLLOW_BUTTON_TEXT,
     FOLLOWED_BUTTON_TEXT,
     REQUESTED_BUTTON_TEXT
-} from "../../constants/ui-text";
+} from 'utils/constants/ui-text';
 
 const FollowButtons = (props) => {
-
     if (!props.followerStatus || props.isOwner) return (<></>);
     else {
-        let text = "";
+        let text = '';
         let isFollowing = true;
 
         switch (props.followerStatus) {

@@ -4,10 +4,11 @@ import Comments from "./comments";
 import DanteEditor from 'Dante2';
 import { ImageBlockConfig } from 'Dante2/package/es/components/blocks/image.js';
 import { PlaceholderBlockConfig } from 'Dante2/package/es/components/blocks/placeholder';
-import { IMAGE_BASE_URL, returnUserImageURL, TEMP_PROFILE_PHOTO_URL } from '../../constants/urls';
-import { LONG, INITIAL_STATE, EDIT_STATE, REVIEW_STATE, EXPANDED, COLLAPSED } from '../../constants/flags';
+import { TEMP_PROFILE_PHOTO_URL, IMAGE_BASE_URL } from '../../../utils/constants/urls';
+import { returnUserImageURL } from "../../../utils/url";
+import { LONG, INITIAL_STATE, EDIT_STATE, REVIEW_STATE, EXPANDED, COLLAPSED } from '../../../utils/constants/flags';
 import ReviewPost from "../draft/review-post";
-import { withFirebase } from "../../../Firebase/index";
+import { withFirebase } from "../../../store/firebase/index";
 import "./long-post.scss";
 
 const monthNames = ["January", "February", "March", "April", "May",
@@ -99,10 +100,10 @@ const LongPostViewer = (props) => {
                                             onClick={() => windowSwitch(EDIT_STATE)}
                                         >
                                             Edit
-                                            </button>
+                                        </button>
                                         <button onClick={props.onDeletePost}>
                                             Remove
-                                            </button>
+                                        </button>
                                     </div>)
                                     :
                                     (<></>)

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SHORT, NEW_LONG, OLD_LONG } from "../../constants/flags";
+import { SHORT, NEW_LONG, OLD_LONG } from "../../../utils/constants/flags";
 import "./new-post.scss";
 
 const NewPost = (props) => {

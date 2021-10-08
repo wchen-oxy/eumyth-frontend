@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import Firebase, { FirebaseContext } from './Firebase';
+import Firebase, { FirebaseContext } from './store/firebase';
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,16 +1,25 @@
 import React from 'react';
 import ProfileModal from '../profile/profile-modal';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
-import AxiosHelper from '../../Axios/axios';
 import { withRouter } from 'react-router-dom';
-import { PROJECT_CONTENT_ONLY_VIEW_STATE, POST, POST_VIEWER_MODAL_STATE, PROJECT_EVENT, PROJECT_MACRO_VIEW_STATE, PROJECT_MICRO_VIEW_STATE, PROJECT_REARRANGE_STATE, PROJECT_SELECT_VIEW_STATE, PROJECT } from "../constants/flags";
-import { returnUsernameURL, returnPostURL, returnProjectURL } from "../constants/urls";
-import "./index.scss";
-
 import EventController from '../profile/timeline/timeline-event-controller';
 import MainDisplay from './main-display';
 import TopButtonBar from './sub-components/top-button-bar';
 import ProjectReview from './review';
+import { returnUsernameURL, returnPostURL, returnProjectURL } from "utils/url";
+import {
+    PROJECT_CONTENT_ONLY_VIEW_STATE,
+    POST,
+    POST_VIEWER_MODAL_STATE,
+    PROJECT_EVENT,
+    PROJECT_MACRO_VIEW_STATE,
+    PROJECT_MICRO_VIEW_STATE,
+    PROJECT_REARRANGE_STATE,
+    PROJECT_SELECT_VIEW_STATE,
+    PROJECT
+} from "../../utils/constants/flags";
+import AxiosHelper from 'utils/axios';
+import "./index.scss";
 
 const MAIN = "MAIN";
 const EDIT = "EDIT";
@@ -441,6 +450,7 @@ class ProjectController extends React.Component {
                 else {
                     return this.props.content.posts.map((item) => item.post_id);
                 }
+                break;
             default:
                 throw new Error("Nothing Matched");
         }

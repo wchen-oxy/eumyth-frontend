@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LOGIN_STATE, } from "../../../constants/flags";
+import { LOGIN_STATE, } from "../../../../utils/constants/flags";
 import "./register.scss";
 
 const WelcomeRegisterForm = (props) => {

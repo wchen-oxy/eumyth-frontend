@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withFirebase } from '../../../Firebase';
+import { withFirebase } from '../../../../store/firebase';
 import './index.scss';
 
 const INITIAL_STATE = {
@@ -42,29 +42,29 @@ class PasswordChangeForm extends Component {
     const isInvalid = passwordOne !== passwordTwo || passwordOne === '';
 
     return (
-      <div id="passwordchangeform-container">
+      <div id='passwordchangeform-container'>
         <form onSubmit={this.handlePasswordUpdateSubmit}>
           <input
-            name="passwordOne"
+            name='passwordOne'
             value={passwordOne}
             onChange={this.handleTextUpdate}
-            type="password"
-            placeholder="New Password"
+            type='password'
+            placeholder='New Password'
           />
           <input
-            name="passwordTwo"
+            name='passwordTwo'
             value={passwordTwo}
             onChange={this.handleTextUpdate}
-            type="password"
-            placeholder="Confirm New Password"
+            type='password'
+            placeholder='Confirm New Password'
           />
           <button
             id='passwordchangeform-reset-button'
             disabled={isInvalid}
-            type="submit"
+            type='submit'
           >
             Reset My Password
-        </button>
+          </button>
           {error && <p>{error.message}</p>}
         </form>
       </div>

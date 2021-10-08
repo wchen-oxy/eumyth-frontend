@@ -1,17 +1,17 @@
 import React from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
-import "./file-display-container.scss";
+import './file-display-container.scss';
 
 const FileDisplayContainer = (props) => {
     const SortableItem =
         SortableElement(({ data, fileType, fileSize, errorMessage, removeFile }) => {
             const isDataInvalidError = data.invalid ? ('sortableitem-error') : ('');
             return (
-                <div className="sortableitem-status-bar">
+                <div className='sortableitem-status-bar'>
                     <div>
-                        <div className="sortableitem-type-logo">
+                        <div className='sortableitem-type-logo'>
                         </div>
-                        <div className="sortableitem-type">
+                        <div className='sortableitem-type'>
                             {fileType(data.name)}
                         </div>
                         <span
@@ -19,7 +19,7 @@ const FileDisplayContainer = (props) => {
                         >
                             {data.name}
                         </span>
-                        <span className="sortableitem-size">
+                        <span className='sortableitem-size'>
                             ({fileSize(data.size)})
                         </span>
                         {data.invalid &&
@@ -52,7 +52,6 @@ const FileDisplayContainer = (props) => {
                             fileSize={fileSize}
                             errorMessage={errorMessage}
                             removeFile={removeFile}
-
                         />
                     ))}
                 </ul>

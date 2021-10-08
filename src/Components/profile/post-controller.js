@@ -1,10 +1,10 @@
 import React from 'react';
-import Timeline from "./timeline/index";
-import ProfileModal from './profile-modal';
 import { withRouter } from 'react-router-dom';
-import { returnUsernameURL, returnPostURL } from "../constants/urls";
-import { POST, POST_VIEWER_MODAL_STATE } from '../constants/flags';
+import Timeline from './timeline/index';
+import ProfileModal from './profile-modal';
 import EventController from './timeline/timeline-event-controller';
+import { returnUsernameURL, returnPostURL } from 'utils/url';
+import { POST, POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
 
 
 class PostController extends React.Component {

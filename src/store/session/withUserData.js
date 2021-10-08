@@ -1,9 +1,7 @@
-import { UserDataContext } from "./context";
-import AxiosHelper from "../../Axios/axios";
-import React from "react";
-import { withFirebase } from "../../Firebase";
-
-
+import { UserDataContext } from './context';
+import AxiosHelper from '../../utils/axios';
+import React from 'react';
+import { withFirebase } from '../firebase';
 
 const withUserData = Component => {
     class WithUserData extends React.Component {
@@ -14,16 +12,15 @@ const withUserData = Component => {
             }
         }
         componentDidMount() {
-            console.log("Mounted data");
+            console.log('Mounted data');
             this.listener = this.props.firebase.auth.onAuthStateChanged(
                 authUser => {
-                    
+
                     return AxiosHelper.returnIndexUser(authUser.displayName)
-                        .then(result => this.setState({indexUserData: result}))
+                        .then(result => this.setState({ indexUserData: result }))
                         .catch((err) => console.log(err));
                 }
             )
-
         }
 
         componentWillUnmount() {
@@ -31,7 +28,6 @@ const withUserData = Component => {
         }
 
         render() {
-            console.log(this.props.authUser);
             return (
                 <UserDataContext.Provider value={this.state.indexUserData}>
                     <Component {...this.props} />

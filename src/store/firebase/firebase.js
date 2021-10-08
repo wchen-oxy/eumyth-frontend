@@ -1,14 +1,14 @@
 import firebase from 'firebase';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC9sBHK-evjecmuWQsQHoE-iSJmHUcIBcE",
-  authDomain: "eumyth-65330.firebaseapp.com",
-  databaseURL: "https://eumyth-65330.firebaseio.com",
-  projectId: "eumyth-65330",
-  storageBucket: "eumyth-65330.appspot.com",
-  messagingSenderId: "677080457179",
-  appId: "1:677080457179:web:5e1e38f3f082f93427d1fe",
-  measurementId: "G-GP77M3QKXG"
+  apiKey: 'AIzaSyC9sBHK-evjecmuWQsQHoE-iSJmHUcIBcE',
+  authDomain: 'eumyth-65330.firebaseapp.com',
+  databaseURL: 'https://eumyth-65330.firebaseio.com',
+  projectId: 'eumyth-65330',
+  storageBucket: 'eumyth-65330.appspot.com',
+  messagingSenderId: '677080457179',
+  appId: '1:677080457179:web:5e1e38f3f082f93427d1fe',
+  measurementId: 'G-GP77M3QKXG'
 };
 
 class Firebase {
@@ -30,7 +30,7 @@ class Firebase {
   }
 
   doTest() {
-    return ("FIREBASE");
+    return ('FIREBASE');
   }
 
   //yes
@@ -59,7 +59,7 @@ class Firebase {
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
-        if (errorMessage) alert(errorCode + " " + errorMessage);
+        if (errorMessage) alert(errorCode + ' ' + errorMessage);
       }
       );
   }
@@ -85,7 +85,7 @@ class Firebase {
   }
   //yes
   doPasswordReset(email) {
-    alert("EMAIL");
+    alert('EMAIL');
     return this.auth.sendPasswordResetEmail(email);
   }
 

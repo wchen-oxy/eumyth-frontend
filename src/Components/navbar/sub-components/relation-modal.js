@@ -1,12 +1,12 @@
 import React from 'react';
-import AxiosHelper from '../../../Axios/axios';
-import { returnUserImageURL, returnUsernameURL } from "../../constants/urls";
+import AxiosHelper from 'utils/axios';
+import { returnUserImageURL, returnUsernameURL } from 'utils/url';
 import {
     UNFOLLOW_ACTION,
     ACCEPT_ACTION,
     DECLINE_ACTION
-} from "../../constants/flags";
-import "./relation-modal.scss";
+} from 'utils/constants/flags';
+import './relation-modal.scss';
 
 class RelationModal extends React.Component {
     _isMounted = false;
@@ -66,15 +66,15 @@ class RelationModal extends React.Component {
                         this.setState({ userRelation: result.data });
                     }
                 })
-                .catch((err) => window.alert("Something went wrong :(")));
+                .catch((err) => window.alert('Something went wrong :(')));
     }
 
     renderUserRow(data, isRequest) {
         let users = [];
         for (const user of data) {
             users.push(
-                <div className="relationmodal-profile-row">
-                    <div className="relationmodal-profile-info-container">
+                <div className='relationmodal-profile-row'>
+                    <div className='relationmodal-profile-info-container'>
                         <img src={returnUserImageURL(user.display_photo)} />
                         <a href={returnUsernameURL(user.username)}
                         >
@@ -90,7 +90,7 @@ class RelationModal extends React.Component {
                     >
                         Following
                     </button> : null}
-                    {isRequest ?
+                    {isRequest &&
                         <div>
                             <button
                                 onClick={() => (
@@ -99,7 +99,7 @@ class RelationModal extends React.Component {
                                         user.username))}
                             >
                                 Accept Request
-                    </button>
+                            </button>
                             <button
                                 onClick={() => (
                                     this.handleStatusChange(
@@ -107,10 +107,8 @@ class RelationModal extends React.Component {
                                         user.username))}
                             >
                                 Decline Request
-                    </button>
+                            </button>
                         </div>
-                        :
-                        null
                     }
 
                 </div>
@@ -130,17 +128,17 @@ class RelationModal extends React.Component {
 
     render() {
         return (
-            <div id="relationmodal-window">
-                <div id="relationmodal-hero-container">
-                    <div className="relationmodal-column">
+            <div id='relationmodal-window'>
+                <div id='relationmodal-hero-container'>
+                    <div className='relationmodal-column'>
                         <h2>Requests</h2>
                         {this.state.requested}
                     </div>
-                    <div className="relationmodal-column">
+                    <div className='relationmodal-column'>
                         <h2>Followers</h2>
                         {this.state.followers}
                     </div>
-                    <div className="relationmodal-column">
+                    <div className='relationmodal-column'>
                         <h2>Following</h2>
                         {this.state.following}
                     </div>

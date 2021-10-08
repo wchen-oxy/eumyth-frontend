@@ -1,5 +1,5 @@
 import React from 'react';
-import { displayProgressionType } from "../../../constants/ui-text";
+import { displayProgressionType } from "../../../../utils/constants/ui-text";
 
 const ProgressInput = (props) => {
     return (

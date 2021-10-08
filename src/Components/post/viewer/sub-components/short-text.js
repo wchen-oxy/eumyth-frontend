@@ -1,5 +1,5 @@
 import React from 'react';
-import "./short-text.scss";
+import './short-text.scss';
 
 const ShortHeroText = (props) => {
     const heroText = (
@@ -7,14 +7,14 @@ const ShortHeroText = (props) => {
             <pre>{props.textData[props.index]}</pre> : <pre>{props.textData}</pre>);
     if (props.length < 1000) {
         return (
-            <div id="tiny-amount-text-container">
+            <div id='tiny-amount-text-container'>
                 {heroText}
             </div>
         )
     }
     else {
         return (
-            <div id="medium-amount-text-container">
+            <div id='medium-amount-text-container'>
                 {heroText}
             </div>
         )

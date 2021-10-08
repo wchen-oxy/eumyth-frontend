@@ -1,7 +1,7 @@
 import React from 'react';
 import ShortPost from './short-post';
-import { withFirebase } from '../../../Firebase';
-import { SHORT } from "../../constants/flags";
+import { withFirebase } from 'store/firebase';
+import { SHORT } from 'utils/constants/flags';
 
 class PostDraftController extends React.Component {
   _isMounted = false;
@@ -42,7 +42,7 @@ class PostDraftController extends React.Component {
 
   handleModalClose() {
     if (this.state.postType === SHORT) {
-      if (window.confirm("Do you want to discard this post?")) {
+      if (window.confirm('Do you want to discard this post?')) {
         this.props.closeModal();
       }
     }
@@ -53,7 +53,7 @@ class PostDraftController extends React.Component {
   }
 
   handleSubmitPost(e) {
-    alert("PRESSED SUBMIT");
+    alert('PRESSED SUBMIT');
   }
   handleDisablePost(disabled) {
     this.setState({ postDisabled: disabled });
@@ -65,7 +65,7 @@ class PostDraftController extends React.Component {
         this.setState({ postType: postType });
         break;
       default:
-        throw Error("No postType options matched :(");
+        throw Error('No postType options matched :(');
     }
   }
 

@@ -1,6 +1,5 @@
 import React from 'react';
-import { PERSONAL_PAGE, PRIVATE, PUBLIC_FEED } from '../../../constants/flags';
-
+import { PERSONAL_PAGE, PRIVATE, PUBLIC_FEED } from 'utils/constants/flags';
 
 const PrePostControls = (props) => {
     return (
@@ -8,8 +7,8 @@ const PrePostControls = (props) => {
             <p>Post to:</p>
             <div>
                 <select
-                    name="posts"
-                    id="postPrivacyType"
+                    name='posts'
+                    id='postPrivacyType'
                     value={props.preferredPostPrivacy ?
                         props.preferredPostPrivacy : PUBLIC_FEED}
                     onChange={(e) => props.setPostPrivacyType(e.target.value)}
@@ -27,8 +26,8 @@ const PrePostControls = (props) => {
             </div>
             <button onClick={(e) => props.handleFormAppend(e)} disabled={props.isSubmitting}>
                 {props.isUpdateToPost ?
-                    props.isSubmitting ? "Updating!" : "Update!" :
-                    props.isSubmitting ? "Posting!" : "Post!"}
+                    props.isSubmitting ? 'Updating!' : 'Update!' :
+                    props.isSubmitting ? 'Posting!' : 'Post!'}
             </button>
         </div>
     )

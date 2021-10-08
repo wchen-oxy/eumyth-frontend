@@ -1,16 +1,16 @@
 import React from 'react';
-import AxiosHelper from '../../../Axios/axios';
-import SingleComment from "./sub-components/single-comment";
-import CommentInput from "./sub-components/comment-input";
-import { SHORT, EXPANDED, COLLAPSED } from "../../constants/flags";
-import "./comments.scss";
+import SingleComment from './sub-components/single-comment';
+import CommentInput from './sub-components/comment-input';
+import AxiosHelper from 'utils/axios';
+import { SHORT, EXPANDED, COLLAPSED } from 'utils/constants/flags';
+import './comments.scss';
 
 class Comments extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             windowType: this.props.windowType,
-            commentText: "",
+            commentText: '',
             loadingComments: true,
         }
         this.renderCommentSectionType = this.renderCommentSectionType.bind(this);
@@ -94,7 +94,7 @@ class Comments extends React.Component {
                                 this.props.selectedPostFeedType);
                         })
                 })
-            .then(() => alert("Success!"))
+            .then(() => alert('Success!'))
 
     }
 
@@ -112,7 +112,7 @@ class Comments extends React.Component {
             return (this.renderCommentThreads(this.props.fullCommentData));
         }
         else {
-            throw new Error("No viewing modes matched");
+            throw new Error('No viewing modes matched');
         }
     }
 
@@ -182,7 +182,7 @@ class Comments extends React.Component {
                         onMouseOut={this.props.onMouseOut}
                         onMouseClick={this.props.onMouseClick}
                     />
-                    <div className="comments-reply-container">
+                    <div className='comments-reply-container'>
                         {replies}
                     </div>
                 </div>
@@ -205,13 +205,13 @@ class Comments extends React.Component {
         if (this.props.visitorUsername) {
             return (
                 <div className={viewingMode === COLLAPSED ?
-                    "comments-collapsed-input-container"
+                    'comments-collapsed-input-container'
                     :
-                    "comments-expanded-input-container"}
+                    'comments-expanded-input-container'}
                 >
                     <CommentInput
                         classStyle={viewingMode === COLLAPSED ?
-                            "comments-collapsed-input" : "comments-expanded-input"}
+                            'comments-collapsed-input' : 'comments-expanded-input'}
                         minRows={4}
                         handleTextChange={this.handleCommentTextChange}
                         commentText={this.state.commentText}
@@ -248,7 +248,7 @@ class Comments extends React.Component {
     render() {
         if (this.state.windowType === COLLAPSED) {
             return (
-                <div className="comments-main-container">
+                <div className='comments-main-container'>
                     {this.renderCommentSectionType(COLLAPSED)}
                     {this.renderCommentInput(COLLAPSED)}
                 </div>
@@ -256,7 +256,7 @@ class Comments extends React.Component {
         }
         else if (this.state.windowType === EXPANDED) {
             return (
-                <div className="comments-main-container">
+                <div className='comments-main-container'>
                     {this.renderCommentInput(EXPANDED)}
                     {this.renderCommentSectionType(EXPANDED)}
                     <br />

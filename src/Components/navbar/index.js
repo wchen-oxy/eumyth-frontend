@@ -1,5 +1,5 @@
 import React from 'react';
-import { AuthUserContext } from '../../Components/session/'
+import { AuthUserContext } from 'store/session'
 import NavigationAuthorized from './navigation-authorized';
 import NavigationUnauthorized from './navigation-unauthorized';
 
