@@ -19,7 +19,6 @@ const HomePage = (props) => {
                                 openMasterModal={props.openMasterModal}
                                 closeMasterModal={props.closeMasterModal}
                                 modalState={props.modalState}
-
                             /> :
                             <WelcomePageBase
                                 emailVerifiedStatus={false}

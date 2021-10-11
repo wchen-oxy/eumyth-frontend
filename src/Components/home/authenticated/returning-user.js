@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import ShortPostViewer from 'components/post/viewer/short-post';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import EventController from 'components/profile/timeline/timeline-event-controller';
+import EventController from 'components/timeline/timeline-event-controller';
 import AxiosHelper from 'utils/axios';
 import { withAuthorization } from 'store/session';
 import { withFirebase } from 'store/firebase';

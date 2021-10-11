@@ -2,7 +2,7 @@ import React from 'react';
 import ProfileModal from '../profile/profile-modal';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { withRouter } from 'react-router-dom';
-import EventController from '../profile/timeline/timeline-event-controller';
+import EventController from '../timeline/timeline-event-controller';
 import MainDisplay from './main-display';
 import TopButtonBar from './sub-components/top-button-bar';
 import ProjectReview from './review';
@@ -123,13 +123,16 @@ class ProjectController extends React.Component {
 
     createTimelineRow(inputArray, contentType, objectIDs) {
         const feedData = this.state.feedData
-            .concat(inputArray)
-            .sort((a, b) => objectIDs.indexOf(a._id) - objectIDs.indexOf(b._id));
+            .concat(
+                inputArray
+                    .sort((a, b) =>
+                        objectIDs.indexOf(a._id) - objectIDs.indexOf(b._id))
+            )
 
         this.setState({
             feedData,
             nextOpenPostIndex: this.state.nextOpenPostIndex + inputArray.length
-        });
+        }, () => { console.log("SetState complete", this.state.nextOpenPostIndex); });
     }
 
     createRenderedPosts(contentType) {
@@ -165,6 +168,7 @@ class ProjectController extends React.Component {
                 nextOpenPostIndex++;
                 k++;
                 j++;
+
             }
             if (k === 4) masterArray.push([]);
             index++;
@@ -299,7 +303,7 @@ class ProjectController extends React.Component {
         });
     }
 
-    handleEventClick(selectedPost, postIndex, columnIndex) {
+    handleEventClick(selectedPost) {
         this.setState({
             selectedPost: selectedPost,
             textData: selectedPost.text_data,

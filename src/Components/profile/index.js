@@ -1,14 +1,14 @@
 import React from 'react';
-import { withFirebase } from '../../store/firebase';
 import { withRouter } from 'react-router-dom';
 import PursuitHolder from './sub-components/pursuit-holder';
-import AxiosHelper from '../../utils/axios';
-import { AuthUserContext } from '../../store/session';
-import FollowButton from "./sub-components/follow-buttons";
-import ProjectController from "../project/index";
-import PostController from './post-controller';
+import AxiosHelper from 'utils/axios';
+import { AuthUserContext } from 'store/session';
+import FollowButton from './sub-components/follow-buttons';
+import ProjectController from '../project/index';
+import PostController from '../post/post-controller';
 import CoverPhoto from './sub-components/cover-photo';
-import { returnUserImageURL, returnUsernameURL } from "../../utils/url";
+import { withFirebase } from 'store/firebase';
+import { returnUserImageURL, returnUsernameURL } from 'utils/url';
 import {
     POST,
     PROJECT,
@@ -18,7 +18,7 @@ import {
     UNFOLLOWED_STATE,
     FOLLOW_REQUESTED_STATE,
     FOLLOWED_STATE
-} from "../../utils/constants/flags";
+} from 'utils/constants/flags';
 import './index.scss';
 import ShortPostViewer from '../post/viewer/short-post';
 
@@ -68,8 +68,8 @@ class ProfilePageAuthenticated extends React.Component {
         this.state = {
             isPrivate: true,
             croppedDisplayPhoto: null,
-            coverPhoto: "",
-            bio: "",
+            coverPhoto: '',
+            bio: '',
             pursuits: null,
             recentPosts: null,
             allPosts: null,
@@ -80,7 +80,7 @@ class ProfilePageAuthenticated extends React.Component {
             followerStatus: null,
             feedIDList: null,
             contentType: null,
-            selectedPursuit: "ALL",
+            selectedPursuit: 'ALL',
             selectedPursuitIndex: 0,
             preferredPostPrivacy: null,
             isContentOnlyView: null,
@@ -161,7 +161,7 @@ class ProfilePageAuthenticated extends React.Component {
     isOwner() {
         if (!this.props.authUser) return false;
         if (this.state.isContentOnlyView) {
-            console.log("hits")
+            console.log('hits')
             return this.state.selectedContent.username === this.props.authUser.username;
         }
         else return this.props.authUser.username === this.state.target.username;
@@ -278,7 +278,7 @@ class ProfilePageAuthenticated extends React.Component {
                     feedIDList = this.state.allProjects;
                     break;
                 default:
-                    throw new Error("Nothing matched for feed type");
+                    throw new Error('Nothing matched for feed type');
             }
         }
         else {
@@ -291,7 +291,7 @@ class ProfilePageAuthenticated extends React.Component {
                     feedIDList = feed.projects;
                     break;
                 default:
-                    throw new Error("Nothing matched for feed type");
+                    throw new Error('Nothing matched for feed type');
             }
         }
 
@@ -334,7 +334,7 @@ class ProfilePageAuthenticated extends React.Component {
                     return FOLLOW_REQUESTED_STATE;
                 }
                 else {
-                    throw new Error("No Follow State Matched");
+                    throw new Error('No Follow State Matched');
                 }
             }
             else if (followerStatusResponse.data.error) {
@@ -410,7 +410,7 @@ class ProfilePageAuthenticated extends React.Component {
             this.handleFollowerStatusChange(action);
         }
         else {
-            window.confirm("Are you sure you want to unfollow?") &&
+            window.confirm('Are you sure you want to unfollow?') &&
                 this.handleFollowerStatusChange(action);
         }
     }
@@ -419,8 +419,8 @@ class ProfilePageAuthenticated extends React.Component {
     decideHeroContentVisibility() {
         const hideFromAll = !this.props.authUser?.username && this.state.isPrivate;
         const hideFromUnauthorized = (!this.isOwner() && this.state.isPrivate)
-            && (this.state.followerStatus !== "FOLLOWING" &&
-                this.state.followerStatus !== "REQUEST_ACCEPTED");
+            && (this.state.followerStatus !== 'FOLLOWING' &&
+                this.state.followerStatus !== 'REQUEST_ACCEPTED');
         if (this.state.fail) {
             return (
                 <p>The user you're looking for does not exist.</p>)
@@ -473,7 +473,7 @@ class ProfilePageAuthenticated extends React.Component {
             }
             else if (this.state.contentType === PROJECT) {
                 return (
-                    <div id="profile-main-container">
+                    <div id='profile-main-container'>
                         <ProjectController
                             authUser={this.props.authUser}
                             content={this.state.selectedContent}
@@ -492,29 +492,29 @@ class ProfilePageAuthenticated extends React.Component {
                 )
             }
             else {
-                throw new Error("No Content Type Matched");
+                throw new Error('No Content Type Matched');
             }
         }
         else if (!this.state.isContentOnlyView) {
-            const targetUsername = this.state.target?.username ?? "";
+            const targetUsername = this.state.target?.username ?? '';
             const targetProfilePhoto = returnUserImageURL(this.state.croppedDisplayPhoto);
             return (
                 <div>
-                    <div id="profile-main-container">
-                        <div id="profile-cover-photo-container">
+                    <div id='profile-main-container'>
+                        <div id='profile-cover-photo-container'>
                             <CoverPhoto coverPhoto={this.state.coverPhoto} />
                         </div>
-                        <div id="profile-intro-container">
-                            <div id="profile-display-photo-container">
+                        <div id='profile-intro-container'>
+                            <div id='profile-display-photo-container'>
                                 <img
-                                    alt="user profile photo"
+                                    alt='user profile photo'
                                     src={targetProfilePhoto}
                                 />
 
-                                <div id="profile-name-container">
+                                <div id='profile-name-container'>
                                     <h4>{targetUsername}</h4>
                                 </div>
-                                <div id="profile-follow-actions-container">
+                                <div id='profile-follow-actions-container'>
                                     <FollowButton
                                         isOwner={this.isOwner()}
                                         followerStatus={this.state.followerStatus}
@@ -523,15 +523,15 @@ class ProfilePageAuthenticated extends React.Component {
                                     />
                                 </div>
                             </div>
-                            <div id="profile-biography">
+                            <div id='profile-biography'>
                                 {this.state.bio ? <p>{this.state.bio}</p> : <p></p>}
                             </div>
-                            <div id="profile-pursuits-container">
+                            <div id='profile-pursuits-container'>
                                 {pursuitHolderArray}
                             </div>
                         </div>
 
-                        <div id="profile-content-switch-container">
+                        <div id='profile-content-switch-container'>
                             <button
                                 disabled={this.state.contentType === POST ?
                                     true : false}
@@ -552,7 +552,7 @@ class ProfilePageAuthenticated extends React.Component {
             );
         }
         else {
-            return new Error("State condition for postOnlyView was null");
+            return new Error('State condition for postOnlyView was null');
         }
 
     }

@@ -1,8 +1,8 @@
 import React from 'react';
 import InitialCustomizationPage from './initial-customization'
 import ReturningUserPage from './returning-user';
-import { withAuthorization } from '../../../store/session';
-import { withFirebase } from '../../../store/firebase';
+import { withAuthorization } from 'store/session';
+import { withFirebase } from 'store/firebase';
 
 class UserHomePage extends React.Component {
     _isMounted = false;

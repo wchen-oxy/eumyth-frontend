@@ -2,7 +2,7 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import EventController from './timeline-event-controller';
 import AxiosHelper from 'utils/axios';
-import { PROJECT} from 'utils/constants/flags';
+import { PROJECT } from 'utils/constants/flags';
 import './index.scss';
 
 class Timeline extends React.Component {
@@ -11,10 +11,8 @@ class Timeline extends React.Component {
         super(props)
         this.state = {
             fixedDataLoadLength: 4,
-            nextOpenPostIndex: 0
         }
         this.fetchNextPosts = this.fetchNextPosts.bind(this);
-        this.createTimelineRow = this.createTimelineRow.bind(this);
     }
 
     componentDidMount() {
@@ -24,54 +22,6 @@ class Timeline extends React.Component {
         }
         else {
             this.props.shouldPull(false);
-        }
-    }
-
-    createTimelineRow(inputArray, contentType) {
-        let masterArray = this.props.loadedFeed;
-        let index = masterArray.length - 1; //index position of array in masterArray
-        let nextOpenPostIndex = this.props.nextOpenPostIndex;
-        let j = 0;
-        let k = masterArray[index].length; //length of last array 
-        while (j < inputArray.length) {
-            while (k < 4) {
-                let isSelected = false;
-                if (!inputArray[j]) break; //if we finish...
-                if (this.props.selectedPosts) {
-                    for (const selected of this.props.selectedPosts) {
-                        if (selected.key === inputArray[j]._id) isSelected = true;
-                    }
-                }
-                masterArray[index].push(
-                    <div key={k}>
-                        <EventController
-                            columnIndex={k}
-                            contentType={contentType}
-                            isSelected={isSelected}
-                            editProjectState={this.props.editProjectState}
-                            key={nextOpenPostIndex}
-                            eventIndex={nextOpenPostIndex}
-                            eventData={inputArray[j]}
-                            onEventClick={this.props.onEventClick}
-                            onProjectClick={this.props.onProjectClick}
-                            onProjectEventSelect={this.props.onProjectEventSelect}
-                        />
-                    </div>
-                );
-                nextOpenPostIndex++;
-                k++;
-                j++;
-            }
-            if (k === 4) masterArray.push([]);
-            if (!inputArray[j]) break;
-            index++;
-            k = 0;
-        }
-        if (this.props.editProjectState) {
-            this.props.updateFeedData(masterArray, nextOpenPostIndex, inputArray);
-        }
-        else {
-            this.props.updateFeedData(masterArray, nextOpenPostIndex);
         }
     }
 
@@ -88,10 +38,11 @@ class Timeline extends React.Component {
             >= this.props.allPosts.length) {
             this.props.shouldPull(false);
         }
-
+        console.log("Post index", this.props.nextOpenPostIndex);
         const slicedObjectIDs = this.props.allPosts.slice(
             this.props.nextOpenPostIndex,
             this.props.nextOpenPostIndex + this.state.fixedDataLoadLength);
+
         return returnContent(this.props.contentType)
             .then((result) => {
                 if (this._isMounted) {

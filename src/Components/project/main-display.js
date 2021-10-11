@@ -1,5 +1,5 @@
 import React from 'react';
-import Timeline from '../profile/timeline';
+import Timeline from '../timeline';
 import TopButtonBar from './sub-components/top-button-bar';
 import ProjectHeaderInput from './sub-components/project-header-input';
 import ProjectHeader from './project-header';
