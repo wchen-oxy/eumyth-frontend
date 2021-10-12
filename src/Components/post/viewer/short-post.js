@@ -436,8 +436,7 @@ class ShortPostViewer extends React.Component {
 
     render() {
         const isOwnProfile = this.props.authUser.username === this.props.eventData.username;
-        console.log(isOwnProfile);
-        if (this.state.window === INITIAL_STATE) {
+         if (this.state.window === INITIAL_STATE) {
             if (!this.props.eventData.image_data.length) {
                 if (this.props.largeViewMode) {
                     return (

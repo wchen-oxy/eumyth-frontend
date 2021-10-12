@@ -1,6 +1,5 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import EventController from './timeline-event-controller';
 import AxiosHelper from 'utils/axios';
 import { PROJECT } from 'utils/constants/flags';
 import './index.scss';
@@ -11,8 +10,18 @@ class Timeline extends React.Component {
         super(props)
         this.state = {
             fixedDataLoadLength: 4,
+            nextOpenPostIndex: 0,
+            feedID: this.props.feedID,
+
         }
         this.fetchNextPosts = this.fetchNextPosts.bind(this);
+        this.callAPI = this.callAPI.bind(this);
+    }
+
+    componentDidUpdate() {
+        if (this.props.feedID !== this.state.feedID) {
+            this.setState({ feedID: this.props.feedID, nextOpenPostIndex: 0 }, this.fetchNextPosts)
+        }
     }
 
     componentDidMount() {
@@ -26,23 +35,30 @@ class Timeline extends React.Component {
     }
 
     fetchNextPosts() {
+        const nextOpenPostIndex = this.state.nextOpenPostIndex + this.state.fixedDataLoadLength;
+        const slicedObjectIDs = this.props.allPosts.slice(
+            this.state.nextOpenPostIndex,
+            this.state.nextOpenPostIndex + this.state.fixedDataLoadLength);
+
+        if (this.props.allPosts.every(i => (typeof i !== 'string'))) {
+            throw new Error('Feed is not just ObjectIDs');
+        }
+        if (nextOpenPostIndex >= this.props.allPosts.length) {
+            this.props.shouldPull(false);
+        }
+        console.log("Post index", this.state.nextOpenPostIndex);
+
+        this.setState({
+            nextOpenPostIndex: nextOpenPostIndex
+        }, () => this.callAPI(slicedObjectIDs))
+    }
+
+    callAPI(slicedObjectIDs) {
         const returnContent = (contentType) => (
             contentType === PROJECT ?
                 AxiosHelper.returnMultipleProjects(slicedObjectIDs)
                 : AxiosHelper.returnMultiplePosts(slicedObjectIDs, true)
         );
-        if (this.props.allPosts.every(i => (typeof i !== 'string'))) {
-            throw new Error('Feed is not just ObjectIDs');
-        }
-        if (this.props.nextOpenPostIndex + this.state.fixedDataLoadLength
-            >= this.props.allPosts.length) {
-            this.props.shouldPull(false);
-        }
-        console.log("Post index", this.props.nextOpenPostIndex);
-        const slicedObjectIDs = this.props.allPosts.slice(
-            this.props.nextOpenPostIndex,
-            this.props.nextOpenPostIndex + this.state.fixedDataLoadLength);
-
         return returnContent(this.props.contentType)
             .then((result) => {
                 if (this._isMounted) {
@@ -57,6 +73,7 @@ class Timeline extends React.Component {
     }
 
     render() {
+
         const endMessage = (
             <div>
                 <br />
@@ -74,7 +91,7 @@ class Timeline extends React.Component {
             <div key={this.props.feedID}>
                 {this.props.allPosts && this.props.allPosts.length > 0 ?
                     (<InfiniteScroll
-                        dataLength={this.props.nextOpenPostIndex}
+                        dataLength={this.state.nextOpenPostIndex}
                         next={this.fetchNextPosts}
                         hasMore={this.props.hasMore}
                         loader={<h4>Loading...</h4>}
@@ -93,7 +110,8 @@ class Timeline extends React.Component {
                     :
                     <p>There doesn't seem to be anything here</p>
                 }
-                {this.props.loadedFeed.length > 1 ? null : <div style={{ height: this.props.editProjectState ? '500px' : '200px' }}></div>}
+                {this.props.loadedFeed.length > 1 ?
+                    null : <div style={{ height: this.props.editProjectState ? '500px' : '200px' }}></div>}
                 <br />
                 <br />
                 <br />

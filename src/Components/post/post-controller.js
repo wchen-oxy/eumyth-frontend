@@ -11,12 +11,10 @@ class PostController extends React.Component {
         super(props);
         this.state = {
             selectedEvent: null,
-            selectedPostColumnIndex: null,
-            selectedPostIndex: null,
+            selectedEventIndex: null,
             isModalShowing: false,
 
             hasMore: true,
-            nextOpenPostIndex: 0,
             feedData: [],
             selectedPursuitIndex: this.props.selectedPursuitIndex
         }
@@ -25,7 +23,6 @@ class PostController extends React.Component {
         this.clearModal = this.clearModal.bind(this);
         this.setModal = this.setModal.bind(this);
         this.shouldPull = this.shouldPull.bind(this);
-        this.updateFeedData = this.updateFeedData.bind(this);
         this.createTimelineRow = this.createTimelineRow.bind(this);
         this.createRenderedPosts = this.createRenderedPosts.bind(this);
     }
@@ -33,7 +30,6 @@ class PostController extends React.Component {
     componentWillUnmount() {
         this.setState({
             hasMore: true,
-            nextOpenPostIndex: 0,
             feedData: []
         })
     }
@@ -44,10 +40,10 @@ class PostController extends React.Component {
                 selectedPursuitIndex: this.props.selectedPursuitIndex,
                 feedData: [],
                 hasMore: true,
-                nextOpenPostIndex: 0,
             })
         }
     }
+
     createTimelineRow(inputArray, contentType, objectIDs) {
         const feedData = this.state.feedData
             .concat(
@@ -56,15 +52,13 @@ class PostController extends React.Component {
                         objectIDs.indexOf(a._id) - objectIDs.indexOf(b._id))
             );
         this.setState({
-            feedData,
-            nextOpenPostIndex: this.state.nextOpenPostIndex + inputArray.length
+            feedData
         });
     }
 
     createRenderedPosts(inputArray, contentType) {
         let masterArray = [[]];
         let index = masterArray.length - 1; //index position of array in masterArray
-        let nextOpenPostIndex = this.state.nextOpenPostIndex;
         let k = masterArray[index].length; //length of last array
         for (let j = 0; j < this.state.feedData.length; j++) {
             while (k < 4) {
@@ -73,18 +67,15 @@ class PostController extends React.Component {
                 masterArray[index].push(
                     <div key={event._id}>
                         <EventController
-                            key={nextOpenPostIndex}
-                            columnIndex={k}
+                            key={j}
                             contentType={POST}
-                            eventIndex={nextOpenPostIndex}
+                            eventIndex={j}
+                            columnIndex={k}
                             eventData={event}
-                            onEventClick={this.props.onEventClick}
-                            onProjectClick={this.props.onProjectClick}
-                            onProjectEventSelect={this.props.onProjectEventSelect}
+                            onEventClick={this.handleEventClick}
                         />
                     </div>
                 );
-                nextOpenPostIndex++;
                 k++;
                 j++;
             }
@@ -101,7 +92,7 @@ class PostController extends React.Component {
     }
 
     clearModal() {
-        const username = this.state.selectedEvent.username;
+        const username = this.state.feedData[this.state.selectedEventIndex].username;
         this.setState(
             { selectedEvent: null }, () => {
                 this.props.history.replace(returnUsernameURL(username));
@@ -109,38 +100,23 @@ class PostController extends React.Component {
             });
     }
 
-    //FIXME
-    handleCommentIDInjection(postIndex, rootCommentsArray, feedType) {
-        let currentFeed = this.state.loadedFeed;
-        const row = Math.floor(this.state.selectedPostIndex / 4);
-        const columnIndex = this.state.selectedPostColumnIndex;
-        const current = currentFeed[row][columnIndex].props.children.props.eventData;
-        current.comments = rootCommentsArray;
-        current.comment_count = current.comment_count + 1;
-        this.updateFeedData(currentFeed);
+    handleCommentIDInjection(selectedEventIndex, rootCommentsArray) {
+        const feedData = this.state.feedData;
+        feedData[selectedEventIndex].comments = rootCommentsArray;
+        feedData[selectedEventIndex].comment_count += 1;
+        this.setState({ feedData });
     }
 
-    handleEventClick(selectedEvent, postIndex, columnIndex) {
+    handleEventClick(selectedEventIndex) {
         this.setState({
-            selectedEvent: selectedEvent,
-            selectedPostIndex: postIndex,
-            selectedPostColumnIndex: columnIndex,
-            textData: selectedEvent.text_data,
-            postType: selectedEvent.post_format
-        }, this.setModal(selectedEvent._id))
+            selectedEventIndex
+        }, this.setModal(this.state.feedData[selectedEventIndex]._id))
     }
 
     shouldPull(value) {
         this.setState({ hasMore: value });
     }
-    //FIXME
 
-    updateFeedData(masterArray, nextOpenPostIndex) {
-        this.setState({
-            loadedFeed: masterArray,
-            nextOpenPostIndex
-        })
-    }
 
     render() {
         return (
@@ -148,13 +124,14 @@ class PostController extends React.Component {
                 <ProfileModal
                     authUser={this.props.authUser}
                     modalState={this.props.modalState}
-                    postIndex={this.state.selectedPostIndex}
+                    postIndex={this.state.selectedEventIndex}
                     postType={this.state.postType}
                     pursuitNames={this.props.pursuitNames}
-                    eventData={this.state.selectedEvent}
+                    eventData={this.state.feedData[this.state.selectedEventIndex]}
                     textData={this.state.textData}
                     closeModal={this.clearModal}
                     onCommentIDInjection={this.handleCommentIDInjection}
+
                     returnModalStructure={this.props.returnModalStructure}
                 />
                 <Timeline
@@ -164,7 +141,7 @@ class PostController extends React.Component {
                     loadedFeed={this.createRenderedPosts()}
                     hasMore={this.state.hasMore}
                     nextOpenPostIndex={this.state.nextOpenPostIndex}
-                    onEventClick={this.handleEventClick}
+
                     shouldPull={this.shouldPull}
                     createTimelineRow={this.createTimelineRow}
                 />

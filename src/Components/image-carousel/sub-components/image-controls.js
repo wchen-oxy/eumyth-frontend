@@ -4,13 +4,13 @@ import { EXPANDED } from 'utils/constants/flags';
 const ImageControls = (props) => {
     return (
         <div>
-            {this.props.imageArray.length > 1 ?
+            {props.imageArray.length > 1 ?
                 (<>
                     <button
-                        onClick={() => this.props.handleArrowPress(-1)}>
+                        onClick={() => props.handleArrowPress(-1)}>
                         Previous
                     </button>
-                    <button onClick={() => this.props.handleArrowPress(1)}>
+                    <button onClick={() => props.handleArrowPress(1)}>
                         Next
                     </button>
                 </>
@@ -19,8 +19,8 @@ const ImageControls = (props) => {
             }
             {props.windowType === EXPANDED &&
                 <button
-                    onClick={this.props.toggleAnnotations}>
-                    {this.props.areAnnotationsHidden ?
+                    onClick={props.toggleAnnotations}>
+                    {props.areAnnotationsHidden ?
                         'Show Annotations' :
                         'Hide Annotations'
                     }

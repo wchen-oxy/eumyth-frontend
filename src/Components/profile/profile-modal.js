@@ -15,7 +15,7 @@ const ProfileModal = (props) => {
                     projectID={props.projectID}
                     disableCommenting={props.disableCommenting}
                     isPostOnlyView={false}
-                    postIndex={props.selectedPostIndex}
+                    postIndex={props.postIndex}
                     postType={props.postType}
                     largeViewMode={true}
                     pursuitNames={props.pursuitNames}

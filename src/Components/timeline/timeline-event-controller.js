@@ -38,7 +38,7 @@ const EventController = (props) => {
 
     else if (props.contentType === POST || props.contentType === PROJECT_EVENT) {
         const eventClickParams = props.isRecentEvents ?
-            [post, props.index] : [post, props.eventIndex, props.columnIndex];
+            [post, props.index] : [props.eventIndex];
         return (
             <div className={props.columnIndex !== null ?
                 selectClassStyle(props.columnIndex) : 'event-middle-container'}>

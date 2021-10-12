@@ -90,8 +90,7 @@ class Comments extends React.Component {
                         .then((result) => {
                             this.props.onCommentDataInjection(
                                 this.props.postIndex,
-                                result.data.rootComments,
-                                this.props.selectedPostFeedType);
+                                result.data.rootComments);
                         })
                 })
             .then(() => alert('Success!'))
