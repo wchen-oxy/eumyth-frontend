@@ -221,7 +221,7 @@ class ShortPostViewer extends React.Component {
                     annotations={this.returnValidAnnotations()}
                     onAnnotationSubmit={this.handleAnnotationSubmit}
                     toggleAnnotations={this.toggleAnnotations}
-                    handleArrowPress={this.handleArrowPress}
+                    onArrowPress={this.handleArrowPress}
                 />
             </div>)
     }
@@ -435,8 +435,8 @@ class ShortPostViewer extends React.Component {
     }
 
     render() {
-        const isOwnProfile = this.props.authUser.username === this.props.eventData.username;
-         if (this.state.window === INITIAL_STATE) {
+        const isOwnProfile = this.props.authUser?.username === this.props.eventData.username;
+        if (this.state.window === INITIAL_STATE) {
             if (!this.props.eventData.image_data.length) {
                 if (this.props.largeViewMode) {
                     return (
@@ -592,7 +592,7 @@ class ShortPostViewer extends React.Component {
                         eventData={this.props.eventData}
                         textData={this.state.tempTextForEdit}
                         isPaginated={this.state.isPaginated}
-                        handleArrowPress={this.handleArrowPress}
+                        onArrowPress={this.handleArrowPress}
                         onTextChange={this.handleTextChange}
                         onPaginatedChange={this.handlePaginatedChange}
                     />

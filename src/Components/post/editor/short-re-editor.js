@@ -36,7 +36,7 @@ const ShortReEditor = (props) => {
                 <div className='shortreeditor-hero-container'>
                     <CustomImageSlider
                         hideAnnotations
-                        handleArrowPress={props.handleArrowPress}
+                        onArrowPress={props.onArrowPress}
                         imageIndex={props.imageIndex}
                         imageArray={newArray}
                     />

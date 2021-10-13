@@ -91,9 +91,8 @@ class ProjectController extends React.Component {
             coverPhoto: null,
             selectedProject: this.props.content.post_ids ? { post_ids: this.props.content.post_ids } : null,
             priorProjectID: this.props.priorProjectID ? this.props.priorProjectID : null,
-            selectedPost: null,
+            selectedEventIndex: null,
             hasMore: true,
-            nextOpenPostIndex: 0,
             isUpdate: false,
             editProjectState: false,
             feedID: 0,
@@ -129,17 +128,13 @@ class ProjectController extends React.Component {
                         objectIDs.indexOf(a._id) - objectIDs.indexOf(b._id))
             )
 
-        this.setState({
-            feedData,
-            nextOpenPostIndex: this.state.nextOpenPostIndex + inputArray.length
-        }, () => { console.log("SetState complete", this.state.nextOpenPostIndex); });
+        this.setState({ feedData });
     }
 
     createRenderedPosts(contentType) {
         const shouldMarkNewPosts = this.state.isUpdate && this.state.selectStage === 2;
         let masterArray = [[]];
         let index = masterArray.length - 1; //index position of array in masterArray
-        let nextOpenPostIndex = this.state.nextOpenPostIndex;
         let k = masterArray[index].length; //length of last array 
         let usedPostsLength = this.state.selectedPosts.length;
         for (let j = 0; j < this.state.feedData.length; j++) {
@@ -156,8 +151,8 @@ class ProjectController extends React.Component {
                             shouldMarkAsNew={shouldMarkNewPosts ? j < usedPostsLength : false}
                             isSelected={this.state.feedIndex.get(event._id)}
                             editProjectState={this.state.editProjectState}
-                            key={nextOpenPostIndex}
-                            eventIndex={nextOpenPostIndex}
+                            key={j}
+                            eventIndex={j}
                             eventData={event}
                             onEventClick={this.handleEventClick}
                             onProjectClick={this.handleProjectClick}
@@ -165,7 +160,6 @@ class ProjectController extends React.Component {
                         />
                     </div>
                 );
-                nextOpenPostIndex++;
                 k++;
                 j++;
 
@@ -186,7 +180,6 @@ class ProjectController extends React.Component {
         if (isSelected) {
             selectedPosts = this.state.feedData;
         }
-
         this.setState({ feedIndex: newFeedIndex, selectedPosts });
     }
 
@@ -202,7 +195,6 @@ class ProjectController extends React.Component {
             return AxiosHelper
                 .allPosts(this.props.authUser.profileID)
                 .then((result => {
-                    console.log(result.data);
                     this.setState({
                         contentViewOnlyAllPosts: { post_ids: result.data.map(item => item.post_id) },
                         ...sharedState
@@ -226,7 +218,6 @@ class ProjectController extends React.Component {
     clearLoadedFeed() {
         this.setState({
             feedData: [],
-            nextOpenPostIndex: 0,
             hasMore: true,
             feedID: this.state.feedID + 1
         });
@@ -243,7 +234,6 @@ class ProjectController extends React.Component {
                 this.setState({
                     selectedProject: null,
                     barType: PROJECT_MACRO_VIEW_STATE,
-                    nextOpenPostIndex: 0,
                     hasMore: true,
                     feedID: this.state.feedID + 1,
                 }, () => {
@@ -297,18 +287,27 @@ class ProjectController extends React.Component {
     }
 
     clearModal() {
-        this.setState({ selectedPost: null }, () => {
+        this.setState({ selectedEventIndex: null }, () => {
             this.setNewURL(returnProjectURL(this.state.selectedProject._id));
             this.props.closeMasterModal();
         });
     }
 
-    handleEventClick(selectedPost) {
+
+    handleEventClick(selectedEventIndex) {
+        console.log(this.state.feedData);
+        console.log(this.state.feedData[selectedEventIndex]);
         this.setState({
-            selectedPost: selectedPost,
-            textData: selectedPost.text_data,
-        }, this.setModal(selectedPost._id));
+            selectedEventIndex
+        }, this.setModal(this.state.feedData[selectedEventIndex]._id))
     }
+
+    // handleEventClick(selectedPost) {
+    //     this.setState({
+    //         selectedPost: selectedPost,
+    //         textData: selectedPost.text_data,
+    //     }, this.setModal(selectedPost._id));
+    // }
 
     handleInputChange(id, value) {
         switch (id) {
@@ -473,7 +472,7 @@ class ProjectController extends React.Component {
                             postIndex={this.state.selectedPostIndex}
                             postType={this.state.postType}
                             pursuitNames={this.props.pursuitNames}
-                            eventData={this.state.selectedPost}
+                            eventData={this.state.feedData[this.state.selectedEventIndex]}
                             disableCommenting={true}
                             returnModalStructure={this.props.returnModalStructure}
                             closeModal={this.clearModal}
@@ -486,7 +485,6 @@ class ProjectController extends React.Component {
                             titleValue={this.state.title}
                             descriptionValue={this.state.overview}
                             window={this.state.window}
-                            nextOpenPostIndex={this.state.nextOpenPostIndex}
                             contentType={
                                 this.state.editProjectState
                                     || sourceContent

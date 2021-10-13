@@ -7,10 +7,10 @@ const ImageControls = (props) => {
             {props.imageArray.length > 1 ?
                 (<>
                     <button
-                        onClick={() => props.handleArrowPress(-1)}>
+                        onClick={() => props.onArrowPress(-1)}>
                         Previous
                     </button>
-                    <button onClick={() => props.handleArrowPress(1)}>
+                    <button onClick={() => props.onArrowPress(1)}>
                         Next
                     </button>
                 </>

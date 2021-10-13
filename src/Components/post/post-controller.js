@@ -10,7 +10,6 @@ class PostController extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedEvent: null,
             selectedEventIndex: null,
             isModalShowing: false,
 
@@ -94,7 +93,7 @@ class PostController extends React.Component {
     clearModal() {
         const username = this.state.feedData[this.state.selectedEventIndex].username;
         this.setState(
-            { selectedEvent: null }, () => {
+            { selectedEventIndex: null }, () => {
                 this.props.history.replace(returnUsernameURL(username));
                 this.props.closeMasterModal();
             });

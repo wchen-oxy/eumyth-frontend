@@ -207,7 +207,7 @@ class ProfilePageAuthenticated extends React.Component {
 
     loadedContentCallback(contentType, data) {
         const content = contentType === POST ? data : data.project;
-        if (this.props.authUser.username) {
+        if (this.props.authUser) {
             const authUser = this.props.authUser;
             const pursuitData = createPusuitArray(authUser.pursuits);
             this.setContentOnlyData(

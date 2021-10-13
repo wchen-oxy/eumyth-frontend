@@ -27,7 +27,7 @@ const CustomMultiSelect = (props) => {
   return (
     <CreatableSelect
       isMulti
-      onChange={this.props.onSelect}
+      onChange={props.onSelect}
       defaultValue={defaults}
       options={options}
       components={{ Menu }}

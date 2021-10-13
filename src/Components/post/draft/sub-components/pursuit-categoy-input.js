@@ -3,7 +3,7 @@ import React from 'react';
 const PursuitCategoryInput = (props) => {
     let pursuitSelects = [];
 
-    pursuitSelects.push(<option value={null}></option>)
+    pursuitSelects.push(<option key={"null"} value={null}></option>)
     for (let i = 1; i < props.pursuitNames.length; i++) {
         const pursuit = props.pursuitNames[i];
         pursuitSelects.push(

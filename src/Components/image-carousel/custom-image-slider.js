@@ -120,7 +120,7 @@ class CustomImageSlider extends React.Component {
                     imageArray={this.props.imageArray}
                     windowType={this.props.windowType}
                     areAnnotationsHidden={this.props.areAnnotationsHidden}
-                    onArrowPress={this.props.handleArrowPress}
+                    onArrowPress={this.props.onArrowPress}
                     toggleAnnotations={this.props.toggleAnnotations}
                 />
             </>
