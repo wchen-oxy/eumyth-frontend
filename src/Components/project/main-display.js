@@ -10,11 +10,13 @@ const MainDisplay = (props) => {
     return (
         <div>
             <TopButtonBar
-                selectStage={props.selectStage}
+                userInfo={props.userInfo}
+                projectID={props.projectMetaData?._id}
+                projectSelectSubState={props.projectSelectSubState}
                 barType={props.barType}
+                postIDList={props.projectMetaData?.post_ids}
                 onBackClick={props.onBackClick}
                 onNewProjectSelect={props.onNewProjectSelect}
-                selectedProjectID={props.selectedProjectID}
                 onEditExistingProject={props.onEditExistingProject}
                 copyToClipboard={props.copyToClipboard}
                 handleWindowSwitch={props.handleWindowSwitch}
@@ -22,20 +24,19 @@ const MainDisplay = (props) => {
 
             {props.editProjectState &&
                 <ProjectHeaderInput
-                    titleValue={props.header.title}
-                    descriptionValue={props.descriptionValue}
+                    titleValue={props.title}
+                    descriptionValue={props.overview}
                     onTextChange={props.handleInputChange}
                 />
             }
-
             {props.barType === PROJECT_CONTENT_ONLY_VIEW_STATE
                 || props.barType === PROJECT_MICRO_VIEW_STATE
                 ?
                 <ProjectHeader
-                    titleValue={props.header.title}
-                    descriptionValue={props.header.overview}
-                    username={props.header.username}
-                    displayPhoto={props.header.displayPhoto}
+                    titleValue={props.title}
+                    descriptionValue={props.overview}
+                    username={props.projectMetaData.username}
+                    displayPhoto={props.projectMetaData.displayPhoto}
                     onPriorForkClick={props.onPriorForkClick}
                     priorProjectID={props.priorProjectID}
                 />
@@ -53,7 +54,6 @@ const MainDisplay = (props) => {
                         feedID={props.feedID}
                         nextOpenPostIndex={props.nextOpenPostIndex}
                         contentType={props.contentType}
-                        selectedPosts={props.selectedPosts}
                         editProjectState={props.editProjectState}
                         onProjectEventSelect={props.onProjectEventSelect}
                         onProjectClick={props.onProjectClick}

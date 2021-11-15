@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
+import DeleteWindow from './delete-window';
 import './right-manage-buttons.scss';
 
 const RightManageButtons = (props) => {
     const [areButtonsShowing, setButtonShow] = useState(false);
+    const [isDeletePageShowing, setIsDeletePageShowing] = useState(false);
     const toggleButton = () => {
         setButtonShow(!areButtonsShowing);
     }
+
+    const toggleDelete = () => {
+        setIsDeletePageShowing(!isDeletePageShowing);
+    }
+
     return (
         <div>
             <div className='rightmanagebuttons-centered-container'>
@@ -13,7 +20,7 @@ const RightManageButtons = (props) => {
                     (<div className='rightmanagebuttons-centered-container'>
                         <button onClick={toggleButton}> ... </button>
                         <button onClick={() => props.onEditExistingProject()}>Edit</button>
-                        <button>Remove</button>
+                        <button onClick={toggleDelete}>Delete Project</button>
                     </div>)
                     : <button onClick={toggleButton}> ... </button>
                 }
@@ -25,8 +32,15 @@ const RightManageButtons = (props) => {
                 >
                     Copy Post ID
                 </button>
-                <p> {props.selectedProjectID}</p>
+                <p> {props.projectID}</p>
             </div>
+            {isDeletePageShowing &&
+                <DeleteWindow
+                    userInfo={props.userInfo}
+                    projectID={props.projectID}
+                    toggleDelete={toggleDelete}
+                />
+            }
         </div >
     );
 }

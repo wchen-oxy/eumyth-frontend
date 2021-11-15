@@ -10,15 +10,19 @@ import {
 import './top-button-bar.scss';
 
 const TopButtonBar = (props) => {
+    const ManageButtons =
+        <RightManageButtons
+            userInfo={props.userInfo}
+            copyToClipboard={props.copyToClipboard}
+            projectID={props.projectID}
+            onEditExistingProject={props.onEditExistingProject}
+            postIDList={props.postIDList}
+        />;
     switch (props.barType) {
         case (PROJECT_CONTENT_ONLY_VIEW_STATE):
             return (
                 <div id='topbuttonbar-right-only-button-bar'>
-                    <RightManageButtons
-                        copyToClipboard={props.copyToClipboard}
-                        selectedProjectID={props.selectedProjectID}
-                        onEditExistingProject={props.onEditExistingProject}
-                    />
+                    {ManageButtons}
                 </div>
             )
         case (PROJECT_MACRO_VIEW_STATE):
@@ -41,11 +45,7 @@ const TopButtonBar = (props) => {
                     </div>
 
                     <div id='topbuttonbar-right-button-container'>
-                        <RightManageButtons
-                            copyToClipboard={props.copyToClipboard}
-                            selectedProjectID={props.selectedProjectID}
-                            onEditExistingProject={props.onEditExistingProject}
-                        />
+                        {ManageButtons}
                     </div>
                 </div>
             );
@@ -63,10 +63,10 @@ const TopButtonBar = (props) => {
                         <button
                             id='topbuttonbar-right-button'
                             onClick={() => {
-                                if (props.selectStage === 1) {
+                                if (props.projectSelectSubState === 1) {
                                     props.handleWindowSwitch(2)
                                 }
-                                else if (props.selectStage === 2) {
+                                else if (props.projectSelectSubState === 2) {
                                     props.handleWindowSwitch('EDIT')
                                 }
                                 else {

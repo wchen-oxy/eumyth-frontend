@@ -228,6 +228,7 @@ class ShortPost extends React.Component {
   }
 
   render() {
+    console.log(this.props.authUser)
     if (this.state.window === INITIAL_STATE) {
       return (
         <div id='shortpost-window'>
@@ -295,6 +296,7 @@ class ShortPost extends React.Component {
             imageArray={this.state.tinyPhotos}
             coverPhoto={this.state.coverPhoto}
             textData={this.state.textData}
+            preferredPostPrivacy={this.props.authUser.preferredPostType}
             handlePreferredPostPrivacyChange={this.props.handlePreferredPostPrivacyChange}
             setPostStage={this.setPostStage}
             handleTitleChange={this.handleTextChange}

@@ -15,6 +15,7 @@ const IS_COMPLETE_FIELD = 'isComplete';
 const TITLE_FIELD = 'title';
 const POST_PRIVACY_TYPE_FIELD = 'postPrivacyType';
 const POST_TYPE_FIELD = 'postType';
+const PROJECT_ID_FIELD = 'projectID';
 const PURSUIT_ARRAY_FIELD = 'pursuitArray';
 const PURSUIT_FIELD = 'pursuit';
 const DATE_FIELD = 'date';
@@ -36,6 +37,7 @@ const LAST_NAME_FIELD = 'lastName';
 
 module.exports = {
     COVER_PHOTO_FIELD,
+    PROJECT_ID_FIELD,
     POST_ID_FIELD,
     USER_ID_FIELD,
     INDEX_USER_ID_FIELD,

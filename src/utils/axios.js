@@ -68,6 +68,17 @@ export default class AxiosHelper {
         });
     }
 
+    static deleteProject(projectID, shouldDeletePosts, indexUserID, userID) {
+        return axios.delete(urls.PROJECT_BASE_URL, {
+            params: {
+                projectID: projectID,
+                shouldDeletePosts: shouldDeletePosts,
+                indexUserID: indexUserID,
+                userID: userID
+            }
+        })
+    }
+
     static deletePost(userID, indexUserID, postID, pursuit, duration, progression) {
         return axios.delete(urls.POST_BASE_URL, {
             data: {

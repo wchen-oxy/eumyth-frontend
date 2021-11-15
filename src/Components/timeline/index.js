@@ -14,13 +14,18 @@ class Timeline extends React.Component {
             feedID: this.props.feedID,
 
         }
+        this.validateFeedIDs = this.validateFeedIDs.bind(this);
         this.fetchNextPosts = this.fetchNextPosts.bind(this);
         this.callAPI = this.callAPI.bind(this);
     }
 
     componentDidUpdate() {
         if (this.props.feedID !== this.state.feedID) {
-            this.setState({ feedID: this.props.feedID, nextOpenPostIndex: 0 }, this.fetchNextPosts)
+            this.setState({ feedID: this.props.feedID, nextOpenPostIndex: 0 },
+                () => {
+                    if (this.state.nextOpenPostIndex < this.props.allPosts.length)
+                        this.fetchNextPosts();
+                })
         }
     }
 
@@ -34,23 +39,28 @@ class Timeline extends React.Component {
         }
     }
 
-    fetchNextPosts() {
-        const nextOpenPostIndex = this.state.nextOpenPostIndex + this.state.fixedDataLoadLength;
-        const slicedObjectIDs = this.props.allPosts.slice(
-            this.state.nextOpenPostIndex,
-            this.state.nextOpenPostIndex + this.state.fixedDataLoadLength);
-
+    validateFeedIDs() {
         if (this.props.allPosts.every(i => (typeof i !== 'string'))) {
             throw new Error('Feed is not just ObjectIDs');
         }
-        if (nextOpenPostIndex >= this.props.allPosts.length) {
+    }
+
+    fetchNextPosts() {
+        this.validateFeedIDs();
+        const slicedObjectIDs = this.props.allPosts.slice(
+            this.state.nextOpenPostIndex,
+            this.state.nextOpenPostIndex + this.state.fixedDataLoadLength);
+        const feedLimitReached = slicedObjectIDs.length !== this.state.fixedDataLoadLength
+        const nextOpenPostIndex = feedLimitReached ?
+            this.state.nextOpenPostIndex + slicedObjectIDs.length
+            : this.state.nextOpenPostIndex + this.state.fixedDataLoadLength;
+
+        if (nextOpenPostIndex >= this.props.allPosts.length || feedLimitReached) {
             this.props.shouldPull(false);
         }
-        console.log("Post index", this.state.nextOpenPostIndex);
+        this.setState({ nextOpenPostIndex: nextOpenPostIndex },
+            () => this.callAPI(slicedObjectIDs))
 
-        this.setState({
-            nextOpenPostIndex: nextOpenPostIndex
-        }, () => this.callAPI(slicedObjectIDs))
     }
 
     callAPI(slicedObjectIDs) {
@@ -73,7 +83,6 @@ class Timeline extends React.Component {
     }
 
     render() {
-
         const endMessage = (
             <div>
                 <br />
