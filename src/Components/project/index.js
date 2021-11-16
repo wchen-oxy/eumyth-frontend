@@ -123,8 +123,7 @@ class ProjectController extends React.Component {
                 inputArray
                     .sort((a, b) =>
                         objectIDs.indexOf(a._id) - objectIDs.indexOf(b._id))
-            )
-
+            );
         this.setState({ feedData });
     }
 
@@ -230,6 +229,8 @@ class ProjectController extends React.Component {
                 this.setState({
                     newProjectState: false,
                     selectedProject: null,
+                    title: '',
+                    overview: '',
                     barType: PROJECT_MACRO_VIEW_STATE,
                     hasMore: true,
                     feedID: this.state.feedID + 1,

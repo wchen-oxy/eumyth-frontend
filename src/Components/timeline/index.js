@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import AxiosHelper from 'utils/axios';
@@ -15,6 +16,7 @@ class Timeline extends React.Component {
 
         }
         this.validateFeedIDs = this.validateFeedIDs.bind(this);
+        this.debounceFetch = _.debounce(() => this.fetchNextPosts(), 10)
         this.fetchNextPosts = this.fetchNextPosts.bind(this);
         this.callAPI = this.callAPI.bind(this);
     }
@@ -24,15 +26,16 @@ class Timeline extends React.Component {
             this.setState({ feedID: this.props.feedID, nextOpenPostIndex: 0 },
                 () => {
                     if (this.state.nextOpenPostIndex < this.props.allPosts.length)
-                        this.fetchNextPosts();
+                        this.debounceFetch();
                 })
         }
     }
 
     componentDidMount() {
         this._isMounted = true;
+
         if (this.props.allPosts.length > 0 && this.props.hasMore) {
-            this.fetchNextPosts();
+            this.debounceFetch();
         }
         else {
             this.props.shouldPull(false);
@@ -47,6 +50,7 @@ class Timeline extends React.Component {
 
     fetchNextPosts() {
         this.validateFeedIDs();
+        this.debounceFetch.cancel();
         const slicedObjectIDs = this.props.allPosts.slice(
             this.state.nextOpenPostIndex,
             this.state.nextOpenPostIndex + this.state.fixedDataLoadLength);
@@ -71,6 +75,7 @@ class Timeline extends React.Component {
         );
         return returnContent(this.props.contentType)
             .then((result) => {
+                console.log('Finished');
                 if (this._isMounted) {
                     const data = this.props.contentType === PROJECT ? result.data.projects : result.data.posts;
                     this.props.createTimelineRow(
@@ -101,7 +106,7 @@ class Timeline extends React.Component {
                 {this.props.allPosts && this.props.allPosts.length > 0 ?
                     (<InfiniteScroll
                         dataLength={this.state.nextOpenPostIndex}
-                        next={this.fetchNextPosts}
+                        next={this.debounceFetch}
                         hasMore={this.props.hasMore}
                         loader={<h4>Loading...</h4>}
                         endMessage={endMessage}>
