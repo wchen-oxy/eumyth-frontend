@@ -28,7 +28,7 @@ class NavigationAuthorized extends React.Component {
     componentDidMount() {
         this.props.firebase.checkIsExistingUser()
             .then((result) => {
-                const rawDisplayPhoto = this.props.authUser.tiny_cropped_display_photo_key;
+                const rawDisplayPhoto = this.props.authUser.tinyCroppedDisplayPhotoKey;
                 const displayPhoto = returnUserImageURL(rawDisplayPhoto);
                 this.setBasicInfo(
                     !!result,

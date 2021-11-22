@@ -10,6 +10,7 @@ const withAuthentication = Component => {
       this.state = {
         authUser: null,
         isLoading: true,
+        mongoError: false,
       };
       this.createUserInfoObject = this.createUserInfoObject.bind(this);
       this.saveUserInfoObject = this.saveUserInfoObject.bind(this);
@@ -19,7 +20,7 @@ const withAuthentication = Component => {
       this.listener = this.props.firebase.auth.onAuthStateChanged(
         authUser => {
           authUser ?
-            this.createUserInfoObject(authUser.displayName, authUser)
+            this.createUserInfoObject(authUser)
             :
             this.saveUserInfoObject(false);
         }
@@ -30,8 +31,17 @@ const withAuthentication = Component => {
       this.listener();
     }
 
-    createUserInfoObject(username, authUser) {
-      return AxiosHelper.returnIndexUser(username, true)
+    createUserInfoObject(authUser) {
+      if (!authUser.displayName) {
+        console.log(authUser)
+        const combined = {
+          email: authUser.email,
+          emailVerified: authUser.emailVerified,
+          uid: authUser.uid,
+        }
+        return this.saveUserInfoObject(true, combined)
+      }
+      return AxiosHelper.returnIndexUser(authUser.displayName, true)
         .then(result => {
           const combined = {
             email: authUser.email,
@@ -41,11 +51,25 @@ const withAuthentication = Component => {
           }
           this.saveUserInfoObject(true, combined)
         })
+        .catch(err => {
+          console.log(err);
+          if (err.response.status === 404) {
+            const combined = {
+              email: authUser.email,
+              emailVerified: authUser.emailVerified,
+              uid: authUser.uid
+            }
+            this.saveUserInfoObject(true, combined)
+          }
+          else {
+            this.setState({ isLoading: false, mongoError: true })
+          }
+        })
 
     }
 
-    saveUserInfoObject(doesUserExist, object) {
-      if (doesUserExist) {
+    saveUserInfoObject(hasCompletedRegistration, object) {
+      if (hasCompletedRegistration) {
         this.setState({ authUser: object, isLoading: false })
       }
       else {
@@ -58,7 +82,9 @@ const withAuthentication = Component => {
       if (isLoading) {
         return <p>Loading ... </p>
       }
-
+      if (this.state.mongoError) {
+        return <p>You are authenticated but we cannot reach our servers at the moment. Please Contact 88developers@gmail.com</p>
+      }
       return (
         <AuthUserContext.Provider value={this.state.authUser}>
           <Component {...this.props} />

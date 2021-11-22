@@ -15,7 +15,7 @@ import {
     TINY_CROPPED_IMAGE_FIELD,
     USERNAME_FIELD
 } from 'utils/constants/form-data';
-import { options as pursuitOptions } from 'utils/constants/options';
+import { testOptions} from 'utils/constants/options';
 import './initial-customization.scss';
 
 
@@ -377,7 +377,7 @@ class InitialCustomizationPage extends React.Component {
                         <CustomMultiSelect
                             name={PURSUIT_ARRAY_FIELD}
                             onSelect={this.handleExperienceSelect}
-                            options={pursuitOptions}
+                            options={testOptions}
                         />
                         {pursuitDetails}
                         <button

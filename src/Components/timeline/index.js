@@ -44,6 +44,7 @@ class Timeline extends React.Component {
 
     validateFeedIDs() {
         if (this.props.allPosts.every(i => (typeof i !== 'string'))) {
+            console.log(this.props.allPosts);
             throw new Error('Feed is not just ObjectIDs');
         }
     }

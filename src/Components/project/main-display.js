@@ -4,9 +4,10 @@ import TopButtonBar from './sub-components/top-button-bar';
 import ProjectHeaderInput from './sub-components/project-header-input';
 import ProjectHeader from './project-header';
 import ProjectUtilityButtons from './sub-components/project-utility-buttons';
-import { PROJECT_CONTENT_ONLY_VIEW_STATE, PROJECT_MICRO_VIEW_STATE } from 'utils/constants/flags';
+import { PROJECT, PROJECT_CONTENT_ONLY_VIEW_STATE, PROJECT_MICRO_VIEW_STATE } from 'utils/constants/flags';
 
 const MainDisplay = (props) => {
+    console.log(props.allPosts);
     return (
         <div>
             <TopButtonBar
@@ -69,7 +70,12 @@ const MainDisplay = (props) => {
                     :
                     <div>
                         <br />
-                        <p>You haven't made any projects yet. Feel free to make one!</p>
+                        {
+                            props.contentType === PROJECT ?
+                                <p>You haven't made any projects yet. Feel free to make one!</p> :
+                                <p>You haven't added any posts yet.</p>
+                        }
+
                         <br />
                         <br />
                         <br />

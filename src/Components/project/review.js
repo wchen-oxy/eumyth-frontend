@@ -26,7 +26,7 @@ const ProjectReview = (props) => {
     const [startDate, setStartDate] = useState(props.projectMetaData?.start_date);
     const [endDate, setEndDate] = useState(props.projectMetaData?.end_date);
     const [isComplete, setIsComplete] = useState(false);
-    const [duration, setDuration] = useState(null);
+    const [duration, setDuration] = useState(0);
     const [coverPhoto, setCoverPhoto] = useState(null);
     const [labels, setLabels] = useState([]);
     const [removeCoverPhoto, setRemoveCoverPhoto] = useState(null);
@@ -40,7 +40,7 @@ const ProjectReview = (props) => {
         if (startDate) formData.append(START_DATE_FIELD, startDate);
         if (endDate) formData.append(END_DATE_FIELD, endDate);
         if (isComplete) formData.append(IS_COMPLETE_FIELD, isComplete);
-        if (duration) formData.append(MIN_DURATION_FIELD, duration);
+        if (duration !== 0) formData.append(MIN_DURATION_FIELD, duration);
         if (coverPhoto) formData.append(COVER_PHOTO_FIELD, coverPhoto);
         if (labels.length > 0) formData.append(LABELS_FIELD, labels);
         for (const post of props.selectedPosts) formData.append(SELECTED_POSTS_FIELD, post);

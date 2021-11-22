@@ -129,12 +129,13 @@ export default class AxiosHelper {
         );
     }
 
-    static createFork(userID, indexUserID, username, projectData) {
+    static createFork(userID, indexUserID, username, projectData, shouldCopyPosts) {
         return axios.put(urls.PROJECT_FORK_URL, {
-            userID: userID,
-            indexUserID: indexUserID,
-            username: username,
-            projectData: projectData
+            userID,
+            indexUserID,
+            username,
+            projectData,
+            shouldCopyPosts
 
         })
     }

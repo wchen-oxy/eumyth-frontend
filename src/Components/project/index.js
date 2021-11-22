@@ -124,45 +124,45 @@ class ProjectController extends React.Component {
                     .sort((a, b) =>
                         objectIDs.indexOf(a._id) - objectIDs.indexOf(b._id))
             );
+        console.log(feedData)
         this.setState({ feedData });
     }
 
     createRenderedPosts() {
         const shouldMarkNewPosts = this.state.isUpdate && this.state.projectSelectSubState === 2;
         let masterArray = [[]];
-        let index = masterArray.length - 1; //index position of array in masterArray
-        let k = masterArray[index].length; //length of last array 
+        let index = 0; //index position of array in masterArray
+        let k = 0; //length of last array 
+        let j = 0;
         let usedPostsLength = this.state.selectedPosts.length;
-        for (let j = 0; j < this.state.feedData.length; j++) {
-            while (k < 4) {
-                if (!this.state.feedData[j]) break; //if we finish...
-                const event = this.state.feedData[j];
-                masterArray[index].push(
-                    <div key={event._id}>
-                        <EventController
-                            columnIndex={k}
-                            contentType={this.state.barType === PROJECT_MACRO_VIEW_STATE
-                                ? PROJECT :
-                                PROJECT_EVENT}
-                            shouldMarkAsNew={shouldMarkNewPosts ? j < usedPostsLength : false}
-                            isSelected={this.state.feedIndex.get(event._id)}
-                            editProjectState={this.state.editProjectState}
-                            key={j}
-                            eventIndex={j}
-                            eventData={event}
-                            onEventClick={this.handleEventClick}
-                            onProjectClick={this.handleProjectClick}
-                            onProjectEventSelect={this.handleProjectEventSelect}
-                        />
-                    </div>
-                );
-                k++;
-                j++;
-
+        while (j < this.state.feedData.length) {
+            if (k === 4) {
+                masterArray.push([]);
+                index++;
+                k = 0;
             }
-            if (k === 4) masterArray.push([]);
-            index++;
-            k = 0;
+            const event = this.state.feedData[j];
+            masterArray[index].push(
+                <div key={event._id}>
+                    <EventController
+                        columnIndex={k}
+                        contentType={this.state.barType === PROJECT_MACRO_VIEW_STATE
+                            ? PROJECT :
+                            PROJECT_EVENT}
+                        shouldMarkAsNew={shouldMarkNewPosts ? j < usedPostsLength : false}
+                        isSelected={this.state.feedIndex.get(event._id)}
+                        editProjectState={this.state.editProjectState}
+                        key={j}
+                        eventIndex={j}
+                        eventData={event}
+                        onEventClick={this.handleEventClick}
+                        onProjectClick={this.handleProjectClick}
+                        onProjectEventSelect={this.handleProjectEventSelect}
+                    />
+                </div>
+            );
+            k++;
+            j++;
         }
         return masterArray;
     }
@@ -414,11 +414,14 @@ class ProjectController extends React.Component {
     }
 
     copyToClipboard() {
+        const sourceContent = this.props.isContentOnlyView ? this.props.content : this.state.selectedProject;
+
         return AxiosHelper.createFork(
             this.props.authUser.profileID,
             this.props.authUser.indexProfileID,
             this.props.authUser.username,
-            this.state.selectedProject
+            sourceContent,
+            false
         )
             .then((res) => {
                 alert("Done!");
@@ -436,16 +439,14 @@ class ProjectController extends React.Component {
     }
 
     selectFeedSource() {
-        const sourceContent = this.props.isContentOnlyView ? this.props.content : this.state.selectedProject;
     }
 
     selectFeedData() { //decider for feed Data
-        const source = this.selectFeedSource();
         switch (this.state.barType) {
             case (PROJECT_CONTENT_ONLY_VIEW_STATE):
                 return this.props.content.post_ids;
             case (PROJECT_MACRO_VIEW_STATE):
-                return this.props.content.projects.map((item) => item.post_id);
+                return this.props.content.projects.map((item) => item.content_id);
             case (PROJECT_MICRO_VIEW_STATE):
                 return this.state.selectedProject.post_ids;
             case (PROJECT_SELECT_VIEW_STATE):
@@ -453,17 +454,17 @@ class ProjectController extends React.Component {
                     if (this.state.projectSelectSubState === 1) {
                         const feed = this.props.isContentOnlyView ?
                             this.state.contentViewOnlyAllPosts.post_ids
-                            : this.props.content.posts.map((item) => item.post_id);
+                            : this.props.content.posts.map((item) => item.content_id);
                         return feed.filter(item => !this.state.selectedProject.post_ids.includes(item));
                     }
                     else if (this.state.projectSelectSubState === 2) {
                         return this.state.selectedPosts
-                            .map((item) => item.post_id)
+                            .map((item) => item.content_id)
                             .concat(this.state.selectedProject.post_ids);
                     }
                 }
                 else {
-                    return this.props.content.posts.map((item) => item.post_id);
+                    return this.props.content.posts.map((item) => item.content_id);
                 }
                 break;
             default:

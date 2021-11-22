@@ -22,7 +22,7 @@ import {
 import './index.scss';
 import ShortPostViewer from '../post/viewer/short-post';
 
-const createPusuitArray = (pursuits) => {
+const createPursuitArray = (pursuits) => {
     let pursuitNameArray = [];
     let projectArray = [];
     for (const pursuit of pursuits) {
@@ -67,7 +67,6 @@ class ProfilePageAuthenticated extends React.Component {
         super(props);
         this.state = {
             isPrivate: true,
-            croppedDisplayPhoto: null,
             coverPhoto: '',
             bio: '',
             pursuits: null,
@@ -209,7 +208,7 @@ class ProfilePageAuthenticated extends React.Component {
         const content = contentType === POST ? data : data.project;
         if (this.props.authUser) {
             const authUser = this.props.authUser;
-            const pursuitData = createPusuitArray(authUser.pursuits);
+            const pursuitData = createPursuitArray(authUser.pursuits);
             this.setContentOnlyData(
                 contentType,
                 content,
@@ -225,7 +224,7 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     setProfileData(userData, rawFollowerState, contentType) {
-        const pursuitData = createPusuitArray(userData.pursuits);
+        const pursuitData = createPursuitArray(userData.pursuits);
         const followerStatus = this.handleFollowerStatusResponse(rawFollowerState);
         this.setState({
             target: userData,
@@ -361,7 +360,7 @@ class ProfilePageAuthenticated extends React.Component {
                     closeMasterModal={this.props.closeMasterModal}
                     pursuitNames={this.state.pursuitNames}
                     selectedPursuitIndex={this.state.selectedPursuitIndex}
-                    feedData={selectedPursuit.posts.map((item) => item.post_id)}
+                    feedData={selectedPursuit.posts.map((item) => item.content_id)}
                 />
             )
         }
@@ -497,7 +496,7 @@ class ProfilePageAuthenticated extends React.Component {
         }
         else if (!this.state.isContentOnlyView) {
             const targetUsername = this.state.target?.username ?? '';
-            const targetProfilePhoto = returnUserImageURL(this.state.croppedDisplayPhoto);
+            const targetProfilePhoto = returnUserImageURL(this.props.authUser?.croppedDisplayPhotoKey??null);
             return (
                 <div>
                     <div id='profile-main-container'>
