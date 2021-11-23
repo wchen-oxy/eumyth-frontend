@@ -30,11 +30,13 @@ import {
     PROGRESSION_FIELD,
     PURSUIT_FIELD,
     REMOVE_COVER_PHOTO,
+    SELECTED_DRAFT,
     SUBTITLE_FIELD,
     TEXT_DATA_FIELD,
     TITLE_FIELD,
     USERNAME_FIELD,
-    INDEX_USER_ID_FIELD
+    INDEX_USER_ID_FIELD,
+    SELECTED_DRAFT_ID
 } from 'utils/constants/form-data';
 import './review-post.scss';
 
@@ -50,6 +52,7 @@ const ReviewPost = (props) => {
         props.selectedPursuit ? props.selectedPursuit : null)
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    const [selectedDraft, setDraft] = useState(null);
     const [coverPhoto, setCoverPhoto] = useState(null);
     const [useCoverPhoto, setUseCoverPhoto] = useState(props.coverPhotoKey !== null && props.isUpdateToPost);
     const [useImageForThumbnail, setUseImageForThumbnail] = useState(props.coverPhotoKey);
@@ -173,7 +176,7 @@ const ReviewPost = (props) => {
             });
     }
 
-    const handleFormAppend = () => {
+    const handleFormAppend = (isDraftSave) => {
         setIsSubmitting(true);
         let formData = new FormData();
         formData.append(DATE_FIELD, date);
@@ -182,6 +185,7 @@ const ReviewPost = (props) => {
         formData.append(IS_PAGINATED_FIELD, props.isPaginated);
         formData.append(PROGRESSION_FIELD, (progression));
         formData.append(DIFFICULTY_FIELD, difficulty);
+        if (isDraftSave) formData.append(SELECTED_DRAFT_ID, selectedDraft)
         if (props.authUser.indexProfileID) formData.append(INDEX_USER_ID_FIELD, props.authUser.indexProfileID);
         if (props.previewTitle) formData.append(TITLE_FIELD, _.trim(props.previewTitle));
         if (postPrivacyType) formData.append(POST_PRIVACY_TYPE_FIELD, postPrivacyType);
@@ -239,7 +243,7 @@ const ReviewPost = (props) => {
         }
     }
 
-
+    console.log(props.authUser)
     return (
         <div id='reviewpost-small-window'>
             <div>
@@ -305,7 +309,10 @@ const ReviewPost = (props) => {
                 </div>
                 <div className='reviewpost-button-container'>
                     <PrePostControls
+                        drafts={props.authUser.drafts}
+                        selectedDraft={selectedDraft}
                         preferredPostPrivacy={props.authUser.preferredPostType}
+                        setDraft={setDraft}
                         setPostPrivacyType={setPostPrivacyType}
                         handleFormAppend={handleFormAppend}
                         disabled={isSubmitting}

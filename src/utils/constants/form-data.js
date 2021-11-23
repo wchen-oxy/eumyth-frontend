@@ -20,6 +20,7 @@ const PURSUIT_ARRAY_FIELD = 'pursuitArray';
 const PURSUIT_FIELD = 'pursuit';
 const DATE_FIELD = 'date';
 const START_DATE_FIELD = 'startDate';
+const SELECTED_DRAFT_ID = 'selectedDraftID';
 const END_DATE_FIELD = 'endDate';
 const MIN_DURATION_FIELD = 'minDuration';
 const SELECTED_POSTS_FIELD = 'selectedPosts';
@@ -59,6 +60,7 @@ module.exports = {
     PURSUIT_FIELD,
     DATE_FIELD,
     MIN_DURATION_FIELD,
+    SELECTED_DRAFT_ID,
     SELECTED_POSTS_FIELD,
     SUBTITLE_FIELD,
     IMAGE_KEY_FIELD,
