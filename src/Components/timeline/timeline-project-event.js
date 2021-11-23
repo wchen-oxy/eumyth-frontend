@@ -1,11 +1,12 @@
 import React from 'react';
 import { returnUserImageURL } from 'utils/url';
-
+import './timeline-project-event.scss';
 
 const ProjectEvent = (props) => {
     const post = props.post;
+    const isDraft = props.post.status === 'DRAFT';
     return (
-        <div>
+        <div className={isDraft ? 'timelineprojectevent-draft' : null} >
             <div className='event-cover-container'>
                 {post.cover_photo_key ?
                     <img
