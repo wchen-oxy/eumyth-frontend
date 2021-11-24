@@ -3,11 +3,11 @@ import { returnUserImageURL } from 'utils/url';
 import './cover-photo.scss';
 
 const CoverPhoto = (props) => {
-    if (props.coverPhoto) {
+    if (props.coverPhotoKey) {
         return (<img
             alt='cover photo'
             src={returnUserImageURL(
-                props.coverPhoto)}
+                props.coverPhotoKey)}
         ></img>
         )
     }

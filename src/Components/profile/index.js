@@ -67,7 +67,7 @@ class ProfilePageAuthenticated extends React.Component {
         super(props);
         this.state = {
             isPrivate: true,
-            coverPhoto: '',
+            coverPhotoKey: '',
             bio: '',
             pursuits: null,
             recentPosts: null,
@@ -502,7 +502,7 @@ class ProfilePageAuthenticated extends React.Component {
                 <div>
                     <div id='profile-main-container'>
                         <div id='profile-cover-photo-container'>
-                            <CoverPhoto coverPhoto={this.state.coverPhoto} />
+                            <CoverPhoto coverPhotoKey={this.state.coverPhotoKey} />
                         </div>
                         <div id='profile-intro-container'>
                             <div id='profile-display-photo-container'>

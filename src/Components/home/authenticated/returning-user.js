@@ -219,7 +219,7 @@ class ReturningUserPage extends React.Component {
                 <EventController
                     isRecentEvents={true}
                     index={postIndex}
-                    mediaType={POST}
+                    contentType={POST}
                     key={postIndex}
                     eventData={value}
                     onEventClick={this.handleEventClick}
@@ -292,7 +292,8 @@ class ReturningUserPage extends React.Component {
             this.state.nextOpenPostIndex,
             newEndIndex)
         let isMoreFollowedUserPosts = true;
-        if (newEndIndex >= this.state.followedUserPostIDs.length) {
+        console.log(slicedPostsArray);
+        if (slicedPostsArray + this.state.nextOpenPostIndex >= this.state.followedUserPostIDs.length) {
             isMoreFollowedUserPosts = false;
         }
         return (AxiosHelper
@@ -446,7 +447,7 @@ class ReturningUserPage extends React.Component {
                 TEMP_PROFILE_PHOTO_URL);
         const renderedRecentPosts = this.state.recentPosts ?
             this.renderRecentPosts(this.state.recentPosts) : null;
-
+                console.log(this.state.isMoreFollowedUserPosts);
         return (
             <div id='returninguser-body-container'>
                 <div id='returninguser-top-title-container' >

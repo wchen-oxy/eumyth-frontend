@@ -39,8 +39,9 @@ const EventController = (props) => {
     else if (props.contentType === POST || props.contentType === PROJECT_EVENT) {
         const eventClickParams = props.isRecentEvents ?
             [post, props.index] : [props.eventIndex];
+        console.log(props.columnIndex);
         return (
-            <div className={props.columnIndex !== null ?
+            <div className={props.columnIndex ?
                 selectClassStyle(props.columnIndex) : 'event-middle-container'}>
                 <div onClick={props.disableModalPreview ?
                     () => console.log('Selected')
