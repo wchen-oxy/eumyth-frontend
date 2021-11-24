@@ -209,7 +209,7 @@ class ShortEditor extends React.Component {
                                     windowType={COLLAPSED}
                                     imageArray={this.props.imageArray}
                                     imageIndex={this.props.imageIndex}
-                                    handleArrowPress={this.props.handleArrowPress}
+                                    onArrowPress={this.props.handleArrowPress}
                                     activeAnnotations={[]}
                                 />
                             </div>

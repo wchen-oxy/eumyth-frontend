@@ -122,7 +122,7 @@ export default class AxiosHelper {
             {
                 visitorUsername: visitorUsername,
                 userRelationArrayID: userRelationArrayID,
-                targetProfilePreviewID: targetProfilePreviewID,
+                profilePreviewID: targetProfilePreviewID,
                 isPrivate: isPrivate,
                 action: action
             }

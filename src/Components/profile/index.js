@@ -226,6 +226,7 @@ class ProfilePageAuthenticated extends React.Component {
     setProfileData(userData, rawFollowerState, contentType) {
         const pursuitData = createPursuitArray(userData.pursuits);
         const followerStatus = this.handleFollowerStatusResponse(rawFollowerState);
+        console.log(followerStatus);
         this.setState({
             target: userData,
             coverPhotoKey: userData.cover_photo_key,
@@ -323,7 +324,7 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     handleFollowerStatusResponse(followerStatusResponse) {
-        if (!followerStatusResponse) return null;
+        if (!followerStatusResponse) return NOT_A_FOLLOWER_STATE;
         else if (followerStatusResponse.status === 200) {
             if (followerStatusResponse.data.success) {
                 if (followerStatusResponse.data.success === FOLLOWED_STATE) {

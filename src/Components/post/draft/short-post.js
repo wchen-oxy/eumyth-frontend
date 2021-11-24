@@ -228,7 +228,6 @@ class ShortPost extends React.Component {
   }
 
   render() {
-    console.log(this.props.authUser)
     if (this.state.window === INITIAL_STATE) {
       return (
         <div id='shortpost-window'>

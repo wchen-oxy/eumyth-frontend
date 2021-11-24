@@ -56,7 +56,7 @@ class RelationModal extends React.Component {
                 action,
                 username,
                 this.props.username,
-                this.state.userRelation._id)
+                this.state.userRelationID)
                 .then(
                     () =>
                         AxiosHelper.returnUserRelationInfo(this.props.username)

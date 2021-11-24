@@ -13,7 +13,7 @@ import {
 } from 'utils/constants/ui-text';
 
 const FollowButtons = (props) => {
-    if (!props.followerStatus || props.isOwner) return (<></>);
+    if (props.isOwner ) return (<></>);
     else {
         let text = '';
         let isFollowing = true;
