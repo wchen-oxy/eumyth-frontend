@@ -1,7 +1,11 @@
 import { MILESTONE, NEUTRAL, SETBACK } from './flags';
 
+export const ACCEPT_REQUEST_TEXT = 'Accept Request';
+export const DECLINE_REQUEST_TEXT = "Decline Request";
+
 export const FOLLOW_BUTTON_TEXT = 'Follow';
 export const FOLLOWED_BUTTON_TEXT = 'Followed';
+export const FOLLOWING_BUTTON_TEXT = 'Following';
 export const REQUESTED_BUTTON_TEXT = 'Requested';
 
 export const SETBACK_PROGRESSION_TEXT = 'Setback';

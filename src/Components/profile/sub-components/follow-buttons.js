@@ -13,35 +13,30 @@ import {
 } from 'utils/constants/ui-text';
 
 const FollowButtons = (props) => {
-    if (props.isOwner ) return (<></>);
+    if (props.isOwner) return (<></>);
     else {
         let text = '';
-        let isFollowing = true;
-
+        let action = null;
         switch (props.followerStatus) {
             case (NOT_A_FOLLOWER_STATE):
                 text = FOLLOW_BUTTON_TEXT;
-                isFollowing = false;
+                action = FOLLOW_ACTION;
                 break;
             case (FOLLOW_REQUESTED_STATE):
                 text = REQUESTED_BUTTON_TEXT;
+                action = UNFOLLOW_ACTION;
                 break;
             case (FOLLOWED_STATE):
                 text = FOLLOWED_BUTTON_TEXT;
+                action = UNFOLLOW_ACTION;
                 break;
             default:
                 break;
 
         }
-        if (isFollowing) return (
-            <div>
-                <button onClick={() => props.onFollowClick(UNFOLLOW_ACTION)}>{text}</button>
-                {/* <button onClick={props.onOptionsClick}>...</button> */}
-            </div>
-        )
         return (
             <div>
-                <button onClick={() => props.onFollowClick(FOLLOW_ACTION)}>{text}</button>
+                <button onClick={() => props.onFollowClick(action)}>{text}</button>
                 {/* <button onClick={props.onOptionsClick}>...</button> */}
             </div>
         )

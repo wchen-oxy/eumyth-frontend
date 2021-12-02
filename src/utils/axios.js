@@ -14,12 +14,12 @@ export default class AxiosHelper {
         })
     }
 
-    static changeRelationStatus(action, targetUsername, currentUsername, ID) {
+    static changeRelationStatus(action, targetUserPreviewID, targetUserRelationID, currentUserRelationID) {
         return axios.put(urls.RELATION_SET_FOLLOWER_URL, {
             action: action,
-            targetUsername: targetUsername,
-            currentUsername: currentUsername,
-            ID: ID
+            targetUserPreviewID: targetUserPreviewID,
+            targetUserRelationID: targetUserRelationID,
+            currentUserRelationID: currentUserRelationID
         })
     }
 
@@ -112,19 +112,17 @@ export default class AxiosHelper {
     }
 
     static setFollowerStatus(
-        visitorUsername,
-        userRelationArrayID,
-        targetProfilePreviewID,
-        isPrivate,
-        action) {
-        console.log(isPrivate);
+        visitorUserRelationID,
+        targetUserRelationID,
+        action,
+        isPrivate
+    ) {
         return axios.put(urls.RELATION_STATUS_URL,
             {
-                visitorUsername: visitorUsername,
-                userRelationArrayID: userRelationArrayID,
-                profilePreviewID: targetProfilePreviewID,
-                isPrivate: isPrivate,
-                action: action
+                visitorUserRelationID,
+                targetUserRelationID,
+                action,
+                isPrivate
             }
         );
     }
@@ -136,7 +134,6 @@ export default class AxiosHelper {
             username,
             projectData,
             shouldCopyPosts
-
         })
     }
 
@@ -161,11 +158,11 @@ export default class AxiosHelper {
         return axios.get(urls.USER_BASE_URL, returnUsernameObject(username));
     }
 
-    static returnFollowerStatus(visitorUsername, userRelationArrayID) {
+    static returnFollowerStatus(visitorUsername, userRelationID) {
         return axios.get(urls.RELATION_BASE_URL, {
             params: {
                 visitorUsername: visitorUsername,
-                userRelationArrayID: userRelationArrayID,
+                userRelationID: userRelationID,
             }
         })
     }

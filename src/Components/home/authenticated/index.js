@@ -37,6 +37,7 @@ class UserHomePage extends React.Component {
         return (this.state.isNewUser ?
             <InitialCustomizationPage /> :
             <ReturningUserPage
+                authUser={this.props.authUser}
                 returnModalStructure={this.props.returnModalStructure}
                 openMasterModal={this.props.openMasterModal}
                 closeMasterModal={this.props.closeMasterModal}

@@ -3,6 +3,7 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import AxiosHelper from 'utils/axios';
 import { PROJECT } from 'utils/constants/flags';
+import { validateFeedIDs } from 'utils/validator';
 import './index.scss';
 
 class Timeline extends React.Component {
@@ -15,7 +16,6 @@ class Timeline extends React.Component {
             feedID: this.props.feedID,
 
         }
-        this.validateFeedIDs = this.validateFeedIDs.bind(this);
         this.debounceFetch = _.debounce(() => this.fetchNextPosts(), 10)
         this.fetchNextPosts = this.fetchNextPosts.bind(this);
         this.callAPI = this.callAPI.bind(this);
@@ -33,7 +33,7 @@ class Timeline extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
-
+        validateFeedIDs(this.props.allPosts);
         if (this.props.allPosts.length > 0 && this.props.hasMore) {
             this.debounceFetch();
         }
@@ -42,15 +42,8 @@ class Timeline extends React.Component {
         }
     }
 
-    validateFeedIDs() {
-        if (this.props.allPosts.every(i => (typeof i !== 'string'))) {
-            console.log(this.props.allPosts);
-            throw new Error('Feed is not just ObjectIDs');
-        }
-    }
 
     fetchNextPosts() {
-        this.validateFeedIDs();
         this.debounceFetch.cancel();
         const slicedObjectIDs = this.props.allPosts.slice(
             this.state.nextOpenPostIndex,
@@ -76,7 +69,6 @@ class Timeline extends React.Component {
         );
         return returnContent(this.props.contentType)
             .then((result) => {
-                console.log('Finished');
                 if (this._isMounted) {
                     const data = this.props.contentType === PROJECT ? result.data.projects : result.data.posts;
                     this.props.createTimelineRow(

@@ -6,6 +6,11 @@ import {
     ACCEPT_ACTION,
     DECLINE_ACTION
 } from 'utils/constants/flags';
+import {
+    ACCEPT_REQUEST_TEXT,
+    DECLINE_REQUEST_TEXT,
+    FOLLOWING_BUTTON_TEXT,
+} from 'utils/constants/ui-text';
 import './relation-modal.scss';
 
 class RelationModal extends React.Component {
@@ -50,13 +55,13 @@ class RelationModal extends React.Component {
             })
     }
 
-    handleStatusChange(action, username) {
+    handleStatusChange(action, followingRelationID, followerRelationID) {
         return (
-            AxiosHelper.changeRelationStatus(
+            AxiosHelper.setFollowerStatus(
+                followingRelationID,
+                followerRelationID,
                 action,
-                username,
-                this.props.username,
-                this.state.userRelationID)
+            )
                 .then(
                     () =>
                         AxiosHelper.returnUserRelationInfo(this.props.username)
@@ -81,37 +86,43 @@ class RelationModal extends React.Component {
                             {user.username}
                         </a>
                     </div>
-                    {!isRequest ? <button
+                    {!isRequest && <button
                         onClick={() => (
                             this.handleStatusChange(
                                 UNFOLLOW_ACTION,
-                                user.username)
+                                this.state.userRelationID,
+                                user.user_relation_id)
                         )}
                     >
-                        Following
-                    </button> : null}
-                    {isRequest &&
+                        {FOLLOWING_BUTTON_TEXT}
+                    </button>}
+                    {
+                        isRequest &&
                         <div>
                             <button
                                 onClick={() => (
                                     this.handleStatusChange(
                                         ACCEPT_ACTION,
-                                        user.username))}
+                                        user.user_relation_id,
+                                        this.state.userRelationID,
+                                    ))}
                             >
-                                Accept Request
+                                {ACCEPT_REQUEST_TEXT}
                             </button>
                             <button
                                 onClick={() => (
                                     this.handleStatusChange(
                                         DECLINE_ACTION,
-                                        user.username))}
+                                        user.user_relation_id,
+                                        this.state.userRelationID
+                                    ))}
                             >
-                                Decline Request
+                                {DECLINE_REQUEST_TEXT}
                             </button>
                         </div>
                     }
 
-                </div>
+                </div >
             )
         }
         return users;
