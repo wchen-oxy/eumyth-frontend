@@ -1,0 +1,13 @@
+@import "../review-post.scss";
+
+#progressinput-main {
+    @include meta-buttons;
+}
+
+#progressinput-content {
+    @include meta-input;
+}
+
+#progressinput-slider-container{
+    @include meta-slider;
+}

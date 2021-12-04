@@ -231,18 +231,16 @@ class ShortPost extends React.Component {
     if (this.state.window === INITIAL_STATE) {
       return (
         <div id='shortpost-window'>
-          <h2>Short Post</h2>
+          <h2 id="shortpost-title">Short Post</h2>
           <div className='shortpost-button-container'>
             {this.state.isCompressing && <p>Compressing Photos</p>}
-            <span>
-              <button
-                value={REVIEW_STATE}
-                disabled={this.state.postDisabled}
-                onClick={e => this.setPostStage(e.target.value)}
-              >
-                Review Post
-              </button>
-            </span>
+            <button
+              value={REVIEW_STATE}
+              disabled={this.state.postDisabled}
+              onClick={e => this.setPostStage(e.target.value)}
+            >
+              Review Post
+            </button>
           </div>
           <div id='shortpost-title-container'>
             <TextareaAutosize

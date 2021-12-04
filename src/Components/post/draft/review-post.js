@@ -6,13 +6,13 @@ import AxiosHelper from 'utils/axios';
 import CustomMultiSelect from '../../custom-clickables/createable-single';
 import CoverPhotoControls from './sub-components/cover-photo-controls';
 import PrePostControls from './sub-components/pre-post-controls';
-import PostTypeTitle from './sub-components/post-type-title';
 import DateInput from './sub-components/data-input';
-import PursuitCategoryInput from './sub-components/pursuit-categoy-input';
+import PursuitCategoryInput from './sub-components/pursuit-category-input';
 import DifficultyInput from './sub-components/difficulty-input';
 import ProgressInput from './sub-components/progress-input';
 import MinutesInput from './sub-components/minutes-input';
 import TitleInput from './sub-components/title-input';
+import ProjectDraftControls from './sub-components/project-draft-controls';
 import { displayDifficulty, } from 'utils/constants/ui-text';
 import { SHORT, LONG } from 'utils/constants/flags';
 import {
@@ -30,7 +30,6 @@ import {
     PROGRESSION_FIELD,
     PURSUIT_FIELD,
     REMOVE_COVER_PHOTO,
-    SELECTED_DRAFT,
     SUBTITLE_FIELD,
     TEXT_DATA_FIELD,
     TITLE_FIELD,
@@ -39,7 +38,6 @@ import {
     SELECTED_DRAFT_ID
 } from 'utils/constants/form-data';
 import './review-post.scss';
-import ProjectDraftControls from './sub-components/project-draft-controls';
 
 
 const ReviewPost = (props) => {
@@ -252,26 +250,31 @@ const ReviewPost = (props) => {
         <div id='reviewpost-small-window'>
             <div>
                 <div>
-                    <PostTypeTitle
-                        postType={props.postType}
-                    />
-                    <div>
-                        <span >
-                            <button
-                                value={props.previousState}
-                                onClick={e => handleReturnClick(e.target.value)}
-                            >
-                                Return
-                            </button>
-                        </span>
+                    <div id='reviewpost-header'>
+                        <h2>Add your metadata!</h2>
+                        <p>Optional of course</p>
+                    </div>
+                    <div id="reviewpost-button-container">
+                        <button
+                            value={props.previousState}
+                            onClick={e => handleReturnClick(e.target.value)}
+                        >
+                            Return
+                        </button>
+
                     </div>
                 </div>
-                <div className='reviewpost-button-container'>
+                <div className='reviewpost-meta-container'>
                     <TitleInput
                         postType={props.postType}
                         title={props.previewTitle}
                         setTitle={props.handleTitleChange}
                         setSubtitle={setSubtitle}
+                    />
+                    <ProjectDraftControls
+                        drafts={props.authUser.drafts}
+                        selectedDraft={selectedDraft}
+                        setDraft={setDraft}
                     />
                     <CoverPhotoControls
                         useImageForThumbnail={useImageForThumbnail}
@@ -287,11 +290,7 @@ const ReviewPost = (props) => {
                         pursuit={props.pursuit}
                         setPursuit={setPursuit}
                     />
-                    <ProjectDraftControls
-                        drafts={props.authUser.drafts}
-                        selectedDraft={selectedDraft}
-                        setDraft={setDraft}
-                    />
+
                     <MinutesInput
                         min={props.min}
                         setMinDuration={setMinDuration}

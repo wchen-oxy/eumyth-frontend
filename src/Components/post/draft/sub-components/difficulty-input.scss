@@ -1,0 +1,13 @@
+@import "../review-post.scss";
+
+#difficultyinput-main {
+    @include meta-buttons;
+}
+
+#difficultyinput-content {
+    @include meta-input;
+}
+
+#difficultyinput-slider-container {
+    @include meta-slider;
+}

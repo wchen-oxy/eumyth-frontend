@@ -1,9 +1,9 @@
 @import "../review-post.scss";
 
-#projectdraftcontrols-main {
+#minutesinput-main {
     @include meta-buttons;
 }
 
-#projectdraftcontrols-content{
+#minutesinput-content{
     @include meta-input;
 }

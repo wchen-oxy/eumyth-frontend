@@ -10,17 +10,15 @@ const ProjectDraftControls = (props) => {
         <option value={null} disabled>No Drafts Available</option>;
     if (doDraftsExist) draftOptions.unshift(<option value={''}></option>);
     return (
-        <div id={'projectdraftcontrols-main'}>
-            <p>Add to Existing Draft Project:</p>
-            <div>
-                <select
-                    name='select'
-                    id='drafts'
-                    value={props.selectedDraft}
-                    onChange={e => props.setDraft(e.target.value)}>
-                    {draftOptions}
-                </select>
-            </div>
+        <div id='projectdraftcontrols-main'>
+            <label>Add to Existing Draft Project:</label>
+            <select
+                name='select'
+                id='projectdraftcontrols-content'
+                value={props.selectedDraft}
+                onChange={e => props.setDraft(e.target.value)}>
+                {draftOptions}
+            </select>
         </div>
     )
 }

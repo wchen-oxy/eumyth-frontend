@@ -4,15 +4,15 @@ import {
     PRIVATE,
     PUBLIC_FEED
 } from 'utils/constants/flags';
+import './pre-post-controls.scss';
 
 const PrePostControls = (props) => {
     return (
-        <div>
+        <div id='prepostcontrols-main'>
             <p>Post to:</p>
             <div>
                 <select
                     name='posts'
-                    id='postPrivacyType'
                     value={props.preferredPostPrivacy ?
                         props.preferredPostPrivacy : PUBLIC_FEED}
                     onChange={(e) => props.setPostPrivacyType(e.target.value)}

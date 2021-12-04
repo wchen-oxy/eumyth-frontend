@@ -1,0 +1,9 @@
+@import '../review-post.scss';
+
+#coverphotocontrols-main{
+    @include meta-buttons;
+}
+
+#coverphotocontrols-content{
+    @include meta-input;
+}

@@ -50,6 +50,10 @@ $overlay: 10;
     width: 250px;
 }
 
+@mixin meta-buttons {
+    justify-content: center;
+}
+
 @mixin medium-profile-photo {
     height: 100px;
     width: 100px;

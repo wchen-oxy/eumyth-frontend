@@ -1,10 +1,12 @@
 import React from 'react';
+import './minutes-input.scss';
 
 const MinutesInput = (props) => {
     return (
-        <div>
+        <div id='minutesinput-main'>
             <label>Total Minutes</label>
             <input
+                id='minutesinput-content'
                 type='number'
                 value={props.min}
                 min={0}

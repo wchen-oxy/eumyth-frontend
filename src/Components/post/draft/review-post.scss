@@ -1,8 +1,53 @@
 @import "../../../partials";
+
+@mixin meta-buttons {
+    @include flex-display-row;
+    padding: 10px 0 10px 20%;
+    align-items: center;
+    justify-content: space-between;
+    width: 60%;
+    label {
+        max-width: 150px;
+        padding-left: 50px;
+        padding-right: 30px;
+    }
+    input {
+        padding: 2px;
+        width: 194px;
+    }
+    select {
+        width: 202px;
+    }
+    textarea {
+        width: 196px;
+    }
+}
+
+@mixin meta-input {
+}
+
+@mixin meta-slider {
+    @include flex-display-column;
+    height: 40px;
+    p{
+        margin-top: 0px;
+        margin-bottom: 5px;
+    }
+}
+
+#reviewpost-header {
+    text-align: center;
+}
+
 #reviewpost-small-window {
     @include flex-display-column;
 }
 
-.reviewpost-button-container {
-    @include centered-vertical-button-container;
+#reviewpost-button-container {
+    @include flex-display-row;
+    justify-content: space-between;
+    padding: 0 5px;
+    button {
+        margin-left: auto;
+    }
 }

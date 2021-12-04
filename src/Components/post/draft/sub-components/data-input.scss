@@ -1,0 +1,9 @@
+@import '../review-post.scss';
+
+#datainput-main{
+    @include meta-buttons;
+}
+
+#datainput-content{
+    @include meta-input;
+}

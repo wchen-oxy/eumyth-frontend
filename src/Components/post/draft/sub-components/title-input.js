@@ -1,28 +1,30 @@
 import React from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { PROJECT } from 'utils/constants/flags';
+import './title-input.scss';
 
 const TitleInput = (props) => {
-
     return (
-        <div>
+        <div id='titleinput-main'>
             <label>Preview Title</label>
             <TextareaAutosize
                 name='title'
+                id='titleinput-content'
                 placeholder='Create an Optional Preview Title Text'
                 value={props.title ? props.title : null}
                 onChange={(e) => props.setTitle(e.target.value, true)}
+                minRows={2}
                 maxLength={100}
             />
             {props.postType === PROJECT &&
                 <TextareaAutosize
                     name='subtitle'
-                    id='review-post-text'
+                    id='titleinput-content'
                     placeholder='Create an Optional Description'
                     onChange={(e) => props.setSubtitle(e.target.value,)}
+                    minRows={2}
                     maxLength={140} />
             }
-
         </div>
     );
 }

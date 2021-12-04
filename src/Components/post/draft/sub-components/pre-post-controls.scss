@@ -1,0 +1,9 @@
+@import "../../../../partials";
+
+#prepostcontrols-main {
+    @include flex-display-column;
+    align-items: center;
+    button {
+        width: fit-content;
+    }
+}

@@ -1,19 +1,23 @@
 import React from 'react';
 import { displayProgressionType } from "../../../../utils/constants/ui-text";
+import './progress-input.scss';
 
 const ProgressInput = (props) => {
     return (
-        <div>
+        <div id='progressinput-main'>
             <label>Progress</label>
-            <p>{displayProgressionType(props.progression)}</p>
-            <input
-                defaultValue={props.progression}
-                type="range"
-                step={1}
-                min={0}
-                max={2}
-                onClick={(e) => props.setProgression(e.target.value)}>
-            </input>
+            <div id='progressinput-slider-container'>
+                <input
+                    id='progressinput-content'
+                    defaultValue={props.progression}
+                    type="range"
+                    step={1}
+                    min={0}
+                    max={2}
+                    onClick={(e) => props.setProgression(e.target.value)}>
+                </input>
+                <p>{displayProgressionType(props.progression)}</p>
+            </div>
         </div>
     );
 }

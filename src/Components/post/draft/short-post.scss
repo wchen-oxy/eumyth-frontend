@@ -7,12 +7,13 @@
     @include small-post-window;
 }
 
+#shortpost-title {
+    text-align: center;
+}
+
 #shortpost-title-container {
     width: 50%;
     margin: 0 auto;
-}
-
-#textcontainer-text-input {
 }
 
 .shortpost-special-button-container {
@@ -26,5 +27,8 @@
     padding: 0 5px;
     p {
         margin: 0;
+    }
+    button {
+        margin-left: auto;
     }
 }

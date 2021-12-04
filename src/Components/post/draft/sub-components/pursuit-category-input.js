@@ -1,4 +1,5 @@
 import React from 'react';
+import './pursuit-category-input.scss';
 
 const PursuitCategoryInput = (props) => {
     let pursuitSelects = [];
@@ -12,10 +13,11 @@ const PursuitCategoryInput = (props) => {
     }
 
     return (
-        <div>
+        <div id='pursuitcategoryinput-main'>
             <label>Pursuit</label>
             <select
                 name="pursuit-category"
+                id='pursuitcategoryinput-content'
                 value={props.pursuit}
                 onChange={(e) => props.setPursuit(e.target.value)}
             >
