@@ -19,11 +19,28 @@
 }
 
 .account-section-container {
+    @include flex-display-column;
     margin-top: 15px;
     margin-bottom: 15px;
+
+    label {
+        font-size: medium;
+        font-weight: bold;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    button {
+        width: fit-content;
+    }
 }
 
 .account-photo-edit-container {
     display: none;
-    flex-direction: column;
+    flex-direction: row;
+    padding: 10px;
+    border: 2px solid black;
+}
+
+.account-photo-inner-container {
+    @include flex-display-column;
 }

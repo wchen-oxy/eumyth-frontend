@@ -21,6 +21,7 @@ const ProjectEvent = (props) => {
                 {post.title ? post.title : post.pursuit_category}
             </h4>
             {post.overview && <h6 className='event-overview-container'>{post.overview}</h6>}
+            {isDraft ? <p>[Draft]</p> : <p>[Published]</p>}
         </div>
     );
 }
