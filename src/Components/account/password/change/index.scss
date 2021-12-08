@@ -1,7 +1,14 @@
+@import "../../../../partials";
+
 #passwordchangeform-container {
+    @include flex-display-column;
     margin-top: 15px;
     margin-bottom: 15px;
+    form{
+        @include flex-display-column;
+        width: 200px;
+    }
 }
 #passwordchangeform-reset-button {
-    margin-left: 1vh;
+    margin-top: 1vh;
 }

@@ -43,6 +43,7 @@ class PasswordChangeForm extends Component {
 
     return (
       <div id='passwordchangeform-container'>
+        <label>Update Password</label>
         <form onSubmit={this.handlePasswordUpdateSubmit}>
           <input
             name='passwordOne'

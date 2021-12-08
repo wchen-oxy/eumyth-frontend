@@ -255,8 +255,7 @@ const AccountPage = (props) => {
     setImageKey(imageKey + 1);
     setDisplayPhoto(null);
   }
-  console.log(displayPhotoRef?.current?.style?.display);
-  const profilePhotoEditor = 
+  const profilePhotoEditor =
     <ProfilePhotoEditor
       clearFile={clearFile}
       profilePhoto={displayPhoto}
@@ -326,7 +325,9 @@ const AccountPage = (props) => {
                   <option key='public' value={PUBLIC}>Public</option>
                 </select>
               </div>
-              <PasswordChangeForm />
+              <div className='account-section-container'>
+                <PasswordChangeForm />
+              </div>
               {/* 
               <div
                 id='account-template-container'

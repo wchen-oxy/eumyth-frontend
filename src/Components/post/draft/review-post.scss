@@ -2,7 +2,7 @@
 
 @mixin meta-buttons {
     @include flex-display-row;
-    padding: 10px 0 10px 20%;
+    padding: 10px 0 10px 10%;
     align-items: center;
     justify-content: space-between;
     width: 60%;
@@ -29,6 +29,7 @@
 @mixin meta-slider {
     @include flex-display-column;
     height: 40px;
+    justify-content: center;
     p{
         margin-top: 0px;
         margin-bottom: 5px;

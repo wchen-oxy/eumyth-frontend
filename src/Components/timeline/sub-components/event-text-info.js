@@ -7,13 +7,13 @@ const EventTextInfo = (props) => (
     <div className='eventtextinfo-text-container'>
         {props.title ? <h4>{props.title}</h4> : <></>}
         {props.date ? <p>{props.date.month}, {props.date.day}, {props.date.year} </p> : <></>}
-        {props.pursuit_category
+        {props.pursuitCategory
             &&
             (
                 <div className='eventtextinfo-progression-container'>
                     <p>
                         {props.pursuitCategory}
-                        {props.progression === 2 ? ' ' + 'MileStone' : ' ' + 'Progress'}
+                        {props.progression === 2 && ' ' + 'MileStone'}
                     </p>
                 </div>
             )}
