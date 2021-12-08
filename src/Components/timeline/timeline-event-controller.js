@@ -6,6 +6,7 @@ import EventCheckbox from './sub-components/event-checkbox';
 import './timeline-event.scss';
 
 const selectClassStyle = (num) => {
+    console.log(num)
     switch (num) {
         case (0):
             return 'event-first-container';
@@ -40,7 +41,7 @@ const EventController = (props) => {
         const eventClickParams = props.isRecentEvents ?
             [post, props.index] : [props.eventIndex];
         return (
-            <div className={props.columnIndex ?
+            <div className={props.columnIndex !== null ?
                 selectClassStyle(props.columnIndex) : 'event-middle-container'}>
                 <div onClick={props.disableModalPreview ?
                     () => console.log('Selected')

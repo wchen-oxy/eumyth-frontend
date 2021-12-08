@@ -3,7 +3,9 @@ import Timeline from '../timeline';
 import TopButtonBar from './sub-components/top-button-bar';
 import ProjectHeaderInput from './sub-components/project-header-input';
 import ProjectHeader from './project-header';
+import ProjectSelectHeader from './sub-components/project-select-header';
 import ProjectUtilityButtons from './sub-components/project-utility-buttons';
+
 import { PROJECT, PROJECT_CONTENT_ONLY_VIEW_STATE, PROJECT_MICRO_VIEW_STATE } from 'utils/constants/flags';
 
 const MainDisplay = (props) => {
@@ -48,6 +50,8 @@ const MainDisplay = (props) => {
                     onSelectAll={props.onSelectAll}
                 />
             }
+            {props.editProjectState &&
+                <ProjectSelectHeader stage={props.projectSelectSubState} />}
             {
                 props.allPosts.length > 0 ?
                     <Timeline

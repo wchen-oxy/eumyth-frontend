@@ -124,7 +124,6 @@ class ProjectController extends React.Component {
                     .sort((a, b) =>
                         objectIDs.indexOf(a._id) - objectIDs.indexOf(b._id))
             );
-        console.log(feedData)
         this.setState({ feedData });
     }
 
@@ -174,8 +173,9 @@ class ProjectController extends React.Component {
             newFeedIndex.set(post._id, isSelected);
         }
         if (isSelected) {
-            selectedPosts = this.state.feedData;
+            selectedPosts = this.state.feedData.map(item => { return { post_id: item._id } });
         }
+        console.log(selectedPosts);
         this.setState({ feedIndex: newFeedIndex, selectedPosts });
     }
 
@@ -192,7 +192,7 @@ class ProjectController extends React.Component {
                 .allPosts(this.props.authUser.profileID)
                 .then((result => {
                     this.setState({
-                        contentViewOnlyAllPosts: { post_ids: result.data.map(item => item.post_id) },
+                        contentViewOnlyAllPosts: { post_ids: result.data.map(item => item.content_id) },
                         ...sharedState
                     },
                         this.clearLoadedFeed)
@@ -246,6 +246,7 @@ class ProjectController extends React.Component {
                             barType: this.props.isContentOnlyView ?
                                 PROJECT_CONTENT_ONLY_VIEW_STATE : PROJECT_MICRO_VIEW_STATE,
                             editProjectState: false,
+                            selectedPosts: [],
                             isUpdate: false,
                             hasMore: true,
                         }, this.clearLoadedFeed)
@@ -376,7 +377,7 @@ class ProjectController extends React.Component {
             this.setState({ feedIndex })
         }
         else {
-            throw new Error("Something weird happend")
+            throw new Error("Something weird happened")
         }
 
     }
@@ -458,8 +459,10 @@ class ProjectController extends React.Component {
                         return feed.filter(item => !this.state.selectedProject.post_ids.includes(item));
                     }
                     else if (this.state.projectSelectSubState === 2) {
+                        console.log(this.state.selectedPosts);
+                        console.log(this.state.selectedProject)
                         return this.state.selectedPosts
-                            .map((item) => item.content_id)
+                            .map((item) => item.post_id)
                             .concat(this.state.selectedProject.post_ids);
                     }
                 }
@@ -537,7 +540,7 @@ class ProjectController extends React.Component {
                             onNewProjectSelect={this.handleNewProjectSelect}
                             handleWindowSwitch={this.handleWindowSwitch}
                         />
-
+                        <h3>Rearrange Your Posts</h3>
                         <div id="projectcontroller-sortable-list-container">
                             <SortableList
                                 contentType={POST}

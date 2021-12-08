@@ -11,7 +11,7 @@ class Timeline extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            fixedDataLoadLength: 4,
+            fixedDataLoadLength: 8,
             nextOpenPostIndex: 0,
             feedID: this.props.feedID,
 
@@ -26,6 +26,7 @@ class Timeline extends React.Component {
             this.setState({ feedID: this.props.feedID, nextOpenPostIndex: 0 },
                 () => {
                     if (this.state.nextOpenPostIndex < this.props.allPosts.length)
+                    console.log('hello');
                         this.debounceFetch();
                 })
         }
