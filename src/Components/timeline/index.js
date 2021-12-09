@@ -26,8 +26,8 @@ class Timeline extends React.Component {
             this.setState({ feedID: this.props.feedID, nextOpenPostIndex: 0 },
                 () => {
                     if (this.state.nextOpenPostIndex < this.props.allPosts.length)
-                    console.log('hello');
-                        this.debounceFetch();
+                        console.log('hello');
+                    this.debounceFetch();
                 })
         }
     }
@@ -116,19 +116,20 @@ class Timeline extends React.Component {
                     </InfiniteScroll>
                     )
                     :
-                    <p>There doesn't seem to be anything here</p>
+                    (<div>
+                        <br />
+                        <br />
+                        <br />
+                        {this.props.contentType === PROJECT ?
+                            <p> You don't have any projects. Feel free to make one!</p>
+                            : <p>There doesn't seem to be anything here.</p>
+                        }
+                    </div>
+                    )
                 }
                 {this.props.loadedFeed.length > 1 ?
                     null : <div style={{ height: this.props.editProjectState ? '500px' : '200px' }}></div>}
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
+
             </div>
         )
     }

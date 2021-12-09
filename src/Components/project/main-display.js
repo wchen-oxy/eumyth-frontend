@@ -52,7 +52,32 @@ const MainDisplay = (props) => {
             }
             {props.editProjectState &&
                 <ProjectSelectHeader stage={props.projectSelectSubState} />}
-            {
+            <Timeline
+                feedID={props.feedID}
+                nextOpenPostIndex={props.nextOpenPostIndex}
+                contentType={props.contentType}
+                editProjectState={props.editProjectState}
+                onProjectEventSelect={props.onProjectEventSelect}
+                onProjectClick={props.onProjectClick}
+                allPosts={props.allPosts}
+                onEventClick={props.onEventClick}
+                loadedFeed={props.loadedFeed}
+                updateFeedData={props.updateFeedData}
+                targetProfileID={props.targetProfileID}
+                shouldPull={props.shouldPull}
+                hasMore={props.hasMore}
+                createTimelineRow={props.createTimelineRow}
+            />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            {/* {
                 props.allPosts.length > 0 ?
                     <Timeline
                         feedID={props.feedID}
@@ -73,6 +98,10 @@ const MainDisplay = (props) => {
                     :
                     <div>
                         <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
                         {
                             props.contentType === PROJECT ?
                                 <p>You haven't made any projects yet. Feel free to make one!</p> :
@@ -85,9 +114,20 @@ const MainDisplay = (props) => {
                         <br />
                         <br />
                         <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
                     </div>
 
-            }
+            } */}
         </div>
     )
 }

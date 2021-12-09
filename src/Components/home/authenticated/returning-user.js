@@ -55,7 +55,6 @@ class ReturningUserPage extends React.Component {
     componentDidMount() {
         this._isMounted = true;
         if (this._isMounted && this.state.username) {
-            console.log(this.props.authUser);
             const pursuitObjects =
                 this.createPursuits(this.props.authUser.pursuits);
             return Promise.all([
@@ -90,6 +89,7 @@ class ReturningUserPage extends React.Component {
         for (const value of data) {
             array.push(
                 <EventController
+                    columnIndex={2}
                     isRecentEvents={true}
                     index={postIndex}
                     contentType={POST}

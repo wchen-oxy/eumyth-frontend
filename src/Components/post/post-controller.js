@@ -144,6 +144,15 @@ class PostController extends React.Component {
                     shouldPull={this.shouldPull}
                     createTimelineRow={this.createTimelineRow}
                 />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
             </>
         );
     }
