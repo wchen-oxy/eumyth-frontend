@@ -2,6 +2,7 @@ import { MILESTONE, NEUTRAL, SETBACK } from './flags';
 
 export const ACCEPT_REQUEST_TEXT = 'Accept Request';
 export const DECLINE_REQUEST_TEXT = 'Decline Request';
+export const REMOVE_TEXT = 'Remove';
 export const CANCEL_REQUEST_TEXT = 'Cancel Request';
 
 export const FOLLOW_BUTTON_TEXT = 'Follow';

@@ -25,9 +25,9 @@ class Timeline extends React.Component {
         if (this.props.feedID !== this.state.feedID) {
             this.setState({ feedID: this.props.feedID, nextOpenPostIndex: 0 },
                 () => {
-                    if (this.state.nextOpenPostIndex < this.props.allPosts.length)
-                        console.log('hello');
-                    this.debounceFetch();
+                    if (this.state.nextOpenPostIndex < this.props.allPosts.length && this.props.allPosts.length > 0) {
+                        this.debounceFetch();
+                    }
                 })
         }
     }

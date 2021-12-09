@@ -5,14 +5,13 @@ import {
     UNFOLLOW_ACTION,
     ACCEPT_ACTION,
     DECLINE_ACTION,
-    FOLLOW_REQUESTED_STATE
 } from 'utils/constants/flags';
 import {
     ACCEPT_REQUEST_TEXT,
     DECLINE_REQUEST_TEXT,
+    REMOVE_TEXT,
     CANCEL_REQUEST_TEXT,
     FOLLOWING_BUTTON_TEXT,
-    REQUESTED_BUTTON_TEXT,
 } from 'utils/constants/ui-text';
 import './relation-modal.scss';
 
@@ -29,6 +28,8 @@ class RelationModal extends React.Component {
         this.handleStatusChange = this.handleStatusChange.bind(this);
         this.handleRenderRelation = this.handleRenderRelation.bind(this);
         this.renderUserRow = this.renderUserRow.bind(this);
+        this.handleDataSet = this.handleDataSet.bind(this);
+        this.handleRelationUpdate = this.handleRelationUpdate.bind(this);
     }
 
     componentDidMount() {
@@ -36,31 +37,34 @@ class RelationModal extends React.Component {
         AxiosHelper.returnUserRelationInfo(this.props.username)
             .then((result) => {
                 if (this._isMounted) {
-                    const falseRequest = { exists: false };
-                    const following = this.handleRenderRelation(
-                        this.renderUserRow,
-                        result.data.following,
-                        falseRequest);
-                    const followers = this.handleRenderRelation(
-                        this.renderUserRow,
-                        result.data.followers,
-                        falseRequest);
-                    const requested = this.handleRenderRelation(
-                        this.renderUserRow,
-                        result.data.requested,
-                        { exists: true, type: 'REQUESTED' });
-                    const requester = this.handleRenderRelation(
-                        this.renderUserRow,
-                        result.data.requester,
-                        { exists: true, type: 'REQUESTER' });
-                    this.setState({
-                        userRelationID: result.data._id,
-                        following: following,
-                        followers: followers,
-                        requests: requester.concat(requested)
-                    });
+                    this.handleDataSet(result.data);
                 }
             })
+    }
+
+    handleDataSet(result) {
+        const following = this.handleRenderRelation(
+            this.renderUserRow,
+            result.following,
+            { exists: true, type: 'FOLLOWING' });
+        const followers = this.handleRenderRelation(
+            this.renderUserRow,
+            result.followers,
+            { exists: true, type: 'REMOVE' });
+        const requested = this.handleRenderRelation(
+            this.renderUserRow,
+            result.requested,
+            { exists: false, type: 'REQUESTED' });
+        const requester = this.handleRenderRelation(
+            this.renderUserRow,
+            result.requester,
+            { exists: false, type: 'REQUESTER' });
+        this.setState({
+            userRelationID: result._id,
+            following: following,
+            followers: followers,
+            requests: requester.concat(requested)
+        });
     }
 
     handleStatusChange(action, followingRelationID, followerRelationID) {
@@ -75,39 +79,43 @@ class RelationModal extends React.Component {
                         AxiosHelper.returnUserRelationInfo(this.props.username)
                 )
                 .then((result) => {
-                    if (this._isMounted) {
-                        this.setState({ userRelation: result.data });
-                    }
+                    this.handleDataSet(result.data);
                 })
                 .catch((err) => window.alert('Something went wrong :(')));
     }
 
-    renderUserRow(data, request) {
+    handleRelationUpdate() {
+
+    }
+
+    renderUserRow(data, relation) {
         const users = [];
-        if (request.exists) {
+        if (!relation.exists) {
             for (const user of data) {
-                const buttons = request.type === "REQUESTED" ? (<div>
-                    <button
-                        onClick={() => (
-                            this.handleStatusChange(
-                                ACCEPT_ACTION,
-                                user.user_relation_id,
-                                this.state.userRelationID,
-                            ))}
-                    >
-                        {ACCEPT_REQUEST_TEXT}
-                    </button>
-                    <button
-                        onClick={() => (
-                            this.handleStatusChange(
-                                DECLINE_ACTION,
-                                user.user_relation_id,
-                                this.state.userRelationID
-                            ))}
-                    >
-                        {DECLINE_REQUEST_TEXT}
-                    </button>
-                </div>) :
+                const buttons = relation.type === "REQUESTED" ? (
+                    <div>
+                        <button
+                            onClick={() => (
+                                this.handleStatusChange(
+                                    ACCEPT_ACTION,
+                                    user.user_relation_id,
+                                    this.state.userRelationID,
+                                ))}
+                        >
+                            {ACCEPT_REQUEST_TEXT}
+                        </button>
+                        <button
+                            onClick={() => (
+                                this.handleStatusChange(
+                                    DECLINE_ACTION,
+                                    user.user_relation_id,
+                                    this.state.userRelationID
+                                ))}
+                        >
+                            {DECLINE_REQUEST_TEXT}
+                        </button>
+                    </div>)
+                    :
                     (<button
                         onClick={() => (
                             this.handleStatusChange(
@@ -144,16 +152,29 @@ class RelationModal extends React.Component {
                                 {user.username}
                             </a>
                         </div>
-                        <button
-                            onClick={() => (
-                                this.handleStatusChange(
-                                    UNFOLLOW_ACTION,
-                                    this.state.userRelationID,
-                                    user.user_relation_id)
-                            )}
-                        >
-                            {FOLLOWING_BUTTON_TEXT}
-                        </button>
+                        {
+                            relation.type === 'FOLLOWING' ?
+                                <button
+                                    onClick={() => (
+                                        this.handleStatusChange(
+                                            UNFOLLOW_ACTION,
+                                            this.state.userRelationID,
+                                            user.user_relation_id)
+                                    )}
+                                >
+                                    {FOLLOWING_BUTTON_TEXT}
+                                </button> :
+                                <button
+                                    onClick={() => (
+                                        this.handleStatusChange(
+                                            UNFOLLOW_ACTION,
+                                            user.user_relation_id,
+                                            this.state.userRelationID)
+                                    )}
+                                >
+                                    {REMOVE_TEXT}
+                                </button>
+                        }
                     </div>
                 )
             }
