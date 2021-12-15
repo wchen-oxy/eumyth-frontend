@@ -12,8 +12,8 @@ const ProjectHeader = (props) => {
                 {props.priorProjectID && <a href={'/c/' + props.priorProjectID}>See Predecessor Project</a>}
             </div>
             <div id="projectheader-user-info-container">
-                <h5>{props.username}</h5>
                 <img src={returnUserImageURL(props.displayPhoto)}></img>
+                <h5>{props.username}</h5>
             </div>
         </div>
     )

@@ -85,7 +85,11 @@ class ProjectController extends React.Component {
             feedIndex: new Map(),
             title: this.props.content ? this.props.content.title : "",
             overview: this.props.content ? this.props.content?.overview : "",
-            selectedProject: this.props.content.post_ids ? { post_ids: this.props.content.post_ids } : null,
+            selectedProject: this.props.content.post_ids ? {
+                post_ids: this.props.content.post_ids,
+                username: this.props.content.username,
+                displayPhoto: this.props.content.display_photo_key
+            } : null,
             priorProjectID: this.props.priorProjectID ? this.props.priorProjectID : null,
             selectedEventIndex: null,
             hasMore: true,

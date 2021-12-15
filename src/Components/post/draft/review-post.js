@@ -46,7 +46,7 @@ const ReviewPost = (props) => {
     const [minDuration, setMinDuration] = useState(null);
     const [progression, setProgression] = useState(props.progression);
     const [subtitle, setSubtitle] = useState('');
-    const [postPrivacyType, setPostPrivacyType] = useState(props.preferredPostPrivacy);
+    const [postPrivacyType, setPostPrivacyType] = useState(props.authUser.preferredPostType);
     const [pursuit, setPursuit] = useState(
         props.selectedPursuit ? props.selectedPursuit : null)
     const [loading, setLoading] = useState(false);
@@ -245,7 +245,8 @@ const ReviewPost = (props) => {
         }
     }
 
-    console.log(props.authUser)
+    console.log(postPrivacyType)
+
     return (
         <div id='reviewpost-small-window'>
             <div>
@@ -317,7 +318,7 @@ const ReviewPost = (props) => {
                 </div>
                 <div className='reviewpost-button-container'>
                     <PrePostControls
-                        preferredPostPrivacy={props.authUser.preferredPostType}
+                        preferredPostPrivacy={postPrivacyType}
                         setPostPrivacyType={setPostPrivacyType}
                         handleFormAppend={handleFormAppend}
                         disabled={isSubmitting}

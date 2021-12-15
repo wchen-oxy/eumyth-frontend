@@ -9,6 +9,7 @@ import ProjectUtilityButtons from './sub-components/project-utility-buttons';
 import { PROJECT, PROJECT_CONTENT_ONLY_VIEW_STATE, PROJECT_MICRO_VIEW_STATE } from 'utils/constants/flags';
 
 const MainDisplay = (props) => {
+    console.log(props.projectMetaData)
     return (
         <div>
             <TopButtonBar
