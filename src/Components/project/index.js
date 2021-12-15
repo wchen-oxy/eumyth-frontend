@@ -94,7 +94,6 @@ class ProjectController extends React.Component {
             feedID: 0,
         }
 
-        this.modalRef = React.createRef(null);
         this.handleBackClick = this.handleBackClick.bind(this);
         this.handleProjectClick = this.handleProjectClick.bind(this);
         this.setNewURL = this.setNewURL.bind(this);
@@ -479,6 +478,7 @@ class ProjectController extends React.Component {
         const contentType = this.state.editProjectState || this.props.isContentOnlyView || this.state.selectedProject
             ?
             PROJECT_EVENT : PROJECT;
+        console.log(this.state.editProjectState);
         switch (this.state.window) {
             case (MAIN):
                 return (
@@ -486,6 +486,7 @@ class ProjectController extends React.Component {
                         <ProfileModal
                             authUser={this.props.authUser}
                             projectID={this.state.selectedProject?._id}
+                            editProjectState={this.state.editProjectState}
                             modalState={this.props.modalState}
                             postIndex={this.state.selectedPostIndex}
                             postType={this.state.postType}

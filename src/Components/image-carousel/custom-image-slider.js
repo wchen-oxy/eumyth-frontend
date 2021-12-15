@@ -117,6 +117,7 @@ class CustomImageSlider extends React.Component {
                 </div>
                 {this.props.showPromptOverlay && (<p>Click on a point in the image and drag!</p>)}
                 <ImageControls
+                    editProjectState={this.props.editProjectState}
                     imageArray={this.props.imageArray}
                     windowType={this.props.windowType}
                     areAnnotationsHidden={this.props.areAnnotationsHidden}

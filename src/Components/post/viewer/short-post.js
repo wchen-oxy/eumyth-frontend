@@ -209,6 +209,7 @@ class ShortPostViewer extends React.Component {
         return (
             <div className={sliderClassName}>
                 <CustomImageSlider
+                    editProjectState={this.props.editProjectState}
                     windowType={windowType}
                     hideAnnotations={this.state.areAnnotationsHidden}
                     imageArray={imageArray}
@@ -444,6 +445,7 @@ class ShortPostViewer extends React.Component {
                             <div id='shortpostviewer-large-inline-header-container'>
                                 <PostHeader
                                     isOwnProfile={isOwnProfile}
+                                    editProjectState={this.props.editProjectState}
                                     username={this.props.eventData.username}
                                     date={this.state.date}
                                     displayPhoto={this.props.eventData.display_photo_key}
@@ -479,6 +481,7 @@ class ShortPostViewer extends React.Component {
                                 <div className='shortpostviewer-inline-side-container'>
                                     <PostHeader
                                         isOwnProfile={isOwnProfile}
+                                        editProjectState={this.props.editProjectState}
                                         username={this.props.eventData.username}
                                         date={this.state.date}
                                         displayPhoto={this.props.eventData.display_photo_key}
@@ -521,6 +524,7 @@ class ShortPostViewer extends React.Component {
                                 >
                                     <PostHeader
                                         isOwnProfile={isOwnProfile}
+                                        editProjectState={this.props.editProjectState}
                                         username={this.props.eventData.username}
                                         date={this.state.date}
                                         displayPhoto={this.props.eventData.display_photo_key}
@@ -551,6 +555,7 @@ class ShortPostViewer extends React.Component {
                             >
                                 <PostHeader
                                     isOwnProfile={this.props.isOwnProfile}
+                                    editProjectState={this.props.editProjectState}
                                     username={this.props.eventData.username}
                                     date={this.state.date}
                                     displayPhoto={this.props.eventData.display_photo_key}

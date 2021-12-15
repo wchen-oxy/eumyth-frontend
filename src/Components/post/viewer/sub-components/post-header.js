@@ -25,15 +25,16 @@ const PostHeader = (props) => {
                     {date && <p>{date.month}, {date.day}, {date.year} </p>}
                 </div>
             </div>
-            <div id='postheader-main-button-container'>
-                <button onClick={() => setButtonShow(!isButtonShowing)}>...</button>
-                {props.isOwnProfile && isButtonShowing && (
-                    <div id='postheader-button-pop-up'>
-                        <button onClick={props.onDeletePost}>Remove</button>
-                        <button onClick={() => props.onEditClick(EDIT_STATE)}>Edit</button>
-                    </div>
-                )}
-            </div>
+            {!props.editProjectState &&
+                <div id='postheader-main-button-container'>
+                    <button onClick={() => setButtonShow(!isButtonShowing)}>...</button>
+                    {props.isOwnProfile && isButtonShowing && (
+                        <div id='postheader-button-pop-up'>
+                            <button onClick={props.onDeletePost}>Remove</button>
+                            <button onClick={() => props.onEditClick(EDIT_STATE)}>Edit</button>
+                        </div>
+                    )}
+                </div>}
 
         </div>
     )

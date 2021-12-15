@@ -13,6 +13,7 @@ const ProfileModal = (props) => {
                 <ShortPostViewer
                     authUser={props.authUser}
                     projectID={props.projectID}
+                    editProjectState={props.editProjectState}
                     disableCommenting={props.disableCommenting}
                     isPostOnlyView={false}
                     postIndex={props.postIndex}
