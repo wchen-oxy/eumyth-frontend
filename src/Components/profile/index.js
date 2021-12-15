@@ -437,7 +437,7 @@ class ProfilePageAuthenticated extends React.Component {
                     <PursuitHolder
                         isSelected={pursuit.name === this.state.selectedPursuit}
                         name={pursuit.name}
-                        numEvents={pursuit.num_posts}
+                        numEvents={pursuit.posts.length}
                         key={pursuit.name}
                         value={index++}
                         onPursuitToggle={this.handlePursuitToggle} />

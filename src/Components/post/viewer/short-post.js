@@ -180,7 +180,7 @@ class ShortPostViewer extends React.Component {
                     windowType={windowType}
                     visitorUsername={this.props.authUser?.username}
                     visitorProfilePreviewID={this.props.authUser?.userPreviewID}
-                    postID={this.props.postID}
+                    postID={this.props.eventData._id}
                     postIndex={this.props.postIndex}
                     onCommentDataInjection={this.handleCommentDataInjection}
                     selectedPostFeedType={this.props.selectedPostFeedType}

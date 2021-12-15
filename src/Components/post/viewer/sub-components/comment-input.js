@@ -7,6 +7,7 @@ const CommentInput = (props) => (
         minRows={props.minRows}
         onChange={(e) => props.handleTextChange(e.target.value)}
         value={props.commentText}
+        style={{ width: "120%" }}
     />
 )
 export default CommentInput;

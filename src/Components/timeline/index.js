@@ -39,6 +39,7 @@ class Timeline extends React.Component {
             this.debounceFetch();
         }
         else {
+            console.log('ff');
             this.props.shouldPull(false);
         }
     }

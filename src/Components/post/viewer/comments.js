@@ -11,8 +11,10 @@ class Comments extends React.Component {
         this.state = {
             windowType: this.props.windowType,
             commentText: '',
+            selectedCommentThread: false,
             loadingComments: true,
         }
+        this.setCommentThread = this.setCommentThread.bind(this);
         this.renderCommentSectionType = this.renderCommentSectionType.bind(this);
         this.renderCommentInput = this.renderCommentInput.bind(this);
         this.renderCommentThreads = this.renderCommentThreads.bind(this);
@@ -71,6 +73,20 @@ class Comments extends React.Component {
         }
     }
 
+    setCommentThread(ID) {
+        const thread = ID ? [ID] : this.props.commentIDArray;
+        return AxiosHelper.getComments(
+            JSON.stringify(thread),
+            this.state.windowType)
+            .then((result) => this.setState({
+                loadingComments: false,
+                selectedCommentThread: ID ? true : false
+            }, () => {
+                this.props.passAnnotationData(result.data.rootComments)
+
+            }))
+    }
+
     handleCommentTextChange(text) {
         this.setState({ commentText: text })
     }
@@ -124,7 +140,7 @@ class Comments extends React.Component {
             commentData.comment : annotation.text;
         if (!commentData.replies) {
             return (
-                <div key={commentData._id}>
+                <div key={commentData._id + 'outer'}>
                     <SingleComment
                         hasAnnotation={!!annotation}
                         level={currentLevel}
@@ -147,7 +163,11 @@ class Comments extends React.Component {
             );
         }
         else {
-            let replies = [];
+            const replies = [];
+            const threadIndicatorArray = [];
+            const shouldHideReplies =
+                currentLevel % 14 === 0 && commentData.replies.length > 0;
+
             commentData.replies.sort(
                 (a, b) => {
                     if (a.createdAt < b.createdAt) {
@@ -158,9 +178,22 @@ class Comments extends React.Component {
                     }
                     return 0;
                 });
-            for (const reply of commentData.replies) {
-                replies.push(this.recursiveRenderComments(reply, currentLevel));
+            if (!shouldHideReplies) {
+                for (const reply of commentData.replies) {
+                    replies.push(this.recursiveRenderComments(reply, currentLevel));
+                }
             }
+            else {
+                for (let i = 0; i < currentLevel; i++) {
+                    threadIndicatorArray.push(
+                        <div key={this.props.commentID + 'inner' + Math.random() * 2}
+                            className='singlecomment-thread-indicator'>
+                        </div>);
+                }
+            }
+            console.log(currentLevel, text);
+            console.log(shouldHideReplies);
+            console.log(threadIndicatorArray);
             return (
                 <div key={commentData._id}>
                     <SingleComment
@@ -181,9 +214,21 @@ class Comments extends React.Component {
                         onMouseOut={this.props.onMouseOut}
                         onMouseClick={this.props.onMouseClick}
                     />
-                    <div className='comments-reply-container'>
-                        {replies}
-                    </div>
+
+                    {shouldHideReplies ? (
+                        <div className='singlecomment-multiple-thread-style'>
+                            <div className='singlecomment-thread-indicator-container'>
+                                {threadIndicatorArray}
+                            </div>
+                            <button className='comments-extended-thread'
+                                value={commentData._id}
+                                onClick={() => this.setCommentThread(commentData._id)} >
+                                Continue this thread &rarr;
+                            </button>
+                        </div>
+                    ) :
+                        <div className='comments-reply-container'>{replies}</div>
+                    }
                 </div>
             )
         }
@@ -257,7 +302,16 @@ class Comments extends React.Component {
             return (
                 <div className='comments-main-container'>
                     {this.renderCommentInput(EXPANDED)}
+                    {this.state.selectedCommentThread &&
+                        <button
+                            id='comments-return-parent'
+                            className='comments-extended-thread'
+                            onClick={() => this.setCommentThread(null)} >
+                            &larr; Return To Parent Thread</button>}
                     {this.renderCommentSectionType(EXPANDED)}
+                    <br />
+                    <br />
+                    <br />
                     <br />
                     <br />
                 </div>

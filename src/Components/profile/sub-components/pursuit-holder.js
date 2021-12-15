@@ -6,10 +6,17 @@ const PursuitHolder = (props) => (
     <div className='pursuitholder-container'
         key={props.name}
         onClick={() => props.onPursuitToggle(props.value)}
-        style={props.isSelected ? {backgroundColor: 'blue'} : null}
-        >
+        style={props.isSelected ?
+            { color: 'blue', borderBottom: '4px solid blue' }
+            : null}
+    >
         <h4>  {props.name}  </h4>
-        {  props.numEvents ? <p>  Events: {props.numEvents}  </p> : <></>}
+        {props.numEvents ?
+            <p>
+                {props.numEvents}
+                {props.numEvents === 1 ? ' Post' : ' Posts'}
+            </p>
+            : <br></br>}
     </div>
 );
 

@@ -6,7 +6,6 @@ import EventCheckbox from './sub-components/event-checkbox';
 import './timeline-event.scss';
 
 const selectClassStyle = (num) => {
-    console.log(num)
     switch (num) {
         case (0):
             return 'event-first-container';

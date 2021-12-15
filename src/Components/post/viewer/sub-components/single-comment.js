@@ -13,12 +13,14 @@ class SingleComment extends React.Component {
             overallVoteScore: this.props.score,
             previousVote: 0,
             isReplyBoxToggled: false,
-            replyText: ''
+            replyText: '',
+            replies: []
         }
         this.toggleReplyBox = this.toggleReplyBox.bind(this);
         this.setReplyText = this.setReplyText.bind(this);
         this.handleVote = this.handleVote.bind(this);
         this.postReply = this.postReply.bind(this);
+        this.renderReply = this.renderReply.bind(this);
         this.isReplyTextInvalid = this.isReplyTextInvalid.bind(this);
         this.renderThreadIndicators = this.renderThreadIndicators.bind(this);
         this.cancelTextInput = this.cancelTextInput.bind(this);
@@ -119,8 +121,10 @@ class SingleComment extends React.Component {
             )
                 .then((result) => {
                     alert('Comment added! Refresh the page to see!');
+                    this.renderReply(result.data, this.props.level)
                     this.toggleReplyBox(false);
                 })
+                .catch(err => console.log(err));
         }
     }
 
@@ -138,87 +142,126 @@ class SingleComment extends React.Component {
         let threadIndicatorArray = [];
         for (let i = 0; i < levels; i++)
             threadIndicatorArray.push(
-                <div key={this.props.commentID + 'inner'}
+                <div key={this.props.commentID + 'inner' + Math.random() * 2}
                     className='singlecomment-thread-indicator'>
                 </div>
             )
         return threadIndicatorArray;
     }
 
+    renderReply(commentData, pastLevel) {
+        console.log(pastLevel);
+        const currentLevel = pastLevel + 1;
+        const annotation =
+            commentData.annotation ?
+                JSON.parse(commentData.annotation.data) : null;
+        const text = commentData.comment ?
+            commentData.comment : annotation.text;
+        const replies = this.state.replies;
+        replies.push(
+
+            <SingleComment
+                hasAnnotation={!!annotation}
+                level={currentLevel}
+                postID={this.props.postID}
+                visitorProfilePreviewID={this.props.visitorProfilePreviewID}
+                commentID={commentData._id}
+                ancestors={commentData.ancestor_post_ids}
+                username={commentData.username}
+                commentText={text}
+                likes={commentData.likes}
+                dislikes={commentData.dislikes}
+                displayPhoto={this.props.displayPhoto}
+                score={commentData.score}
+                annotation={annotation}
+                onMouseOver={this.props.onMouseOver}
+                onMouseOut={this.props.onMouseOut}
+                onMouseClick={this.props.onMouseClick}
+            />
+        );
+        this.setState({ replies })
+
+    }
     render() {
         const masterClassName = this.props.level > 1 ?
             'singlecomment-multiple-thread-style' : '';
-        const displayPhotoURL = this.props.displayPhoto ? returnUserImageURL(this.props.displayPhoto) : TEMP_PROFILE_PHOTO_URL;
+        const displayPhotoURL = this.props.displayPhoto ?
+            returnUserImageURL(this.props.displayPhoto) : TEMP_PROFILE_PHOTO_URL;
         return (
-            <div className={masterClassName}>
-                {this.props.level > 1 && (
-                    <div className='singlecomment-thread-indicator-container'>
-                        {this.renderThreadIndicators(this.props.level - 1)}
-                    </div>
-                )}
-                <div className='singlecomment-main-container'>
-                    <div className='singlecomment-header-container'>
-                        <div className='singlecomment-display-photo-container'>
-                            <img
-                                alt='Single Comment Display Photo Url'
-                                src={displayPhotoURL} />
-                        </div>
-                        <div className='singlecomment-username-container'>
-                            <p>{this.props.username}</p>
-                        </div>
-                    </div>
-                    <div className='singlecomment-body-container'>
+            <div>
+                <div className={masterClassName}>
+                    {this.props.level > 1 && (
                         <div className='singlecomment-thread-indicator-container'>
-                            {this.renderThreadIndicators(1)}
+                            {this.renderThreadIndicators(this.props.level - 1)}
                         </div>
-                        <div className={'singlecomment-main-content-container'}>
-                            {this.props.hasAnnotation &&
-                                <div className='singlecomment-annotation-indicator'>Annotation</div>
-                            }
-                            <div className='singlecomment-comment-container'
-
-                                onMouseOver={() => (
-                                    this.props.onMouseOver(this.props.commentID))}
-                                onMouseOut={() => (
-                                    this.props.onMouseOut(this.props.commentID))}
-                                onClick={() => (
-                                    this.props.onMouseClick(this.props.commentID))}
-                            >
-                                <p>{this.props.commentText}</p>
+                    )}
+                    <div className='singlecomment-main-container'>
+                        <div className='singlecomment-header-container'>
+                            <div className='singlecomment-display-photo-container'>
+                                <img
+                                    alt='Single Comment Display Photo Url'
+                                    src={displayPhotoURL} />
                             </div>
-                            <div className='singlecomment-management-container'>
-                                <button onClick={() => this.handleVote(1)}>
-                                    Upvote
-                                </button>
-                                <p>{this.state.overallVoteScore}</p>
-                                <button onClick={() => this.handleVote(-1)}>
-                                    Downvote
-                                </button>
-                                <button onClick={() => this.toggleReplyBox()}>
-                                    Reply
-                                </button>
+                            <div className='singlecomment-username-container'>
+                                <p>{this.props.username}</p>
                             </div>
-                            <div>
-                                {this.state.isReplyBoxToggled &&
-                                    <>
-                                        <CommentInput
-                                            classStyle={''}
-                                            minRows={4}
-                                            handleTextChange={this.setReplyText}
-                                            commentText={this.state.replyText}
-                                        />
-                                        <button onClick={this.cancelTextInput}>
-                                            Cancel
-                                        </button>
-                                        <button onClick={this.postReply}>
-                                            Reply
-                                        </button>
-                                    </>
+                        </div>
+                        <div className='singlecomment-body-container'>
+                            <div className='singlecomment-thread-indicator-container'>
+                                {this.renderThreadIndicators(1)}
+                            </div>
+                            <div className={'singlecomment-main-content-container'}>
+                                {this.props.hasAnnotation &&
+                                    <div className='singlecomment-annotation-indicator'>Annotation</div>
                                 }
+                                <div className='singlecomment-comment-container'
+
+                                    onMouseOver={() => (
+                                        this.props.onMouseOver(this.props.commentID))}
+                                    onMouseOut={() => (
+                                        this.props.onMouseOut(this.props.commentID))}
+                                    onClick={() => (
+                                        this.props.onMouseClick(this.props.commentID))}
+                                >
+                                    <pre>{this.props.commentText}</pre>
+                                </div>
+                                <div className='singlecomment-management-container'>
+                                    <button onClick={() => this.handleVote(1)}>
+                                        Upvote
+                                    </button>
+                                    <p>{this.state.overallVoteScore}</p>
+                                    <button onClick={() => this.handleVote(-1)}>
+                                        Downvote
+                                    </button>
+                                    <button onClick={() => this.toggleReplyBox()}>
+                                        Reply
+                                    </button>
+                                </div>
+                                <div>
+                                    {this.state.isReplyBoxToggled &&
+                                        <>
+                                            <CommentInput
+                                                classStyle={''}
+                                                minRows={4}
+                                                handleTextChange={this.setReplyText}
+                                                commentText={this.state.replyText}
+                                            />
+                                            <button onClick={this.cancelTextInput}>
+                                                Cancel
+                                            </button>
+                                            <button onClick={this.postReply}>
+                                                Reply
+                                            </button>
+                                        </>
+                                    }
+                                </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
+                </div>
+                <div key={'Reply' + Math.random() * 2}>
+                    {this.state.replies}
                 </div>
             </div>
         );
