@@ -11,7 +11,10 @@ const ShortPostMetaInfo = (props) => {
                 {props.difficulty ? <p>{displayDifficulty(props.difficulty)}</p> : null}
                 {props.pursuit ? <p>{props.pursuit}</p> : <></>}
                 {props.min ? <p>{props.min} minutes</p> : <></>}
-                <EventLabels labels={props.labels} />
+                {(props.labels?.length ?? 0) > 0 &&
+                    <EventLabels
+                        isFullPage={props.isFullPage}
+                        labels={props.labels} />}
             </div>
             <div className="shortpostmetainfo-text-container">
                 <p>{props.isPaginated && props.textData ?

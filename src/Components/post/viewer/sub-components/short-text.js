@@ -2,23 +2,23 @@ import React from 'react';
 import './short-text.scss';
 
 const ShortHeroText = (props) => {
+    const styleType = props.length < 1000 ? 'tiny-amount-text-container' : 'medium-amount-text-container';
     const heroText = (
         props.isPaginated && props.textData ?
             <pre>{props.textData[props.index]}</pre> : <pre>{props.textData}</pre>);
-    if (props.length < 1000) {
-        return (
-            <div id='tiny-amount-text-container'>
+
+    return (
+        <div>
+            <div id='shortherotext-title-container'>
+                <h2>{props.title}</h2>
+            </div>
+            <div id={styleType}>
                 {heroText}
             </div>
-        )
-    }
-    else {
-        return (
-            <div id='medium-amount-text-container'>
-                {heroText}
-            </div>
-        )
-    }
+        </div>
+
+    )
+
 }
 
 export default ShortHeroText;

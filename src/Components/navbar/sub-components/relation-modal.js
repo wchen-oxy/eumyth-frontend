@@ -93,7 +93,7 @@ class RelationModal extends React.Component {
         if (!relation.exists) {
             for (const user of data) {
                 const buttons = relation.type === "REQUESTED" ? (
-                    <div>
+                    <div className='relationmodal-button-container'>
                         <button
                             onClick={() => (
                                 this.handleStatusChange(

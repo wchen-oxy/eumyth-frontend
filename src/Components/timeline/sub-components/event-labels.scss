@@ -1,4 +1,13 @@
 @import "../timeline-event.scss";
+@import "../../../partials";
+
+#eventlabels-full-page-container {
+    @include flex-display-row;
+    margin-left: 50px;
+}
+#eventlabels-partial-page-container {
+    @include flex-display-row;
+}
 
 .eventlabels-outer-label-container {
     padding: 1px;

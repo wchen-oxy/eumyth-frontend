@@ -191,9 +191,6 @@ class Comments extends React.Component {
                         </div>);
                 }
             }
-            console.log(currentLevel, text);
-            console.log(shouldHideReplies);
-            console.log(threadIndicatorArray);
             return (
                 <div key={commentData._id}>
                     <SingleComment

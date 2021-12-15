@@ -5,11 +5,21 @@
     #relationmodal-hero-container {
         @include flex-display-row;
 
+        .relationmodal-button-container {
+            button {
+                margin: 5px;
+            }
+        }
+
         .relationmodal-column {
             width: 33.32%;
 
+            h2 {
+                text-align: center;
+            }
+
             .relationmodal-profile-row {
-                @include flex-display-row;
+                @include flex-display-column;
                 align-items: center;
 
                 .relationmodal-profile-info-container {
@@ -23,6 +33,8 @@
                 img {
                     @include tiny-profile-photo;
                     border-radius: 50%;
+                    padding-right: 5px;
+                    object-fit: cover;
                 }
             }
         }

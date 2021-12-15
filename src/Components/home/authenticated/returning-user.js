@@ -272,16 +272,11 @@ class ReturningUserPage extends React.Component {
             this.state.selectedEvent) {
             const content = (
                 <ShortPostViewer
-                    labels={this.state.labels}
-                    targetProfileID={this.state.fullUserDataID}
-                    targetIndexUserID={this.state.indexUserDataID}
+                    authUser={this.props.authUser}
                     largeViewMode={true}
-                    visitorUsername={this.state.username}
-                    key={this.state.selectedEvent._id}
                     postIndex={this.state.selectedPostIndex}
                     isOwnProfile={true}
                     isPostOnlyView={false}
-                    displayPhoto={this.state.smallCroppedDisplayPhoto}
                     preferredPostPrivacy={this.state.preferredPostPrivacy}
                     pursuitNames={this.state.pursuitObjects.names}
                     eventData={this.state.selectedEvent}

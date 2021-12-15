@@ -454,6 +454,7 @@ class ShortPostViewer extends React.Component {
                             <ShortPostMetaInfo
                                 difficulty={this.props.eventData.difficulty}
                                 isPaginated={this.state.isPaginated}
+                                isFullPage={true}
                                 progression={this.state.progression}
                                 labels={this.props.eventData.labels}
                                 pursuit={this.state.pursuitCategory}
@@ -463,6 +464,7 @@ class ShortPostViewer extends React.Component {
 
                             <div className='shortpostviewer-large-hero-text-container'>
                                 <ShortHeroText
+                                    title={this.props.eventData.title}
                                     textData={this.props.textData} />
                             </div>
                             {this.renderComments(EXPANDED)}
