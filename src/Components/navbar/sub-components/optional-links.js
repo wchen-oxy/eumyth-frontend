@@ -1,5 +1,5 @@
 import React from 'react';
-import { NEW_ENTRY_MODAL_STATE, RELATION_MODAL_STATE } from 'utils/constants/flags';
+import { NEW_ENTRY_MODAL_STATE, PEOPLE_SEARCH_STATE, RELATION_MODAL_STATE } from 'utils/constants/flags';
 import './optional-links.scss';
 
 const OptionalLinks = (props) => {
@@ -12,6 +12,15 @@ const OptionalLinks = (props) => {
                     </button>
                 </div>
             );
+        case (PEOPLE_SEARCH_STATE):
+            return (
+                <a href={'/search'}>
+                    <div className='optionallinks-action-buttons-container'>
+                        <h4>People Like You</h4>
+                    </div>
+                </a>
+            );
+
         case (RELATION_MODAL_STATE):
             return (
                 <>
@@ -30,6 +39,8 @@ const OptionalLinks = (props) => {
                     </div>
                 </>
             );
+
+
         default:
             throw new Error('Nothing matched in Optional-Links');
     }

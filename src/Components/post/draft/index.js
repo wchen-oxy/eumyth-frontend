@@ -8,7 +8,6 @@ class PostDraftController extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      onlineDraftRetrieved: false,
       localDraft: null,
       onlineDraft: null,
       isSavePending: false,

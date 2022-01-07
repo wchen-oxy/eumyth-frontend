@@ -5,7 +5,7 @@ import OptionalLinks from './sub-components/optional-links';
 import OptionsMenu from './sub-components/options-menu';
 import { withFirebase } from 'store/firebase';
 import { returnUserImageURL } from 'utils/url';
-import { NEW_ENTRY_MODAL_STATE, RELATION_MODAL_STATE } from 'utils/constants/flags';
+import { NEW_ENTRY_MODAL_STATE, PEOPLE_SEARCH_STATE, RELATION_MODAL_STATE } from 'utils/constants/flags';
 import './navigation-authorized.scss';
 
 class NavigationAuthorized extends React.Component {
@@ -45,8 +45,14 @@ class NavigationAuthorized extends React.Component {
         })
     }
     setModal(postType) {
-        this.clearModal();
-        this.props.openMasterModal(postType);
+        if (this.props.modalState
+            && postType === this.props.modalState) {
+            this.clearModal();
+        }
+        else {
+            this.clearModal();
+            this.props.openMasterModal(postType);
+        }
     }
 
     clearModal() {
@@ -91,6 +97,12 @@ class NavigationAuthorized extends React.Component {
                             <OptionalLinks
                                 username={this.props.authUser.username}
                                 linkType={NEW_ENTRY_MODAL_STATE}
+                                setModal={this.setModal}
+                            />)}
+                        {this.displayOptionalsDecider(
+                            <OptionalLinks
+                                username={this.props.authUser.username}
+                                linkType={PEOPLE_SEARCH_STATE}
                                 setModal={this.setModal}
                             />)}
                     </div>

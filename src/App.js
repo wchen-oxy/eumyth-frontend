@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import HomePage from './components/home/index';
 import AccountPage from './components/account';
-import { withAuthentication } from './store/session';
 import Navbar from './components/navbar/index';
 import ProfilePage from './components/profile';
+import GeoSearch from 'components/geo-search';
 import Test from './components/test';
+import { withAuthentication } from './store/session';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.scss';
 
 const App = () => {
@@ -58,6 +59,7 @@ const App = () => {
                         />
                         <Route exact path='/account' component={AccountPage} />
                         <Route exact path='/test' component={Test} />
+                        <Route exact path='/search' component={GeoSearch} />
                         <Route exact path='/u/:username'
                               render={(props) =>
                                     <ProfilePage

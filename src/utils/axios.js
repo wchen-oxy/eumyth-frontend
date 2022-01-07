@@ -79,15 +79,16 @@ export default class AxiosHelper {
         })
     }
 
-    static deletePost(userID, indexUserID, postID, pursuit, duration, progression) {
+    static deletePost(userPreviewID, userID, indexUserID, postID, pursuit, duration, progression) {
         return axios.delete(urls.POST_BASE_URL, {
             data: {
-                userID: userID,
-                indexUserID: indexUserID,
-                postID: postID,
-                pursuit: pursuit,
-                duration: duration,
-                progression: progression
+                userPreviewID,
+                userID,
+                indexUserID,
+                postID,
+                pursuit,
+                duration,
+                progression
             }
         });
     }

@@ -35,7 +35,8 @@ import {
     TITLE_FIELD,
     USERNAME_FIELD,
     INDEX_USER_ID_FIELD,
-    SELECTED_DRAFT_ID
+    SELECTED_DRAFT_ID,
+    USER_PREVIEW_ID_FIELD
 } from 'utils/constants/form-data';
 import './review-post.scss';
 
@@ -188,6 +189,7 @@ const ReviewPost = (props) => {
             console.log(selectedDraft);
             formData.append(SELECTED_DRAFT_ID, selectedDraft);
         }
+        if (props.authUser.userPreviewID) formData.append(USER_PREVIEW_ID_FIELD, props.authUser.userPreviewID);
         if (props.authUser.indexProfileID) formData.append(INDEX_USER_ID_FIELD, props.authUser.indexProfileID);
         if (props.previewTitle) formData.append(TITLE_FIELD, _.trim(props.previewTitle));
         if (postPrivacyType) formData.append(POST_PRIVACY_TYPE_FIELD, postPrivacyType);
@@ -244,8 +246,6 @@ const ReviewPost = (props) => {
             throw new Error('No value matched for return click.');
         }
     }
-
-    console.log(postPrivacyType)
 
     return (
         <div id='reviewpost-small-window'>

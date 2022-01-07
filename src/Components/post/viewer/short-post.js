@@ -80,8 +80,10 @@ class ShortPostViewer extends React.Component {
     }
 
     deletePostCallback() {
+        console.log(this.props.authUser)
         return AxiosHelper
             .deletePost(
+                this.props.authUser.userPreviewID,
                 this.props.authUser.profileID,
                 this.props.authUser.indexProfileID,
                 this.props.eventData._id,

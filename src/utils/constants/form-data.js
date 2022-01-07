@@ -2,6 +2,7 @@ const COVER_PHOTO_FIELD = 'coverPhoto';
 const POST_ID_FIELD = 'postID';
 const USER_ID_FIELD = 'userID';
 const INDEX_USER_ID_FIELD = 'indexUserID';
+const USER_PREVIEW_ID_FIELD = 'userPreviewID';
 
 const REMOVE_COVER_PHOTO = 'removeCoverPhoto';
 const OVERVIEW_FIELD = 'overview';
@@ -42,6 +43,7 @@ module.exports = {
     POST_ID_FIELD,
     USER_ID_FIELD,
     INDEX_USER_ID_FIELD,
+    USER_PREVIEW_ID_FIELD,
     OVERVIEW_FIELD,
     REMOVE_COVER_PHOTO,
     DISPLAY_PHOTO_FIELD,

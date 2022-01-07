@@ -57,17 +57,23 @@ class ReturningUserPage extends React.Component {
         if (this._isMounted && this.state.username) {
             const pursuitObjects =
                 this.createPursuits(this.props.authUser.pursuits);
-            return Promise.all([
-                AxiosHelper.returnMultiplePosts(this.props.authUser.recentPosts, true),
-                this.props.firebase.returnName()
-            ]).then((results) => {
-                const recentPosts = results[0].data?.posts ?? [];
-                console.log(results[1]);
+            const returnedPosts = this.props.authUser.recentPosts.length > 0 ?
+                Promise.all([
+                    AxiosHelper.returnMultiplePosts(this.props.authUser.recentPosts, true),
+                    this.props.firebase.returnName()
+                ])
+                    .then(results => {
+                        const recentPosts = results[0].data?.posts ?? [];
+                        return ([recentPosts, results[1]]);
+                    })
+                :
+                this.props.firebase.returnName().then((result) => [[], result]);
+            returnedPosts.then((results) => {
                 this.setState(
                     ({
                         firstName: results[1].firstName,
                         lastName: results[1].lastName,
-                        recentPosts: recentPosts,
+                        recentPosts: results[0],
                         hasMore: this.props.authUser.followingFeed.length > 0,
                         pursuitObjects: pursuitObjects,
                     }));
@@ -327,8 +333,8 @@ class ReturningUserPage extends React.Component {
                                 src={imageURL}>
                             </img>
                             <div className='returninguser-profile-text-container'>
-                                <p>{this.props.authUser.username}</p>
-                                <p>{this.state.firstName}</p>
+                                <p id='returninguser-username-text'>{this.props.authUser.username}</p>
+                                <p id='returninguser-name-text'>{this.state.firstName}</p>
                             </div>
                         </Link>
                     </div>
