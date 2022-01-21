@@ -32,6 +32,7 @@ const USER_TEMPLATE_URL = USER_BASE_URL + '/template';
 //UserPreview
 const USER_PREVIEW_BASE_URL = ROOT_URL + '/user-preview';
 const USER_PREVIEW_ID_URL = USER_PREVIEW_BASE_URL + '/id';
+const USER_PREVIEW_LOCATION_URL = USER_PREVIEW_BASE_URL + '/location';
 
 
 //relation
@@ -60,6 +61,12 @@ const PROJECT_FORK_URL = PROJECT_BASE_URL + '/fork';
 //pursuits
 const PURSUITS_BASE_URL = ROOT_URL + '/pursuit';
 const ALL_POSTS = PURSUITS_BASE_URL + '/all-posts';
+
+//search
+const SEARCH_BASE_URL = ROOT_URL + '/search';
+const SPOTLIGHT_URL = SEARCH_BASE_URL + '/spotlight';
+const PEOPLE_URL = SEARCH_BASE_URL + '/people';
+
 
 //index
 const INDEX_BASE_URL = ROOT_URL + '/index-user';
@@ -93,11 +100,14 @@ module.exports = {
     USER_PRIVACY_URL,
     USER_PREVIEW_BASE_URL,
     USER_PREVIEW_ID_URL,
+    USER_PREVIEW_LOCATION_URL,
     USER_TEMPLATE_URL,
     RELATION_BASE_URL,
     RELATION_STATUS_URL,
     RELATION_INFO_URL,
     RELATION_SET_FOLLOWER_URL,
+    PEOPLE_URL,
+    SPOTLIGHT_URL,
     POST_BASE_URL,
     PROJECT_BASE_URL,
     PROJECT_FORK_URL,

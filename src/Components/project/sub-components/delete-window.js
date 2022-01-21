@@ -8,7 +8,8 @@ const DeleteWindow = (props) => {
             projectID,
             shouldDeletePosts,
             props.userInfo.indexUserID,
-            props.userInfo.completeUserID
+            props.userInfo.completeUserID,
+            props.userInfo.userPreviewID
         )
             .then((result) => console.log(result))
             .catch((err) => console.log(err));

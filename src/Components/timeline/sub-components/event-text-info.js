@@ -19,7 +19,7 @@ const EventTextInfo = (props) => (
             )}
         <div className='eventtextinfo-dynamic-container' >
             <div className='eventtextinfo-all-labels-container'>
-                <EventLabels labels={props.labels} />
+              {props.labels &&  <EventLabels labels={props.labels} />}
             </div>
             <div className='eventtextinfo-comment-text-container'>
                 <p className='eventtextinfo-comment-text'>

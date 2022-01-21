@@ -1,0 +1,16 @@
+@import "../../../partials";
+
+#postfield-main-container {
+    @include flex-display-row;
+    margin: 0 auto;
+    .postfield-toggle-container {
+        padding: 20px;
+    }
+    .postfield-label {
+        padding-right: 5px;
+    }
+}
+
+#postfield-refresh-button {
+    height: fit-content;
+}

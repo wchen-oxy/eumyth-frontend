@@ -37,6 +37,7 @@ export const COLLAPSED = 'COLLAPSED';
 export const EXPANDED = 'EXPANDED';
 export const RECENT_POSTS = 'RECENT_POSTS';
 export const FRIEND_POSTS = 'FRIEND_POSTS';
+export const SPOTLIGHT_POST = 'SPOTLIGHT_POST';
 
 // POST TYPE
 export const DISPLAY = 'DISPLAY';

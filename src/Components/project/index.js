@@ -482,7 +482,6 @@ class ProjectController extends React.Component {
         const contentType = this.state.editProjectState || this.props.isContentOnlyView || this.state.selectedProject
             ?
             PROJECT_EVENT : PROJECT;
-        console.log(this.state.editProjectState);
         switch (this.state.window) {
             case (MAIN):
                 return (
@@ -503,7 +502,8 @@ class ProjectController extends React.Component {
                         <MainDisplay
                             userInfo={{
                                 indexUserID: this.props.authUser.indexProfileID,
-                                completeUserID: this.props.authUser.profileID
+                                completeUserID: this.props.authUser.profileID,
+                                userPreviewID: this.props.authUser.userPreviewID
                             }}
                             feedID={this.state.feedID}
                             contentType={contentType}

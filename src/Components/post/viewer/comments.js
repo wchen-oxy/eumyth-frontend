@@ -9,7 +9,7 @@ class Comments extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            windowType: this.props.windowType,
+
             commentText: '',
             selectedCommentThread: false,
             loadingComments: true,
@@ -27,13 +27,12 @@ class Comments extends React.Component {
         if (this.props.commentIDArray.length > 0) {
             if (this.props.visitorUsername) {
                 return AxiosHelper.getComments(
-                    JSON.stringify(this.props.commentIDArray),
-                    this.state.windowType)
+                    this.props.commentIDArray,
+                    this.props.windowType)
                     .then(
                         (result) => {
                             this.setState({
                                 loadingComments: false,
-
                             }, () => {
                                 if (this.props.postType === SHORT) {
                                     this.props.passAnnotationData(result.data.rootComments)
@@ -48,7 +47,7 @@ class Comments extends React.Component {
             else {
                 AxiosHelper.getComments(
                     JSON.stringify(this.props.commentIDArray),
-                    this.state.windowType
+                    this.props.windowType
                 )
                     .then(
                         (result) => {
@@ -77,7 +76,7 @@ class Comments extends React.Component {
         const thread = ID ? [ID] : this.props.commentIDArray;
         return AxiosHelper.getComments(
             JSON.stringify(thread),
-            this.state.windowType)
+            this.props.windowType)
             .then((result) => this.setState({
                 loadingComments: false,
                 selectedCommentThread: ID ? true : false
@@ -287,7 +286,8 @@ class Comments extends React.Component {
 
 
     render() {
-        if (this.state.windowType === COLLAPSED) {
+        console.log(this.props.fullCommentData);
+        if (this.props.windowType === COLLAPSED) {
             return (
                 <div className='comments-main-container'>
                     {this.renderCommentSectionType(COLLAPSED)}
@@ -295,7 +295,7 @@ class Comments extends React.Component {
                 </div>
             );
         }
-        else if (this.state.windowType === EXPANDED) {
+        else if (this.props.windowType === EXPANDED) {
             return (
                 <div className='comments-main-container'>
                     {this.renderCommentInput(EXPANDED)}

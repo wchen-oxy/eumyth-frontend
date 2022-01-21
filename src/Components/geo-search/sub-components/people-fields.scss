@@ -1,0 +1,20 @@
+@import "../../../partials";
+
+#peoplefields-main-container {
+    @include flex-display-row;
+    margin: 0 auto;
+    .peoplefields-toggle-container {
+        padding: 20px;
+    }
+    .peoplefields-label {
+        padding-right: 5px;
+    }
+}
+
+#peoplefields-createable-container{
+    width: 300px;
+}
+
+#peoplefields-refresh-button {
+    height: fit-content;
+}

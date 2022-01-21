@@ -24,6 +24,7 @@ import {
 } from 'utils/constants/ui-text';
 import './index.scss';
 import ShortPostViewer from '../post/viewer/short-post';
+import { createPursuitArray } from 'utils';
 
 const selectMessage = (action, isPrivate) => {
     switch (action) {
@@ -40,22 +41,7 @@ const selectMessage = (action, isPrivate) => {
     }
 }
 
-const createPursuitArray = (pursuits) => {
-    let pursuitNameArray = [];
-    let projectArray = [];
-    for (const pursuit of pursuits) {
-        pursuitNameArray.push(pursuit.name);
-        if (pursuit.projects) {
-            for (const project of pursuit.projects) {
-                projectArray.push(project);
-            }
-        }
-    }
-    return {
-        names: pursuitNameArray,
-        projects: projectArray
-    }
-}
+
 
 const filterPublicPosts = (allPosts) => {
     return allPosts.reduce((result, value) => {
@@ -86,7 +72,6 @@ class ProfilePageAuthenticated extends React.Component {
         this.state = {
             isPrivate: true,
             pursuits: null,
-            recentPosts: null,
             allPosts: null,
             allProjects: null,
             fail: false,

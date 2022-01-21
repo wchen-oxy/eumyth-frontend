@@ -7,6 +7,7 @@ const USER_PREVIEW_ID_FIELD = 'userPreviewID';
 const REMOVE_COVER_PHOTO = 'removeCoverPhoto';
 const OVERVIEW_FIELD = 'overview';
 const DISPLAY_PHOTO_FIELD = 'displayPhoto';
+const DISTANCE_FIELD = 'distance';
 const DIFFICULTY_FIELD = 'difficulty';
 const USERNAME_FIELD = 'username';
 const IS_PAGINATED_FIELD = 'isPaginated';
@@ -47,6 +48,7 @@ module.exports = {
     OVERVIEW_FIELD,
     REMOVE_COVER_PHOTO,
     DISPLAY_PHOTO_FIELD,
+    DISTANCE_FIELD,
     DIFFICULTY_FIELD,
     START_DATE_FIELD,
     END_DATE_FIELD,

@@ -1,7 +1,7 @@
 import React from 'react';
 import EventHeroContent from './timeline-event-hero-content';
 import ProjectEvent from './timeline-project-event';
-import { POST, PROJECT, PROJECT_EVENT } from 'utils/constants/flags';
+import { POST, PROJECT, PROJECT_EVENT, SPOTLIGHT_POST } from 'utils/constants/flags';
 import EventCheckbox from './sub-components/event-checkbox';
 import './timeline-event.scss';
 
@@ -35,12 +35,27 @@ const EventController = (props) => {
             </div>
         );
     }
+    else if (props.contentType === SPOTLIGHT_POST) {
+        return (
+            <div className={props.columnIndex ?
+                selectClassStyle(props.columnIndex) : 'event-middle-container'}>
+                <div onClick={props.disableModalPreview ?
+                    () => console.log('Selected')
+                    :
+                    () => props.onEventClick(post)} >
+                    <EventHeroContent
+                        post={post}
+                        commentCount={post.comment_count}
+                    />
+                </div>
+            </div>)
+    }
 
     else if (props.contentType === POST || props.contentType === PROJECT_EVENT) {
         const eventClickParams = props.isRecentEvents ?
             [post, props.index] : [props.eventIndex];
         return (
-            <div className={props.columnIndex !== null ?
+            <div className={props.columnIndex ?
                 selectClassStyle(props.columnIndex) : 'event-middle-container'}>
                 <div onClick={props.disableModalPreview ?
                     () => console.log('Selected')

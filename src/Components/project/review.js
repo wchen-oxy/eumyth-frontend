@@ -17,7 +17,8 @@ import {
     START_DATE_FIELD,
     TITLE_FIELD,
     USERNAME_FIELD,
-    USER_ID_FIELD
+    USER_ID_FIELD,
+    USER_PREVIEW_ID_FIELD
 } from 'utils/constants/form-data';
 import { EDIT, TITLE, OVERVIEW } from 'utils/constants/flags';
 
@@ -33,7 +34,6 @@ const ProjectReview = (props) => {
 
     const handlePost = () => {
         let formData = new FormData();
-
         formData.append(TITLE_FIELD, props.title);
         if (props.overview) formData.append(OVERVIEW_FIELD, props.overview);
         if (pursuit) formData.append(PURSUIT_FIELD, pursuit);
@@ -44,7 +44,6 @@ const ProjectReview = (props) => {
         if (coverPhoto) formData.append(COVER_PHOTO_FIELD, coverPhoto);
         if (labels.length > 0) formData.append(LABELS_FIELD, labels);
         for (const post of props.selectedPosts) formData.append(SELECTED_POSTS_FIELD, post);
-
         if (props.isUpdate) {
             formData.append(PROJECT_ID_FIELD, props.projectMetaData._id)
             if (removeCoverPhoto) {
@@ -71,6 +70,7 @@ const ProjectReview = (props) => {
             formData.append(DISPLAY_PHOTO_FIELD, props.authUser.smallCroppedDisplayPhotoKey)
             formData.append(USER_ID_FIELD, props.authUser.profileID);
             formData.append(INDEX_USER_ID_FIELD, props.authUser.indexProfileID);
+            formData.append(USER_PREVIEW_ID_FIELD, props.authUser.userPreviewID);
             return AxiosHelper.createProject(formData)
                 .then((result) => {
                     alert("Success!");

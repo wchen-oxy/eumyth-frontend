@@ -13,19 +13,14 @@ const PostHeader = (props) => {
         <div className='postheader-main-container'>
             <div className='postheader-author-information'>
                 <div className='postheader-display-photo-container'>
-                    <img src={
-                        props.displayPhoto ?
-                            returnUserImageURL(props.displayPhoto)
-                            :
-                            TEMP_PROFILE_PHOTO_URL
-                    } />
+                    <img src={returnUserImageURL(props.displayPhoto)} />
                 </div>
                 <div className='postheader-text-information-container'>
                     <h4>{props.username}</h4>
                     {date && <p>{date.month}, {date.day}, {date.year} </p>}
                 </div>
             </div>
-            {!props.editProjectState &&
+            {!props.editProjectState && props.isOwnProfile &&
                 <div id='postheader-main-button-container'>
                     <button onClick={() => setButtonShow(!isButtonShowing)}>...</button>
                     {props.isOwnProfile && isButtonShowing && (

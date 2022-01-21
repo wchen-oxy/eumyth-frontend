@@ -68,13 +68,19 @@ export default class AxiosHelper {
         });
     }
 
-    static deleteProject(projectID, shouldDeletePosts, indexUserID, userID) {
+    static deleteProject(
+        projectID,
+        shouldDeletePosts,
+        indexUserID,
+        userID,
+        userPreviewID) {
         return axios.delete(urls.PROJECT_BASE_URL, {
             params: {
-                projectID: projectID,
-                shouldDeletePosts: shouldDeletePosts,
-                indexUserID: indexUserID,
-                userID: userID
+                projectID,
+                shouldDeletePosts,
+                indexUserID,
+                userID,
+                userPreviewID
             }
         })
     }
@@ -97,6 +103,15 @@ export default class AxiosHelper {
         return axios.get(urls.USER_PREVIEW_ID_URL, returnUsernameObject(username));
     }
 
+    static getSimilarPeople(distance, pursuit, userPreviewIDList, latitude, longitude) {
+        return axios.get(urls.PEOPLE_URL,
+            { params: { distance, pursuit, userPreviewIDList, latitude, longitude } })
+    }
+
+    static getSpotlight(distance, latitude, longitude, userPreviewIDList) {
+        return axios.get(urls.SPOTLIGHT_URL, { params: { distance, latitude, longitude, userPreviewIDList } });
+    }
+
     static returnUserRelationInfo(username) {
         return axios.get(urls.RELATION_INFO_URL, returnUsernameObject(username));
     }
@@ -104,6 +119,8 @@ export default class AxiosHelper {
     static returnTinyDisplayPhoto(username) {
         return axios.get(urls.TINY_DISPLAY_PHOTO_URL, returnUsernameObject(username))
     }
+
+
 
     static setProfilePrivacy(username, isPrivate) {
         return axios.put(urls.USER_PRIVACY_URL, {
@@ -138,6 +155,13 @@ export default class AxiosHelper {
         })
     }
 
+    static getLocation(userPreviewID) {
+        return axios.get(urls.USER_PREVIEW_LOCATION_URL, { params: { userPreviewID: userPreviewID } });
+    }
+
+    static setLocation(latitude, longitude, userPreviewID) {
+        return axios.put(urls.USER_PREVIEW_LOCATION_URL, { latitude, longitude, userPreviewID });
+    }
     // static setDraftPreviewTitle(previewTitle) {
     //     return axios.post(urls.DRAFT_BASE_URL, { previewTitle: previewTitle });
     // }
@@ -250,7 +274,7 @@ export default class AxiosHelper {
     static getComments(rootCommentIDArray, viewingMode) {
         return axios.get(urls.COMMENT_BASE_URL, {
             params: {
-                rootCommentIDArray: rootCommentIDArray,
+                rootCommentIDArray,
                 viewingMode: viewingMode
             }
         })

@@ -59,7 +59,19 @@ const App = () => {
                         />
                         <Route exact path='/account' component={AccountPage} />
                         <Route exact path='/test' component={Test} />
-                        <Route exact path='/search' component={GeoSearch} />
+                        <Route exact path='/search'
+                              render={(props) =>
+                                    <GeoSearch
+                                          {...props}
+                                          returnModalStructure={returnModalStructure}
+                                          openMasterModal={openModal}
+                                          closeMasterModal={closeModal}
+                                          modalState={modalState}
+
+                                    />
+                              }
+                        />
+
                         <Route exact path='/u/:username'
                               render={(props) =>
                                     <ProfilePage
