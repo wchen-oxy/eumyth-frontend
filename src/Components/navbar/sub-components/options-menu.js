@@ -42,13 +42,19 @@ class OptionsMenu extends React.Component {
                             {this.props.shouldHideFriendsTab ?
                                 null
                                 :
-                                <div className='optionsmenu-button-container'>
+                                <div
+                                    className='optionsmenu-button-container'
+                                    onClick={() => this.props.closeModal()}
+                                >
                                     <Link to={'/account'}>Edit Your Profile</Link>
                                 </div>
                             }
 
                             <div className='optionsmenu-button-container'>
-                                <button onClick={this.props.firebase.doSignOut}>
+                                <button onClick={() => {
+                                    this.props.closeModal();
+                                    this.props.firebase.doSignOut();
+                                }}>
                                     <h4>Sign Out</h4>
                                 </button>
                             </div>

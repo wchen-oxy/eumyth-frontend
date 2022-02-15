@@ -16,7 +16,19 @@ import {
 import './index.scss';
 import PhotoContainer from './photo-container';
 
-const AccountPage = (props) => {
+const AccountPage = (props) =>
+(<AuthUserContext.Consumer>
+  {
+    authUser =>
+      <AuthenticatedAccountPage
+        {...props}
+        authUser={authUser}
+      />
+
+  }
+</AuthUserContext.Consumer>);
+
+const AuthenticatedAccountPage = (props) => {
   const [isEditingDisplay, setIsEditingDisplay] = useState(false);
   const [isEditingCover, setIsEditingCover] = useState(false);
   const [indexUserID, setIndexUserID] = useState(null);
@@ -136,7 +148,11 @@ const AccountPage = (props) => {
 
   const handleBioSubmit = () => {
     return (
-      AxiosHelper.updateBio(bio, props.firebase.returnUsername())
+      AxiosHelper.updateBio(
+        props.authUser.userPreviewID,
+        props.authUser.indexProfileID,
+        props.authUser.profileID,
+        bio)
         .then(() => {
           alert('Successfully updated your bio!');
           window.location.reload();
@@ -266,69 +282,67 @@ const AccountPage = (props) => {
       rotateImage={setDisplayPhotoRotation}
       setEditorRef={setAvatarEditorInstance}
     />;
-  return (
-    <AuthUserContext.Consumer>
-      {
-        authUser => {
-          return (
-            <div id='account-container'>
-              <h1>Account: {authUser.email}</h1>
-              <div className='account-section-container'>
-                <PhotoContainer
-                  type={DISPLAY}
-                  isEditing={isEditingDisplay}
-                  setIsEditingPhoto={setIsEditingDisplay}
-                  setPhoto={setDisplayPhoto}
-                  showPhotoEditor={showPhotoEditor}
-                  photoExists={displayPhoto}
-                  photoRef={displayPhotoRef}
-                  profilePhotoEditor={profilePhotoEditor}
-                  submitPhoto={submitPhoto}
-                  removePhoto={removePhoto}
-                />
-              </div>
-              <div className='account-section-container'>
-                <PhotoContainer
-                  type={COVER}
-                  isEditing={isEditingCover}
-                  setIsEditingPhoto={setIsEditingCover}
-                  setPhoto={setCoverPhoto}
-                  showPhotoEditor={showPhotoEditor}
-                  photoExists={coverPhoto}
-                  photoRef={coverPhotoRef}
-                  profilePhotoEditor={profilePhotoEditor}
-                  submitPhoto={submitPhoto}
-                  removePhoto={removePhoto}
-                />
-              </div>
-              <div id='account-bio-container' className='account-section-container'>
-                <label>Bio</label>
-                <textarea
-                  type='text'
-                  onChange={e => setBioText(e.target.value)}
-                  value={bio}
-                  maxLength={500}
-                />
-                <button onClick={handleBioSubmit}>
-                  Submit Bio
-                </button>
-              </div>
+  console.log(props.authUser)
 
-              <div className='account-section-container'>
-                <label>
-                  Choose the privacy of your profile!
-                </label>
-                <select
-                  value={isPrivate ? PRIVATE : PUBLIC}
-                  onChange={(e) => handleProfilePrivacyChange(e.target.value)}>
-                  <option key='private' value={PRIVATE}>Private</option>
-                  <option key='public' value={PUBLIC}>Public</option>
-                </select>
-              </div>
-              <div className='account-section-container'>
-                <PasswordChangeForm />
-              </div>
-              {/* 
+  return (
+    <div id='account-container'>
+      <h1>Account: {props.authUser.email}</h1>
+      <div className='account-section-container'>
+        <PhotoContainer
+          type={DISPLAY}
+          isEditing={isEditingDisplay}
+          setIsEditingPhoto={setIsEditingDisplay}
+          setPhoto={setDisplayPhoto}
+          showPhotoEditor={showPhotoEditor}
+          photoExists={displayPhoto}
+          photoRef={displayPhotoRef}
+          profilePhotoEditor={profilePhotoEditor}
+          submitPhoto={submitPhoto}
+          removePhoto={removePhoto}
+        />
+      </div>
+      <div className='account-section-container'>
+        <PhotoContainer
+          type={COVER}
+          isEditing={isEditingCover}
+          setIsEditingPhoto={setIsEditingCover}
+          setPhoto={setCoverPhoto}
+          showPhotoEditor={showPhotoEditor}
+          photoExists={coverPhoto}
+          photoRef={coverPhotoRef}
+          profilePhotoEditor={profilePhotoEditor}
+          submitPhoto={submitPhoto}
+          removePhoto={removePhoto}
+        />
+      </div>
+      <div id='account-bio-container' className='account-section-container'>
+        <label>Bio</label>
+        <textarea
+          type='text'
+          onChange={e => setBioText(e.target.value)}
+          value={bio}
+          maxLength={500}
+        />
+        <button onClick={handleBioSubmit}>
+          Submit Bio
+        </button>
+      </div>
+
+      <div className='account-section-container'>
+        <label>
+          Choose the privacy of your profile!
+        </label>
+        <select
+          value={isPrivate ? PRIVATE : PUBLIC}
+          onChange={(e) => handleProfilePrivacyChange(e.target.value)}>
+          <option key='private' value={PRIVATE}>Private</option>
+          <option key='public' value={PUBLIC}>Public</option>
+        </select>
+      </div>
+      <div className='account-section-container'>
+        <PasswordChangeForm />
+      </div>
+      {/* 
               <div
                 id='account-template-container'
                 className='account-section-container'>
@@ -349,12 +363,9 @@ const AccountPage = (props) => {
                   Submit Template
                 </button>
               </div> */}
-            </div>
-          );
-        }
-      }
-    </AuthUserContext.Consumer>
+    </div>
   );
+
 }
 
 const condition = authUser => !!authUser;

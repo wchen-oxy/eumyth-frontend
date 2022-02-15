@@ -1,9 +1,13 @@
 import EventController from 'components/timeline/timeline-event-controller';
 import React from 'react';
 import AxiosHelper from 'utils/axios';
-import { SPOTLIGHT_POST } from 'utils/constants/flags';
+import { PROJECT, SPOTLIGHT_POST } from 'utils/constants/flags';
 import { returnUserImageURL } from 'utils/url';
+import { useNavigate } from "react-router-dom";
+
 import './tab.scss';
+
+//FIXME The project is not being used
 
 class Tab extends React.Component {
     _isMounted = false;
@@ -11,11 +15,14 @@ class Tab extends React.Component {
         super(props);
         this.state = {
             isLoaded: false,
-            content: { upper: null, lower: null }
+            content: { upper: null, lower: null },
+            containsProject: false
         }
         this.returnPosts = this.returnPosts.bind(this);
         this.returnProject = this.returnProject.bind(this);
         this.setContent = this.setContent.bind(this);
+        this.renderUppercontent = this.renderUppercontent.bind(this);
+        this.handleProjectClick = this.handleProjectClick.bind(this);
     }
 
     componentDidMount() {
@@ -43,20 +50,18 @@ class Tab extends React.Component {
 
         if (this._isMounted && postArray.length > 0) {
             if (projectContent) {
-                console.log(projectContent);
                 return Promise
                     .all([
-                        this.returnPosts(postArray),
-                        this.returnProject(projectContent)
+                        this.returnPosts([contentObj['lower']]),
+                        this.returnProject(contentObj['upper'])
                     ])
                     .then(results => {
-                        const data = results[1].data;
-                        this.setContent(results[0], data)
+                        this.setContent(results, true)
                     });
             }
             else {
                 return this.returnPosts(postArray)
-                    .then(result => this.setContent(result));
+                    .then(result => this.setContent(result, false));
             }
         }
     }
@@ -65,10 +70,11 @@ class Tab extends React.Component {
         this._isMounted = false;
     }
 
-    setContent(content, project) {
+    setContent(content, containsProject) {
+
         this.setState({
             content,
-            project,
+            containsProject,
             isLoaded: true
         })
     }
@@ -96,28 +102,49 @@ class Tab extends React.Component {
 
     returnProject(id) {
         return AxiosHelper
-            .returnProject(id)
-            .then(results => {
-                console.log(results);
-            })
+            .returnSingleProject(id)
+            .then(results => results.project)
+    }
+
+    renderUppercontent() {
+        if (this.state.containsProject) {
+            return (
+                < EventController
+                    isRecentEvents={false}
+                    contentType={PROJECT}
+                    key={'Project'}
+                    eventData={this.state.content.upper}
+                    onProjectClick={this.handleProjectClick}
+                />)
+        }
+        return (
+            < EventController
+                isRecentEvents={false}
+                contentType={SPOTLIGHT_POST}
+                key={'First Post'}
+                eventData={this.state.content.upper}
+                onEventClick={this.props.onEventClick}
+            />)
+    }
+
+    handleProjectClick(project){
+        let navigate = useNavigate();
+        navigate("/c/" + project._id, { replace: false });
     }
 
     render() {
+
         return (
             <div key={this.props.user._id} className='tab-container'>
                 <div className='tab-profile-photo-container'>
                     <img src={returnUserImageURL(this.props.user.small_cropped_display_photo_key)}></img>
                 </div>
-                <h3>{this.props.user.first_name + " " + this.props.user.last_name}</h3>
-                <div>
+                <a href={'/u/' + this.props.user.username}><h3>{this.props.user.first_name + " " + this.props.user.last_name}</h3></a>
+                <div className='tab-event-container'>
+
                     {this.state.content.upper &&
-                        <EventController
-                            isRecentEvents={false}
-                            contentType={SPOTLIGHT_POST}
-                            key={'First Post'}
-                            eventData={this.state.content.upper}
-                            onEventClick={this.props.onEventClick}
-                        />}
+                        this.renderUppercontent()
+                    }
                     {this.state.content.lower &&
                         <EventController
                             isRecentEvents={false}

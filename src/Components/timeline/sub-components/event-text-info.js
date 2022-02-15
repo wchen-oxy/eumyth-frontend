@@ -11,15 +11,13 @@ const EventTextInfo = (props) => (
             &&
             (
                 <div className='eventtextinfo-progression-container'>
-                    <p>
-                        {props.pursuitCategory}
-                        {props.progression === 2 && ' ' + 'MileStone'}
-                    </p>
+                    <h5>{props.pursuitCategory}</h5>
+                    <p> {props.progression === 2 && ' ' + 'MileStone'}     </p>
                 </div>
             )}
         <div className='eventtextinfo-dynamic-container' >
             <div className='eventtextinfo-all-labels-container'>
-              {props.labels &&  <EventLabels labels={props.labels} />}
+                {props.labels && <EventLabels labels={props.labels} />}
             </div>
             <div className='eventtextinfo-comment-text-container'>
                 <p className='eventtextinfo-comment-text'>

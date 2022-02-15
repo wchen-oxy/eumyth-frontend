@@ -110,7 +110,7 @@ export default class WelcomePage extends React.Component {
     this.props.firebase.doSignIn(this.state.email, this.state.password)
       .then((result) => {
         if (result) {
-          if (result.user.emailVerified) this.props.history.push('/');
+          if (result.user.emailVerified) this.props.navigate('/', { replace: true });
           else {
             this.handleVerifiedState(result.user.emailVerified);
           }

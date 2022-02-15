@@ -5,7 +5,7 @@ import { checkInputNotNull } from 'utils/validator';
 import './people-fields.scss'
 
 const defaultOption = { label: 'Search Only Your Pursuits', value: 'ALL' };
-const formatPrompt = (string) => "Add " + string;
+const formatPrompt = (string) => string;
 const PeopleFields = (props) => {
     const formatOptions = (data) => data.map((value) => {
         if (value === 'ALL') return ({ label: 'Search Only Your Pursuits', value: value });
@@ -21,7 +21,6 @@ const PeopleFields = (props) => {
             return props.onFieldChange(PURSUIT_FIELD, null);
         }
     }
-    console.log(props.selectedPursuit)
     return (
         <div id='peoplefields-main-container'>
             <div id='peoplefields-createable-container'
@@ -34,7 +33,18 @@ const PeopleFields = (props) => {
                     onChange={onValueChange}
 
                 />
+                <div id='peoplefields-distance-container'>
+                    <select onChange={(e) => props.onDistanceChange(e.target.value)}>
+                        <option value={10}>10 Miles</option>
+                        <option value={50}>50 Miles</option>
+                        <option value={100}>100 Miles</option>
+                        <option value={250}>250 Miles</option>
+                        <option value={500}>500 Miles</option>
+                    </select>
+
+                </div>
             </div>
+
             <div className='peoplefields-toggle-container'>
                 <button
                     id="peoplefields-refresh-button"

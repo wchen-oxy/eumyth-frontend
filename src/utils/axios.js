@@ -192,6 +192,12 @@ export default class AxiosHelper {
         })
     }
 
+    static getSpotlightProjects(quantity, pursuitArray) {
+        return axios.get(urls.PROJECT_SPOTLIGHT_URL, {
+            params: { quantity, pursuitArray }
+        })
+    }
+
     static returnSingleProject(projectID) {
         return axios.get(urls.SINGLE_PROJECT_URL, {
             params: {
@@ -256,10 +262,9 @@ export default class AxiosHelper {
         return axios.get(urls.USER_ACCOUNT_SETTINGS_INFO_URL, returnUsernameObject(username))
     }
 
-    static updateBio(bio, username) {
+    static updateBio(userPreviewID, indexUserID, userID, bio) {
         return axios.put(urls.USER_BIO_URL, {
-            bio: bio,
-            username: username,
+            userPreviewID, indexUserID, userID, bio
         });
     }
 
@@ -362,7 +367,32 @@ export default class AxiosHelper {
             voteValue: voteValue,
         });
     }
+    static voteOnProject(projectID, userPreviewID, voteValue) {
+        return axios.put(urls.PROJECT_VOTE_URL, {
+            projectID,
+            userPreviewID,
+            voteValue
+        })
+    }
 
+    static bookmarkProject(projectID, userPreviewID, bookmarkState) {
+        return axios.put(urls.PROJECT_BOOKMARK_URL,
+            {
+                projectID,
+                userPreviewID,
+                bookmarkState
+            })
+    }
+
+    static searchProject(pursuit, projectIDList) {
+        console.log(projectIDList);
+        return axios.get(urls.SEARCH_PROJECT_URL, {
+            params: {
+                pursuit,
+                projectIDList
+            }
+        })
+    }
     // static saveTitle(payload) {
     //     return axios.put(urls.DRAFT_TITLE_URL, payload);
     // }

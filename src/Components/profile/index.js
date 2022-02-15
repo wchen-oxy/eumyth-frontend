@@ -1,5 +1,4 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 import PursuitHolder from './sub-components/pursuit-holder';
 import AxiosHelper from 'utils/axios';
 import { AuthUserContext } from 'store/session';
@@ -19,9 +18,8 @@ import {
     FOLLOW_REQUESTED_STATE,
     FOLLOWED_STATE
 } from 'utils/constants/flags';
-import {
+import withRouter from 'utils/withRouter';
 
-} from 'utils/constants/ui-text';
 import './index.scss';
 import ShortPostViewer from '../post/viewer/short-post';
 import { createPursuitArray } from 'utils';
@@ -108,7 +106,7 @@ class ProfilePageAuthenticated extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
-        const params = this.props.match.params;
+        const params = this.props.match;
         const targetUsername = params.username;
         const requestedPostID = params.postID;
         const requestedProjectID = params.projectID;
@@ -134,10 +132,10 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     componentDidUpdate() {
-        const username = this.props.match.params.username;
+        const username = this.props.match.username;
         const isSamePage = username !== this.state.profileData?.username;
-        const isViewingPost = this.props.match.params.postID ? true : false;
-        const isViewingProject = this.props.match.params.projectID ? true : false;
+        const isViewingPost = this.props.match.postID ? true : false;
+        const isViewingProject = this.props.match.projectID ? true : false;
         const isNewURL = !this.state.fail && isSamePage && !isViewingPost && !isViewingProject;
         if (isNewURL) {
             return this.loadProfile(username, POST);
@@ -284,10 +282,10 @@ class ProfilePageAuthenticated extends React.Component {
             feedIDList: feedIDList
         }, () => {
             if (contentType === PROJECT) {
-                this.props.history.replace(returnUsernameURL(this.state.profileData.username) + '/' + PROJECT.toLowerCase())
+                this.props.navigate(returnUsernameURL(this.state.profileData.username) + '/' + PROJECT.toLowerCase(), { replace: false })
             }
             else {
-                this.props.history.replace(returnUsernameURL(this.state.profileData.username));
+                this.props.navigate(returnUsernameURL(this.state.profileData.username), { replace: true });
             }
         });
     }
@@ -472,6 +470,7 @@ class ProfilePageAuthenticated extends React.Component {
             }
         }
         else if (!this.state.isContentOnlyView) {
+            console.log(this.props.authUser);
             const targetUsername = this.state.profileData?.username ?? '';
             const targetProfilePhoto = returnUserImageURL(this.props.authUser?.croppedDisplayPhotoKey ?? null);
             return (
@@ -500,7 +499,7 @@ class ProfilePageAuthenticated extends React.Component {
                                 </div>
                             </div>
                             <div id='profile-biography'>
-                                {this.state.profileData.bio && <p>{this.state.bio}</p>}
+                                {this.state.profileData.bio && <p>{this.state.profileData.bio}</p>}
                             </div>
                             <div id='profile-pursuits-container'>
                                 {pursuitHolderArray}

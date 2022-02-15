@@ -1,3 +1,4 @@
+
 export const createPursuitArray = (pursuits) => {
     let pursuitNameArray = [];
     let projectArray = [];
@@ -13,6 +14,6 @@ export const createPursuitArray = (pursuits) => {
         names: pursuitNameArray,
         projects: projectArray
     }
-}; 
+};
 
-export const formatReactSelectOptions = (data) =>  data.map((value) => ({ label: value, value: value }));
+export const formatReactSelectOptions = (data) => data.map((value) => ({ label: value, value: value }));

@@ -1,0 +1,30 @@
+@import "../../../partials";
+
+.spotlightpreview-main-container {
+    min-width: 400px;
+    padding:50px;
+}
+
+.spotlightpreview-cover-container{
+    img {
+        height: auto;
+        width: 100%;
+        max-width: 400px;
+    }
+}
+.spotlightpreview-display-container {
+    @include flex-display-row;
+    align-items: baseline;
+
+    img {
+        @include tiny-profile-photo;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: auto 5px;
+        margin-right: 15px;
+    }
+}
+
+.spotlightpreview-posts {
+    @include flex-display-row;
+}

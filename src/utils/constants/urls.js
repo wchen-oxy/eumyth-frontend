@@ -57,6 +57,9 @@ const PROJECT_BASE_URL = ROOT_URL + '/project';
 const SINGLE_PROJECT_URL = PROJECT_BASE_URL + '/single';
 const MULTIPLE_PROJECTS_URL = PROJECT_BASE_URL + '/multiple';
 const PROJECT_FORK_URL = PROJECT_BASE_URL + '/fork';
+const PROJECT_SPOTLIGHT_URL = PROJECT_BASE_URL + '/spotlight';
+const PROJECT_VOTE_URL = PROJECT_BASE_URL + '/vote';
+const PROJECT_BOOKMARK_URL = PROJECT_BASE_URL + '/bookmark';
 
 //pursuits
 const PURSUITS_BASE_URL = ROOT_URL + '/pursuit';
@@ -66,6 +69,7 @@ const ALL_POSTS = PURSUITS_BASE_URL + '/all-posts';
 const SEARCH_BASE_URL = ROOT_URL + '/search';
 const SPOTLIGHT_URL = SEARCH_BASE_URL + '/spotlight';
 const PEOPLE_URL = SEARCH_BASE_URL + '/people';
+const SEARCH_PROJECT_URL = SEARCH_BASE_URL + '/projects';
 
 
 //index
@@ -80,6 +84,7 @@ const REPLY_COMMENT_URL = COMMENT_BASE_URL + '/reply';
 const REFRESH_COMMENTS_URL = COMMENT_BASE_URL + '/refresh';
 const VOTE_ON_COMMENT_URL = COMMENT_BASE_URL + '/vote';
 
+ 
 module.exports = {
     BUCKET_NAME,
     REGION,
@@ -111,6 +116,9 @@ module.exports = {
     POST_BASE_URL,
     PROJECT_BASE_URL,
     PROJECT_FORK_URL,
+    PROJECT_SPOTLIGHT_URL,
+    PROJECT_BOOKMARK_URL,
+    PROJECT_VOTE_URL,
     SINGLE_PROJECT_URL,
     MULTIPLE_PROJECTS_URL,
     MULTIPLE_POSTS_URL,
@@ -118,6 +126,7 @@ module.exports = {
     NO_IMAGE_POST_URL,
     SOCIAL_FEED_POSTS_URL,
     POST_DISPLAY_PHOTO_URL,
+    SEARCH_PROJECT_URL,
     SINGLE_POST_TEXT_DATA_URL,
     INDEX_BASE_URL,
     CHECK_USERNAME_URL,

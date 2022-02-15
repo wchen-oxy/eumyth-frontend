@@ -31,7 +31,7 @@ const ProjectReview = (props) => {
     const [coverPhoto, setCoverPhoto] = useState(null);
     const [labels, setLabels] = useState([]);
     const [removeCoverPhoto, setRemoveCoverPhoto] = useState(null);
-
+   
     const handlePost = () => {
         let formData = new FormData();
         formData.append(TITLE_FIELD, props.title);
@@ -42,7 +42,13 @@ const ProjectReview = (props) => {
         if (isComplete) formData.append(IS_COMPLETE_FIELD, isComplete);
         if (duration !== 0) formData.append(MIN_DURATION_FIELD, duration);
         if (coverPhoto) formData.append(COVER_PHOTO_FIELD, coverPhoto);
-        if (labels.length > 0) formData.append(LABELS_FIELD, labels);
+        if (labels.length > 0) {
+            for (const label of labels) {
+                console.log(label);
+                formData.append(LABELS_FIELD, label.value);
+            }
+        }
+        if (props.authUser.smallCroppedDisplayPhotoKey) formData.append(DISPLAY_PHOTO_FIELD, props.authUser.smallCroppedDisplayPhotoKey)
         for (const post of props.selectedPosts) formData.append(SELECTED_POSTS_FIELD, post);
         if (props.isUpdate) {
             formData.append(PROJECT_ID_FIELD, props.projectMetaData._id)
@@ -67,7 +73,7 @@ const ProjectReview = (props) => {
         }
         else {
             formData.append(USERNAME_FIELD, props.authUser.username);
-            formData.append(DISPLAY_PHOTO_FIELD, props.authUser.smallCroppedDisplayPhotoKey)
+
             formData.append(USER_ID_FIELD, props.authUser.profileID);
             formData.append(INDEX_USER_ID_FIELD, props.authUser.indexProfileID);
             formData.append(USER_PREVIEW_ID_FIELD, props.authUser.userPreviewID);
@@ -79,6 +85,7 @@ const ProjectReview = (props) => {
                 .catch(err => console.log(err));
         }
     }
+    console.log(labels);
 
     return (
         <div >

@@ -1,10 +1,10 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 import Timeline from '../timeline/index';
 import ProfileModal from '../profile/profile-modal';
 import EventController from '../timeline/timeline-event-controller';
 import { returnUsernameURL, returnPostURL } from 'utils/url';
 import { POST, POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
+import withRouter from 'utils/withRouter';
 
 class PostController extends React.Component {
     constructor(props) {
@@ -86,7 +86,7 @@ class PostController extends React.Component {
     }
 
     setModal(postID) {
-        this.props.history.replace(returnPostURL(postID));
+        this.props.navigate(returnPostURL(postID), { replace: true });
         this.props.openMasterModal(POST_VIEWER_MODAL_STATE);
     }
 
@@ -94,7 +94,7 @@ class PostController extends React.Component {
         const username = this.state.feedData[this.state.selectedEventIndex].username;
         this.setState(
             { selectedEventIndex: null }, () => {
-                this.props.history.replace(returnUsernameURL(username));
+                this.props.navigate(returnUsernameURL(username), { replace: true });
                 this.props.closeMasterModal();
             });
     }

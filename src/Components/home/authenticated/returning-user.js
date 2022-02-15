@@ -221,7 +221,7 @@ class ReturningUserPage extends React.Component {
 
     handlePursuitClick(e) {
         e.preventDefault();
-        this.props.history.push(this.state.username);
+        this.props.navigate(this.state.username, { replace: false });
     }
 
     handleRecentWorkClick(e, value) {

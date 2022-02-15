@@ -6,7 +6,7 @@ import ProjectHeader from './project-header';
 import ProjectSelectHeader from './sub-components/project-select-header';
 import ProjectUtilityButtons from './sub-components/project-utility-buttons';
 
-import { PROJECT, PROJECT_CONTENT_ONLY_VIEW_STATE, PROJECT_MICRO_VIEW_STATE } from 'utils/constants/flags';
+import { PROJECT_CONTENT_ONLY_VIEW_STATE, PROJECT_MICRO_VIEW_STATE } from 'utils/constants/flags';
 
 const MainDisplay = (props) => {
     console.log(props.projectMetaData)

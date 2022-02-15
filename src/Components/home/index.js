@@ -2,11 +2,13 @@ import React from 'react';
 import { compose } from 'recompose';
 import WelcomePage from './unauthenticated/index';
 import UserHomePage from './authenticated/index';
-import { withRouter } from 'react-router-dom';
+import withRouter from 'utils/withRouter';
 import { withFirebase } from 'store/firebase';
 import { AuthUserContext } from 'store/session';
 
 const HomePage = (props) => {
+
+    console.log(props);
     return (
         <>
             <AuthUserContext.Consumer>

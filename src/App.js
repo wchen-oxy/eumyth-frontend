@@ -4,9 +4,15 @@ import AccountPage from './components/account';
 import Navbar from './components/navbar/index';
 import ProfilePage from './components/profile';
 import GeoSearch from 'components/geo-search';
+import Published from 'components/published';
 import Test from './components/test';
 import { withAuthentication } from './store/session';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+      BrowserRouter,
+      Router,
+      Routes,
+      Route
+} from 'react-router-dom';
 import './App.scss';
 
 const App = () => {
@@ -37,18 +43,18 @@ const App = () => {
             );
       };
       return (
-            <Router>
+            <BrowserRouter>
                   <Navbar
                         returnModalStructure={returnModalStructure}
                         openMasterModal={openModal}
                         closeMasterModal={closeModal}
                         modalState={modalState}
                   />
-                  <Switch>
-                        <Route exact path='/'
-                              render={(props) =>
+                  <Routes>
+                        <Route path='/'
+                              element={
                                     <HomePage
-                                          {...props}
+
                                           returnModalStructure={returnModalStructure}
                                           openMasterModal={openModal}
                                           closeMasterModal={closeModal}
@@ -57,12 +63,21 @@ const App = () => {
                                     />
                               }
                         />
-                        <Route exact path='/account' component={AccountPage} />
-                        <Route exact path='/test' component={Test} />
-                        <Route exact path='/search'
-                              render={(props) =>
+                        <Route path='account' element={<AccountPage />} />
+                        {/* <Route exact path='test' element={Test} /> */}
+                        <Route path='works'
+                              element={
+                                    <Published
+                                          returnModalStructure={returnModalStructure}
+                                          openMasterModal={openModal}
+                                          closeMasterModal={closeModal}
+                                          modalState={modalState}
+                                    />
+                              }
+                        />
+                        <Route path='search'
+                              element={
                                     <GeoSearch
-                                          {...props}
                                           returnModalStructure={returnModalStructure}
                                           openMasterModal={openModal}
                                           closeMasterModal={closeModal}
@@ -72,10 +87,9 @@ const App = () => {
                               }
                         />
 
-                        <Route exact path='/u/:username'
-                              render={(props) =>
+                        <Route path='u/:username'
+                              element={
                                     <ProfilePage
-                                          {...props}
                                           returnModalStructure={returnModalStructure}
                                           openMasterModal={openModal}
                                           closeMasterModal={closeModal}
@@ -84,10 +98,9 @@ const App = () => {
                                     />
                               }
                         />
-                        <Route exact path='/u/:username/project'
-                              render={(props) =>
+                        <Route path='u/:username/project'
+                              element={
                                     <ProfilePage
-                                          {...props}
                                           returnModalStructure={returnModalStructure}
                                           openMasterModal={openModal}
                                           closeMasterModal={closeModal}
@@ -96,9 +109,8 @@ const App = () => {
                                     />
                               }
                         />
-                        <Route exact path='/p/:postID' render={(props) =>
+                        <Route path='p/:postID' element={
                               <ProfilePage
-                                    {...props}
                                     returnModalStructure={returnModalStructure}
                                     openMasterModal={openModal}
                                     closeMasterModal={closeModal}
@@ -107,9 +119,8 @@ const App = () => {
 
                               />
                         } />
-                        <Route exact path='/c/:projectID' render={(props) =>
+                        <Route path='c/:projectID' element={
                               <ProfilePage
-                                    {...props}
                                     returnModalStructure={returnModalStructure}
                                     openMasterModal={openModal}
                                     closeMasterModal={closeModal}
@@ -117,9 +128,9 @@ const App = () => {
                                     isProjectView={false}
                               />
                         } />
-                  </Switch>
+                  </Routes>
 
-            </Router>
+            </BrowserRouter>
       )
 }
 

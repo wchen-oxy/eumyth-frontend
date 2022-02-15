@@ -2,7 +2,7 @@ import React from 'react';
 import Tab from './sub-components/tab';
 import './spotlight.scss';
 
-const Spotlight = (props) => {
+const GeoSpotlight = (props) => {
     const tabArray = props.users.map(user =>
         <Tab
             key={user._id}
@@ -20,4 +20,4 @@ const Spotlight = (props) => {
     )
 }
 
-export default Spotlight;
+export default GeoSpotlight;

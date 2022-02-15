@@ -17,9 +17,16 @@
             margin: 0 auto;
         }
     }
-
-    h3{
+    a {
+        color: black;
+        text-decoration: none; /* no underline */
+    }
+    h3 {
         margin: 0 auto;
         text-align: center;
+    }
+
+    .tab-event-container {
+        margin-top: 20px;
     }
 }

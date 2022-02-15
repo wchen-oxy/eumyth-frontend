@@ -1,18 +1,13 @@
-import Axios from 'axios';
-import { result } from 'lodash';
 import React from 'react';
-import { AuthUserContext, withAuthorization } from 'store/session';
+import { AuthUserContext } from 'store/session';
 import AxiosHelper from 'utils/axios';
 import Results from './results';
-import Spotlight from './spotlight';
-import './index.scss';
+import GeoSpotlight from './geo-spotlight';
 import ShortPostViewer from 'components/post/viewer/short-post';
-import { POST, POST_VIEWER_MODAL_STATE, SPOTLIGHT_POST } from 'utils/constants/flags';
-import { withFirebase } from 'store/firebase';
-import { DIFFICULTY_FIELD, DISTANCE_FIELD, PROGRESSION_FIELD, PURSUIT_FIELD } from 'utils/constants/form-data';
-import PostFields from './sub-components/post-fields';
 import PeopleFields from './sub-components/people-fields';
-import { createPursuitArray } from 'utils';
+import { POST_VIEWER_MODAL_STATE, SPOTLIGHT_POST } from 'utils/constants/flags';
+import { DIFFICULTY_FIELD, DISTANCE_FIELD, PROGRESSION_FIELD, PURSUIT_FIELD } from 'utils/constants/form-data';
+import './index.scss';
 
 const SPOTLIGHT = 'SPOTLIGHT';
 const RESULTS = 'RESULTS';
@@ -22,6 +17,10 @@ const options = {
     timeout: 5000,
     maximumAge: 0
 };
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
+
 
 const GeoSearch = (props) =>
 (<AuthUserContext.Consumer>
@@ -47,7 +46,7 @@ class AuthenticatedGeoSearch extends React.Component {
             pursuits: this.props.authUser.pursuits.map(item => item.name),
             selectedContent: null,
 
-            distance: 5,
+            distance: 10,
             difficulty: 0,
             progression: 1,
             selectedPursuit: 'ALL',
@@ -61,6 +60,7 @@ class AuthenticatedGeoSearch extends React.Component {
         this.handleEventClick = this.handleEventClick.bind(this);
         this.handleFieldChange = this.handleFieldChange.bind(this);
         this.handleRefreshClick = this.handleRefreshClick.bind(this);
+        this.handleDistanceChange = this.handleDistanceChange.bind(this);
         this.refreshResults = this.refreshResults.bind(this);
 
 
@@ -133,8 +133,9 @@ class AuthenticatedGeoSearch extends React.Component {
     }
 
     handleEventClick(selectedContent, postIndex) {
+        console.log(selectedContent)
         this.setState({
-            selectedContent: selectedContent,
+            selectedContent,
         }, this.setModal());
 
     }
@@ -142,6 +143,7 @@ class AuthenticatedGeoSearch extends React.Component {
     renderModal() {
         if (this.props.modalState === POST_VIEWER_MODAL_STATE &&
             this.state.selectedContent) {
+            console.log(this.state.selectedContent);
             const formattedTextData = this.state.selectedContent?.text_data && this.state.selectedContent.is_paginated ?
                 JSON.parse(this.state.selectedContent.text_data) : this.state.selectedContent.text_data;
 
@@ -190,25 +192,36 @@ class AuthenticatedGeoSearch extends React.Component {
         this.setState({ loading: true }, this.refreshResults)
     }
 
+    handleDistanceChange(distance) {
+        this.setState({ distance })
+    }
+
     refreshResults() {
         const selectedPursuit = this.state.selectedPursuit === 'ALL' ?
-            this.state.pursuits.slice(1) : [this.state.selectedPursuit];
-        // const selectedPeople = this.state.people.map(person => person._id);
+            this.state.pursuits.slice(1) : [capitalize(this.state.selectedPursuit)];
+        const selectedPeople = this.state.people.map(person => person._id);
+        selectedPeople.push(this.props.authUser.userPreviewID);
         AxiosHelper
             .getSimilarPeople(
                 this.state.distance,
                 selectedPursuit,
-                [],
+                selectedPeople,
                 this.state.lat,
                 this.state.long,
             )
             .then(results => {
                 console.log(results);
-                this.setState({
-                    people: results.data.users,
-                    loading: false,
-                    resultState: RESULTS
-                })
+                if (results.data.users.length === 0 && this.state.people.length === 0) {
+                    return;
+                }
+                else {
+                    let people = this.state.people.concat(results.data.users);
+                    this.setState({
+                        people,
+                        loading: false,
+                        resultState: RESULTS
+                    })
+                }
             })
     }
 
@@ -224,6 +237,7 @@ class AuthenticatedGeoSearch extends React.Component {
                         onFieldChange={this.handleFieldChange}
                         onRefreshClick={this.handleRefreshClick}
                         selectedPursuit={this.state.selectedPursuit}
+                        onDistanceChange={this.handleDistanceChange}
 
                     />
                     {/* <PostFields
@@ -235,13 +249,20 @@ class AuthenticatedGeoSearch extends React.Component {
 
                 <div id="geosearch-results-container">
                     {this.state.resultState === "SPOTLIGHT" ?
-                        <Spotlight
+                        <GeoSpotlight
                             users={this.state.spotlight}
                             onEventClick={this.handleEventClick}
                         /> :
-                        <Results 
-                            people={this.state.people}
-                        />
+                        this.state.people.length > 0 ?
+                            this.state.people.map(
+                                person =>
+                                    <Results
+                                        person={person}
+                                        onEventClick={this.handleEventClick}
+                                    />)
+
+                            :
+                            <p>No Results Found</p>
                     }
                 </div>
                 {this.renderModal()}

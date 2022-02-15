@@ -1,11 +1,13 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link  } from 'react-router-dom';
+import withRouter from 'utils/withRouter';
+
 import ModalController from './sub-components/modal-controller';
 import OptionalLinks from './sub-components/optional-links';
 import OptionsMenu from './sub-components/options-menu';
 import { withFirebase } from 'store/firebase';
 import { returnUserImageURL } from 'utils/url';
-import { NEW_ENTRY_MODAL_STATE, PEOPLE_SEARCH_STATE, RELATION_MODAL_STATE } from 'utils/constants/flags';
+import { NEW_ENTRY_MODAL_STATE, PEOPLE_SEARCH_STATE, RELATION_MODAL_STATE, WORKS_STATE } from 'utils/constants/flags';
 import './navigation-authorized.scss';
 
 class NavigationAuthorized extends React.Component {
@@ -69,7 +71,7 @@ class NavigationAuthorized extends React.Component {
 
     linkDecider() {
         if (window.location.pathname !== '/') {
-            this.props.history.push('')
+           this.props.navigate('', {replace: false})
         }
         else if (window.location.pathname.toString() === '/') {
             window.location.reload()
@@ -105,6 +107,11 @@ class NavigationAuthorized extends React.Component {
                                 linkType={PEOPLE_SEARCH_STATE}
                                 setModal={this.setModal}
                             />)}
+                        {this.displayOptionalsDecider(
+                            <OptionalLinks
+                                linkType={WORKS_STATE}
+                                setModal={this.setModal}
+                            />)}
                     </div>
                     <div id='navbar-right-container'>
                         {this.displayOptionalsDecider(
@@ -118,6 +125,7 @@ class NavigationAuthorized extends React.Component {
                             shouldHideFriendsTab={
                                 !this.state.isUserStillLoading && !this.state.isExistingUser
                             }
+                            closeModal={this.clearModal}
                         />
                     </div>
                 </nav>

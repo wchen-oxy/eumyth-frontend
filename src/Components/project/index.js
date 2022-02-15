@@ -6,7 +6,7 @@ import TopButtonBar from './sub-components/top-button-bar';
 import ProjectReview from './review';
 import { returnUsernameURL, returnPostURL, returnProjectURL } from "utils/url";
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
-import { withRouter } from 'react-router-dom';
+import withRouter from 'utils/withRouter';
 import AxiosHelper from 'utils/axios';
 import {
     PROJECT_CONTENT_ONLY_VIEW_STATE,
@@ -86,6 +86,7 @@ class ProjectController extends React.Component {
             title: this.props.content ? this.props.content.title : "",
             overview: this.props.content ? this.props.content?.overview : "",
             selectedProject: this.props.content.post_ids ? {
+                _id: this.props.content._id,
                 post_ids: this.props.content.post_ids,
                 username: this.props.content.username,
                 displayPhoto: this.props.content.display_photo_key
@@ -284,7 +285,7 @@ class ProjectController extends React.Component {
     }
 
     setModal(postID) {
-        this.props.history.replace(returnPostURL(postID));
+        this.props.navigate (returnPostURL(postID), {replace: false});
         this.props.openMasterModal(POST_VIEWER_MODAL_STATE);
     }
 
@@ -398,7 +399,7 @@ class ProjectController extends React.Component {
     }
 
     setNewURL(projectID) {
-        this.props.history.replace(projectID);
+        this.props.navigate (projectID, { replace: false });
     }
 
     handleProjectClick(projectData) {
@@ -419,7 +420,6 @@ class ProjectController extends React.Component {
 
     copyToClipboard() {
         const sourceContent = this.props.isContentOnlyView ? this.props.content : this.state.selectedProject;
-
         return AxiosHelper.createFork(
             this.props.authUser.profileID,
             this.props.authUser.indexProfileID,
