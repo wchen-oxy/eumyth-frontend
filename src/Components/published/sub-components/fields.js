@@ -30,7 +30,7 @@ const ProjectFields = (props) => {
             defaultValue={defaultOption}
             options={options}
             formatCreateLabel={formatPrompt}
-            OnChange={onValueChange}
+            onChange={onValueChange}
         />
         <button onClick={props.onSubmitSearch}>Submit</button>
                    

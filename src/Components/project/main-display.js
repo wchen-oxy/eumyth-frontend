@@ -7,6 +7,7 @@ import ProjectSelectHeader from './sub-components/project-select-header';
 import ProjectUtilityButtons from './sub-components/project-utility-buttons';
 
 import { PROJECT_CONTENT_ONLY_VIEW_STATE, PROJECT_MICRO_VIEW_STATE } from 'utils/constants/flags';
+import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 
 const MainDisplay = (props) => {
     console.log(props.projectMetaData)
@@ -55,6 +56,7 @@ const MainDisplay = (props) => {
                 <ProjectSelectHeader stage={props.projectSelectSubState} />}
             <Timeline
                 feedID={props.feedID}
+                requestLength={REGULAR_CONTENT_REQUEST_LENGTH}
                 nextOpenPostIndex={props.nextOpenPostIndex}
                 contentType={props.contentType}
                 editProjectState={props.editProjectState}

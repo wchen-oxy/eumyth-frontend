@@ -30,6 +30,7 @@ export const DECLINE_ACTION = 'DECLINE';
 
 //OVERALL CONTENT TYPE
 export const ALL = 'ALL';
+export const DYNAMIC = 'DYNAMIC';
 export const POST = 'POST';
 export const PROJECT = 'PROJECT';
 export const PROJECT_EVENT = 'PROJECT_EVENT';

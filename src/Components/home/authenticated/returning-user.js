@@ -10,6 +10,7 @@ import { returnUsernameURL, returnUserImageURL } from 'utils/url';
 import { TEMP_PROFILE_PHOTO_URL } from 'utils/constants/urls';
 import { POST, RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
 import './returning-user.scss';
+import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 
 class ReturningUserPage extends React.Component {
     _isMounted = false;
@@ -27,7 +28,6 @@ class ReturningUserPage extends React.Component {
             preferredPostPrivacy: null,
             followedUserPostIDs: [],
             hasMore: true,
-            fixedDataLoadLength: 4,
             nextOpenPostIndex: 0,
             feedData: [],
             isModalShowing: false,
@@ -161,11 +161,11 @@ class ReturningUserPage extends React.Component {
         const posts = this.props.authUser.followingFeed
         const slicedObjectIDs = posts.slice(
             this.state.nextOpenPostIndex,
-            this.state.nextOpenPostIndex + this.state.fixedDataLoadLength);
-        const feedLimitReached = slicedObjectIDs.length !== this.state.fixedDataLoadLength
+            this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH);
+        const feedLimitReached = slicedObjectIDs.length !== REGULAR_CONTENT_REQUEST_LENGTH
         const nextOpenPostIndex = feedLimitReached ?
             this.state.nextOpenPostIndex + slicedObjectIDs.length
-            : this.state.nextOpenPostIndex + this.state.fixedDataLoadLength;
+            : this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH;
         const hasMore = nextOpenPostIndex >= posts.length || feedLimitReached;
         return (AxiosHelper
             .returnMultiplePosts(
@@ -386,7 +386,7 @@ class ReturningUserPage extends React.Component {
                     <h4 className='returninguser-title'>Your Feed</h4>
                     <div id='returninguser-infinite-scroll-container' >
                         <InfiniteScroll
-                            dataLength={this.state.fixedDataLoadLength}
+                            dataLength={REGULAR_CONTENT_REQUEST_LENGTH}
                             next={this.fetchNextPosts}
                             hasMore={this.state.hasMore}
                             loader={<h4>Loading...</h4>}

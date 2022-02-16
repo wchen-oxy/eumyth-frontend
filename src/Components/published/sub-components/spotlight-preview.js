@@ -18,11 +18,9 @@ const SpotlightPreview = (props) => {
 
     useEffect(() => {
         if (props.project.post_ids.length > 0) {
-            console.log(props.project.post_ids.slice(2))
             AxiosHelper.returnMultiplePosts(
                 props.project.post_ids.slice(0, 2), false)
                 .then((results => {
-                    console.log(results.data);
                     if (results.data.posts.length > 0) {
                         setLoadedPosts(results.data.posts)
                     }

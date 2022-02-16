@@ -1,0 +1,2 @@
+export const DYNAMIC_CONTENT_LENGTH = 5;
+export const REGULAR_CONTENT_REQUEST_LENGTH = 10;

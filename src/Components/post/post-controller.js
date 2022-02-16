@@ -5,6 +5,7 @@ import EventController from '../timeline/timeline-event-controller';
 import { returnUsernameURL, returnPostURL } from 'utils/url';
 import { POST, POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
 import withRouter from 'utils/withRouter';
+import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 
 class PostController extends React.Component {
     constructor(props) {
@@ -135,6 +136,7 @@ class PostController extends React.Component {
                 />
                 <Timeline
                     contentType={POST}
+                    requestLength={REGULAR_CONTENT_REQUEST_LENGTH}
                     feedID={this.props.selectedPursuitIndex}
                     allPosts={this.props.feedData}
                     loadedFeed={this.createRenderedPosts()}
