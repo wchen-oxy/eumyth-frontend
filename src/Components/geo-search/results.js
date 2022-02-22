@@ -2,9 +2,11 @@ import EventController from 'components/timeline/timeline-event-controller';
 import React from 'react';
 import { SPOTLIGHT_POST } from 'utils/constants/flags';
 import { returnUserImageURL } from 'utils/url';
+import { returnFormattedDistance } from 'utils/constants/ui-text';
 import './results.scss';
 
 const Results = (props) => {
+    const distanceText = returnFormattedDistance(props.person.distance)
     const profileURL = returnUserImageURL(props.person.small_cropped_display_photo_key);
     return (
         <div key={props.person._id} className='results-container' >
@@ -16,6 +18,7 @@ const Results = (props) => {
                     <a className='results-full-name' href={'/u/' + props.person.username}>
                         <h3>{props.person.first_name + " " + props.person.last_name}</h3>
                     </a>
+                    {distanceText && <p>{distanceText}</p>}
                 </div>
                 <div>
                     <p>{props.person.bio}</p>
@@ -29,6 +32,14 @@ const Results = (props) => {
                         </div>
                 )}
             </div>
+            {/* <div>
+                <div className='results-title'>
+                    <h4>Latest Project</h4>
+                </div>
+                <div>
+                    
+                </div>
+            </div> */}
             <div className='results-post-content-container'>
                 <div className='results-title'>
                     <h4>Recent Posts</h4>

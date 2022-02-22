@@ -14,12 +14,7 @@ class Results extends React.Component {
         this.shouldPull = this.shouldPull.bind(this);
         this.createRenderedPosts = this.createRenderedPosts.bind(this);
     }
-
-    componentDidMount() {
-        console.log(this.props.results);
-    }
-
-
+ 
     shouldPull(value) {
         this.setState({ hasMore: value });
     }
@@ -39,10 +34,6 @@ class Results extends React.Component {
     render() {
         return (
             <div>
-                {this.props.results.length === 0 && <p>No Results Found</p>}
-                {this.props.results.length !== 0 &&
-                    <p>{this.props.results.map(item => item._id)}</p>
-                }
                 <Timeline
                     feedID={this.props.feedID}
                     contentType={DYNAMIC}

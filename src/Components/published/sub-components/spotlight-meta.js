@@ -10,7 +10,7 @@ const SpotlightMeta = (props) => {
     }
     return (
         <div>
-            {props.parent && <a href={'/c/' + props.parent}>See Parent</a>}
+            {props.parent && <a href={'/c/' + props.parent} target="_blank" rel='noreferrer'>See Parent</a>}
             <p>Start Date: {props.startDate ? props.startDate : "n/a"}</p>
             <p>Start Date: {props.endDate ? props.endDate : "n/a"}</p>
             <p>Duration: {props.duration ? props.duration : 'n/a'}</p>
@@ -25,12 +25,12 @@ const SpotlightMeta = (props) => {
                         if (index === 0)
                             return (
                                 <div>
-                                    <p>Original:  <a href={"/c/" + ancestor}>{ancestor}</a></p>
+                                    <p>Original:  <a href={"/c/" + ancestor} target="_blank" rel='noreferrer'>{ancestor}</a></p>
                                 </div>)
                         else {
                             return (
                                 <div>
-                                    <p>{index + 1}.    <a href={"/c/" + ancestor}>{ancestor}</a></p>
+                                    <p>{index + 1}.    <a href={"/c/" + ancestor} target="_blank" rel='noreferrer'  >{ancestor}</a></p>
 
                                 </div>
                             )

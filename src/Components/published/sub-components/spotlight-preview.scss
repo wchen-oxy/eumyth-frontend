@@ -3,6 +3,9 @@
 .spotlightpreview-main-container {
     min-width: 400px;
     padding:50px;
+    h4{
+        margin: 0 auto;
+    }
 }
 
 .spotlightpreview-cover-container{
@@ -24,6 +27,7 @@
         margin-right: 15px;
     }
 }
+
 
 .spotlightpreview-posts {
     @include flex-display-row;

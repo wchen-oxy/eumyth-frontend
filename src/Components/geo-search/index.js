@@ -75,7 +75,6 @@ class AuthenticatedGeoSearch extends React.Component {
                 }
                 else {
                     const crd = results.data.coordinates;
-                    console.log(results);
                     this.setState({
                         lat: crd.latitude,
                         long: crd.longitude
@@ -86,10 +85,10 @@ class AuthenticatedGeoSearch extends React.Component {
 
     success(pos) {
         const crd = pos.coords;
-        console.log('Your current position is:');
-        console.log(`Latitude : ${crd.latitude}`);
-        console.log(`Longitude: ${crd.longitude}`);
-        console.log(`More or less ${crd.accuracy} meters.`);
+        // console.log('Your current position is:');
+        // console.log(`Latitude : ${crd.latitude}`);
+        // console.log(`Longitude: ${crd.longitude}`);
+        // console.log(`More or less ${crd.accuracy} meters.`);
 
         this.setState({
             lat: crd.latitude,
@@ -133,7 +132,6 @@ class AuthenticatedGeoSearch extends React.Component {
     }
 
     handleEventClick(selectedContent, postIndex) {
-        console.log(selectedContent)
         this.setState({
             selectedContent,
         }, this.setModal());
@@ -143,7 +141,6 @@ class AuthenticatedGeoSearch extends React.Component {
     renderModal() {
         if (this.props.modalState === POST_VIEWER_MODAL_STATE &&
             this.state.selectedContent) {
-            console.log(this.state.selectedContent);
             const formattedTextData = this.state.selectedContent?.text_data && this.state.selectedContent.is_paginated ?
                 JSON.parse(this.state.selectedContent.text_data) : this.state.selectedContent.text_data;
 
@@ -201,6 +198,7 @@ class AuthenticatedGeoSearch extends React.Component {
             this.state.pursuits.slice(1) : [capitalize(this.state.selectedPursuit)];
         const selectedPeople = this.state.people.map(person => person._id);
         selectedPeople.push(this.props.authUser.userPreviewID);
+
         AxiosHelper
             .getSimilarPeople(
                 this.state.distance,

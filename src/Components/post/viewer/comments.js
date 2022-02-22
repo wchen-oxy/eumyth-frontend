@@ -286,7 +286,6 @@ class Comments extends React.Component {
 
 
     render() {
-        console.log(this.props.fullCommentData);
         if (this.props.windowType === COLLAPSED) {
             return (
                 <div className='comments-main-container'>

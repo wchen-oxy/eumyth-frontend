@@ -21,6 +21,7 @@ const PROJECT_ID_FIELD = 'projectID';
 const PURSUIT_ARRAY_FIELD = 'pursuitArray';
 const PURSUIT_FIELD = 'pursuit';
 const DATE_FIELD = 'date';
+const STATUS_FIELD = 'status';
 const START_DATE_FIELD = 'startDate';
 const SELECTED_DRAFT_ID = 'selectedDraftID';
 const END_DATE_FIELD = 'endDate';
@@ -50,6 +51,7 @@ module.exports = {
     DISPLAY_PHOTO_FIELD,
     DISTANCE_FIELD,
     DIFFICULTY_FIELD,
+    STATUS_FIELD,
     START_DATE_FIELD,
     END_DATE_FIELD,
     USERNAME_FIELD,

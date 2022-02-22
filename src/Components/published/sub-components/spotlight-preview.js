@@ -4,10 +4,10 @@ import SpotlightEvent from './event';
 import ShortPostViewer from 'components/post/viewer/short-post.js';
 import { returnUserImageURL } from 'utils/url';
 import { POST_VIEWER_MODAL_STATE, SPOTLIGHT_POST } from 'utils/constants/flags';
-import './spotlight-preview.scss';
 import EventLabels from 'components/timeline/sub-components/event-labels';
 import SpotlightMeta from './spotlight-meta';
 import ProjectVote from './project-vote';
+import './spotlight-preview.scss';
 
 const OVERVIEW_STATE = 'OVERVIEW_STATE';
 const STAT_STATE = "STAT_STATE";
@@ -69,7 +69,6 @@ const SpotlightPreview = (props) => {
         setSelectedContent(selectedContent);
         setModal()
     }
-
     return (
         <div className='spotlightpreview-main-container'>
             <a href={"/c/" + props.project._id}><h3>{props.project.title}</h3></a>
@@ -78,16 +77,18 @@ const SpotlightPreview = (props) => {
                     <img src={returnUserImageURL(props.project.cover_photo_key)} />
                 </div>
             }
+            {props.project.pursuit && <h4>{props.project.pursuit}</h4>}
             <button disabled={metaState === OVERVIEW_STATE} onClick={() => setMetaState(OVERVIEW_STATE)} >
                 Overview </button>
             <button disabled={metaState === STAT_STATE} onClick={() => setMetaState(STAT_STATE)} >
                 Stats
             </button>
-            {props.project.pursuit && <p>{props.project.pursuit}</p>}
+
 
             {props.project.overview &&
                 metaState === OVERVIEW_STATE ?
                 <div>
+                    <h4>Overview</h4>
                     <p>{props.project.overview}</p>
                     {props.project.children_length !== 0
                         &&

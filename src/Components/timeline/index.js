@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import AxiosHelper from 'utils/axios';
-import { DYNAMIC, POST, PROJECT } from 'utils/constants/flags';
+import { DYNAMIC, POST, PROJECT, PROJECT_EVENT } from 'utils/constants/flags';
 import { validateFeedIDs } from 'utils/validator';
 import './index.scss';
 
@@ -88,7 +88,7 @@ class Timeline extends React.Component {
                     this.setState({ nextOpenPostIndex }, this.handleReturnedContent(results.data));
                 })
         }
-        else if (this.props.contentType === PROJECT || this.props.contentType === POST) {
+        else if (this.props.contentType === PROJECT || this.props.contentType === POST || this.props.contentType === PROJECT_EVENT) {
             const metaInfo = this.updateMetaInfo();
             this.setState({ nextOpenPostIndex: metaInfo.nextOpenPostIndex },
                 () => this.callAPI(metaInfo.slicedObjectIDs))
@@ -114,6 +114,11 @@ class Timeline extends React.Component {
                     result.posts,
                     this.props.contentType,
                     slicedObjectIDs);
+            case (PROJECT_EVENT):
+                return this.props.createTimelineRow(
+                    result.posts,
+                    this.props.contentType,
+                    slicedObjectIDs);
             case (DYNAMIC):
                 return this.props.createTimelineRow(
                     result,
@@ -129,6 +134,8 @@ class Timeline extends React.Component {
                 return AxiosHelper.returnMultipleProjects(slicedObjectIDs);
             case (POST):
                 return AxiosHelper.returnMultiplePosts(slicedObjectIDs, true);
+            case (PROJECT_EVENT):
+                return AxiosHelper.returnMultiplePosts(slicedObjectIDs, true);
             default:
                 throw new Error();
         }
@@ -136,7 +143,11 @@ class Timeline extends React.Component {
     }
 
     decideInfiniteScroller() {
-        if (this.props.contentType === POST || this.props.contentType === PROJECT) {
+        if (this.props.contentType === POST
+            ||
+            this.props.contentType === PROJECT
+            || this.props.contentType === PROJECT_EVENT
+        ) {
             return (
                 <InfiniteScroll
                     dataLength={this.state.nextOpenPostIndex}
@@ -157,7 +168,7 @@ class Timeline extends React.Component {
             )
 
         }
-        else {
+        else if (this.props.contentType === DYNAMIC) {
             return (
                 <InfiniteScroll
                     dataLength={this.state.nextOpenPostIndex}
@@ -173,7 +184,7 @@ class Timeline extends React.Component {
     }
 
     render() {
-        const shouldLoadScroller = this.props.contentType === DYNAMIC
+         const shouldLoadScroller = this.props.contentType === DYNAMIC
             || (this.props.allPosts && this.props.allPosts.length > 0);
         if (this.props.contentType !== DYNAMIC && !this.props.allPosts
         ) return (

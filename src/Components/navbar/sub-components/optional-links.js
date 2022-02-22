@@ -8,7 +8,7 @@ const OptionalLinks = (props) => {
             return (
                 <div className='optionallinks-action-buttons-container' >
                     <button onClick={() => props.setModal(NEW_ENTRY_MODAL_STATE)}>
-                        <h4>+ New Entry</h4>
+                        <h4>+ Add Activity</h4>
                     </button>
                 </div>
             );

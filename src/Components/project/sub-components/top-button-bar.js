@@ -50,7 +50,6 @@ const TopButtonBar = (props) => {
                 </div>
             );
         case (PROJECT_SELECT_VIEW_STATE):
-
             return (
                 <div id='topbuttonbar-dual-button-bar'>
                     <div id='topbuttonbar-left-button-container'>

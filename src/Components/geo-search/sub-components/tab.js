@@ -3,8 +3,8 @@ import React from 'react';
 import AxiosHelper from 'utils/axios';
 import { PROJECT, SPOTLIGHT_POST } from 'utils/constants/flags';
 import { returnUserImageURL } from 'utils/url';
-import { useNavigate } from "react-router-dom";
-
+import { returnFormattedDistance } from 'utils/constants/ui-text';
+import withRouter from 'utils/withRouter';
 import './tab.scss';
 
 //FIXME The project is not being used
@@ -28,32 +28,25 @@ class Tab extends React.Component {
     componentDidMount() {
         this._isMounted = true;
         const content = this.props.user.pursuits[0];
-        const extraPostContent = content.posts.length > 1 ? content.posts[1].content_id : null;
         const postContent = content.posts.length > 0 ? content.posts[0].content_id : null;
+        const extraPostContent = content.posts.length > 1 ? content.posts[1].content_id : null;
         const projectContent = content.projects.length > 0 ? content.projects[0].content_id : null;
         const postArray = [];
-        const contentObj = this.state.content;
 
-        if (projectContent) {
-            contentObj['upper'] = projectContent;
-        }
         if (postContent) {
-            contentObj['lower'] = postContent;
             postArray.push(postContent);
         }
-        else {
-            if (extraPostContent) {
-                contentObj['upper'] = extraPostContent;
-                postArray.push(extraPostContent);
-            }
+        if (!projectContent && extraPostContent) {
+            postArray.push(extraPostContent);
         }
 
         if (this._isMounted && postArray.length > 0) {
             if (projectContent) {
                 return Promise
                     .all([
-                        this.returnPosts([contentObj['lower']]),
-                        this.returnProject(contentObj['upper'])
+                        this.returnProject(projectContent),
+                        AxiosHelper.retrievePost(postContent, false)
+                            .then(result => result.data)
                     ])
                     .then(results => {
                         this.setContent(results, true)
@@ -71,9 +64,24 @@ class Tab extends React.Component {
     }
 
     setContent(content, containsProject) {
+        const contentObj = this.state.content;
+        if (!containsProject) {
+            if (content.length === 1) {
+                contentObj['upper'] = content[0];
+            }
+            if (content.length === 2) {
+                contentObj['upper'] = content[0];
+                contentObj['lower'] = content[1];
+            }
+        }
+        else {
+            contentObj['upper'] = content[0];
+            contentObj['lower'] = content[1];
+        }
+
 
         this.setState({
-            content,
+            content: contentObj,
             containsProject,
             isLoaded: true
         })
@@ -82,28 +90,30 @@ class Tab extends React.Component {
     returnPosts(postArray) {
         return AxiosHelper
             .returnMultiplePosts(postArray, false)
-            .then(results => {
-                const content = this.state.content;
-                results.data.posts.forEach(item => {
-                    switch (item._id) {
-                        case (content['upper']):
-                            content['upper'] = item;
-                            break;
-                        case (content['lower']):
-                            content['lower'] = item;
-                            break;
-                        default:
-                            throw new Error('Something Went Wrong');
-                    }
-                });
-                return content;
-            });
+            .then(results => results.data.posts)
+        // .then(results => {
+        //     const content = this.state.content;
+        //     results.data.posts.forEach(item => {
+        //         switch (item._id) {
+        //             case (content['upper']):
+        //                 content['upper'] = item;
+        //                 break;
+        //             case (content['lower']):
+        //                 content['lower'] = item;
+        //                 break;
+        //             default:
+        //                 throw new Error('Something Went Wrong');
+        //         }
+        //     });
+        //     return content;
+        // });
     }
 
     returnProject(id) {
         return AxiosHelper
             .returnSingleProject(id)
-            .then(results => results.project)
+            .then(result => result.data.project);
+
     }
 
     renderUppercontent() {
@@ -127,19 +137,19 @@ class Tab extends React.Component {
             />)
     }
 
-    handleProjectClick(project){
-        let navigate = useNavigate();
-        navigate("/c/" + project._id, { replace: false });
+    handleProjectClick(project) {
+        window.open("/c/" + project._id);
     }
 
     render() {
-
+        const distanceText = returnFormattedDistance(this.props.user.distance);
         return (
             <div key={this.props.user._id} className='tab-container'>
                 <div className='tab-profile-photo-container'>
                     <img src={returnUserImageURL(this.props.user.small_cropped_display_photo_key)}></img>
                 </div>
                 <a href={'/u/' + this.props.user.username}><h3>{this.props.user.first_name + " " + this.props.user.last_name}</h3></a>
+                {distanceText && <p>{distanceText}</p>}
                 <div className='tab-event-container'>
 
                     {this.state.content.upper &&
@@ -159,4 +169,4 @@ class Tab extends React.Component {
     }
 }
 
-export default Tab;
+export default withRouter(Tab);

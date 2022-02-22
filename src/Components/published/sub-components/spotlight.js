@@ -7,8 +7,9 @@ const Spotlight = (props) => {
         <div>
             <h2>Check out some projects</h2>
             <div id='spotlight-projects-container'>
-                {props.spotlight.map(project =>
+                {props.spotlight.map((project, index) =>
                     <SpotlightPreview
+                        key={index}
                         {...props}
                         project={project}
                     />

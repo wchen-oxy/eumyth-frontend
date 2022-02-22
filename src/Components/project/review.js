@@ -15,6 +15,7 @@ import {
     PURSUIT_FIELD,
     SELECTED_POSTS_FIELD,
     START_DATE_FIELD,
+    STATUS_FIELD,
     TITLE_FIELD,
     USERNAME_FIELD,
     USER_ID_FIELD,
@@ -22,6 +23,8 @@ import {
 } from 'utils/constants/form-data';
 import { EDIT, TITLE, OVERVIEW } from 'utils/constants/flags';
 
+const DRAFT = 'DRAFT';
+const PUBLISHED = 'PUBLISHED';
 const ProjectReview = (props) => {
     const [pursuit, setPursuit] = useState(props.projectMetaData?.pursuit);
     const [startDate, setStartDate] = useState(props.projectMetaData?.start_date);
@@ -31,8 +34,8 @@ const ProjectReview = (props) => {
     const [coverPhoto, setCoverPhoto] = useState(null);
     const [labels, setLabels] = useState([]);
     const [removeCoverPhoto, setRemoveCoverPhoto] = useState(null);
-   
-    const handlePost = () => {
+
+    const handlePost = (status) => {
         let formData = new FormData();
         formData.append(TITLE_FIELD, props.title);
         if (props.overview) formData.append(OVERVIEW_FIELD, props.overview);
@@ -44,20 +47,18 @@ const ProjectReview = (props) => {
         if (coverPhoto) formData.append(COVER_PHOTO_FIELD, coverPhoto);
         if (labels.length > 0) {
             for (const label of labels) {
-                console.log(label);
                 formData.append(LABELS_FIELD, label.value);
             }
         }
         if (props.authUser.smallCroppedDisplayPhotoKey) formData.append(DISPLAY_PHOTO_FIELD, props.authUser.smallCroppedDisplayPhotoKey)
         for (const post of props.selectedPosts) formData.append(SELECTED_POSTS_FIELD, post);
         if (props.isUpdate) {
-            formData.append(PROJECT_ID_FIELD, props.projectMetaData._id)
+            formData.append(PROJECT_ID_FIELD, props.projectMetaData._id);
+            formData.append(STATUS_FIELD, status);
             if (removeCoverPhoto) {
                 if (!props.coverPhotoKey) throw new Error("Need cover Photo");
                 return AxiosHelper.deletePhotoByKey(props.coverPhotoKey)
                     .then((result) => {
-                        console.log(result);
-                        console.log("finished deletion");
                         return AxiosHelper.updateProject(formData)
                     })
                     .then((result => {
@@ -73,10 +74,10 @@ const ProjectReview = (props) => {
         }
         else {
             formData.append(USERNAME_FIELD, props.authUser.username);
-
             formData.append(USER_ID_FIELD, props.authUser.profileID);
             formData.append(INDEX_USER_ID_FIELD, props.authUser.indexProfileID);
             formData.append(USER_PREVIEW_ID_FIELD, props.authUser.userPreviewID);
+            formData.append(STATUS_FIELD, status);
             return AxiosHelper.createProject(formData)
                 .then((result) => {
                     alert("Success!");
@@ -85,18 +86,11 @@ const ProjectReview = (props) => {
                 .catch(err => console.log(err));
         }
     }
-    console.log(labels);
-
     return (
         <div >
             <div className="">
                 <button onClick={() => props.onWindowSwitch(EDIT)}    >
                     Return
-                </button>
-                <button
-                    onClick={handlePost}
-                >
-                    Post!
                 </button>
             </div>
             <div id="projectcontroller-submit-container">
@@ -154,7 +148,12 @@ const ProjectReview = (props) => {
                     />
                 </div>
                 <button
-                    onClick={handlePost}
+                    onClick={() => handlePost(DRAFT)}
+                >
+                    Save
+                </button>
+                <button
+                    onClick={() => handlePost(PUBLISHED)}
                 >
                     Submit
                 </button>

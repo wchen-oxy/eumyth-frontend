@@ -51,7 +51,6 @@ class AuthenticatedProjectSearch extends React.Component {
         //set the current spotlight project with the top branch one
         return AxiosHelper.getSpotlightProjects(2, ['ALL'])
             .then(results => {
-                console.log(results.data);
                 this.setInitalState(results.data.projects)
             })
 
@@ -69,9 +68,7 @@ class AuthenticatedProjectSearch extends React.Component {
     }
 
     setInitalState(data) {
-        console.log(data);
         let state = null;
-
         if (this.props.authUser) {
             const pursuits = this.props.authUser.pursuits
                 .map(pursuit => pursuit.name);
@@ -88,12 +85,10 @@ class AuthenticatedProjectSearch extends React.Component {
     }
 
     handleFieldChange(type, value) {
-        console.log(value);
         switch (type) {
             case (PURSUIT_FIELD):
                 const finalPursuitObject = value === ALL ?
                     this.state.pursuits : value;
-                    console.log(finalPursuitObject);
                 this.setState({ selectedPursuit: value, finalPursuitObject })
                 break;
             default:
@@ -102,16 +97,14 @@ class AuthenticatedProjectSearch extends React.Component {
     }
 
     handleSubmitSearch() {
-        console.log(this.state.finalPursuitObject);
         return AxiosHelper
             .searchProject(
                 this.state.finalPursuitObject,
                 [],
                 DYNAMIC_CONTENT_LENGTH,
                 this.props.authUser.indexProfileID
-                )
+            )
             .then(results => {
-                console.log(results);
                 const resultsIDList = results.data.map(project => project._id)
                 this.setState({
                     feedID: this.state.feedID + 1,
@@ -125,7 +118,6 @@ class AuthenticatedProjectSearch extends React.Component {
     }
 
     render() {
-        console.log(this.props.authUser.indexProfileID)
         return (
             <div>
                 < Fields

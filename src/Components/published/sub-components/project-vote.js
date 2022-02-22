@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AxiosHelper from 'utils/axios';
+import "./project-vote.scss";
 
 const validateInclusion = (array, ID) => {
     return array.length > 0 && array.includes(ID);
@@ -73,14 +74,17 @@ const ProjectVote = props => {
     }
 
     return (
-        <div>
-            <div>
+        <div className='projectvote-main-container'>
+            <div className='projectvote-controls-container'>
                 <button onClick={() => handleVote(1)}>Upvote</button>
                 <p>{overallVoteScore}</p>
                 <button onClick={() => handleVote(-1)}>DownVote</button>
             </div>
-            <button onClick={handleBookmark}>Bookmark~</button>
-            <p>{bookmarkState ? "Bookmarked" : "Bookmark"}</p>
+            <div className='projectvote-controls-container'>
+                <p>{bookmarkState ? "Bookmarked" : "Bookmark"}</p>
+                <button onClick={handleBookmark}>Bookmark</button>
+            </div>
+
         </div>
     )
 }

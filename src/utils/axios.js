@@ -385,7 +385,6 @@ export default class AxiosHelper {
     }
 
     static searchProject(pursuit, projectIDList, requestQuantity, submittingIndexUserID) {
-        console.log(submittingIndexUserID);
         return axios.get(urls.SEARCH_PROJECT_URL, {
             params: {
                 pursuit,

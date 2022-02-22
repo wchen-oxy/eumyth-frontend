@@ -69,3 +69,8 @@ export const returnFormattedDate = (rawDate) => {
 
     );
 }
+
+export const returnFormattedDistance = (distance) => {
+    if (!distance) return null;
+    return distance < 1 ? "Less than 1 mile from you" : Math.floor(distance) + ' miles from you';
+}

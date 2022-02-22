@@ -179,7 +179,6 @@ class ProjectController extends React.Component {
         if (isSelected) {
             selectedPosts = this.state.feedData.map(item => { return { post_id: item._id } });
         }
-        console.log(selectedPosts);
         this.setState({ feedIndex: newFeedIndex, selectedPosts });
     }
 
@@ -264,10 +263,15 @@ class ProjectController extends React.Component {
                     }
                 }
                 else {
+                    const decideClearedPageType = this.props.isContentOnlyView ?
+                        PROJECT_CONTENT_ONLY_VIEW_STATE : PROJECT_MACRO_VIEW_STATE;
+                    const stopEdits = this.props.isContentOnlyView && this.projectSelectSubState === 1;
+                    const state = stopEdits ? { barType: decideClearedPageType } : {};
+
                     this.setState({
-                        barType: this.props.isContentOnlyView ?
-                            PROJECT_CONTENT_ONLY_VIEW_STATE : PROJECT_MACRO_VIEW_STATE,
+                        ...state,
                         editProjectState: false,
+                        projectSelectSubState: 1,
                         isUpdate: false,
                         hasMore: true,
                     }, this.clearLoadedFeed)
@@ -285,7 +289,7 @@ class ProjectController extends React.Component {
     }
 
     setModal(postID) {
-        this.props.navigate (returnPostURL(postID), {replace: false});
+        this.props.navigate(returnPostURL(postID), { replace: false });
         this.props.openMasterModal(POST_VIEWER_MODAL_STATE);
     }
 
@@ -399,7 +403,7 @@ class ProjectController extends React.Component {
     }
 
     setNewURL(projectID) {
-        this.props.navigate (projectID, { replace: false });
+        this.props.navigate(projectID, { replace: false });
     }
 
     handleProjectClick(projectData) {
@@ -462,8 +466,6 @@ class ProjectController extends React.Component {
                         return feed.filter(item => !this.state.selectedProject.post_ids.includes(item));
                     }
                     else if (this.state.projectSelectSubState === 2) {
-                        console.log(this.state.selectedPosts);
-                        console.log(this.state.selectedProject)
                         return this.state.selectedPosts
                             .map((item) => item.post_id)
                             .concat(this.state.selectedProject.post_ids);

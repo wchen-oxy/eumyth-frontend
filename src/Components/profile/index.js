@@ -3,11 +3,13 @@ import PursuitHolder from './sub-components/pursuit-holder';
 import AxiosHelper from 'utils/axios';
 import { AuthUserContext } from 'store/session';
 import FollowButton from './sub-components/follow-buttons';
+import ShortPostViewer from '../post/viewer/short-post';
 import ProjectController from '../project/index';
 import PostController from '../post/post-controller';
 import CoverPhoto from './sub-components/cover-photo';
 import { withFirebase } from 'store/firebase';
 import { returnUserImageURL, returnUsernameURL } from 'utils/url';
+import withRouter from 'utils/withRouter';
 import {
     POST,
     PROJECT,
@@ -18,11 +20,9 @@ import {
     FOLLOW_REQUESTED_STATE,
     FOLLOWED_STATE
 } from 'utils/constants/flags';
-import withRouter from 'utils/withRouter';
 
-import './index.scss';
-import ShortPostViewer from '../post/viewer/short-post';
 import { createPursuitArray } from 'utils';
+import './index.scss';
 
 const selectMessage = (action, isPrivate) => {
     switch (action) {
@@ -470,9 +470,8 @@ class ProfilePageAuthenticated extends React.Component {
             }
         }
         else if (!this.state.isContentOnlyView) {
-            console.log(this.props.authUser);
             const targetUsername = this.state.profileData?.username ?? '';
-            const targetProfilePhoto = returnUserImageURL(this.props.authUser?.croppedDisplayPhotoKey ?? null);
+            const targetProfilePhoto = returnUserImageURL(this.state.profileData?.cropped_display_photo_key ?? null);
             return (
                 <div>
                     <div id='profile-main-container'>
@@ -511,13 +510,13 @@ class ProfilePageAuthenticated extends React.Component {
                                 disabled={this.state.contentType === POST ?
                                     true : false}
                                 onClick={() => this.handleMediaTypeSwitch(POST)}>
-                                Posts
+                                Activities
                             </button>
                             <button
                                 disabled={this.state.contentType === PROJECT ?
                                     true : false}
                                 onClick={() => this.handleMediaTypeSwitch(PROJECT)}>
-                                Works
+                                Projects
                             </button>
                         </div>
                         {this.state.contentType && this.decideHeroContentVisibility()}

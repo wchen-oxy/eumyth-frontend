@@ -10,7 +10,6 @@ import { PROJECT_CONTENT_ONLY_VIEW_STATE, PROJECT_MICRO_VIEW_STATE } from 'utils
 import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 
 const MainDisplay = (props) => {
-    console.log(props.projectMetaData)
     return (
         <div>
             <TopButtonBar
