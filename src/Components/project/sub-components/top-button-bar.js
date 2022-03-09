@@ -13,10 +13,11 @@ const TopButtonBar = (props) => {
     const ManageButtons =
         <RightManageButtons
             userInfo={props.userInfo}
-            copyToClipboard={props.copyToClipboard}
+            title={props.title}
             projectID={props.projectID}
             onEditExistingProject={props.onEditExistingProject}
             postIDList={props.postIDList}
+            forkData={props.forkData}
         />;
     switch (props.barType) {
         case (PROJECT_CONTENT_ONLY_VIEW_STATE):

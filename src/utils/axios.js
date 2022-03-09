@@ -145,13 +145,16 @@ export default class AxiosHelper {
         );
     }
 
-    static createFork(userID, indexUserID, username, projectData, shouldCopyPosts) {
+    static createFork(userID, indexUserID, username, projectData, shouldCopyPosts, displayPhotoKey, title, remix) {
         return axios.put(urls.PROJECT_FORK_URL, {
             userID,
             indexUserID,
             username,
             projectData,
-            shouldCopyPosts
+            shouldCopyPosts,
+            displayPhotoKey,
+            title,
+            remix
         })
     }
 
@@ -210,6 +213,24 @@ export default class AxiosHelper {
         return axios.get(urls.MULTIPLE_PROJECTS_URL, {
             params: {
                 projectIDList: projectIDList
+            }
+        })
+    }
+
+    static getSingleProjectPreview(id) {
+        return axios.get(urls.PROJECT_PREVIEW_SINGLE_URL, {
+            params: {
+                projectPreviewID: id
+            }
+        })
+    }
+
+    static getSharedParentProjectPreview(parentProjectPreviewID, status, blocklist) {
+        return axios.get(urls.PROJECT_PREVIEW_SHARED_URL, {
+            params: {
+                parentProjectPreviewID,
+                status,
+                blocklist
             }
         })
     }
@@ -375,10 +396,11 @@ export default class AxiosHelper {
         })
     }
 
-    static bookmarkProject(projectID, userPreviewID, bookmarkState) {
-        return axios.put(urls.PROJECT_BOOKMARK_URL,
+    static bookmarkContent(contentType, contentID, userPreviewID, bookmarkState) {
+        return axios.put(urls.BOOKMARK_URL,
             {
-                projectID,
+                contentType,
+                contentID,
                 userPreviewID,
                 bookmarkState
             })

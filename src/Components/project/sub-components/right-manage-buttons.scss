@@ -1,10 +1,6 @@
 @import "../../../partials";
 
-#rightmanagebuttons-delete-container {
-    @include small-post-window;
-    
-}
-
+ 
 .rightmanagebuttons-centered-container {
     @include flex-display-column;
     align-items: center;

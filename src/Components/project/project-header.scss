@@ -6,7 +6,7 @@
 }
 
 #projectheader-user-fork{
-    @include flex-display-row;
+    @include flex-display-column;
     align-items: center;
     justify-content: center;
 }

@@ -27,6 +27,8 @@ class Firebase {
     this.checkIsExistingUser = this.checkIsExistingUser.bind(this);
     this.writeBasicUserData = this.writeBasicUserData.bind(this);
     this.clearBasicUserData = this.clearBasicUserData.bind(this);
+    this.togglePublisher = this.togglePublisher.bind(this);
+
   }
 
   doTest() {
@@ -156,6 +158,16 @@ class Firebase {
       return;
     }
   }
+
+
+  togglePublisher(uid, boolean) {
+    return this.db.ref('users/' + uid)
+      .set({
+        publisher: boolean
+      })
+      .then(() => 200)
+  }
 }
+
 
 export default Firebase;

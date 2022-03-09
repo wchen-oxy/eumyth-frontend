@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AxiosHelper from 'utils/axios';
+import { PROJECT } from 'utils/constants/flags';
 import "./project-vote.scss";
 
 const validateInclusion = (array, ID) => {
@@ -12,19 +13,26 @@ const ProjectVote = props => {
     const [bookmarkState, setBookmarkState] = useState(false);
 
     useEffect(() => {
+        setOverallVoteScore(props.likes.length - props.dislikes.length);
         if (validateInclusion(props.bookmarks, props.userPreviewID)) {
             setBookmarkState(true);
         }
         if (validateInclusion(props.likes, props.userPreviewID)) {
-            setOverallVoteScore(1);
+            setPreviousVote(1);
         }
         else if (validateInclusion(props.dislikes, props.userPreviewID)) {
-            setOverallVoteScore(-1);
+            setPreviousVote(-1);
         }
     }, [])
 
     const handleBookmark = () => {
-        return AxiosHelper.bookmarkProject(props.projectID, props.userPreviewID, !bookmarkState)
+        return AxiosHelper
+            .bookmarkContent(
+                PROJECT,
+                props.projectID,
+                props.userPreviewID,
+                !bookmarkState
+            )
             .then((results) => {
                 setBookmarkState(!bookmarkState);
             })
@@ -49,6 +57,7 @@ const ProjectVote = props => {
             overallVoteScoreModifier = 1;
         }
         if (combinedVote > 1) {
+            console.log(combinedVote)
             overallVoteScoreModifier = -1;
         }
 

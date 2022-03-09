@@ -98,19 +98,18 @@ const SpotlightPreview = (props) => {
                 <SpotlightMeta
                     parent={props.project.parent}
                     ancestors={props.project.ancestors}
+                    children={props.project.children}
                     startDate={props.project.start_date}
                     endDate={props.project.end_date}
                     minDuration={props.project.min_duration}
                     postListLength={props.project.postListLength}
                 />
             }
-            <div>
-                <div className='spotlightpreview-display-container'>
-                    <img src={returnUserImageURL(props.project.display_photo_key)} />
-                    <a className='spotlightpreview-username' href={'/u/' + props.project.username}>
-                        <h4>{props.project.username}</h4>
-                    </a>
-                </div>
+            <div className='spotlightpreview-display-container'>
+                <img src={returnUserImageURL(props.project.display_photo_key)} />
+                <a className='spotlightpreview-username' href={'/u/' + props.project.username}>
+                    <h4>{props.project.username}</h4>
+                </a>
             </div>
             <div>
                 <ProjectVote

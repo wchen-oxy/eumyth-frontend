@@ -8,11 +8,14 @@ import {
     END_DATE_FIELD,
     INDEX_USER_ID_FIELD,
     IS_COMPLETE_FIELD,
+    IS_FORKED_FIELD,
     LABELS_FIELD,
     MIN_DURATION_FIELD,
     OVERVIEW_FIELD,
     PROJECT_ID_FIELD,
+    PROJECT_PREVIEW_ID_FIELD,
     PURSUIT_FIELD,
+    REMIX,
     SELECTED_POSTS_FIELD,
     START_DATE_FIELD,
     STATUS_FIELD,
@@ -26,9 +29,10 @@ import { EDIT, TITLE, OVERVIEW } from 'utils/constants/flags';
 const DRAFT = 'DRAFT';
 const PUBLISHED = 'PUBLISHED';
 const ProjectReview = (props) => {
-    const [pursuit, setPursuit] = useState(props.projectMetaData?.pursuit);
-    const [startDate, setStartDate] = useState(props.projectMetaData?.start_date);
-    const [endDate, setEndDate] = useState(props.projectMetaData?.end_date);
+    const [remix, setRemix] = useState(props.projectMetaData?.remix ?? null);
+    const [pursuit, setPursuit] = useState(props.projectMetaData?.pursuit ?? null);
+    const [startDate, setStartDate] = useState(props.projectMetaData?.start_date ?? null);
+    const [endDate, setEndDate] = useState(props.projectMetaData?.end_date ?? null);
     const [isComplete, setIsComplete] = useState(false);
     const [duration, setDuration] = useState(0);
     const [coverPhoto, setCoverPhoto] = useState(null);
@@ -37,8 +41,16 @@ const ProjectReview = (props) => {
 
     const handlePost = (status) => {
         let formData = new FormData();
-        formData.append(TITLE_FIELD, props.title);
-        if (props.overview) formData.append(OVERVIEW_FIELD, props.overview);
+        formData.append(TITLE_FIELD, props.title.trim());
+        if (props.projectMetaData.ancestors && props.projectMetaData.ancestors.length > 0) {
+            formData.append(IS_FORKED_FIELD, true);
+            formData.append(
+                PROJECT_PREVIEW_ID_FIELD,
+                props.projectMetaData.project_preview_id
+            );
+        };
+        if (remix.trim().length > 0) formData.append(REMIX, remix.trim());
+        if (props.overview) formData.append(OVERVIEW_FIELD, props.overview.trim());
         if (pursuit) formData.append(PURSUIT_FIELD, pursuit);
         if (startDate) formData.append(START_DATE_FIELD, startDate);
         if (endDate) formData.append(END_DATE_FIELD, endDate);
@@ -58,18 +70,18 @@ const ProjectReview = (props) => {
             if (removeCoverPhoto) {
                 if (!props.coverPhotoKey) throw new Error("Need cover Photo");
                 return AxiosHelper.deletePhotoByKey(props.coverPhotoKey)
-                    .then((result) => {
-                        return AxiosHelper.updateProject(formData)
-                    })
+                    .then((result) => AxiosHelper.updateProject(formData))
                     .then((result => {
-                        alert("success!");
                         console.log(result);
+                        alert("success!");
+                        window.location.reload();
                     }));
             }
             return AxiosHelper.updateProject(formData)
                 .then((result => {
-                    alert("success!");
                     console.log(result);
+                    alert("success!");
+                    window.location.reload();
                 }))
         }
         else {
@@ -80,12 +92,14 @@ const ProjectReview = (props) => {
             formData.append(STATUS_FIELD, status);
             return AxiosHelper.createProject(formData)
                 .then((result) => {
+                    console.log(result);
                     alert("Success!");
                     window.location.reload();
                 })
                 .catch(err => console.log(err));
         }
     }
+    console.log(remix.trim());
     return (
         <div >
             <div className="">
@@ -94,14 +108,26 @@ const ProjectReview = (props) => {
                 </button>
             </div>
             <div id="projectcontroller-submit-container">
+                <label>Title</label>
                 <TextareaAutosize
                     value={props.title}
                     onChange={(e) => props.handleInputChange(TITLE, e.target.value)}
                 />
+                <label>Overview</label>
                 <TextareaAutosize
                     value={props.overview}
                     onChange={(e) => props.handleInputChange(OVERVIEW, e.target.value)}
                 />
+                {
+                    props.projectMetaData.project_preview_id && <label>Remix</label>}
+                {
+                    props.projectMetaData.project_preview_id &&
+
+                    <TextareaAutosize
+                        value={remix}
+                        onChange={(e) => setRemix(e.target.value)}
+                    />
+                }
                 <label>Pursuit</label>
                 <select
                     name="pursuit-category"

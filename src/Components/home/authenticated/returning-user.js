@@ -6,6 +6,7 @@ import EventController from 'components/timeline/timeline-event-controller';
 import AxiosHelper from 'utils/axios';
 import { withAuthorization } from 'store/session';
 import { withFirebase } from 'store/firebase';
+import withRouter from "utils/withRouter";
 import { returnUsernameURL, returnUserImageURL } from 'utils/url';
 import { TEMP_PROFILE_PHOTO_URL } from 'utils/constants/urls';
 import { POST, RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
@@ -303,9 +304,8 @@ class ReturningUserPage extends React.Component {
     }
 
     render() {
-
-        const imageURL = this.props.authUser.croppedDisplayPhoto ? (
-            returnUserImageURL(this.props.authUser.croppedDisplayPhoto))
+        const imageURL = this.props.authUser.croppedDisplayPhotoKey ? (
+            returnUserImageURL(this.props.authUser.croppedDisplayPhotoKey))
             : (
                 TEMP_PROFILE_PHOTO_URL);
         const renderedRecentPosts = this.state.recentPosts ?
@@ -414,4 +414,4 @@ const handleCheckUser = () => {
 }
 
 const condition = authUser => !!authUser && withFirebase(handleCheckUser);
-export default withAuthorization(condition)(withFirebase(ReturningUserPage));
+export default withAuthorization(condition)(withRouter(ReturningUserPage));

@@ -21,8 +21,9 @@ const MainDisplay = (props) => {
                 onBackClick={props.onBackClick}
                 onNewProjectSelect={props.onNewProjectSelect}
                 onEditExistingProject={props.onEditExistingProject}
-                copyToClipboard={props.copyToClipboard}
                 handleWindowSwitch={props.handleWindowSwitch}
+                title={props.title}
+                forkData={props.forkData}
             />
 
             {props.editProjectState &&
@@ -38,8 +39,7 @@ const MainDisplay = (props) => {
                 <ProjectHeader
                     titleValue={props.title}
                     descriptionValue={props.overview}
-                    username={props.projectMetaData.username}
-                    displayPhoto={props.projectMetaData.displayPhoto}
+                    projectMetaData={props.projectMetaData}
                     onPriorForkClick={props.onPriorForkClick}
                     priorProjectID={props.priorProjectID}
                 />

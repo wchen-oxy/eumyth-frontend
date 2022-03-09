@@ -11,6 +11,7 @@ const DISTANCE_FIELD = 'distance';
 const DIFFICULTY_FIELD = 'difficulty';
 const USERNAME_FIELD = 'username';
 const IS_PAGINATED_FIELD = 'isPaginated';
+const IS_FORKED_FIELD = 'isForked';
 const LABELS_FIELD = 'labels';
 const PROGRESSION_FIELD = 'progression';
 const IS_COMPLETE_FIELD = 'isComplete';
@@ -18,9 +19,12 @@ const TITLE_FIELD = 'title';
 const POST_PRIVACY_TYPE_FIELD = 'postPrivacyType';
 const POST_TYPE_FIELD = 'postType';
 const PROJECT_ID_FIELD = 'projectID';
+const PROJECT_PREVIEW_ID_FIELD = 'projectPreviewID';
 const PURSUIT_ARRAY_FIELD = 'pursuitArray';
 const PURSUIT_FIELD = 'pursuit';
 const DATE_FIELD = 'date';
+const REMIX = 'remix';
+
 const STATUS_FIELD = 'status';
 const START_DATE_FIELD = 'startDate';
 const SELECTED_DRAFT_ID = 'selectedDraftID';
@@ -56,16 +60,19 @@ module.exports = {
     END_DATE_FIELD,
     USERNAME_FIELD,
     IS_PAGINATED_FIELD,
+    IS_FORKED_FIELD,
     LABELS_FIELD,
     PROGRESSION_FIELD,
     IS_COMPLETE_FIELD,
     TITLE_FIELD,
     POST_PRIVACY_TYPE_FIELD,
     POST_TYPE_FIELD,
+    PROJECT_PREVIEW_ID_FIELD,
     PURSUIT_ARRAY_FIELD,
     PURSUIT_FIELD,
     DATE_FIELD,
     MIN_DURATION_FIELD,
+    REMIX,
     SELECTED_DRAFT_ID,
     SELECTED_POSTS_FIELD,
     SUBTITLE_FIELD,

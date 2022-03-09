@@ -89,7 +89,11 @@ class ProjectController extends React.Component {
                 _id: this.props.content._id,
                 post_ids: this.props.content.post_ids,
                 username: this.props.content.username,
-                displayPhoto: this.props.content.display_photo_key
+                displayPhoto: this.props.content.display_photo_key,
+                ancestors: this.props.content.ancestors,
+                status: this.props.content.status,
+                remix: this.props.content.remix,
+                project_preview_id: this.props.content.project_preview_id
             } : null,
             priorProjectID: this.props.priorProjectID ? this.props.priorProjectID : null,
             selectedEventIndex: null,
@@ -108,7 +112,6 @@ class ProjectController extends React.Component {
         this.handleSortEnd = this.handleSortEnd.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.setModal = this.setModal.bind(this);
-        this.copyToClipboard = this.copyToClipboard.bind(this);
         this.clearModal = this.clearModal.bind(this);
         this.handleNewProjectSelect = this.handleNewProjectSelect.bind(this);
         this.shouldPull = this.shouldPull.bind(this);
@@ -422,20 +425,7 @@ class ProjectController extends React.Component {
         });
     }
 
-    copyToClipboard() {
-        const sourceContent = this.props.isContentOnlyView ? this.props.content : this.state.selectedProject;
-        return AxiosHelper.createFork(
-            this.props.authUser.profileID,
-            this.props.authUser.indexProfileID,
-            this.props.authUser.username,
-            sourceContent,
-            false
-        )
-            .then((res) => {
-                alert("Done!");
-            })
-            .catch(err => console.log(err));
-    }
+
 
     handleNewProjectSelect() {
         this.setState({
@@ -481,11 +471,23 @@ class ProjectController extends React.Component {
     }
 
     render() {
+        console.log(this.state.selectedProject);
         const contentType = this.state.editProjectState || this.props.isContentOnlyView || this.state.selectedProject
             ?
             PROJECT_EVENT : PROJECT;
         switch (this.state.window) {
             case (MAIN):
+                const sourceContent = this.props.isContentOnlyView ? this.props.content : this.state.selectedProject;
+                const forkData = {
+                    sourceContent,
+                    profileID: this.props.authUser.profileID,
+                    indexProfileID: this.props.authUser.indexProfileID,
+                    username: this.props.authUser.username,
+                    shouldCopyPosts: false,
+                    displayPhotoKey: this.props.authUser.croppedDisplayPhotoKey,
+
+                }
+
                 return (
                     <>
                         <ProfileModal
@@ -507,6 +509,7 @@ class ProjectController extends React.Component {
                                 completeUserID: this.props.authUser.profileID,
                                 userPreviewID: this.props.authUser.userPreviewID
                             }}
+                            forkData={forkData}
                             feedID={this.state.feedID}
                             contentType={contentType}
                             projectMetaData={this.state.selectedProject}
@@ -529,7 +532,6 @@ class ProjectController extends React.Component {
                             handleInputChange={this.handleInputChange}
                             onEditExistingProject={this.onEditExistingProject}
                             onNewProjectSelect={this.handleNewProjectSelect}
-                            copyToClipboard={this.copyToClipboard}
                             shouldPull={this.shouldPull}
                             onSelectAll={this.onSelectAll}
                             allPosts={this.selectFeedData()}

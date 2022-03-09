@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
 import DeleteWindow from './delete-window';
+import ForkWindow from './fork-window';
 import './right-manage-buttons.scss';
 
 const RightManageButtons = (props) => {
     const [areButtonsShowing, setButtonShow] = useState(false);
     const [isDeletePageShowing, setIsDeletePageShowing] = useState(false);
+    const [isForkPageShowing, setIsForkPageShowing] = useState(false);
+
     const toggleButton = () => {
         setButtonShow(!areButtonsShowing);
     }
 
     const toggleDelete = () => {
         setIsDeletePageShowing(!isDeletePageShowing);
+    }
+    const toggleFork = () => {
+        setIsForkPageShowing(!isForkPageShowing);
     }
 
     return (
@@ -28,9 +34,9 @@ const RightManageButtons = (props) => {
             <div className='rightmanagebuttons-centered-container'>
                 <button
                     id='rightmanagebuttons-right-button'
-                    onClick={props.copyToClipboard}
+                    onClick={toggleFork}
                 >
-                    Copy Post ID
+                    Fork Project
                 </button>
                 <p> {props.projectID}</p>
             </div>
@@ -40,6 +46,14 @@ const RightManageButtons = (props) => {
                     projectID={props.projectID}
                     toggleDelete={toggleDelete}
                 />
+            }
+            {isForkPageShowing &&
+                <ForkWindow
+                    toggleFork={toggleFork}
+                    title={props.title}
+                    forkData={props.forkData}
+                />
+
             }
         </div >
     );

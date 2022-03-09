@@ -24,12 +24,14 @@ const Results = (props) => {
                     <p>{props.person.bio}</p>
                 </div>
                 {props.person.pursuits.map(
-                    (pursuit, index) =>
-                        <div key={index} className='results-stats-container'>
-                            <h4>{pursuit.name}</h4>
-                            <p> {pursuit.num_milestones} Milestones</p>
-                            <p> {pursuit.total_min} Total Minutes</p>
-                        </div>
+                    (pursuit, index) => {
+                        if (index !== 0) return (
+                            <div key={index} className='results-stats-container'>
+                                <h4>{pursuit.name}</h4>
+                                <p> {pursuit.num_milestones} Milestones</p>
+                                <p> {pursuit.total_min} Total Minutes</p>
+                            </div>)
+                    }
                 )}
             </div>
             {/* <div>
