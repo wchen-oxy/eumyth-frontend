@@ -1,7 +1,7 @@
 import EventController from 'components/timeline/timeline-event-controller';
 import React from 'react';
 import AxiosHelper from 'utils/axios';
-import { PROJECT, SPOTLIGHT_POST } from 'utils/constants/flags';
+import { ALL, PROJECT, SPOTLIGHT_POST } from 'utils/constants/flags';
 import { returnUserImageURL } from 'utils/url';
 import { returnFormattedDistance } from 'utils/constants/ui-text';
 import withRouter from 'utils/withRouter';
@@ -143,13 +143,26 @@ class Tab extends React.Component {
 
     render() {
         const distanceText = returnFormattedDistance(this.props.user.distance);
+        console.log(this.props.user);
+        let count = 0;
+        for (const pursuitObject of this.props.user.pursuits) {
+            console.log(pursuitObject)
+            if (pursuitObject.name !== ALL && this.props.pursuits.includes(pursuitObject.name)) {
+                count++;
+            }
+        }
         return (
             <div key={this.props.user._id} className='tab-container'>
                 <div className='tab-profile-photo-container'>
                     <img src={returnUserImageURL(this.props.user.small_cropped_display_photo_key)}></img>
                 </div>
                 <a href={'/u/' + this.props.user.username}><h3>{this.props.user.first_name + " " + this.props.user.last_name}</h3></a>
-                {distanceText && <p>{distanceText}</p>}
+                <div className='tab-meta-container'>
+                    {distanceText && <p>{distanceText}</p>}
+                    {count !== 0 && <p>Shares {count} {count > 1 ? 'Pursuits With You' : 'Pursuit With You'} </p>}
+                </div>
+
+                <h4>Recent Work</h4>
                 <div className='tab-event-container'>
 
                     {this.state.content.upper &&

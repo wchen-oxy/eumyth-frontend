@@ -35,6 +35,9 @@ const SUBTITLE_FIELD = 'subtitle';
 const IMAGE_KEY_FIELD = 'imageKey';
 const IMAGES_FIELD = 'images';
 const TEXT_DATA_FIELD = 'textData';
+const THREAD_TYPE = 'threadType';
+const THREAD_TITLE = 'threadTitle';
+const THREAD_TITLE_PRIVACY = 'threadTitlePrivacy';
 
 const CROPPED_IMAGE_FIELD = 'croppedImage';
 const SMALL_CROPPED_IMAGE_FIELD = 'smallCroppedImage';
@@ -42,6 +45,9 @@ const TINY_CROPPED_IMAGE_FIELD = 'tinyCroppedImage';
 
 const FIRST_NAME_FIELD = 'firstName';
 const LAST_NAME_FIELD = 'lastName';
+
+const NEW = 'new';
+const EXISTING = 'existing';
 
 module.exports = {
     COVER_PHOTO_FIELD,
@@ -86,5 +92,11 @@ module.exports = {
 
     FIRST_NAME_FIELD,
     LAST_NAME_FIELD,
+
+    THREAD_TYPE,
+    THREAD_TITLE,
+    THREAD_TITLE_PRIVACY,
+    NEW,
+    EXISTING,
 
 }

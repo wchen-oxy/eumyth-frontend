@@ -13,10 +13,13 @@ const PostHeader = (props) => {
         <div className='postheader-main-container'>
             <div className='postheader-author-information'>
                 <div className='postheader-display-photo-container'>
-                    <img src={returnUserImageURL(props.displayPhoto)} />
+                    <a href={'/u/' + props.username}>
+                        <img src={returnUserImageURL(props.displayPhoto)} />
+                    </a>
+
                 </div>
                 <div className='postheader-text-information-container'>
-                    <h4>{props.username}</h4>
+                    <a href={'/u/' + props.username}><h4>{props.username}</h4></a>
                     {date && <p>{date.month}, {date.day}, {date.year} </p>}
                 </div>
             </div>

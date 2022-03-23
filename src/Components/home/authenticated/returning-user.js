@@ -359,7 +359,7 @@ class ReturningUserPage extends React.Component {
                         </table>
                     </div>
                 </div>
-                <div
+                {/* <div
                     id='returninguser-recent-work-container'
                     className='returninguser-main-row'
                 >
@@ -378,7 +378,7 @@ class ReturningUserPage extends React.Component {
                         className='returninguser-row'>
                         {renderedRecentPosts}
                     </div>
-                </div>
+                </div> */}
                 <div
                     id='returninguser-feed-container'
                     className='returninguser-main-row'

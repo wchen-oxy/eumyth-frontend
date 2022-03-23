@@ -14,16 +14,18 @@ import MinutesInput from './sub-components/minutes-input';
 import TitleInput from './sub-components/title-input';
 import ProjectDraftControls from './sub-components/project-draft-controls';
 import { displayDifficulty, } from 'utils/constants/ui-text';
-import { SHORT, LONG } from 'utils/constants/flags';
+import { SHORT, LONG, } from 'utils/constants/flags';
 import {
     COVER_PHOTO_FIELD,
     DATE_FIELD,
     DIFFICULTY_FIELD,
     DISPLAY_PHOTO_FIELD,
+    EXISTING,
     IMAGES_FIELD,
     LABELS_FIELD,
     IS_PAGINATED_FIELD,
     MIN_DURATION_FIELD,
+    NEW,
     POST_ID_FIELD,
     POST_PRIVACY_TYPE_FIELD,
     POST_TYPE_FIELD,
@@ -33,10 +35,14 @@ import {
     SUBTITLE_FIELD,
     TEXT_DATA_FIELD,
     TITLE_FIELD,
+    THREAD_TYPE,
     USERNAME_FIELD,
     INDEX_USER_ID_FIELD,
     SELECTED_DRAFT_ID,
-    USER_PREVIEW_ID_FIELD
+    USER_PREVIEW_ID_FIELD,
+    THREAD_TITLE,
+    THREAD_TITLE_PRIVACY,
+
 } from 'utils/constants/form-data';
 import './review-post.scss';
 
@@ -59,6 +65,11 @@ const ReviewPost = (props) => {
     const [shouldRemoveSavedCoverPhoto, setShouldRemoveSavedCoverPhoto] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [labels, setLabels] = useState(null);
+
+    const [toggleState, setToggleState] = useState(false);
+    const [title, setTitle] = useState('');
+    const [titlePrivacy, setTitlePrivacy] = useState(false);
+
 
     const setFile = (file) => {
         if (!file) return;
@@ -185,6 +196,7 @@ const ReviewPost = (props) => {
         formData.append(IS_PAGINATED_FIELD, props.isPaginated);
         formData.append(PROGRESSION_FIELD, (progression));
         formData.append(DIFFICULTY_FIELD, difficulty);
+
         if (selectedDraft) {
             console.log(selectedDraft);
             formData.append(SELECTED_DRAFT_ID, selectedDraft);
@@ -219,6 +231,14 @@ const ReviewPost = (props) => {
             for (const image of props.imageArray) {
                 formData.append(IMAGES_FIELD, image);
             }
+        }
+        if (toggleState) {
+            formData.append(THREAD_TYPE, NEW);
+            formData.append(THREAD_TITLE, title);
+            formData.append(THREAD_TITLE_PRIVACY, titlePrivacy)
+        }
+        else {
+            formData.append(THREAD_TYPE, EXISTING);
         }
         handlePostSpecificForm(formData, props.postType);
     }
@@ -265,7 +285,7 @@ const ReviewPost = (props) => {
 
                     </div>
                 </div>
-                <div className='reviewpost-meta-container'>
+                <div  >
                     <TitleInput
                         postType={props.postType}
                         title={props.previewTitle}
@@ -275,7 +295,13 @@ const ReviewPost = (props) => {
                     <ProjectDraftControls
                         drafts={props.authUser.drafts}
                         selectedDraft={selectedDraft}
+                        titlePrivacy={titlePrivacy}
+                        title={title}
+                        toggleState={toggleState}
                         setDraft={setDraft}
+                        setTitlePrivacy={setTitlePrivacy}
+                        setTitle={setTitle}
+                        setToggleState={setToggleState}
                     />
                     <CoverPhotoControls
                         useImageForThumbnail={useImageForThumbnail}

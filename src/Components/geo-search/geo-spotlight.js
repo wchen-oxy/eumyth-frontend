@@ -7,6 +7,7 @@ const GeoSpotlight = (props) => {
         <Tab
             key={user._id}
             user={user}
+            pursuits={props.pursuits}
             onEventClick={props.onEventClick}
         />
     )

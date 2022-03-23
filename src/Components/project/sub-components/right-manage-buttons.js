@@ -20,25 +20,22 @@ const RightManageButtons = (props) => {
     }
 
     return (
-        <div>
-            <div className='rightmanagebuttons-centered-container'>
-                {areButtonsShowing ?
-                    (<div className='rightmanagebuttons-centered-container'>
-                        <button onClick={toggleButton}> ... </button>
+        <div >
+            <div id="rightmanagebuttons-master-button-container">
+                <div className='rightmanagebuttons-outer-container'>
+                    <button onClick={toggleFork}>
+                        Fork Project
+                    </button>
+                    <button onClick={toggleButton}> ... </button>
+                </div>
+
+                {areButtonsShowing &&
+                    (<div className='rightmanagebuttons-outer-container'>
                         <button onClick={() => props.onEditExistingProject()}>Edit</button>
                         <button onClick={toggleDelete}>Delete Project</button>
                     </div>)
-                    : <button onClick={toggleButton}> ... </button>
+
                 }
-            </div>
-            <div className='rightmanagebuttons-centered-container'>
-                <button
-                    id='rightmanagebuttons-right-button'
-                    onClick={toggleFork}
-                >
-                    Fork Project
-                </button>
-                <p> {props.projectID}</p>
             </div>
             {isDeletePageShowing &&
                 <DeleteWindow
@@ -53,7 +50,6 @@ const RightManageButtons = (props) => {
                     title={props.title}
                     forkData={props.forkData}
                 />
-
             }
         </div >
     );

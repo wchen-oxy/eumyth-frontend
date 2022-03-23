@@ -81,7 +81,7 @@ const TopButtonBar = (props) => {
             );
         case (PROJECT_REARRANGE_STATE):
             return (
-                <div className=''>
+                <div id='topbuttonbar-dual-button-bar'>
                     <button onClick={props.onBackClick}>
                         Back
                     </button>

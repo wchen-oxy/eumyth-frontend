@@ -40,6 +40,8 @@ const ProjectReview = (props) => {
     const [removeCoverPhoto, setRemoveCoverPhoto] = useState(null);
 
     const handlePost = (status) => {
+        if (!window.confirm(
+            'Once You Publish, You Will Not Be Able To Make Changes to Your Project. Are You Sure?')) { return; }
         let formData = new FormData();
         formData.append(TITLE_FIELD, props.title.trim());
         if (props.projectMetaData.ancestors && props.projectMetaData.ancestors.length > 0) {
@@ -181,7 +183,7 @@ const ProjectReview = (props) => {
                 <button
                     onClick={() => handlePost(PUBLISHED)}
                 >
-                    Submit
+                    Publish
                 </button>
             </div>
 

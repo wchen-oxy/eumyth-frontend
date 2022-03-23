@@ -9,8 +9,8 @@ import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import withRouter from 'utils/withRouter';
 import AxiosHelper from 'utils/axios';
 import {
-    PROJECT_CONTENT_ONLY_VIEW_STATE,
     POST,
+    PROJECT_CONTENT_ONLY_VIEW_STATE,
     POST_VIEWER_MODAL_STATE,
     PROJECT_EVENT,
     PROJECT_MACRO_VIEW_STATE,
@@ -471,7 +471,6 @@ class ProjectController extends React.Component {
     }
 
     render() {
-        console.log(this.state.selectedProject);
         const contentType = this.state.editProjectState || this.props.isContentOnlyView || this.state.selectedProject
             ?
             PROJECT_EVENT : PROJECT;

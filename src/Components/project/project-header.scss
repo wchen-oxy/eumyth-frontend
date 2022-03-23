@@ -5,7 +5,7 @@
     text-align: center;
 }
 
-#projectheader-user-fork{
+#projectheader-user-fork {
     @include flex-display-column;
     align-items: center;
     justify-content: center;
@@ -13,11 +13,20 @@
 
 #projectheader-user-info-container {
     @include flex-display-row;
-    align-items: center;
     justify-content: center;
+
+    a {
+        @include flex-display-row;
+        align-items: center;
+        justify-content: center;
+    }
     img {
         @include tiny-profile-photo;
         border-radius: 50%;
         object-fit: cover;
     }
+}
+
+#projectheader-previews {
+    @include flex-display-row;
 }

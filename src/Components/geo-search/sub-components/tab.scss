@@ -17,6 +17,7 @@
             margin: 0 auto;
         }
     }
+    
     a {
         color: black;
         text-decoration: none; /* no underline */
@@ -25,7 +26,10 @@
         margin: 0 auto;
         text-align: center;
     }
-
+    .tab-meta-container{
+        @include flex-display-column;
+        justify-content: center;
+    }
     .tab-event-container {
         margin-top: 20px;
     }

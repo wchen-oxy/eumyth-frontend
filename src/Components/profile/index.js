@@ -20,7 +20,6 @@ import {
     FOLLOW_REQUESTED_STATE,
     FOLLOWED_STATE
 } from 'utils/constants/flags';
-
 import { createPursuitArray } from 'utils';
 import './index.scss';
 
@@ -39,8 +38,6 @@ const selectMessage = (action, isPrivate) => {
     }
 }
 
-
-
 const filterPublicPosts = (allPosts) => {
     return allPosts.reduce((result, value) => {
         if (value.post_privacy_type !== PRIVATE) { result.push(value); }
@@ -57,7 +54,6 @@ const ProfilePage = (props) =>
                     {...props}
                     authUser={authUser}
                 />
-
         }
     </AuthUserContext.Consumer>
 )
@@ -358,7 +354,6 @@ class ProfilePageAuthenticated extends React.Component {
                     closeMasterModal={this.props.closeMasterModal}
                 />)
         }
-
     }
 
     handleFollowerStatusChange(action) {
@@ -388,7 +383,6 @@ class ProfilePageAuthenticated extends React.Component {
                 this.handleFollowerStatusChange(action);
         }
     }
-
 
     decideHeroContentVisibility() {
         const hideFromAll = !this.props.authUser?.username && this.state.profileData.private;
@@ -458,7 +452,7 @@ class ProfilePageAuthenticated extends React.Component {
                             closeMasterModal={this.props.closeMasterModal}
                             isContentOnlyView={this.state.isContentOnlyView}
                             priorProjectID={this.state.selectedContent?.ancestors.length > 0 ?
-                                this.state.selectedContent.ancestors[this.state.selectedContent.ancestors.length - 1]
+                                this.state.selectedContent.ancestors[this.state.selectedContent.ancestors.length - 1].project_id
                                 : null
                             }
                         />

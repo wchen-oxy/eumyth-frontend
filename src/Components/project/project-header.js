@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import AxiosHelper from 'utils/axios';
 import { returnUserImageURL } from 'utils/url';
-import "./project-header.scss";
 import SimilarProjectInfo from './sub-components/similar-project-info';
+import "./project-header.scss";
+
 const ProjectHeader = (props) => {
     const [projectPreviews, setProjectPreviews] = useState([]);
     const [toggleSimilarProjectsStatus, toggleSimilarProjects] = useState(false);
@@ -30,19 +31,21 @@ const ProjectHeader = (props) => {
                 <h4>{props.descriptionValue}</h4>
             </div>
             <div id="projectheader-user-fork">
-                {props.projectMetaData.remix && <p>{props.projectMetaData.remix}</p>}
                 {props.priorProjectID && <a href={'/c/' + props.priorProjectID}>See Predecessor Project</a>}
+                {props.projectMetaData.remix && <p>{props.projectMetaData.remix}</p>}
             </div>
             <div id="projectheader-user-info-container">
-                <img src={returnUserImageURL(props.projectMetaData.displayPhoto)}></img>
-                <h5>{props.projectMetaData.username}</h5>
+                <a href={'/u/' + props.projectMetaData.username}>
+                    <img src={returnUserImageURL(props.projectMetaData.displayPhoto)}></img>
+                    <h5>{props.projectMetaData.username}</h5>
+                </a>
             </div>
             <button onClick={() => toggleSimilarProjects(!toggleSimilarProjectsStatus)}>
                 {toggleSimilarProjectsStatus ? 'Return To Overview' : 'See Other In Progress Work'}
             </button>
             {
                 toggleSimilarProjectsStatus ?
-                    <div>
+                    <div id='projectheader-previews'>
                         {projectPreviews.map((preview, index) =>
                             <SimilarProjectInfo
                                 key={index}

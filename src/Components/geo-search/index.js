@@ -250,6 +250,7 @@ class AuthenticatedGeoSearch extends React.Component {
                         <GeoSpotlight
                             users={this.state.spotlight}
                             onEventClick={this.handleEventClick}
+                            pursuits={this.state.pursuits}
                         /> :
                         this.state.people.length > 0 ?
                             this.state.people.map(

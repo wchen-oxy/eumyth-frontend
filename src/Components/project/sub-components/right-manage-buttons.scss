@@ -1,14 +1,16 @@
 @import "../../../partials";
 
- 
-.rightmanagebuttons-centered-container {
+#rightmanagebuttons-master-button-container {
     @include flex-display-column;
-    align-items: center;
-    button {
-        width: fit-content;
-    }
-    p {
-        font-size: 12px;
-        margin: 0;
+}
+
+.rightmanagebuttons-outer-container {
+    @include flex-display-row;
+
+    .rightmanagebuttons-inner-container {
+        p {
+            font-size: 12px;
+            margin: 0;
+        }
     }
 }
