@@ -42,6 +42,8 @@ import {
     USER_PREVIEW_ID_FIELD,
     THREAD_TITLE,
     THREAD_TITLE_PRIVACY,
+    USER_ID_FIELD,
+    STATUS_FIELD,
 
 } from 'utils/constants/form-data';
 import './review-post.scss';
@@ -85,16 +87,43 @@ const ReviewPost = (props) => {
     }
 
     const handleNewSubmit = (formData) => {
-        return AxiosHelper.createPost(formData)
-            .then((result) => {
-                setIsSubmitting(false);
-                result.status === 201 ? handleSuccess() : handleError();
-            })
-            .catch((result) => {
-                setIsSubmitting(false);
-                console.log(result.error);
-                alert(result);
-            });
+        if (toggleState) {
+            console.log('true toggleState');
+            formData.append(USER_ID_FIELD, props.authUser.profileID);
+            formData.append(STATUS_FIELD, "DRAFT");
+
+            return AxiosHelper.createProject(formData)
+                .then((results) => {
+                    console.log(results);
+                    console.log('fa');
+                    formData.append(SELECTED_DRAFT_ID, results.data.id);
+                    formData.append(THREAD_TYPE, EXISTING);
+                    return AxiosHelper.createPost(formData)
+                        .then((result) => {
+                            setIsSubmitting(false);
+                            result.status === 201 ? handleSuccess() : handleError();
+                        })
+                        .catch((result) => {
+                            setIsSubmitting(false);
+                            console.log(result.error);
+                            alert(result);
+                        })
+                }
+                )
+        }
+        else {
+            return AxiosHelper.createPost(formData)
+                .then((result) => {
+                    setIsSubmitting(false);
+                    result.status === 201 ? handleSuccess() : handleError();
+                })
+                .catch((result) => {
+                    setIsSubmitting(false);
+                    console.log(result.error);
+                    alert(result);
+                })
+
+        }
     }
 
     const handlePostSpecificForm = (formData, type) => {
@@ -128,47 +157,48 @@ const ReviewPost = (props) => {
                     }
                     formData.append(COVER_PHOTO_FIELD, props.coverPhoto);
                 }
+                console.log('new submit')
                 return handleNewSubmit(formData);
             }
         }
-        else if (type === LONG) {
-            if (props.isUpdateToPost) {
-                formData.append(POST_ID_FIELD, props.postID);
-                formData.append(REMOVE_COVER_PHOTO, shouldRemoveSavedCoverPhoto)
-                if (useCoverPhoto) {
-                    if (!coverPhoto && !props.coverPhotoKey) {
-                        return alert(`One moment friend, I'm almost 
-                                    done compressing your photo`)
-                    }
-                    else {
-                        formData.append(COVER_PHOTO_FIELD, coverPhoto);
-                        return handleUpdateSubmit(formData)
-                    }
-                }
-                else if (props.coverPhotoKey) {
-                    if (shouldRemoveSavedCoverPhoto) {
-                        return AxiosHelper.deletePhotoByKey(props.coverPhotoKey)
-                            .then(() => handleUpdateSubmit(formData));
-                    }
-                    else {
-                        return handleUpdateSubmit(formData);
-                    }
-                }
-                else {
-                    return handleUpdateSubmit(formData);
-                }
-            }
-            else {
-                if (useCoverPhoto) {
-                    if (!coverPhoto) {
-                        return alert(`One moment friend, I'm almost 
-                                    done compressing your photo`)
-                    };
-                    formData.append(COVER_PHOTO_FIELD, coverPhoto);
-                }
-                return handleNewSubmit(formData);
-            }
-        }
+        // else if (type === LONG) {
+        //     if (props.isUpdateToPost) {
+        //         formData.append(POST_ID_FIELD, props.postID);
+        //         formData.append(REMOVE_COVER_PHOTO, shouldRemoveSavedCoverPhoto)
+        //         if (useCoverPhoto) {
+        //             if (!coverPhoto && !props.coverPhotoKey) {
+        //                 return alert(`One moment friend, I'm almost 
+        //                             done compressing your photo`)
+        //             }
+        //             else {
+        //                 formData.append(COVER_PHOTO_FIELD, coverPhoto);
+        //                 return handleUpdateSubmit(formData)
+        //             }
+        //         }
+        //         else if (props.coverPhotoKey) {
+        //             if (shouldRemoveSavedCoverPhoto) {
+        //                 return AxiosHelper.deletePhotoByKey(props.coverPhotoKey)
+        //                     .then(() => handleUpdateSubmit(formData));
+        //             }
+        //             else {
+        //                 return handleUpdateSubmit(formData);
+        //             }
+        //         }
+        //         else {
+        //             return handleUpdateSubmit(formData);
+        //         }
+        //     }
+        //     else {
+        //         if (useCoverPhoto) {
+        //             if (!coverPhoto) {
+        //                 return alert(`One moment friend, I'm almost 
+        //                             done compressing your photo`)
+        //             };
+        //             formData.append(COVER_PHOTO_FIELD, coverPhoto);
+        //         }
+        //         return handleNewSubmit(formData);
+        //     }
+        // }
         else {
             throw new Error('No Content Type matched in reviewpost')
         }
@@ -188,6 +218,7 @@ const ReviewPost = (props) => {
     }
 
     const handleFormAppend = () => {
+        console.log(props.authUser);
         setIsSubmitting(true);
         let formData = new FormData();
         formData.append(DATE_FIELD, date);
@@ -196,6 +227,7 @@ const ReviewPost = (props) => {
         formData.append(IS_PAGINATED_FIELD, props.isPaginated);
         formData.append(PROGRESSION_FIELD, (progression));
         formData.append(DIFFICULTY_FIELD, difficulty);
+        console.log(props.authUser.username);
 
         if (selectedDraft) {
             console.log(selectedDraft);
@@ -268,7 +300,9 @@ const ReviewPost = (props) => {
     }
 
     return (
-        <div id='reviewpost-small-window'>
+        < div id='reviewpost-small-window' >
+            {console.log(toggleState)}
+
             <div>
                 <div>
                     <div id='reviewpost-header'>
