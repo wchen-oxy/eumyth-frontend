@@ -439,6 +439,23 @@ class ShortPostViewer extends React.Component {
 
     render() {
         const isOwnProfile = this.props.authUser?.username === this.props.eventData.username;
+        const headerProps = {
+            isOwnProfile,
+            editProjectState: this.props.editProjectState,
+            date: this.state.date,
+            displayPhoto: this.props.eventData.display_photo_key,
+            username: this.props.eventData.username
+        }
+        const metaProps = {
+            threadID: this.props.eventData.project_id,
+            isPaginated: this.state.isPaginated,
+            progression: this.state.progression,
+            labels: this.props.eventData.labels,
+            pursuit: this.state.pursuitCategory,
+            min: this.state.min,
+            textData: this.props.textData
+        }
+
         if (this.state.window === INITIAL_STATE) {
             if (!this.props.eventData.image_data.length) {
                 if (this.props.largeViewMode) {
@@ -446,24 +463,15 @@ class ShortPostViewer extends React.Component {
                         <div className='shortpostviewer-window'>
                             <div id='shortpostviewer-large-inline-header-container'>
                                 <PostHeader
-                                    isOwnProfile={isOwnProfile}
-                                    editProjectState={this.props.editProjectState}
-                                    username={this.props.eventData.username}
-                                    date={this.state.date}
-                                    displayPhoto={this.props.eventData.display_photo_key}
+                                    {...headerProps}
                                     onEditClick={this.handleWindowChange}
                                     onDeletePost={this.handleDeletePost}
                                 />
                             </div>
                             <ShortPostMetaInfo
+                                isFullPage
                                 difficulty={this.props.eventData.difficulty}
-                                isPaginated={this.state.isPaginated}
-                                isFullPage={true}
-                                progression={this.state.progression}
-                                labels={this.props.eventData.labels}
-                                pursuit={this.state.pursuitCategory}
-                                min={this.state.min}
-                                textData={null}
+                                {...metaProps}
                             />
 
                             <div className='shortpostviewer-large-hero-text-container'>
@@ -482,21 +490,11 @@ class ShortPostViewer extends React.Component {
 
                                 <div className='shortpostviewer-inline-side-container'>
                                     <PostHeader
-                                        isOwnProfile={isOwnProfile}
-                                        editProjectState={this.props.editProjectState}
-                                        username={this.props.eventData.username}
-                                        date={this.state.date}
-                                        displayPhoto={this.props.eventData.display_photo_key}
+                                        {...headerProps}
                                     />
                                     <ShortPostMetaInfo
                                         index={this.state.imageIndex}
-                                        isPaginated={this.state.isPaginated}
-                                        progression={this.state.progression}
-                                        labels={this.props.eventData.labels}
-                                        pursuit={this.state.pursuitCategory}
-                                        min={this.state.min}
-                                        textData={null}
-
+                                        {...metaProps}
                                     />
                                 </div>
                                 <div className='shortpostviewer-inline-hero-container'>
@@ -525,22 +523,13 @@ class ShortPostViewer extends React.Component {
                                     ref={this.heroRef}
                                 >
                                     <PostHeader
-                                        isOwnProfile={isOwnProfile}
-                                        editProjectState={this.props.editProjectState}
-                                        username={this.props.eventData.username}
-                                        date={this.state.date}
-                                        displayPhoto={this.props.eventData.display_photo_key}
+                                        {...headerProps}
                                         onEditClick={this.handleWindowChange}
                                         onDeletePost={this.handleDeletePost}
                                     />
                                     <ShortPostMetaInfo
                                         index={this.state.imageIndex}
-                                        isPaginated={this.state.isPaginated}
-                                        progression={this.state.progression}
-                                        labels={this.props.eventData.labels}
-                                        pursuit={this.state.pursuitCategory}
-                                        min={this.state.min}
-                                        textData={this.props.textData}
+                                        {...metaProps}
                                     />
                                 </div>
                             </div>
@@ -556,14 +545,11 @@ class ShortPostViewer extends React.Component {
                                 onClick={this.handleModalLaunch}
                             >
                                 <PostHeader
-                                    isOwnProfile={this.props.isOwnProfile}
-                                    editProjectState={this.props.editProjectState}
-                                    username={this.props.eventData.username}
-                                    date={this.state.date}
-                                    displayPhoto={this.props.eventData.display_photo_key}
+                                    {...headerProps}
                                 />
                                 <div className='shortpostviewer-inline-side-container'>
                                     <ShortPostMetaInfo
+                                        threadID={this.props.eventData.project_id}
                                         index={this.state.imageIndex}
                                         isPaginated={this.state.isPaginated}
                                         progression={this.state.progression}

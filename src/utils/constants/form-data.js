@@ -35,9 +35,10 @@ const SUBTITLE_FIELD = 'subtitle';
 const IMAGE_KEY_FIELD = 'imageKey';
 const IMAGES_FIELD = 'images';
 const TEXT_DATA_FIELD = 'textData';
-const THREAD_TYPE = 'threadType';
-const THREAD_TITLE = 'threadTitle';
-const THREAD_TITLE_PRIVACY = 'threadTitlePrivacy';
+const THREAD_TYPE_FIELD = 'threadType';
+const THREAD_TITLE_FIELD = 'threadTitle';
+const THREAD_TITLE_PRIVACY_FIELD = 'threadTitlePrivacy';
+const COMPLETE_PROJECT_FIELD = 'completeProject';
 
 const CROPPED_IMAGE_FIELD = 'croppedImage';
 const SMALL_CROPPED_IMAGE_FIELD = 'smallCroppedImage';
@@ -93,9 +94,10 @@ module.exports = {
     FIRST_NAME_FIELD,
     LAST_NAME_FIELD,
 
-    THREAD_TYPE,
-    THREAD_TITLE,
-    THREAD_TITLE_PRIVACY,
+    THREAD_TYPE_FIELD,
+    THREAD_TITLE_FIELD,
+    THREAD_TITLE_PRIVACY_FIELD,
+    COMPLETE_PROJECT_FIELD,
     NEW,
     EXISTING,
 

@@ -51,6 +51,7 @@ class ReturningUserPage extends React.Component {
         this.renderModal = this.renderModal.bind(this);
         this.renderRecentPosts = this.renderRecentPosts.bind(this);
         this.handleCommentIDInjection = this.handleCommentIDInjection.bind(this);
+        this.loadData = this.loadData.bind(this);
     }
 
     componentDidMount() {
@@ -58,31 +59,9 @@ class ReturningUserPage extends React.Component {
         if (this._isMounted && this.state.username) {
             const pursuitObjects =
                 this.createPursuits(this.props.authUser.pursuits);
-            const returnedPosts = this.props.authUser.recentPosts.length > 0 ?
-                Promise.all([
-                    AxiosHelper.returnMultiplePosts(this.props.authUser.recentPosts, true),
-                    this.props.firebase.returnName()
-                ])
-                    .then(results => {
-                        const recentPosts = results[0].data?.posts ?? [];
-                        return ([recentPosts, results[1]]);
-                    })
-                :
-                this.props.firebase.returnName().then((result) => [[], result]);
-            returnedPosts.then((results) => {
-                this.setState(
-                    ({
-                        firstName: results[1].firstName,
-                        lastName: results[1].lastName,
-                        recentPosts: results[0],
-                        hasMore: this.props.authUser.followingFeed.length > 0,
-                        pursuitObjects: pursuitObjects,
-                    }));
-            })
-                .catch((err) => {
-                    console.log(err);
-                    alert('Could Not Load Feed.' + err);
-                });
+            this.setState({
+                pursuitObjects: pursuitObjects
+            }, this.loadData)
         }
     }
 
@@ -90,6 +69,37 @@ class ReturningUserPage extends React.Component {
         this._isMounted = false;
     }
 
+    loadData() {
+        const promisedBasicInfo = [this.props.firebase.returnName()];
+        if (this.props.authUser.recentPosts.length > 0) {
+            promisedBasicInfo.push(AxiosHelper.returnMultiplePosts(this.props.authUser.recentPosts, true));
+        }
+        if (this.props.authUser.followingFeed.length > 0) {
+            promisedBasicInfo.push(AxiosHelper.returnMultiplePosts(this.props.authUser.followingFeed, true));
+        }
+
+        return Promise.all(promisedBasicInfo)
+            .then(results => {
+                console.log(results)
+                const recentPosts = results[1].data?.posts ?? [];
+                const feedData = results[2]?.data.posts ?? [];
+                console.log(feedData);
+                console.log(this.props.authUser.followingFeed);
+                this.setState(
+                    ({
+                        recentPosts,
+                        feedData,
+                        firstName: results[0].firstName,
+                        lastName: results[0].lastName,
+                        hasMore: feedData.length < this.props.authUser.followingFeed.length
+                    }));
+
+            })
+            .catch((err) => {
+                console.log(err);
+                alert('Could Not Load Feed.' + err);
+            });
+    }
     renderRecentPosts(data) {
         let postIndex = 0;
         let array = []
@@ -159,6 +169,7 @@ class ReturningUserPage extends React.Component {
     }
 
     fetchNextPosts() {
+        console.log("asdfadfadsf")
         const posts = this.props.authUser.followingFeed
         const slicedObjectIDs = posts.slice(
             this.state.nextOpenPostIndex,
@@ -168,11 +179,15 @@ class ReturningUserPage extends React.Component {
             this.state.nextOpenPostIndex + slicedObjectIDs.length
             : this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH;
         const hasMore = nextOpenPostIndex >= posts.length || feedLimitReached;
+        console.log(this.state.hasMore);
         return (AxiosHelper
             .returnMultiplePosts(
                 slicedObjectIDs,
                 true)
             .then((result) => {
+                console.log(result);
+                console.log(this.state.feedData.concat(result.data.posts));
+
                 if (result.data) {
                     this.setState((state) => ({
                         feedData: state.feedData.concat(result.data.posts),
@@ -310,7 +325,15 @@ class ReturningUserPage extends React.Component {
                 TEMP_PROFILE_PHOTO_URL);
         const renderedRecentPosts = this.state.recentPosts ?
             this.renderRecentPosts(this.state.recentPosts) : null;
+        const feed =
+            this.createFeed(this.state.feedData)
+                .map((feedItem) =>
+                    <div className='returninguser-feed-object-container'>
+                        {feedItem}
+                    </div>
+                )
 
+        console.log(this.state.feedData.length);
         return (
             <div id='returninguser-body-container'>
                 <div id='returninguser-top-title-container' >
@@ -386,7 +409,7 @@ class ReturningUserPage extends React.Component {
                     <h4 className='returninguser-title'>Your Feed</h4>
                     <div id='returninguser-infinite-scroll-container' >
                         <InfiniteScroll
-                            dataLength={REGULAR_CONTENT_REQUEST_LENGTH}
+                            dataLength={this.state.nextOpenPostIndex}
                             next={this.fetchNextPosts}
                             hasMore={this.state.hasMore}
                             loader={<h4>Loading...</h4>}
@@ -394,12 +417,7 @@ class ReturningUserPage extends React.Component {
                                 <p style={{ textAlign: 'center' }}>
                                     <b>Yay! You have seen it all</b>
                                 </p>}>
-                            {this.createFeed(this.state.feedData)
-                                .map((feedItem) =>
-                                    <div className='returninguser-feed-object-container'>
-                                        {feedItem}
-                                    </div>
-                                )}
+                            {feed}
                         </InfiniteScroll>
                     </div>
                 </div>

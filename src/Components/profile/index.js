@@ -510,7 +510,7 @@ class ProfilePageAuthenticated extends React.Component {
                                 disabled={this.state.contentType === PROJECT ?
                                     true : false}
                                 onClick={() => this.handleMediaTypeSwitch(PROJECT)}>
-                                Projects
+                                Threads
                             </button>
                         </div>
                         {this.state.contentType && this.decideHeroContentVisibility()}

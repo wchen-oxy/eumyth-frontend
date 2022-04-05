@@ -11,8 +11,7 @@ const ProjectDraftControls = (props) => {
             {item.title}
         </option>) :
         <option value={null} disabled>No Drafts Available</option>;
-    if (doDraftsExist) draftOptions.unshift(<option value={''}></option>);
-
+    draftOptions.unshift(<option value={null}></option>);
     return (
         <div >
             <div className='projectdraftcontrols-main'>
@@ -32,12 +31,12 @@ const ProjectDraftControls = (props) => {
                             name='subtitle'
                             id='titleinput-content'
                             placeholder='Write the Title of Your Thread'
-                            onChange={(e) => props.setTitle(e.target.value)}
+                            onChange={(e) => props.setThreadTitle(e.target.value)}
                             minRows={2}
                             maxLength={140} />
                         <div className='projectdraftcontrols-inner'>
                             <label>Make Title Private</label>
-                            <input type="checkbox" onChange={(e) => props.setTitlePrivacy(e.target.value)} />
+                            <input type="checkbox" onChange={() => props.setTitlePrivacy(!props.titlePrivacy)} />
                         </div>
                     </div>
                     :
@@ -49,6 +48,10 @@ const ProjectDraftControls = (props) => {
                             onChange={e => props.setDraft(e.target.value)}>
                             {draftOptions}
                         </select>
+                        <div className='projectdraftcontrols-inner'>
+                            <label>Complete Thread</label>
+                            <input type="checkbox" onChange={() => props.setCompleteProject(!props.isCompleteProject)} />
+                        </div>
                     </div>
             }
         </div>

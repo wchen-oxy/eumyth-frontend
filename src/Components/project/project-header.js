@@ -40,9 +40,10 @@ const ProjectHeader = (props) => {
                     <h5>{props.projectMetaData.username}</h5>
                 </a>
             </div>
-            <button onClick={() => toggleSimilarProjects(!toggleSimilarProjectsStatus)}>
-                {toggleSimilarProjectsStatus ? 'Return To Overview' : 'See Other In Progress Work'}
-            </button>
+            {projectPreviews.length > 0 &&
+                <button onClick={() => toggleSimilarProjects(!toggleSimilarProjectsStatus)}>
+                    {toggleSimilarProjectsStatus ? 'Return To Overview' : 'See Other Threads With The Same Parent'}
+                </button>}
             {
                 toggleSimilarProjectsStatus ?
                     <div id='projectheader-previews'>

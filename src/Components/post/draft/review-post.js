@@ -25,7 +25,6 @@ import {
     LABELS_FIELD,
     IS_PAGINATED_FIELD,
     MIN_DURATION_FIELD,
-    NEW,
     POST_ID_FIELD,
     POST_PRIVACY_TYPE_FIELD,
     POST_TYPE_FIELD,
@@ -35,20 +34,20 @@ import {
     SUBTITLE_FIELD,
     TEXT_DATA_FIELD,
     TITLE_FIELD,
-    THREAD_TYPE,
     USERNAME_FIELD,
     INDEX_USER_ID_FIELD,
     SELECTED_DRAFT_ID,
     USER_PREVIEW_ID_FIELD,
-    THREAD_TITLE,
-    THREAD_TITLE_PRIVACY,
     USER_ID_FIELD,
     STATUS_FIELD,
+    THREAD_TITLE_PRIVACY_FIELD,
+    COMPLETE_PROJECT_FIELD,
 
 } from 'utils/constants/form-data';
 import './review-post.scss';
 
-
+const warn = () => alert(`One moment friend, I'm almost done compressing
+your photo`);
 const ReviewPost = (props) => {
     const [difficulty, setDifficulty] = useState(props.difficulty);
     const [date, setDate] = useState(props.date);
@@ -68,9 +67,10 @@ const ReviewPost = (props) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [labels, setLabels] = useState(null);
 
-    const [toggleState, setToggleState] = useState(false);
-    const [title, setTitle] = useState('');
+    const [threadToggleState, setToggleState] = useState(false);
+    const [threadTitle, setThreadTitle] = useState('');
     const [titlePrivacy, setTitlePrivacy] = useState(false);
+    const [isCompleteProject, setCompleteProject] = useState(false);
 
 
     const setFile = (file) => {
@@ -87,33 +87,20 @@ const ReviewPost = (props) => {
     }
 
     const handleNewSubmit = (formData) => {
-        if (toggleState) {
-            console.log('true toggleState');
+        if (threadToggleState) {
             formData.append(USER_ID_FIELD, props.authUser.profileID);
             formData.append(STATUS_FIELD, "DRAFT");
-
+            formData.set(TITLE_FIELD, threadTitle);
+            formData.append(THREAD_TITLE_PRIVACY_FIELD, titlePrivacy);
             return AxiosHelper.createProject(formData)
                 .then((results) => {
-                    console.log(results);
-                    console.log('fa');
                     formData.append(SELECTED_DRAFT_ID, results.data.id);
-                    formData.append(THREAD_TYPE, EXISTING);
+                    formData.set(TITLE_FIELD, props.previewTitle);
+                    console.log("New thread");
                     return AxiosHelper.createPost(formData)
-                        .then((result) => {
-                            setIsSubmitting(false);
-                            result.status === 201 ? handleSuccess() : handleError();
-                        })
-                        .catch((result) => {
-                            setIsSubmitting(false);
-                            console.log(result.error);
-                            alert(result);
-                        })
-                }
-                )
-        }
-        else {
-            return AxiosHelper.createPost(formData)
+                })
                 .then((result) => {
+                    console.log(result);
                     setIsSubmitting(false);
                     result.status === 201 ? handleSuccess() : handleError();
                 })
@@ -122,87 +109,20 @@ const ReviewPost = (props) => {
                     console.log(result.error);
                     alert(result);
                 })
-
         }
-    }
-
-    const handlePostSpecificForm = (formData, type) => {
-        if (type === SHORT) {
-            if (props.isUpdateToPost) {
-                formData.append(POST_ID_FIELD, props.postID);
-                formData.append(REMOVE_COVER_PHOTO, shouldRemoveSavedCoverPhoto)
-                if (useImageForThumbnail) {
-                    if (!props.coverPhoto && !props.coverPhotoKey) {
-                        return alert(`One moment friend, I'm almost done compressing
-                        your photo`);
-                    }
-                    else {
-                        formData.append(COVER_PHOTO_FIELD, props.coverPhoto);
-                        return handleUpdateSubmit(formData);
-                    }
-                }
-                else if (!useImageForThumbnail && props.coverPhotoKey) {
-                    return AxiosHelper.deletePhotoByKey(props.coverPhotoKey)
-                        .then(() => handleUpdateSubmit(formData));
-                }
-                else {
-                    return handleUpdateSubmit(formData)
-                }
-            }
-            else {
-                if (useImageForThumbnail) {
-                    if (!props.coverPhoto) {
-                        return alert(`One moment friend, I'm almost
-                                     done compressing your photo`);
-                    }
-                    formData.append(COVER_PHOTO_FIELD, props.coverPhoto);
-                }
-                console.log('new submit')
-                return handleNewSubmit(formData);
-            }
-        }
-        // else if (type === LONG) {
-        //     if (props.isUpdateToPost) {
-        //         formData.append(POST_ID_FIELD, props.postID);
-        //         formData.append(REMOVE_COVER_PHOTO, shouldRemoveSavedCoverPhoto)
-        //         if (useCoverPhoto) {
-        //             if (!coverPhoto && !props.coverPhotoKey) {
-        //                 return alert(`One moment friend, I'm almost 
-        //                             done compressing your photo`)
-        //             }
-        //             else {
-        //                 formData.append(COVER_PHOTO_FIELD, coverPhoto);
-        //                 return handleUpdateSubmit(formData)
-        //             }
-        //         }
-        //         else if (props.coverPhotoKey) {
-        //             if (shouldRemoveSavedCoverPhoto) {
-        //                 return AxiosHelper.deletePhotoByKey(props.coverPhotoKey)
-        //                     .then(() => handleUpdateSubmit(formData));
-        //             }
-        //             else {
-        //                 return handleUpdateSubmit(formData);
-        //             }
-        //         }
-        //         else {
-        //             return handleUpdateSubmit(formData);
-        //         }
-        //     }
-        //     else {
-        //         if (useCoverPhoto) {
-        //             if (!coverPhoto) {
-        //                 return alert(`One moment friend, I'm almost 
-        //                             done compressing your photo`)
-        //             };
-        //             formData.append(COVER_PHOTO_FIELD, coverPhoto);
-        //         }
-        //         return handleNewSubmit(formData);
-        //     }
-        // }
         else {
-            throw new Error('No Content Type matched in reviewpost')
-        }
+            formData.append(COMPLETE_PROJECT_FIELD, isCompleteProject)
+            return AxiosHelper.createPost(formData)
+                .then((result) => {
+                    setIsSubmitting(false);
+                    result.status === 201 ? handleSuccess() : handleError();
+                })
+                .catch((result) => {
+                    setIsSubmitting(false);
+                    alert(result);
+                })
 
+        }
     }
 
     const handleUpdateSubmit = (formData) => {
@@ -217,8 +137,37 @@ const ReviewPost = (props) => {
             });
     }
 
+    const handlePostSpecificForm = (formData, type) => {
+        if (props.isUpdateToPost) {
+            formData.append(POST_ID_FIELD, props.postID);
+            formData.append(REMOVE_COVER_PHOTO, shouldRemoveSavedCoverPhoto);
+            if (useImageForThumbnail) {
+                if (!props.coverPhoto && !props.coverPhotoKey) {
+                    return warn();
+                }
+                else {
+                    formData.append(COVER_PHOTO_FIELD, props.coverPhoto);
+                    return handleUpdateSubmit(formData);
+                }
+            }
+            else if (!useImageForThumbnail && props.coverPhotoKey) {
+                return AxiosHelper.deletePhotoByKey(props.coverPhotoKey)
+                    .then(() => handleUpdateSubmit(formData));
+            }
+            else {
+                return handleUpdateSubmit(formData)
+            }
+        }
+        else {
+            if (useImageForThumbnail) {
+                if (!props.coverPhoto) { return warn(); }
+                formData.append(COVER_PHOTO_FIELD, props.coverPhoto);
+            }
+            return handleNewSubmit(formData);
+        }
+    }
+
     const handleFormAppend = () => {
-        console.log(props.authUser);
         setIsSubmitting(true);
         let formData = new FormData();
         formData.append(DATE_FIELD, date);
@@ -227,11 +176,13 @@ const ReviewPost = (props) => {
         formData.append(IS_PAGINATED_FIELD, props.isPaginated);
         formData.append(PROGRESSION_FIELD, (progression));
         formData.append(DIFFICULTY_FIELD, difficulty);
-        console.log(props.authUser.username);
 
         if (selectedDraft) {
             console.log(selectedDraft);
             formData.append(SELECTED_DRAFT_ID, selectedDraft);
+        }
+        if (props.authUser.smallCroppedDisplayPhotoKey) {
+            formData.append(DISPLAY_PHOTO_FIELD, props.authUser.smallCroppedDisplayPhotoKey);
         }
         if (props.authUser.userPreviewID) formData.append(USER_PREVIEW_ID_FIELD, props.authUser.userPreviewID);
         if (props.authUser.indexProfileID) formData.append(INDEX_USER_ID_FIELD, props.authUser.indexProfileID);
@@ -239,39 +190,24 @@ const ReviewPost = (props) => {
         if (postPrivacyType) formData.append(POST_PRIVACY_TYPE_FIELD, postPrivacyType);
         if (pursuit) formData.append(PURSUIT_FIELD, pursuit);
         if (minDuration) formData.append(MIN_DURATION_FIELD, minDuration);
-        if (props.authUser.smallCroppedDisplayPhotoKey) {
-            formData.append(DISPLAY_PHOTO_FIELD, props.authUser.smallCroppedDisplayPhotoKey);
-        }
-        if (subtitle) {
-            formData.append(SUBTITLE_FIELD, _.trim(subtitle));
-        }
+        if (subtitle) { formData.append(SUBTITLE_FIELD, _.trim(subtitle)); }
         if (labels) {
             for (const label of labels) {
                 formData.append(LABELS_FIELD, label.value);
             }
         }
         if (props.textData) {
-            formData.append(
-                TEXT_DATA_FIELD,
-                props.postType === SHORT && !props.isPaginated ?
-                    props.textData :
-                    JSON.stringify(props.textData)
-            );
+            const text = props.postType === SHORT && !props.isPaginated ?
+                props.textData :
+                JSON.stringify(props.textData);
+            formData.append(TEXT_DATA_FIELD, text);
         }
-
         if (props.imageArray && props.imageArray.length > 0) {
             for (const image of props.imageArray) {
                 formData.append(IMAGES_FIELD, image);
             }
         }
-        if (toggleState) {
-            formData.append(THREAD_TYPE, NEW);
-            formData.append(THREAD_TITLE, title);
-            formData.append(THREAD_TITLE_PRIVACY, titlePrivacy)
-        }
-        else {
-            formData.append(THREAD_TYPE, EXISTING);
-        }
+
         handlePostSpecificForm(formData, props.postType);
     }
 
@@ -301,7 +237,7 @@ const ReviewPost = (props) => {
 
     return (
         < div id='reviewpost-small-window' >
-            {console.log(toggleState)}
+            {console.log(threadToggleState)}
 
             <div>
                 <div>
@@ -330,12 +266,14 @@ const ReviewPost = (props) => {
                         drafts={props.authUser.drafts}
                         selectedDraft={selectedDraft}
                         titlePrivacy={titlePrivacy}
-                        title={title}
-                        toggleState={toggleState}
+                        title={threadTitle}
+                        toggleState={threadToggleState}
+                        isCompleteProject={isCompleteProject}
                         setDraft={setDraft}
                         setTitlePrivacy={setTitlePrivacy}
-                        setTitle={setTitle}
+                        setThreadTitle={setThreadTitle}
                         setToggleState={setToggleState}
+                        setCompleteProject={setCompleteProject}
                     />
                     <CoverPhotoControls
                         useImageForThumbnail={useImageForThumbnail}

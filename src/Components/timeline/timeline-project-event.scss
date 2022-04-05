@@ -1,16 +1,23 @@
 @import "../../_partials.scss";
 
+@mixin event {
+    height: 300px;
+    h4 {
+        margin-top: 0px;
+    }
+}
 
 .timelineprojectevent-draft {
     background-color: rgba($color: #9be3ff, $alpha: 0.5);
-    height: 300px;
-    h4{
-        margin-top: 0px;
-    }
-    
+    @include event;
 }
 
-.timelineprojectevent-cover-container{
+.timelineprojectevent-completed {
+    background-color: rgba($color: #82ff0dbe, $alpha: 0.5);
+    @include event;
+}
+
+.timelineprojectevent-cover-container {
     img {
         height: auto;
         width: 100%;
