@@ -492,7 +492,6 @@ class ShortPostViewer extends React.Component {
                                 />
                             </div>
                             <ShortPostMetaInfo
-                                isFullPage
                                 difficulty={this.props.eventData.difficulty}
                                 {...metaProps}
                             />
@@ -551,7 +550,9 @@ class ShortPostViewer extends React.Component {
                                         onDeletePost={this.handleDeletePost}
                                     />
                                     <ShortPostMetaInfo
+                                        needsSideCaption
                                         index={this.state.imageIndex}
+                                        textData={this.props.textData}
                                         {...metaProps}
                                     />
                                 </div>
@@ -572,7 +573,9 @@ class ShortPostViewer extends React.Component {
                                 />
                                 <div className='shortpostviewer-inline-side-container'>
                                     <ShortPostMetaInfo
+                                        hasImages
                                         index={this.state.imageIndex}
+                                        textData={this.props.textData}
                                         {...metaProps}
                                     />
                                 </div>
