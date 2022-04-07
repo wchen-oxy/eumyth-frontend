@@ -30,7 +30,7 @@ const PrePostControls = (props) => {
             </div>
             <button
                 onClick={(e) => props.handleFormAppend()}
-                disabled={props.isSubmitting}>
+                disabled={props.disabled}>
                 {props.isUpdateToPost ?
                     props.isSubmitting ? 'Updating!' : 'Update!' :
                     props.isSubmitting ? 'Posting!' : 'Post!'}

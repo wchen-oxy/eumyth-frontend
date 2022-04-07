@@ -436,6 +436,7 @@ class ProfilePageAuthenticated extends React.Component {
                         pursuitNames={this.state.pursuitNames}
                         eventData={this.state.selectedContent}
                         textData={formattedTextData}
+                        projectPreviewMap={{}}
                     />
                 )
             }

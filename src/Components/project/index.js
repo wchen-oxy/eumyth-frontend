@@ -501,6 +501,14 @@ class ProjectController extends React.Component {
                             disableCommenting={true}
                             returnModalStructure={this.props.returnModalStructure}
                             closeModal={this.clearModal}
+                            projectPreviewMap={
+                                {
+                                    title: this.state.title,
+                                    project_id: this.state.selectedProject?._id,
+                                    parent_project_id: this.state.priorProjectID,
+                                    remix: this.state.selectedProject?.remix
+                                }
+                            }
                         />
                         <MainDisplay
                             userInfo={{

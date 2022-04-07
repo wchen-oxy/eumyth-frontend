@@ -5,11 +5,13 @@ import EventLabels from "components/timeline/sub-components/event-labels";
 import "./short-post-meta.scss";
 
 const ShortPostMetaInfo = (props) => {
-    console.log(props.threadID)
+    console.log(props.projectPreview)
     return (
         <div>
             <div className="shortpostmetainfo-stat-container">
-                {props.threadID && <a href={returnProjectURL(props.threadID)}>See Parent Thread</a>}
+                {props.projectPreview && <a href={returnProjectURL(props.projectPreview.project_id)}>See Parent Thread</a>}
+                {props.projectPreview && <p>{props.projectPreview.title}</p>}
+
                 {props.progression ? <p>{displayProgressionType(props.progression)}</p> : <></>}
                 {props.difficulty ? <p>{displayDifficulty(props.difficulty)}</p> : null}
                 {props.pursuit ? <p>{props.pursuit}</p> : <></>}

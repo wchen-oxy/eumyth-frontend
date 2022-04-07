@@ -16,15 +16,29 @@ class PostController extends React.Component {
 
             hasMore: true,
             feedData: [],
-            selectedPursuitIndex: this.props.selectedPursuitIndex
+            selectedPursuitIndex: this.props.selectedPursuitIndex,
+
+            projectPreviewMap: {}
+
         }
         this.handleEventClick = this.handleEventClick.bind(this);
-        this.handleCommentIDInjection = this.handleCommentIDInjection.bind(this)
+        this.handleCommentIDInjection = this.handleCommentIDInjection.bind(this);
         this.clearModal = this.clearModal.bind(this);
         this.setModal = this.setModal.bind(this);
         this.shouldPull = this.shouldPull.bind(this);
         this.createTimelineRow = this.createTimelineRow.bind(this);
         this.createRenderedPosts = this.createRenderedPosts.bind(this);
+        this.saveProjectPreview = this.saveProjectPreview.bind(this);
+
+
+    }
+
+    saveProjectPreview(projectPreview) {
+        if (!this.state.projectPreviewMap[projectPreview._id]) {
+            let projectPreviewMap = this.state.projectPreviewMap;
+            projectPreviewMap[projectPreview._id] = projectPreview;
+            this.setState({ projectPreviewMap: projectPreviewMap });
+        }
     }
 
     componentWillUnmount() {
@@ -133,6 +147,10 @@ class PostController extends React.Component {
                     onCommentIDInjection={this.handleCommentIDInjection}
 
                     returnModalStructure={this.props.returnModalStructure}
+
+                    projectPreviewMap={this.state.projectPreviewMap}
+                    saveProjectPreview={this.saveProjectPreview}
+
                 />
                 <Timeline
                     contentType={POST}

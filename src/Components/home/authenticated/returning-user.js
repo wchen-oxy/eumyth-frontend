@@ -35,7 +35,9 @@ class ReturningUserPage extends React.Component {
             selectedEvent: null,
             textData: '',
             recentPosts: null,
-            recentPostsKey: 0
+            recentPostsKey: 0,
+
+            projectPreviewMap: {}
         }
 
         this.handlePursuitClick = this.handlePursuitClick.bind(this);
@@ -52,6 +54,7 @@ class ReturningUserPage extends React.Component {
         this.renderRecentPosts = this.renderRecentPosts.bind(this);
         this.handleCommentIDInjection = this.handleCommentIDInjection.bind(this);
         this.loadData = this.loadData.bind(this);
+        this.saveProjectPreview = this.saveProjectPreview.bind(this);
     }
 
     componentDidMount() {
@@ -80,11 +83,9 @@ class ReturningUserPage extends React.Component {
 
         return Promise.all(promisedBasicInfo)
             .then(results => {
-                console.log(results)
-                const recentPosts = results[1].data?.posts ?? [];
-                const feedData = results[2]?.data.posts ?? [];
-                console.log(feedData);
-                console.log(this.props.authUser.followingFeed);
+                console.log(results);
+                const recentPosts = results[1] ? results[1].data.posts : [];
+                const feedData = results[2] ? results[2].data.posts : [];
                 this.setState(
                     ({
                         recentPosts,
@@ -164,6 +165,8 @@ class ReturningUserPage extends React.Component {
                     passDataToModal={this.passDataToModal}
                     largeViewMode={false}
                     onCommentIDInjection={this.handleCommentIDInjection}
+                    projectPreviewMap={this.state.projectPreviewMap}
+                    saveProjectPreview={this.saveProjectPreview}
                 />)
         });
     }
@@ -288,6 +291,13 @@ class ReturningUserPage extends React.Component {
             totalMin: totalMin
         }
     }
+    saveProjectPreview(projectPreview) {
+        if (!this.state.projectPreviewMap[projectPreview._id]) {
+            let projectPreviewMap = this.state.projectPreviewMap;
+            projectPreviewMap[projectPreview._id] = projectPreview;
+            this.setState({ projectPreviewMap: projectPreviewMap });
+        }
+    }
 
     renderModal() {
         if (this.props.modalState === POST_VIEWER_MODAL_STATE &&
@@ -306,6 +316,9 @@ class ReturningUserPage extends React.Component {
                     textData={this.state.selectedEvent.text_data}
                     closeModal={this.clearModal}
                     onCommentIDInjection={this.handleCommentIDInjection}
+                    projectPreviewMap={this.state.projectPreviewMap}
+                    saveProjectPreview={this.saveProjectPreview}
+
                 />
             );
             return this.props.returnModalStructure(

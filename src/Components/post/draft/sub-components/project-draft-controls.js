@@ -6,12 +6,19 @@ import './project-draft-controls.scss';
 const ProjectDraftControls = (props) => {
 
     const doDraftsExist = props.drafts.length > 0;
-    const draftOptions = doDraftsExist ? props.drafts.map((item) =>
+    let draftOptions = doDraftsExist ? props.drafts.map((item) =>
         <option value={item.content_id}>
             {item.title}
         </option>) :
         <option value={null} disabled>No Drafts Available</option>;
-    draftOptions.unshift(<option value={null}></option>);
+
+    if (doDraftsExist) {
+        draftOptions.unshift(<option value={null}></option>);
+    }
+    else {
+        draftOptions = [<option value={null}></option>];
+    }
+
     return (
         <div >
             <div className='projectdraftcontrols-main'>

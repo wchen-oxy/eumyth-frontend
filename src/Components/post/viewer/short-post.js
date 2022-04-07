@@ -69,18 +69,41 @@ class ShortPostViewer extends React.Component {
         this.handleCommentDataInjection = this.handleCommentDataInjection.bind(this);
         this.deletePostCallback = this.deletePostCallback.bind(this);
         this.handleDeletePost = this.handleDeletePost.bind(this);
+        this.loadProjectPreview = this.loadProjectPreview.bind(this);
     }
 
     componentDidMount() {
+        console.log("mounted");
         let annotationArray = [];
         for (let i = 0; i < this.props.eventData.image_data.length; i++) {
             annotationArray.push([]);
         }
-        this.setState({ annotations: annotationArray });
+        this.setState({ annotations: annotationArray }, this.loadProjectPreview);
+    }
+
+    loadProjectPreview() {
+        const projectPreviewID = this.props.eventData.project_preview_id;
+        console.log(projectPreviewID);
+        if (projectPreviewID && !this.props.projectPreviewMap[projectPreviewID])
+            return AxiosHelper.getSingleProjectPreview(projectPreviewID)
+                .then((result) => {
+                    console.log(result.data);
+                    this.setState({
+                        projectPreview: result.data
+                    }, () => {
+                        if (this.props.saveProjectPreview) {
+                            this.props.saveProjectPreview(result.data)
+                        }
+                    })
+                });
+        else {
+            this.setState({
+                projectPreview: this.props.projectPreviewMap[projectPreviewID]
+            });
+        }
     }
 
     deletePostCallback() {
-        console.log(this.props.authUser)
         return AxiosHelper
             .deletePost(
                 this.props.authUser.userPreviewID,
@@ -447,13 +470,13 @@ class ShortPostViewer extends React.Component {
             username: this.props.eventData.username
         }
         const metaProps = {
-            threadID: this.props.eventData.project_id,
             isPaginated: this.state.isPaginated,
             progression: this.state.progression,
             labels: this.props.eventData.labels,
             pursuit: this.state.pursuitCategory,
             min: this.state.min,
-            textData: this.props.textData
+            textData: this.props.textData,
+            projectPreview: this.state.projectPreview
         }
 
         if (this.state.window === INITIAL_STATE) {
@@ -549,14 +572,8 @@ class ShortPostViewer extends React.Component {
                                 />
                                 <div className='shortpostviewer-inline-side-container'>
                                     <ShortPostMetaInfo
-                                        threadID={this.props.eventData.project_id}
                                         index={this.state.imageIndex}
-                                        isPaginated={this.state.isPaginated}
-                                        progression={this.state.progression}
-                                        labels={this.props.eventData.labels}
-                                        pursuit={this.state.pursuitCategory}
-                                        min={this.state.min}
-                                        textData={this.props.textData}
+                                        {...metaProps}
                                     />
                                 </div>
                                 {this.state.annotations && this.renderImageSlider(COLLAPSED)}

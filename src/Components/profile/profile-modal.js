@@ -23,6 +23,9 @@ const ProfileModal = (props) => {
                     closeModal={props.closeModal}
                     onCommentIDInjection={props.onCommentIDInjection}
                     textData={formattedTextData}
+
+                    projectPreviewMap={props.projectPreviewMap}
+                    saveProjectPreview={props.saveProjectPreview}
                 />
                 ,
                 props.closeModal));

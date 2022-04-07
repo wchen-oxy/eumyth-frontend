@@ -94,6 +94,7 @@ const ReviewPost = (props) => {
             formData.append(THREAD_TITLE_PRIVACY_FIELD, titlePrivacy);
             return AxiosHelper.createProject(formData)
                 .then((results) => {
+                    console.log(results);
                     formData.append(SELECTED_DRAFT_ID, results.data.id);
                     formData.set(TITLE_FIELD, props.previewTitle);
                     console.log("New thread");
@@ -235,10 +236,16 @@ const ReviewPost = (props) => {
         }
     }
 
+    const disableCond1 = !selectedDraft;
+    const disableCond2 = threadTitle.length === 0;
+    console.log(!selectedDraft);
+    console.log(threadTitle.length === 0);
+    console.log('threadtoggle', threadToggleState)
+    console.log(threadToggleState ? disableCond1 : disableCond2);
+
+
     return (
         < div id='reviewpost-small-window' >
-            {console.log(threadToggleState)}
-
             <div>
                 <div>
                     <div id='reviewpost-header'>
@@ -319,7 +326,7 @@ const ReviewPost = (props) => {
                         preferredPostPrivacy={postPrivacyType}
                         setPostPrivacyType={setPostPrivacyType}
                         handleFormAppend={handleFormAppend}
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || threadToggleState ? disableCond2 : disableCond1}
                     />
                 </div>
                 {error && <p>An Error Occured. Please try again. </p>}
