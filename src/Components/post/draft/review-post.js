@@ -238,28 +238,27 @@ const ReviewPost = (props) => {
 
     const disableCond1 = !selectedDraft;
     const disableCond2 = threadTitle.length === 0;
-    console.log(!selectedDraft);
-    console.log(threadTitle.length === 0);
-    console.log('threadtoggle', threadToggleState)
-    console.log(threadToggleState ? disableCond1 : disableCond2);
-
-
     return (
         < div id='reviewpost-small-window' >
             <div>
                 <div>
                     <div id='reviewpost-header'>
                         <h2>Add your metadata!</h2>
-                        <p>Optional of course</p>
+                        {disableCond1 && <p>**Please Select or Create a Thread**</p>}
                     </div>
                     <div id="reviewpost-button-container">
                         <button
                             value={props.previousState}
                             onClick={e => handleReturnClick(e.target.value)}
-                        >
-                            Return
+                        >  Return
                         </button>
-
+                        <button
+                            onClick={(e) => handleFormAppend()}
+                            disabled={isSubmitting || threadToggleState ? disableCond2 : disableCond1}>
+                            {props.isUpdateToPost ?
+                                isSubmitting ? 'Updating!' : 'Update!' :
+                                isSubmitting ? 'Posting!' : 'Post!'}
+                        </button>
                     </div>
                 </div>
                 <div  >
@@ -326,7 +325,6 @@ const ReviewPost = (props) => {
                         preferredPostPrivacy={postPrivacyType}
                         setPostPrivacyType={setPostPrivacyType}
                         handleFormAppend={handleFormAppend}
-                        disabled={isSubmitting || threadToggleState ? disableCond2 : disableCond1}
                     />
                 </div>
                 {error && <p>An Error Occured. Please try again. </p>}

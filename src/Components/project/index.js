@@ -270,6 +270,7 @@ class ProjectController extends React.Component {
                         PROJECT_CONTENT_ONLY_VIEW_STATE : PROJECT_MACRO_VIEW_STATE;
                     const stopEdits = this.props.isContentOnlyView && this.projectSelectSubState === 1;
                     const state = stopEdits ? { barType: decideClearedPageType } : {};
+                    console.log("select, 2");
 
                     this.setState({
                         ...state,

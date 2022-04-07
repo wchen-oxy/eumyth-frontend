@@ -15,8 +15,7 @@ const CoverPhotoControls = (props) => {
                     defaultChecked={props.useImageForThumbnail}
                     onChange={() => {
                         props.setUseImageForThumbnail(!props.useImageForThumbnail)
-                    }
-                    }
+                    }}
                 />
             </div>)
         )

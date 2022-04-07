@@ -1,6 +1,5 @@
 import React from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-
 import './project-draft-controls.scss';
 
 const ProjectDraftControls = (props) => {

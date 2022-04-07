@@ -72,6 +72,7 @@ class PostDraftController extends React.Component {
     return (
       <ShortPost
         onlineDraft
+        onModalClose={this.handleModalClose}
         authUser={this.props.authUser}
         closeModal={this.props.closeModal}
         setImageArray={this.setImageArray}

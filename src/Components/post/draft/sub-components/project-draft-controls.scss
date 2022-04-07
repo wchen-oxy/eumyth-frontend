@@ -1,5 +1,12 @@
 @import "../review-post.scss";
 
+#projectdraftcontrols-content{
+    @include brief-text-input;
+}
+#titleinput-content {
+    @include long-text-input;
+}
+
 .projectdraftcontrols-main {
     display: flex;
     justify-content: center;

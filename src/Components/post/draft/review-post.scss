@@ -1,26 +1,24 @@
 @import "../../../partials";
 
+@mixin long-text-input {
+    width: 50%;
+}
+
+@mixin brief-text-input {
+    width: 30%;
+}
+
+@mixin number-input {
+    width: 25%;
+}
+
+@mixin slider-input {
+    width: 100%;
+}
+
 @mixin meta-buttons {
     @include flex-display-column;
     align-items: center;
-    label {
-        max-width: 150px;
-        padding-left: 50px;
-        padding-right: 30px;
-    }
-    // input {
-    //     padding: 2px;
-    //     width: 194px;
-    // }
-    select {
-        width: 202px;
-    }
-    textarea {
-        width: 196px;
-    }
-}
-
-@mixin meta-input {
 }
 
 @mixin meta-slider {
@@ -45,7 +43,13 @@
     @include flex-display-row;
     justify-content: space-between;
     padding: 0 5px;
-    button {
-        margin-left: auto;
-    }
+}
+
+input,
+select {
+    width: 50%;
+}
+
+label{
+    font-weight: bold;
 }

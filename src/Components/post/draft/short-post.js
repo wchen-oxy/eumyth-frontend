@@ -232,8 +232,12 @@ class ShortPost extends React.Component {
       return (
         <div id='shortpost-window'>
           <h2 id="shortpost-title">Short Post</h2>
-          <div className='shortpost-button-container'>
-            {this.state.isCompressing && <p>Compressing Photos</p>}
+
+          {this.state.isCompressing && <p>Compressing Photos</p>}
+          <div id='shortpost-button-container'>
+            <button onClick={this.props.onModalClose}>
+              Discard
+            </button>
             <button
               value={REVIEW_STATE}
               disabled={this.state.postDisabled}
