@@ -23,6 +23,7 @@ const selectClassStyle = (num) => {
 const EventController = (props) => {
     const post = props.eventData;
     console.log(post);
+    console.log(props.contentType)
     if (props.contentType === PROJECT) {
         return (
             <div

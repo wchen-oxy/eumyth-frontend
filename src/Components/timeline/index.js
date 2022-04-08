@@ -74,6 +74,7 @@ class Timeline extends React.Component {
     }
 
     fetchNextPosts() {
+        console.log(this.props.contentType);
         this.debounceFetch.cancel();
         if (this.props.contentType === DYNAMIC) {
             AxiosHelper.searchProject(
@@ -103,6 +104,7 @@ class Timeline extends React.Component {
     }
 
     handleReturnedContent(result, slicedObjectIDs) {
+        console.log(result);
         switch (this.props.contentType) {
             case (PROJECT):
                 return this.props.createTimelineRow(

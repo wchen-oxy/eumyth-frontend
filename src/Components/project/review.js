@@ -101,7 +101,6 @@ const ProjectReview = (props) => {
                 .catch(err => console.log(err));
         }
     }
-    console.log(remix.trim());
     return (
         <div >
             <div className="">

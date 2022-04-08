@@ -115,7 +115,7 @@ class ProjectController extends React.Component {
         this.clearModal = this.clearModal.bind(this);
         this.handleNewProjectSelect = this.handleNewProjectSelect.bind(this);
         this.shouldPull = this.shouldPull.bind(this);
-        this.clearLoadedFeed = this.clearLoadedFeed.bind(this);
+        this.clearedFeed = this.clearedFeed.bind(this);
         this.selectFeedSource = this.selectFeedSource.bind(this);
         this.selectFeedData = this.selectFeedData.bind(this);
         this.onEditExistingProject = this.onEditExistingProject.bind(this);
@@ -141,6 +141,7 @@ class ProjectController extends React.Component {
         let k = 0; //length of last array 
         let j = 0;
         let usedPostsLength = this.state.selectedPosts.length;
+        console.log(this.state.feedData)
         while (j < this.state.feedData.length) {
             if (k === 4) {
                 masterArray.push([]);
@@ -199,9 +200,9 @@ class ProjectController extends React.Component {
                 .then((result => {
                     this.setState({
                         contentViewOnlyAllPosts: { post_ids: result.data.map(item => item.content_id) },
-                        ...sharedState
-                    },
-                        this.clearLoadedFeed)
+                        ...sharedState,
+                        ...this.clearedFeed()
+                    })
                 }))
                 .catch(err => {
                     console.log(err);
@@ -210,18 +211,19 @@ class ProjectController extends React.Component {
         }
         else {
             this.setState({
-                ...sharedState
-            },
-                this.clearLoadedFeed)
+                ...sharedState,
+                ...this.clearedFeed()
+            })
         }
     }
 
-    clearLoadedFeed() {
-        this.setState({
+    clearedFeed() {
+        console.log("clear loaded feed")
+        return {
             feedData: [],
             hasMore: true,
             feedID: this.state.feedID + 1
-        });
+        };
     }
 
     shouldPull(value) {
@@ -229,6 +231,9 @@ class ProjectController extends React.Component {
     }
 
     handleBackClick() {
+        console.log(this.state.barType);
+        console.log(this.state.isUpdate);
+        console.log(this.state.projectSelectSubState);
         switch (this.state.barType) {
             case (PROJECT_MICRO_VIEW_STATE): //inner project step
                 const username = this.state.selectedProject.username;
@@ -238,11 +243,9 @@ class ProjectController extends React.Component {
                     title: '',
                     overview: '',
                     barType: PROJECT_MACRO_VIEW_STATE,
-                    hasMore: true,
-                    feedID: this.state.feedID + 1,
+                    ...this.clearedFeed()
                 }, () => {
                     this.setNewURL(returnUsernameURL(username));
-                    this.clearLoadedFeed();
                 })
                 break;
             case (PROJECT_SELECT_VIEW_STATE): //editting
@@ -254,31 +257,29 @@ class ProjectController extends React.Component {
                             editProjectState: false,
                             selectedPosts: [],
                             isUpdate: false,
-                            hasMore: true,
-                        }, this.clearLoadedFeed)
+                            ...this.clearedFeed()
+                        })
                     }
                     else if (this.state.projectSelectSubState === 2) {
                         this.setState({
                             projectSelectSubState: 1,
-                            hasMore: true,
-
-                        }, this.clearLoadedFeed)
+                            ...this.clearedFeed()
+                        })
                     }
                 }
                 else {
                     const decideClearedPageType = this.props.isContentOnlyView ?
                         PROJECT_CONTENT_ONLY_VIEW_STATE : PROJECT_MACRO_VIEW_STATE;
-                    const stopEdits = this.props.isContentOnlyView && this.projectSelectSubState === 1;
-                    const state = stopEdits ? { barType: decideClearedPageType } : {};
-                    console.log("select, 2");
-
+                    // const stopEdits = this.props.isContentOnlyView && this.projectSelectSubState === 1;
+                    // const state = stopEdits ? {} : { barType: decideClearedPageType };
+                    // console.log(state);
                     this.setState({
-                        ...state,
+                        barType: decideClearedPageType,
                         editProjectState: false,
                         projectSelectSubState: 1,
                         isUpdate: false,
-                        hasMore: true,
-                    }, this.clearLoadedFeed)
+                        ...this.clearedFeed()
+                    })
                 }
                 break;
             case (PROJECT_REARRANGE_STATE):
@@ -344,8 +345,9 @@ class ProjectController extends React.Component {
             return this.setState({
                 projectSelectSubState: 2,
                 selectedPosts,
-                feedIndex: newIndex
-            }, this.clearLoadedFeed);
+                feedIndex: newIndex,
+                ...this.clearedFeed()
+            });
         }
 
         if (window === EDIT) {
@@ -360,8 +362,9 @@ class ProjectController extends React.Component {
                 return this.setState({
                     semiFinalData,
                     window: window,
-                    barType: PROJECT_REARRANGE_STATE
-                }, this.clearLoadedFeed);
+                    barType: PROJECT_REARRANGE_STATE,
+                    ...this.clearedFeed()
+                });
             }
 
 
@@ -418,11 +421,12 @@ class ProjectController extends React.Component {
                 : null,
             barType: PROJECT_MICRO_VIEW_STATE,
             title: projectData.title,
-            overview: projectData.overview
+            overview: projectData.overview,
+            ...this.clearedFeed()
         }, () => {
             this.setNewURL(returnProjectURL(projectData._id));
             this.shouldPull(true);
-            this.clearLoadedFeed();
+
         });
     }
 
@@ -433,8 +437,8 @@ class ProjectController extends React.Component {
             barType: PROJECT_SELECT_VIEW_STATE,
             editProjectState: true,
             newProjectState: true,
-        },
-            this.clearLoadedFeed)
+            ...this.clearedFeed()
+        })
     }
 
     selectFeedSource() {
@@ -445,6 +449,7 @@ class ProjectController extends React.Component {
             case (PROJECT_CONTENT_ONLY_VIEW_STATE):
                 return this.props.content.post_ids;
             case (PROJECT_MACRO_VIEW_STATE):
+                console.log(this.props.content.projects);
                 return this.props.content.projects.map((item) => item.content_id);
             case (PROJECT_MICRO_VIEW_STATE):
                 return this.state.selectedProject.post_ids;
