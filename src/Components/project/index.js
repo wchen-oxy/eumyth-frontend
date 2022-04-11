@@ -504,7 +504,6 @@ class ProjectController extends React.Component {
                             postType={this.state.postType}
                             pursuitNames={this.props.pursuitNames}
                             eventData={this.state.feedData[this.state.selectedEventIndex]}
-                            disableCommenting={true}
                             returnModalStructure={this.props.returnModalStructure}
                             closeModal={this.clearModal}
                             projectPreviewMap={

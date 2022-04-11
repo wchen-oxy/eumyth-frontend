@@ -1,6 +1,7 @@
 import React from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import './project-draft-controls.scss';
+import PursuitCategoryInput from './pursuit-category-input';
 
 const ProjectDraftControls = (props) => {
 
@@ -19,8 +20,8 @@ const ProjectDraftControls = (props) => {
     }
 
     return (
-        <div >
-            <div className='projectdraftcontrols-main'>
+        <div id='projectdraftcontrols-main'>
+            <div className='projectdraftcontrols-header'>
                 <span>
                     <label>Add to Existing Thread:</label>
                     <label class="switch">
@@ -30,23 +31,35 @@ const ProjectDraftControls = (props) => {
                     <label>Create New Thread</label>
                 </span>
             </div>
+
             {
                 props.toggleState ?
-                    <div className='projectdraftcontrols-inner'>
-                        <TextareaAutosize
-                            name='subtitle'
-                            id='titleinput-content'
-                            placeholder='Write the Title of Your Thread'
-                            onChange={(e) => props.setThreadTitle(e.target.value)}
-                            minRows={2}
-                            maxLength={140} />
+                    <div>
+                        <div className='projectdraftcontrols-inner'>
+                            <TextareaAutosize
+                                name='subtitle'
+                                id='titleinput-content'
+                                placeholder='Write the Title of Your New Thread'
+                                onChange={(e) => props.setThreadTitle(e.target.value)}
+                                minRows={2}
+                                maxLength={140} />
+
+                        </div>
+                        <PursuitCategoryInput
+                            pursuitNames={props.pursuitNames}
+                            pursuit={props.pursuit}
+                            setPursuit={props.setPursuit}
+                        />
+
                         <div className='projectdraftcontrols-inner'>
                             <label>Make Title Private</label>
                             <input type="checkbox" onChange={() => props.setTitlePrivacy(!props.titlePrivacy)} />
                         </div>
                     </div>
+
                     :
                     <div className='projectdraftcontrols-inner'>
+                        <label>Threads</label>
                         <select
                             name='select'
                             id='projectdraftcontrols-content'
@@ -60,6 +73,7 @@ const ProjectDraftControls = (props) => {
                         </div>
                     </div>
             }
+
         </div>
     )
 }

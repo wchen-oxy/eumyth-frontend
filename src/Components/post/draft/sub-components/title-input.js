@@ -6,11 +6,11 @@ import './title-input.scss';
 const TitleInput = (props) => {
     return (
         <div id='titleinput-main'>
-            <label>Preview Title</label>
+            <label>Title</label>
             <TextareaAutosize
                 name='title'
                 id='titleinput-content'
-                placeholder='Create an Optional Preview Title Text'
+                placeholder='Create an Optional Title Text'
                 value={props.title ? props.title : null}
                 onChange={(e) => props.setTitle(e.target.value, true)}
                 minRows={2}

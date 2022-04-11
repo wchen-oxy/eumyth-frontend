@@ -1,13 +1,18 @@
 @import "../review-post.scss";
 
-#projectdraftcontrols-content{
+#projectdraftcontrols-content {
     @include brief-text-input;
 }
 #titleinput-content {
     @include long-text-input;
 }
+#projectdraftcontrols-main {
+    border-radius: 2px;
+    border-style: dashed;
+    margin: 20px;
+}
 
-.projectdraftcontrols-main {
+.projectdraftcontrols-header {
     display: flex;
     justify-content: center;
     label {

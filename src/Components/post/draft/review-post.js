@@ -235,9 +235,8 @@ const ReviewPost = (props) => {
             throw new Error('No value matched for return click.');
         }
     }
-
     const disableCond1 = !selectedDraft;
-    const disableCond2 = threadTitle.length === 0;
+    const disableCond2 = threadTitle.length === 0 || !pursuit;
     return (
         < div id='reviewpost-small-window' >
             <div>
@@ -261,13 +260,7 @@ const ReviewPost = (props) => {
                         </button>
                     </div>
                 </div>
-                <div  >
-                    <TitleInput
-                        postType={props.postType}
-                        title={props.previewTitle}
-                        setTitle={props.handleTitleChange}
-                        setSubtitle={setSubtitle}
-                    />
+                <div>
                     <ProjectDraftControls
                         drafts={props.authUser.drafts}
                         selectedDraft={selectedDraft}
@@ -275,12 +268,22 @@ const ReviewPost = (props) => {
                         title={threadTitle}
                         toggleState={threadToggleState}
                         isCompleteProject={isCompleteProject}
+                        pursuitNames={props.authUser.pursuits.map(pursuit => pursuit.name)}
+                        pursuit={pursuit}
+                        setPursuit={setPursuit}
                         setDraft={setDraft}
                         setTitlePrivacy={setTitlePrivacy}
                         setThreadTitle={setThreadTitle}
                         setToggleState={setToggleState}
                         setCompleteProject={setCompleteProject}
                     />
+                    <TitleInput
+                        postType={props.postType}
+                        title={props.previewTitle}
+                        setTitle={props.handleTitleChange}
+                        setSubtitle={setSubtitle}
+                    />
+
                     <CoverPhotoControls
                         useImageForThumbnail={useImageForThumbnail}
                         setUseImageForThumbnail={setUseImageForThumbnail}
@@ -290,11 +293,6 @@ const ReviewPost = (props) => {
                         imageArray={props.imageArray}
                     />
                     <DateInput date={date} setDate={setDate} />
-                    <PursuitCategoryInput
-                        pursuitNames={props.authUser.pursuits.map(pursuit => pursuit.name)}
-                        pursuit={props.pursuit}
-                        setPursuit={setPursuit}
-                    />
 
                     <MinutesInput
                         min={props.min}

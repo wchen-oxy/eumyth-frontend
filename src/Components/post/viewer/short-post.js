@@ -193,6 +193,7 @@ class ShortPostViewer extends React.Component {
     renderComments(windowType) {
         if (windowType === EXPANDED) {
             if (this.props.disableCommenting) {
+                console.log("Commenting Disbled");
                 return null;
             }
             const isImageOnly = this.props.eventData.image_data.length ? true : false;
