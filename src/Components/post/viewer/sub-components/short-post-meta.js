@@ -7,12 +7,16 @@ import "./short-post-meta.scss";
 const ShortPostMetaInfo = (props) => {
     return (
         <div>
+            <div className="shortpostmetainfo-thread-container">
+                <p>{props.pursuit} | <span>
+                    {props.projectPreview &&
+                        <a href={returnProjectURL(props.projectPreview.project_id)}>{props.projectPreview.title}</a>}
+                </span></p>
+            </div>
             <div className="shortpostmetainfo-stat-container">
-                {props.projectPreview &&
-                    <a href={returnProjectURL(props.projectPreview.project_id)}>{props.projectPreview.title}</a>}
                 {props.progression ? <p>{displayProgressionType(props.progression)}</p> : <></>}
                 {props.difficulty ? <p>{displayDifficulty(props.difficulty)}</p> : null}
-                {props.pursuit ? <p>{props.pursuit}</p> : <></>}
+
                 {props.min ? <p>{props.min} minutes</p> : <></>}
                 {(props.labels?.length ?? 0) > 0 &&
                     <EventLabels

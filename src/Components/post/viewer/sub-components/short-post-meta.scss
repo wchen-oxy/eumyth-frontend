@@ -1,8 +1,16 @@
+.shortpostmetainfo-thread-container {
+    display: flex;
+    justify-content: center;
+}
 .shortpostmetainfo-stat-container {
+    margin: 30px auto;
     p {
         margin: 0 auto;
         font-size: 14px;
     }
+}
+.shortpostmetainfo-text-container {
+    margin: 30px auto;
 }
 
 .shortpostmetainfo-label {
@@ -11,7 +19,4 @@
     p {
         color: white;
     }
-}
-
-.shortpostmetainfo-text-container {
 }
