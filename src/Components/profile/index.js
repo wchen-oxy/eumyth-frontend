@@ -272,8 +272,6 @@ class ProfilePageAuthenticated extends React.Component {
         }
 
         this.setState({
-            nextOpenPostIndex: 0,
-            hasMore: true,
             contentType: contentType,
             feedIDList: feedIDList
         }, () => {
@@ -295,7 +293,7 @@ class ProfilePageAuthenticated extends React.Component {
             selectedPursuitIndex: index,
             selectedPursuit: state.profileData.pursuits[index].name,
             feedIDList: feedIDList,
-            shouldReloadFeed: true
+
         }))
     }
 

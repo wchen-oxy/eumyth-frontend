@@ -8,16 +8,16 @@ import withRouter from 'utils/withRouter';
 import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 
 class PostController extends React.Component {
+    _isMounted = false;
+
     constructor(props) {
         super(props);
         this.state = {
             selectedEventIndex: null,
             isModalShowing: false,
-
             hasMore: true,
             feedData: [],
             selectedPursuitIndex: this.props.selectedPursuitIndex,
-
             projectPreviewMap: {}
 
         }
@@ -32,7 +32,9 @@ class PostController extends React.Component {
 
 
     }
-
+    componentDidMount() {
+        this._isMounted = true;
+    }
     saveProjectPreview(projectPreview) {
         if (!this.state.projectPreviewMap[projectPreview._id]) {
             let projectPreviewMap = this.state.projectPreviewMap;
@@ -42,6 +44,7 @@ class PostController extends React.Component {
     }
 
     componentWillUnmount() {
+        this._isMounted = false;
         this.setState({
             hasMore: true,
             feedData: []
@@ -71,32 +74,29 @@ class PostController extends React.Component {
     }
 
     createRenderedPosts(inputArray, contentType) {
-        let masterArray = [[]];
+        let masterArray = [];
         let index = masterArray.length - 1; //index position of array in masterArray
-        let k = masterArray[index].length; //length of last array
-        for (let j = 0; j < this.state.feedData.length; j++) {
-            while (k < 4) {
-                if (!this.state.feedData[j]) break; //if we finish...
-                const event = this.state.feedData[j];
-                masterArray[index].push(
-                    <div key={event._id}>
-                        <EventController
-                            key={j}
-                            contentType={POST}
-                            eventIndex={j}
-                            columnIndex={k}
-                            eventData={event}
-                            onEventClick={this.handleEventClick}
-                        />
-                    </div>
-                );
-                k++;
-                j++;
-            }
-            if (k === 4) masterArray.push([]);
-            index++;
-            k = 0;
+        if (!this._isMounted || this.state.feedData.length === 0) {
+            return masterArray;
         }
+        this.state.feedData.forEach((event, k) => {
+            if (k % 4 === 0) {
+                masterArray.push([]);
+                index++;
+            }
+            masterArray[index].push(
+                <div key={event._id}>
+                    <EventController
+                        key={index}
+                        contentType={POST}
+                        eventIndex={k}
+                        columnIndex={k % 4}
+                        eventData={event}
+                        onEventClick={this.handleEventClick}
+                    />
+                </div>
+            );
+        })
         return masterArray;
     }
 
@@ -159,7 +159,6 @@ class PostController extends React.Component {
                     allPosts={this.props.feedData}
                     loadedFeed={this.createRenderedPosts()}
                     hasMore={this.state.hasMore}
-                    nextOpenPostIndex={this.state.nextOpenPostIndex}
 
                     shouldPull={this.shouldPull}
                     createTimelineRow={this.createTimelineRow}

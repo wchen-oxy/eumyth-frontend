@@ -104,7 +104,6 @@ class Timeline extends React.Component {
     }
 
     handleReturnedContent(result, slicedObjectIDs) {
-        console.log(result);
         switch (this.props.contentType) {
             case (PROJECT):
                 return this.props.createTimelineRow(
@@ -186,7 +185,7 @@ class Timeline extends React.Component {
     }
 
     render() {
-         const shouldLoadScroller = this.props.contentType === DYNAMIC
+        const shouldLoadScroller = this.props.contentType === DYNAMIC
             || (this.props.allPosts && this.props.allPosts.length > 0);
         if (this.props.contentType !== DYNAMIC && !this.props.allPosts
         ) return (

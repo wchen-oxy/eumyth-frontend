@@ -136,31 +136,29 @@ class ProjectController extends React.Component {
 
     createRenderedPosts() {
         const shouldMarkNewPosts = this.state.isUpdate && this.state.projectSelectSubState === 2;
-        let masterArray = [[]];
-        let index = 0; //index position of array in masterArray
+        let masterArray = [];
+        let index = masterArray.length - 1; //index position of array in masterArray
         let k = 0; //length of last array 
         let j = 0;
         let usedPostsLength = this.state.selectedPosts.length;
-        console.log(this.state.feedData)
-        while (j < this.state.feedData.length) {
-            if (k === 4) {
+
+        this.state.feedData.forEach((event, k) => {
+            if (k % 4 === 0) {
                 masterArray.push([]);
                 index++;
-                k = 0;
             }
-            const event = this.state.feedData[j];
             masterArray[index].push(
                 <div key={event._id}>
                     <EventController
-                        columnIndex={k}
+                        columnIndex={k % 4}
                         contentType={this.state.barType === PROJECT_MACRO_VIEW_STATE
                             ? PROJECT :
                             PROJECT_EVENT}
-                        shouldMarkAsNew={shouldMarkNewPosts ? j < usedPostsLength : false}
+                        shouldMarkAsNew={shouldMarkNewPosts ? k < usedPostsLength : false}
                         isSelected={this.state.feedIndex.get(event._id)}
                         editProjectState={this.state.editProjectState}
-                        key={j}
-                        eventIndex={j}
+                        key={k}
+                        eventIndex={k}
                         eventData={event}
                         onEventClick={this.handleEventClick}
                         onProjectClick={this.handleProjectClick}
@@ -168,9 +166,36 @@ class ProjectController extends React.Component {
                     />
                 </div>
             );
-            k++;
-            j++;
-        }
+        })
+        // while (j < this.state.feedData.length) {
+        //     if (k === 4) {
+        //         masterArray.push([]);
+        //         index++;
+        //         k = 0;
+        //     }
+        //     const event = this.state.feedData[j];
+        //     masterArray[index].push(
+        //         <div key={event._id}>
+        //             <EventController
+        //                 columnIndex={k}
+        //                 contentType={this.state.barType === PROJECT_MACRO_VIEW_STATE
+        //                     ? PROJECT :
+        //                     PROJECT_EVENT}
+        //                 shouldMarkAsNew={shouldMarkNewPosts ? j < usedPostsLength : false}
+        //                 isSelected={this.state.feedIndex.get(event._id)}
+        //                 editProjectState={this.state.editProjectState}
+        //                 key={j}
+        //                 eventIndex={j}
+        //                 eventData={event}
+        //                 onEventClick={this.handleEventClick}
+        //                 onProjectClick={this.handleProjectClick}
+        //                 onProjectEventSelect={this.handleProjectEventSelect}
+        //             />
+        //         </div>
+        //     );
+        //     k++;
+        //     j++;
+        // }
         return masterArray;
     }
 
