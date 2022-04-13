@@ -256,9 +256,6 @@ class ProjectController extends React.Component {
     }
 
     handleBackClick() {
-        console.log(this.state.barType);
-        console.log(this.state.isUpdate);
-        console.log(this.state.projectSelectSubState);
         switch (this.state.barType) {
             case (PROJECT_MICRO_VIEW_STATE): //inner project step
                 const username = this.state.selectedProject.username;
@@ -281,6 +278,7 @@ class ProjectController extends React.Component {
                                 PROJECT_CONTENT_ONLY_VIEW_STATE : PROJECT_MICRO_VIEW_STATE,
                             editProjectState: false,
                             selectedPosts: [],
+                            feedIndex: new Map(),
                             isUpdate: false,
                             ...this.clearedFeed()
                         })
@@ -356,6 +354,7 @@ class ProjectController extends React.Component {
 
     handleWindowSwitch(window) {
         let min = 0
+        console.log(window);
         if (window === 2) {
             let newIndex = this.state.feedIndex;
             let selectedPosts = this.state.selectedPosts;
@@ -365,14 +364,22 @@ class ProjectController extends React.Component {
                 this.state.selectedProject
                     .post_ids
                     .forEach(item => newIndex.set(item, true));
+                return this.setState({
+                    projectSelectSubState: 2,
+                    selectedPosts,
+                    feedIndex: newIndex,
+                    ...this.clearedFeed()
+                });
             }
-
-            return this.setState({
-                projectSelectSubState: 2,
-                selectedPosts,
-                feedIndex: newIndex,
-                ...this.clearedFeed()
-            });
+            else {
+                const semiFinalData = this.state.feedData.filter(item => this.state.feedIndex.get(item._id));
+                return this.setState({
+                    semiFinalData,
+                    window: EDIT,
+                    barType: PROJECT_REARRANGE_STATE,
+                    ...this.clearedFeed()
+                });
+            }
         }
 
         if (window === EDIT) {
@@ -474,7 +481,6 @@ class ProjectController extends React.Component {
             case (PROJECT_CONTENT_ONLY_VIEW_STATE):
                 return this.props.content.post_ids;
             case (PROJECT_MACRO_VIEW_STATE):
-                console.log(this.props.content.projects);
                 return this.props.content.projects.map((item) => item.content_id);
             case (PROJECT_MICRO_VIEW_STATE):
                 return this.state.selectedProject.post_ids;

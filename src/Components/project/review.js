@@ -120,9 +120,9 @@ const ProjectReview = (props) => {
                     onChange={(e) => props.handleInputChange(OVERVIEW, e.target.value)}
                 />
                 {
-                    props.projectMetaData.project_preview_id && <label>Remix</label>}
+                    props.projectMetaData?.project_preview_id && <label>Remix</label>}
                 {
-                    props.projectMetaData.project_preview_id &&
+                    props.projectMetaData?.project_preview_id &&
 
                     <TextareaAutosize
                         value={remix}
