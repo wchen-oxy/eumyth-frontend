@@ -344,6 +344,7 @@ class ProfilePageAuthenticated extends React.Component {
                 <ProjectController
                     authUser={this.props.authUser}
                     content={this.state.profileData.pursuits[this.state.selectedPursuitIndex]}
+                    selectedPursuitIndex={this.state.selectedPursuitIndex}
                     pursuitNames={this.state.pursuitNames}
                     isContentOnlyView={this.state.isContentOnlyView}
                     returnModalStructure={this.props.returnModalStructure}

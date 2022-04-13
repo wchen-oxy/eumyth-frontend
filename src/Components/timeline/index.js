@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { slice } from 'lodash';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import AxiosHelper from 'utils/axios';
@@ -74,7 +74,6 @@ class Timeline extends React.Component {
     }
 
     fetchNextPosts() {
-        console.log(this.props.contentType);
         this.debounceFetch.cancel();
         if (this.props.contentType === DYNAMIC) {
             AxiosHelper.searchProject(

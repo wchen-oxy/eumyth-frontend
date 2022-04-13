@@ -101,6 +101,7 @@ class ProjectController extends React.Component {
             isUpdate: false,
             editProjectState: false,
             feedID: 0,
+            selectedPursuitIndex: this.props.selectedPursuitIndex
         }
 
         this.handleBackClick = this.handleBackClick.bind(this);
@@ -122,6 +123,17 @@ class ProjectController extends React.Component {
         this.onSelectAll = this.onSelectAll.bind(this);
         this.createTimelineRow = this.createTimelineRow.bind(this);
         this.createRenderedPosts = this.createRenderedPosts.bind(this);
+    }
+
+    componentDidUpdate() {
+        if (this.props.selectedPursuitIndex !== this.state.selectedPursuitIndex) {
+            this.setState({
+                selectedPursuitIndex: this.props.selectedPursuitIndex,
+                feedData: [],
+                hasMore: true,
+                feedID: this.state.feedID + 1
+            })
+        }
     }
 
     createTimelineRow(inputArray, contentType, objectIDs) {
