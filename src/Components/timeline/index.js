@@ -103,6 +103,7 @@ class Timeline extends React.Component {
     }
 
     handleReturnedContent(result, slicedObjectIDs) {
+        console.log(result, slicedObjectIDs, this.props.contentType);
         switch (this.props.contentType) {
             case (PROJECT):
                 return this.props.createTimelineRow(

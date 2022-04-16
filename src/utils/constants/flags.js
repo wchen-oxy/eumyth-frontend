@@ -45,6 +45,7 @@ export const RESULTS = 'RESULTS';
 export const SPOTLIGHT = 'SPOTLIGHT';
 export const SPOTLIGHT_POST = 'SPOTLIGHT_POST';
 export const SPOTLIGHT_PROJECT = 'SPOTLIGHT_PROJECT';
+export const FOLLOWED_FEED = 'FOLLOWED_FEED';
 
 // POST TYPE
 export const DISPLAY = 'DISPLAY';

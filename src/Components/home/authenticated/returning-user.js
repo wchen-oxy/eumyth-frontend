@@ -9,7 +9,7 @@ import { withFirebase } from 'store/firebase';
 import withRouter from "utils/withRouter";
 import { returnUsernameURL, returnUserImageURL } from 'utils/url';
 import { TEMP_PROFILE_PHOTO_URL } from 'utils/constants/urls';
-import { POST, RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
+import { POST, RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE, FOLLOWED_FEED } from 'utils/constants/flags';
 import './returning-user.scss';
 import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 
@@ -73,26 +73,37 @@ class ReturningUserPage extends React.Component {
     }
 
     loadData() {
+        const error = (result) => { console.log(result); return [] ; };
+        const hasRecentPosts = this.props.authUser.recentPosts.length > 0;
+        const hasFollowingPosts = this.props.authUser.followingFeed.length > 0;
         const promisedBasicInfo = [this.props.firebase.returnName()];
-        if (this.props.authUser.recentPosts.length > 0) {
-            promisedBasicInfo.push(AxiosHelper.returnMultiplePosts(this.props.authUser.recentPosts, true));
+        if (hasRecentPosts) {
+            const returnedRecent = AxiosHelper.returnMultiplePosts(this.props.authUser.recentPosts, true)
+                .then(result => { return result.data.posts }).catch(error);
+            promisedBasicInfo.push(returnedRecent);
         }
-        if (this.props.authUser.followingFeed.length > 0) {
-            promisedBasicInfo.push(AxiosHelper.returnMultiplePosts(this.props.authUser.followingFeed, true));
+        else {
+            promisedBasicInfo.push(error(RECENT_POSTS));
+        }
+        if (hasFollowingPosts) {
+            const returnedFollow = AxiosHelper.returnMultiplePosts(this.props.authUser.followingFeed, true)
+                .then(result => { return result.data.posts }).catch(error);
+            promisedBasicInfo.push(returnedFollow);
+        }
+        else {
+            promisedBasicInfo.push(error(FOLLOWED_FEED));
         }
 
         return Promise.all(promisedBasicInfo)
             .then(results => {
                 console.log(results);
-                const recentPosts = results[1] ? results[1].data.posts : [];
-                const feedData = results[2] ? results[2].data.posts : [];
                 this.setState(
                     ({
-                        recentPosts,
-                        feedData,
+                        recentPosts: results[1],
+                        feedData: results[2],
                         firstName: results[0].firstName,
                         lastName: results[0].lastName,
-                        hasMore: feedData.length < this.props.authUser.followingFeed.length
+                        hasMore: results[2].length < this.props.authUser.followingFeed.length
                     }));
 
             })
