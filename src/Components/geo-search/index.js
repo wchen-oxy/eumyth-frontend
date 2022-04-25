@@ -50,6 +50,9 @@ class AuthenticatedGeoSearch extends React.Component {
             difficulty: 0,
             progression: 1,
             selectedPursuit: 'ALL',
+
+            projectPreviewMap: {}
+
         }
         this.success = this.success.bind(this);
         this.error = this.error.bind(this);
@@ -63,6 +66,7 @@ class AuthenticatedGeoSearch extends React.Component {
         this.handleDistanceChange = this.handleDistanceChange.bind(this);
         this.refreshResults = this.refreshResults.bind(this);
 
+        this.saveProjectPreview = this.saveProjectPreview.bind(this);
 
     }
     componentDidMount() {
@@ -83,6 +87,13 @@ class AuthenticatedGeoSearch extends React.Component {
             });
     }
 
+    saveProjectPreview(projectPreview) {
+        if (!this.state.projectPreviewMap[projectPreview._id]) {
+            let projectPreviewMap = this.state.projectPreviewMap;
+            projectPreviewMap[projectPreview._id] = projectPreview;
+            this.setState({ projectPreviewMap: projectPreviewMap });
+        }
+    }
     success(pos) {
         const crd = pos.coords;
         // console.log('Your current position is:');
@@ -153,6 +164,9 @@ class AuthenticatedGeoSearch extends React.Component {
                     postType={SPOTLIGHT_POST}
                     eventData={this.state.selectedContent}
                     textData={formattedTextData}
+                    projectPreviewMap={this.state.projectPreviewMap}
+                    saveProjectPreview={this.saveProjectPreview}
+
                 />
             )
             return this.props.returnModalStructure(

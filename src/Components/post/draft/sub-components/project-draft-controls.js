@@ -1,22 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import './project-draft-controls.scss';
 import PursuitCategoryInput from './pursuit-category-input';
 
 const ProjectDraftControls = (props) => {
-
+    const [priorThread, setPriorThread] = useState(props.selectedDraft);
     const doDraftsExist = props.drafts.length > 0;
-    let draftOptions = doDraftsExist ? props.drafts.map((item) =>
-        <option value={item.content_id}>
-            {item.title}
-        </option>) :
-        <option value={null} disabled>No Drafts Available</option>;
+    let draftOptions = doDraftsExist ? props.drafts.map(
+        (item) => {
+            if (props.isUpdateToPost && item.content_id === props.selectedDraft) {
+                console.log(props.selectedDraft, item.title)
+                return (
+                    <option selected value={item.content_id}>
+                        {item.title}
+                    </option>)
+            }
+            else {
+                return (
+                    <option value={item.content_id}>
+                        {item.title}
+                    </option>);
+            }
+        }) :
+        [<option value={null} disabled>No Drafts Available</option>];
 
-    if (doDraftsExist) {
-        draftOptions.unshift(<option value={null}></option>);
-    }
-    else {
-        draftOptions = [<option value={null}></option>];
+    if (doDraftsExist && !props.isUpdateToPost) {
+        draftOptions.unshift(<option selected value={null}></option>);
     }
 
     return (
@@ -73,7 +82,10 @@ const ProjectDraftControls = (props) => {
                         </div>
                     </div>
             }
-
+            {props.isUpdateToPost && priorThread && priorThread !== props.selectedDraft &&
+                <p>Changing the thread this post belongs to may require you
+                    to reorder your posts in the new parent thread. You may do so
+                    by directly editing the parent thread. </p>}
         </div>
     )
 }

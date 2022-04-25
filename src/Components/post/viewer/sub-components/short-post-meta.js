@@ -14,19 +14,15 @@ const ShortPostMetaInfo = (props) => {
                 </span></p>
             </div>
             <div className="shortpostmetainfo-stat-container">
-                {props.progression ? <p>{displayProgressionType(props.progression)}</p> : <></>}
+                {props.progression ? <p>{displayProgressionType(props.progression)}</p> : null}
                 {props.difficulty ? <p>{displayDifficulty(props.difficulty)}</p> : null}
-
-                {props.min ? <p>{props.min} minutes</p> : <></>}
+                {props.min ? <p>{props.min} minutes</p> : null}
                 {(props.labels?.length ?? 0) > 0 &&
                     <EventLabels
                         isFullPage={props.isFullPage}
                         labels={props.labels} />}
             </div>
-            {props.needsSideCaption && <div className="shortpostmetainfo-text-container">
-                <p>{props.isPaginated && props.textData ?
-                    props.textData[props.index] : props.textData}</p>
-            </div>}
+
         </div>
     )
 }

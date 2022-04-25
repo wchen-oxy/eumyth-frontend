@@ -127,6 +127,7 @@ $overlay: 10;
 
 @mixin short-post-side-container {
     width: 35%;
+    padding: 5px;
 }
 
 @mixin long-post-button-container {

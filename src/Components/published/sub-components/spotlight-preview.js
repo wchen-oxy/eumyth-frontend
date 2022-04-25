@@ -85,16 +85,17 @@ const SpotlightPreview = (props) => {
             </button>
 
 
-            {props.project.overview &&
-                metaState === OVERVIEW_STATE ?
+            {
+                metaState === OVERVIEW_STATE &&
                 <div>
                     <h4>Overview</h4>
-                    <p>{props.project.overview}</p>
+                    <p>{props.project?.overview ?? "No Overview"}</p>
                     {props.project.children_length !== 0
                         &&
                         <p> Children: {props.project.children_length} </p>}
                 </div>
-                :
+            }
+            {metaState === STAT_STATE &&
                 <SpotlightMeta
                     parent={props.project.parent}
                     ancestors={props.project.ancestors}

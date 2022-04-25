@@ -3,14 +3,11 @@
     justify-content: center;
 }
 .shortpostmetainfo-stat-container {
-    margin: 30px auto;
+    display: flex;
     p {
         margin: 0 auto;
         font-size: 14px;
     }
-}
-.shortpostmetainfo-text-container {
-    margin: 30px auto;
 }
 
 .shortpostmetainfo-label {

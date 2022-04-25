@@ -60,6 +60,7 @@ const PROJECT_FORK_URL = PROJECT_BASE_URL + '/fork';
 const PROJECT_SPOTLIGHT_URL = PROJECT_BASE_URL + '/spotlight';
 const PROJECT_VOTE_URL = PROJECT_BASE_URL + '/vote';
 const PROJECT_BOOKMARK_URL = PROJECT_BASE_URL + '/bookmark';
+const PROJECT_THREAD_URL = PROJECT_BASE_URL + '/thread';
  
 
 //project preview

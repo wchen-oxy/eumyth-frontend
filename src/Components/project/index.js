@@ -366,7 +366,6 @@ class ProjectController extends React.Component {
 
     handleWindowSwitch(window) {
         let min = 0
-        console.log(window);
         if (window === 2) {
             let newIndex = this.state.feedIndex;
             let selectedPosts = this.state.selectedPosts;

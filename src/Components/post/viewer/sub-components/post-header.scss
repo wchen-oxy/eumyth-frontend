@@ -33,11 +33,3 @@
     }
 }
 
-#postheader-main-button-container {
-    margin: auto 0;
-    margin-right: 5px;
-    #postheader-button-pop-up {
-        margin-left: -10%;
-        @include small-button-window;
-    }
-}

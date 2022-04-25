@@ -28,8 +28,10 @@
 }
 
 .shortpostviewer-large-side-container {
-    background-color: white;
     @include short-post-side-container;
+    background-color: white;
+    @include flex-display-column;
+  
 }
 
 .shortpostviewer-inline-main-container {
@@ -42,6 +44,10 @@
 
 .shortpostviewer-inline-side-container {
     width: 100%;
+}
+
+.shortpostviewer-title{
+    margin-bottom: 0px;
 }
 
 .shortpostviewer-button-container {

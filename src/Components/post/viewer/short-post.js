@@ -21,6 +21,9 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'components/image-carousel/index.scss';
 import './short-post.scss';
+import HiddenButtons from './sub-components/hidden-buttons';
+import CaptionText from './sub-components/caption-text';
+import ActivityButtons from './sub-components/activity-buttons';
 
 
 class ShortPostViewer extends React.Component {
@@ -49,6 +52,7 @@ class ShortPostViewer extends React.Component {
         };
 
         this.heroRef = React.createRef();
+        this.commentRef = React.createRef();
         this.toggleAnnotations = this.toggleAnnotations.bind(this);
         this.passAnnotationData = this.passAnnotationData.bind(this);
         this.returnValidAnnotations = this.returnValidAnnotations.bind(this);
@@ -70,6 +74,7 @@ class ShortPostViewer extends React.Component {
         this.deletePostCallback = this.deletePostCallback.bind(this);
         this.handleDeletePost = this.handleDeletePost.bind(this);
         this.loadProjectPreview = this.loadProjectPreview.bind(this);
+        this.jumpToComment = this.jumpToComment.bind(this);
     }
 
     componentDidMount() {
@@ -80,10 +85,12 @@ class ShortPostViewer extends React.Component {
         }
         this.setState({ annotations: annotationArray }, this.loadProjectPreview);
     }
+    jumpToComment() {
+        this.commentRef.current.scrollIntoView({ block: 'center' });
+    }
 
     loadProjectPreview() {
         const projectPreviewID = this.props.eventData.project_preview_id;
-        console.log(projectPreviewID);
         if (projectPreviewID && !this.props.projectPreviewMap[projectPreviewID])
             return AxiosHelper.getSingleProjectPreview(projectPreviewID)
                 .then((result) => {
@@ -198,24 +205,26 @@ class ShortPostViewer extends React.Component {
             }
             const isImageOnly = this.props.eventData.image_data.length ? true : false;
             return (
-                <Comments
-                    postType={SHORT}
-                    commentIDArray={this.props.eventData.comments}
-                    fullCommentData={this.state.fullCommentData}
-                    isImageOnly={isImageOnly}
-                    windowType={windowType}
-                    visitorUsername={this.props.authUser?.username}
-                    visitorProfilePreviewID={this.props.authUser?.userPreviewID}
-                    postID={this.props.eventData._id}
-                    postIndex={this.props.postIndex}
-                    onCommentDataInjection={this.handleCommentDataInjection}
-                    selectedPostFeedType={this.props.selectedPostFeedType}
-                    onPromptAnnotation={this.handlePromptAnnotation}
-                    passAnnotationData={this.passAnnotationData}
-                    onMouseClick={this.handleMouseClick}
-                    onMouseOver={this.handleMouseOver}
-                    onMouseOut={this.handleMouseOut}
-                />
+                <div ref={this.commentRef}>
+                    <Comments
+                        postType={SHORT}
+                        commentIDArray={this.props.eventData.comments}
+                        fullCommentData={this.state.fullCommentData}
+                        isImageOnly={isImageOnly}
+                        windowType={windowType}
+                        visitorUsername={this.props.authUser?.username}
+                        visitorProfilePreviewID={this.props.authUser?.userPreviewID}
+                        postID={this.props.eventData._id}
+                        postIndex={this.props.postIndex}
+                        onCommentDataInjection={this.handleCommentDataInjection}
+                        selectedPostFeedType={this.props.selectedPostFeedType}
+                        onPromptAnnotation={this.handlePromptAnnotation}
+                        passAnnotationData={this.passAnnotationData}
+                        onMouseClick={this.handleMouseClick}
+                        onMouseOver={this.handleMouseOver}
+                        onMouseOut={this.handleMouseOut}
+                    />
+                </div>
             );
         }
         else if (windowType === COLLAPSED) {
@@ -476,35 +485,119 @@ class ShortPostViewer extends React.Component {
             labels: this.props.eventData.labels,
             pursuit: this.state.pursuitCategory,
             min: this.state.min,
+            projectPreview: this.state.projectPreview,
+            difficulty: this.props.eventData.difficulty
+
+        };
+
+        const textProps = {
+            isPaginated: this.state.isPaginated,
             textData: this.props.textData,
-            projectPreview: this.state.projectPreview
+            title: this.props.eventData.title
         }
 
         if (this.state.window === INITIAL_STATE) {
-            if (!this.props.eventData.image_data.length) {
-                if (this.props.largeViewMode) {
+            const hasImages = this.props.eventData.image_data?.length ?? true;
+
+            if (this.props.largeViewMode) {
+
+
+                /* <PostHeader
+        {...headerProps}
+        onEditClick={this.handleWindowChange}
+        onDeletePost={this.handleDeletePost}
+    /> */
+                if (hasImages) {
                     return (
                         <div className='shortpostviewer-window'>
-                            <div id='shortpostviewer-large-inline-header-container'>
-                                <PostHeader
-                                    {...headerProps}
-                                    onEditClick={this.handleWindowChange}
-                                    onDeletePost={this.handleDeletePost}
-                                />
-                            </div>
-                            <ShortPostMetaInfo
-                                difficulty={this.props.eventData.difficulty}
-                                {...metaProps}
-                            />
-
-                            <div className='shortpostviewer-large-hero-text-container'>
-                                <ShortHeroText
-                                    title={this.props.eventData.title}
-                                    textData={this.props.textData} />
+                            <div id='shortpostviewer-large-main-container'
+                                className='with-image'>
+                                {this.state.annotations && this.renderImageSlider(EXPANDED)}
+                                <div
+                                    className='shortpostviewer-large-side-container'
+                                    ref={this.heroRef}
+                                >
+                                    <ShortPostMetaInfo
+                                        {...metaProps}
+                                    />
+                                    <CaptionText
+                                        needsSideCaption
+                                        index={this.state.imageIndex}
+                                        {...textProps} />
+                                    <ActivityButtons
+                                        {...headerProps}
+                                        jumpToComment={this.jumpToComment}
+                                        onEditClick={this.handleWindowChange}
+                                        onDeletePost={this.handleDeletePost}
+                                    />
+                                </div>
                             </div>
                             {this.renderComments(EXPANDED)}
                         </div>
                     )
+
+                }
+                else {
+                    return (
+                        <div className='shortpostviewer-window'>
+
+                            <ShortPostMetaInfo
+                                {...metaProps}
+                            />
+                            <CaptionText  {...textProps} />
+                            <div className='shortpostviewer-large-hero-text-container'>
+                                <ShortHeroText
+                                    title={this.props.eventData.title}
+                                    textData={this.props.textData} />
+                                <ActivityButtons
+                                    {...headerProps}
+                                    jumpToComment={this.jumpToComment}
+                                    onEditClick={this.handleWindowChange}
+                                    onDeletePost={this.handleDeletePost}
+                                />
+                            </div>
+
+                            {this.renderComments(EXPANDED)}
+                        </div>
+                    );
+                }
+            }
+            //with images
+
+            /* {!headerProps.editProjectState && headerProps.isOwnProfile &&
+                                        <HiddenButtons
+                                            isOwnProfile={headerProps.isOwnProfile}
+                                            onEditClick={this.handleWindowChange}
+                                            onDeletePost={this.handleDeletePost}
+                                        />
+                                    } */
+            else {
+                if (hasImages) {
+                    return (
+                        <>
+                            <div
+                                id='shortpostviewer-inline-main-container'
+                                onClick={this.handleModalLaunch}
+                            >
+                                <PostHeader
+                                    {...headerProps}
+                                />
+                                <div className='shortpostviewer-inline-side-container'>
+                                    {this.props.eventData.title &&
+                                        <h2 className="shortpostviewer-title"> {this.props.eventData.title}</h2>}
+                                    <ShortPostMetaInfo
+                                        {...metaProps}
+                                    />
+
+                                    <CaptionText
+                                        index={this.state.imageIndex}
+                                        {...textProps} />
+                                </div>
+                                {this.state.annotations && this.renderImageSlider(COLLAPSED)}
+                            </div>
+                            {this.renderComments(COLLAPSED)}
+                        </>
+                    );
                 }
                 else {
                     return (
@@ -516,11 +609,12 @@ class ShortPostViewer extends React.Component {
                                         {...headerProps}
                                     />
                                     <ShortPostMetaInfo
-                                        index={this.state.imageIndex}
                                         {...metaProps}
                                     />
                                 </div>
                                 <div className='shortpostviewer-inline-hero-container'>
+                                    {this.props.eventData.title &&
+                                        <h2 className="shortpostviewer-title"> {this.props.eventData.title}</h2>}
                                     <ShortHeroText
                                         index={this.state.imageIndex}
                                         isPaginated={this.state.isPaginated}
@@ -530,61 +624,7 @@ class ShortPostViewer extends React.Component {
                             {this.renderComments(COLLAPSED)}
                         </div>
                     )
-                }
-            }
-            //with images
-            else {
-                if (this.props.largeViewMode) {
-                    return (
-                        <div className='shortpostviewer-window'>
-                            <div id='shortpostviewer-large-main-container'
-                                className='with-image'
-                            >
-                                {this.state.annotations && this.renderImageSlider(EXPANDED)}
-                                <div
-                                    className='shortpostviewer-large-side-container'
-                                    ref={this.heroRef}
-                                >
-                                    <PostHeader
-                                        {...headerProps}
-                                        onEditClick={this.handleWindowChange}
-                                        onDeletePost={this.handleDeletePost}
-                                    />
-                                    <ShortPostMetaInfo
-                                        needsSideCaption
-                                        index={this.state.imageIndex}
-                                        textData={this.props.textData}
-                                        {...metaProps}
-                                    />
-                                </div>
-                            </div>
-                            {this.renderComments(EXPANDED)}
-                        </div>
-                    )
-                }
-                else {
-                    return (
-                        <>
-                            <div
-                                id='shortpostviewer-inline-main-container'
-                                onClick={this.handleModalLaunch}
-                            >
-                                <PostHeader
-                                    {...headerProps}
-                                />
-                                <div className='shortpostviewer-inline-side-container'>
-                                    <ShortPostMetaInfo
-                                        hasImages
-                                        index={this.state.imageIndex}
-                                        textData={this.props.textData}
-                                        {...metaProps}
-                                    />
-                                </div>
-                                {this.state.annotations && this.renderImageSlider(COLLAPSED)}
-                            </div>
-                            {this.renderComments(COLLAPSED)}
-                        </>
-                    );
+
                 }
             }
         }
@@ -637,6 +677,8 @@ class ShortPostViewer extends React.Component {
                         coverPhoto={this.state.coverPhoto}
                         coverPhotoKey={this.props.eventData?.cover_photo_key ?? null}
                         isPaginated={this.state.isPaginated}
+                        projectPreviewID={this.props.eventData.project_preview_id}
+                        projectPreviewRaw={this.state.projectPreview}
                         previewTitle={this.props.eventData.title}
                         previewSubtitle={this.props.eventData.subtitle}
                         date={formattedDate}

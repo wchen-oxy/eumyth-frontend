@@ -45,10 +45,25 @@ import {
 
 } from 'utils/constants/form-data';
 import './review-post.scss';
-
+const iterateDrafts = (drafts, projectID) => {
+    let index = 0;
+    for (const item of drafts) {
+        if (item.content_id === projectID) {
+            return drafts[index].content_id;
+        }
+        index++;
+    };
+    return null;
+}
 const warn = () => alert(`One moment friend, I'm almost done compressing
 your photo`);
 const ReviewPost = (props) => {
+    const findMatchedDraft = () => {
+        if (props.authUser.drafts && props.projectPreviewRaw.project_id) {
+            return iterateDrafts(props.authUser.drafts, props.projectPreviewRaw.project_id);
+        }
+        else return null;
+    }
     const [difficulty, setDifficulty] = useState(props.difficulty);
     const [date, setDate] = useState(props.date);
     const [minDuration, setMinDuration] = useState(null);
@@ -59,7 +74,7 @@ const ReviewPost = (props) => {
         props.selectedPursuit ? props.selectedPursuit : null)
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const [selectedDraft, setDraft] = useState(null);
+    const [selectedDraft, setDraft] = useState(findMatchedDraft());
     const [coverPhoto, setCoverPhoto] = useState(null);
     const [useCoverPhoto, setUseCoverPhoto] = useState(props.coverPhotoKey !== null && props.isUpdateToPost);
     const [useImageForThumbnail, setUseImageForThumbnail] = useState(props.coverPhotoKey);
@@ -71,7 +86,6 @@ const ReviewPost = (props) => {
     const [threadTitle, setThreadTitle] = useState('');
     const [titlePrivacy, setTitlePrivacy] = useState(false);
     const [isCompleteProject, setCompleteProject] = useState(false);
-
 
     const setFile = (file) => {
         if (!file) return;
@@ -127,15 +141,17 @@ const ReviewPost = (props) => {
     }
 
     const handleUpdateSubmit = (formData) => {
-        return AxiosHelper.updatePost(formData)
-            .then((result) => {
-                setIsSubmitting(false);
-                result.status === 200 ? handleSuccess() : handleError();
-            }).catch((result) => {
-                console.log(result.error);
-                setIsSubmitting(false);
-                alert(result);
-            });
+        const updates = props.isUpdateToPost && props.projectPreviewID !== props.selectedDraft ?
+            AxiosHelper.updatePostOwner(props.projectPreviewID, props.selectedDraft, props.postID) :
+            AxiosHelper.updatePost(formData)
+        return updates.then((result) => {
+            setIsSubmitting(false);
+            result.status === 200 ? handleSuccess() : handleError();
+        }).catch((result) => {
+            console.log(result.error);
+            setIsSubmitting(false);
+            alert(result);
+        });
     }
 
     const handlePostSpecificForm = (formData, type) => {
@@ -177,7 +193,7 @@ const ReviewPost = (props) => {
         formData.append(IS_PAGINATED_FIELD, props.isPaginated);
         formData.append(PROGRESSION_FIELD, (progression));
         formData.append(DIFFICULTY_FIELD, difficulty);
-        formData.append(PURSUIT_FIELD, pursuit);
+        if (pursuit) formData.append(PURSUIT_FIELD, pursuit);
 
         if (selectedDraft) {
             console.log(selectedDraft);
@@ -262,6 +278,7 @@ const ReviewPost = (props) => {
                 </div>
                 <div>
                     <ProjectDraftControls
+                        isUpdateToPost={props.isUpdateToPost}
                         drafts={props.authUser.drafts}
                         selectedDraft={selectedDraft}
                         titlePrivacy={titlePrivacy}

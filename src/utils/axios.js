@@ -41,6 +41,14 @@ export default class AxiosHelper {
         return axios.put(urls.PROJECT_BASE_URL, projectInfo);
     }
 
+    static updatePostOwner(projectPreviewID, projectID, postID) {
+        return axios.put(urls.PROJECT_THREAD_URL, {
+            projectPreviewID,
+            projectID,
+            postID
+        })
+    }
+
     static createUserProfile(formData) {
         return axios.post(urls.USER_BASE_URL, formData);
     }
