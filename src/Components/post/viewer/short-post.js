@@ -21,7 +21,6 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'components/image-carousel/index.scss';
 import './short-post.scss';
-import HiddenButtons from './sub-components/hidden-buttons';
 import CaptionText from './sub-components/caption-text';
 import ActivityButtons from './sub-components/activity-buttons';
 
@@ -87,6 +86,7 @@ class ShortPostViewer extends React.Component {
     }
     jumpToComment() {
         this.commentRef.current.scrollIntoView({ block: 'center' });
+        this.commentRef.current.focus();
     }
 
     loadProjectPreview() {
@@ -205,8 +205,9 @@ class ShortPostViewer extends React.Component {
             }
             const isImageOnly = this.props.eventData.image_data.length ? true : false;
             return (
-                <div ref={this.commentRef}>
+                <div>
                     <Comments
+                        reference={this.commentRef}
                         postType={SHORT}
                         commentIDArray={this.props.eventData.comments}
                         fullCommentData={this.state.fullCommentData}

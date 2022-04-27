@@ -344,6 +344,12 @@ export default class AxiosHelper {
         });
     }
 
+    static publishProject(projectID){
+        return axios.put(urls.PROJECT_PUBLISH_URL, {
+            projectID: projectID
+        })
+    }
+
     static retrieveNewPostInfo(username) {
         return axios.get(urls.DRAFT_BASE_URL, returnUsernameObject(username))
     }

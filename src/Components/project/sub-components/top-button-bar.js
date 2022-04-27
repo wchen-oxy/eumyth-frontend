@@ -18,6 +18,13 @@ const TopButtonBar = (props) => {
             onEditExistingProject={props.onEditExistingProject}
             postIDList={props.postIDList}
             forkData={props.forkData}
+            isOwner={props.isOwner}
+            onPublish={props.onPublish}
+
+            returnModalStructure={props.returnModalStructure}
+            modalState={props.modalState}
+            openMasterModal={props.openMasterModal}
+            closeMasterModal={props.closeMasterModal}
         />;
     switch (props.barType) {
         case (PROJECT_CONTENT_ONLY_VIEW_STATE):
@@ -46,6 +53,7 @@ const TopButtonBar = (props) => {
                     </div>
 
                     <div id='topbuttonbar-right-button-container'>
+
                         {ManageButtons}
                     </div>
                 </div>

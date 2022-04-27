@@ -87,6 +87,7 @@ class ProjectController extends React.Component {
             overview: this.props.content ? this.props.content?.overview : "",
             selectedProject: this.props.content.post_ids ? {
                 _id: this.props.content._id,
+                index_user_id: this.props.content.index_user_id,
                 post_ids: this.props.content.post_ids,
                 username: this.props.content.username,
                 displayPhoto: this.props.content.display_photo_key,
@@ -123,6 +124,7 @@ class ProjectController extends React.Component {
         this.onSelectAll = this.onSelectAll.bind(this);
         this.createTimelineRow = this.createTimelineRow.bind(this);
         this.createRenderedPosts = this.createRenderedPosts.bind(this);
+        this.handlePublish = this.handlePublish.bind(this);
     }
 
     componentDidUpdate() {
@@ -518,6 +520,14 @@ class ProjectController extends React.Component {
         }
     }
 
+    handlePublish(id) {
+        return AxiosHelper.publishProject(id)
+            .then(results => {
+                
+            })
+            .catch();
+    }
+
     render() {
         const contentType = this.state.editProjectState || this.props.isContentOnlyView || this.state.selectedProject
             ?
@@ -577,6 +587,7 @@ class ProjectController extends React.Component {
                             title={this.state.title}
                             overview={this.state.overview}
 
+                            onPublish={this.handlePublish}
                             createTimelineRow={this.createTimelineRow}
                             onProjectEventSelect={this.handleProjectEventSelect}
                             onProjectClick={this.handleProjectClick}
@@ -590,6 +601,12 @@ class ProjectController extends React.Component {
                             onSelectAll={this.onSelectAll}
                             allPosts={this.selectFeedData()}
                             loadedFeed={this.createRenderedPosts()}
+                            
+                            returnModalStructure={this.props.returnModalStructure}
+
+                            modalState={this.props.modalState}
+                            openMasterModal={this.props.openMasterModal}
+                            closeMasterModal={this.props.closeMasterModal}
                         />
                     </>
                 );

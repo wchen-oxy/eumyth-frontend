@@ -10,9 +10,12 @@ import { PROJECT_CONTENT_ONLY_VIEW_STATE, PROJECT_MICRO_VIEW_STATE } from 'utils
 import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 
 const MainDisplay = (props) => {
+    const isOwner = props.projectMetaData?.index_user_id === props.userInfo.indexUserID;
+
     return (
         <div>
             <TopButtonBar
+                isOwner={isOwner}
                 userInfo={props.userInfo}
                 projectID={props.projectMetaData?._id}
                 projectSelectSubState={props.projectSelectSubState}
@@ -24,6 +27,13 @@ const MainDisplay = (props) => {
                 handleWindowSwitch={props.handleWindowSwitch}
                 title={props.title}
                 forkData={props.forkData}
+                onPublish={props.onPublish}
+
+                returnModalStructure={props.returnModalStructure}
+
+                modalState={props.modalState}
+                openMasterModal={props.openMasterModal}
+                closeMasterModal={props.closeMasterModal}
             />
 
             {props.editProjectState &&

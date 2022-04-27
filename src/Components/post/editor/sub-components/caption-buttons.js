@@ -2,13 +2,13 @@ import React from 'react';
 
 const CaptionButtons = props => {
     if (props.isPaginated) return (
-        <button onClick={props.onPaginatedChange}>
+        <button title="Discard All Captions Except For the First Image" onClick={props.onPaginatedChange}>
             Return to Single Caption
         </button>
     )
     else {
         return (
-            <button onClick={props.onPaginatedChange}>
+            <button title="Click to Caption Each Image Individually" onClick={props.onPaginatedChange}>
                 Caption Photos Individually
             </button>
         )

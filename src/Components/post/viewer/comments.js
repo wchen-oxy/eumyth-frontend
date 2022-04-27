@@ -250,6 +250,7 @@ class Comments extends React.Component {
                     'comments-expanded-input-container'}
                 >
                     <CommentInput
+                        reference={this.props.reference}
                         classStyle={viewingMode === COLLAPSED ?
                             'comments-collapsed-input' : 'comments-expanded-input'}
                         minRows={4}

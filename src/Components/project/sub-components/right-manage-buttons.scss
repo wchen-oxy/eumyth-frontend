@@ -6,11 +6,11 @@
 
 .rightmanagebuttons-outer-container {
     @include flex-display-row;
+}
+.rightmanagebuttons-inner-container {
+    position: absolute;
+}
 
-    .rightmanagebuttons-inner-container {
-        p {
-            font-size: 12px;
-            margin: 0;
-        }
-    }
+.rightmanagebuttons-buttons {
+    margin: auto 5px;
 }

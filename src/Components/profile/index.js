@@ -110,12 +110,13 @@ class ProfilePageAuthenticated extends React.Component {
         const isPostMicroView = requestedPostID ? POST : null;
         const isProjectMacroView = this.props.isProjectView;
         const isProjectMicroView = requestedProjectID ? PROJECT : null;
+
         if (this._isMounted) {
-            if (isPostMacroView) {
-                return this.loadProfile(targetUsername, POST);
-            }
-            else if (isProjectMacroView) {
+            if (isProjectMacroView) {
                 return this.loadProfile(targetUsername, PROJECT);
+            }
+            else if (isPostMacroView) {
+                return this.loadProfile(targetUsername, POST);
             }
             else if (isPostMicroView) {
                 return this.loadMicroPostData(requestedPostID)
