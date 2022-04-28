@@ -13,6 +13,9 @@
 
 #shorteditor-file-manager-container {
     @include flex-display-column;
+    h4{
+        text-align: center
+    }
 }
 
 #shorteditor-hero-container {

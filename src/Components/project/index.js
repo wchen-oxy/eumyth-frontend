@@ -87,6 +87,7 @@ class ProjectController extends React.Component {
             overview: this.props.content ? this.props.content?.overview : "",
             selectedProject: this.props.content.post_ids ? {
                 _id: this.props.content._id,
+                children: this.props.content.children,
                 index_user_id: this.props.content.index_user_id,
                 post_ids: this.props.content.post_ids,
                 username: this.props.content.username,
@@ -96,7 +97,6 @@ class ProjectController extends React.Component {
                 remix: this.props.content.remix,
                 project_preview_id: this.props.content.project_preview_id
             } : null,
-            priorProjectID: this.props.priorProjectID ? this.props.priorProjectID : null,
             selectedEventIndex: null,
             hasMore: true,
             isUpdate: false,
@@ -523,7 +523,7 @@ class ProjectController extends React.Component {
     handlePublish(id) {
         return AxiosHelper.publishProject(id)
             .then(results => {
-                
+
             })
             .catch();
     }
@@ -544,7 +544,7 @@ class ProjectController extends React.Component {
                     displayPhotoKey: this.props.authUser.croppedDisplayPhotoKey,
 
                 }
-
+                console.log(this.state.selectedProject);
                 return (
                     <>
                         <ProfileModal
@@ -582,7 +582,7 @@ class ProjectController extends React.Component {
                             window={this.state.window}
                             targetProfileID={this.props.targetProfileID}
                             hasMore={this.state.hasMore}
-                            priorProjectID={this.state.priorProjectID}
+
                             editProjectState={this.state.editProjectState}
                             title={this.state.title}
                             overview={this.state.overview}
@@ -601,7 +601,7 @@ class ProjectController extends React.Component {
                             onSelectAll={this.onSelectAll}
                             allPosts={this.selectFeedData()}
                             loadedFeed={this.createRenderedPosts()}
-                            
+
                             returnModalStructure={this.props.returnModalStructure}
 
                             modalState={this.props.modalState}

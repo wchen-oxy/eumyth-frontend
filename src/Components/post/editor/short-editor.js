@@ -228,6 +228,9 @@ class ShortEditor extends React.Component {
                             fileInputClicked={this.fileInputClicked}
                             filesSelected={this.filesSelected}
                         />
+                        <div>
+                            <h4>Drag Your Images To Rearrange Your Photos</h4>
+                        </div>
                         <FileDisplayContainer
                             onSortEnd={this.props.onSortEnd}
                             validFiles={this.props.validFiles}

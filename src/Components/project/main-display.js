@@ -26,6 +26,7 @@ const MainDisplay = (props) => {
                 onEditExistingProject={props.onEditExistingProject}
                 handleWindowSwitch={props.handleWindowSwitch}
                 title={props.title}
+                status={props.projectMetaData?.status}
                 forkData={props.forkData}
                 onPublish={props.onPublish}
 
@@ -51,7 +52,6 @@ const MainDisplay = (props) => {
                     descriptionValue={props.overview}
                     projectMetaData={props.projectMetaData}
                     onPriorForkClick={props.onPriorForkClick}
-                    priorProjectID={props.priorProjectID}
                 />
                 :
                 null

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import withRouter from 'utils/withRouter';
 import { returnProjectURL } from 'utils/url';
 import './similar-project-info.scss';

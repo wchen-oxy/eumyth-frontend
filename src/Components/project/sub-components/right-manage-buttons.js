@@ -49,10 +49,12 @@ const RightManageButtons = (props) => {
                 <div className='rightmanagebuttons-outer-container'>
                     {props.isOwner &&
                         <button
-                            title="Publish Your Thread So The World Can See"
+                            title={props.status === "PUBLISHED" ?
+                                "You've Already Published This" : "Publish Your Thread So The World Can See"}
                             className="rightmanagebuttons-buttons"
+                            disabled={props.status === "PUBLISHED"}
                             onClick={() => props.onPublish(props.projectID)}>
-                            Publish
+                            {props.status === "PUBLISHED" ? "Published" : "Publish"}
                         </button>
                     }
                     <button

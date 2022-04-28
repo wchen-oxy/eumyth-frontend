@@ -6,12 +6,16 @@ import "./project-header.scss";
 
 const ProjectHeader = (props) => {
     const [projectPreviews, setProjectPreviews] = useState([]);
-    const [toggleSimilarProjectsStatus, toggleSimilarProjects] = useState(false);
+    const [toggleSimilarProjectsStatus, setSimilarProjects] = useState(false);
+    const [toggleChildrenStatus, setChildrenStatus] = useState(false);
+    const childrenLength = props.projectMetaData.children?.length ?? 0;
+    const ancestorLength = props.projectMetaData.ancestors.length;
+    const parentProjectID = props.projectMetaData.ancestors[ancestorLength - 1]?.project_id;
     useEffect(() => {
         const status = props.projectMetaData.status;
-        const length = props.projectMetaData.ancestors.length;
+        const ancestorLength = props.projectMetaData.ancestors.length;
         if (props.projectMetaData.ancestors.length > 0) {
-            const parentID = props.projectMetaData.ancestors[length - 1].project_id;
+            const parentID = props.projectMetaData.ancestors[ancestorLength - 1].project_id;
             if (parentID) {
                 const blocklist = projectPreviews.map(preview => preview.project_id);
                 blocklist.push(props.projectMetaData._id);
@@ -22,8 +26,8 @@ const ProjectHeader = (props) => {
                     })
             }
         }
-    }, []);
 
+    }, []);
     return (
         <div>
             <div id="projectheader-hero-text">
@@ -31,7 +35,7 @@ const ProjectHeader = (props) => {
                 <h4>{props.descriptionValue}</h4>
             </div>
             <div id="projectheader-user-fork">
-                {props.priorProjectID && <a href={'/c/' + props.priorProjectID}>See Predecessor Project</a>}
+                {parentProjectID && <a href={'/c/' + parentProjectID.toString()}>See Predecessor Project</a>}
                 {props.projectMetaData.remix && <p>{props.projectMetaData.remix}</p>}
             </div>
             <div id="projectheader-user-info-container">
@@ -41,7 +45,7 @@ const ProjectHeader = (props) => {
                 </a>
             </div>
             {projectPreviews.length > 0 &&
-                <button onClick={() => toggleSimilarProjects(!toggleSimilarProjectsStatus)}>
+                <button onClick={() => setSimilarProjects(!toggleSimilarProjectsStatus)}>
                     {toggleSimilarProjectsStatus ? 'Return To Overview' : 'See Other Threads With The Same Parent'}
                 </button>}
             {
@@ -59,7 +63,23 @@ const ProjectHeader = (props) => {
                         <p>{props.projectMetaData.pursuit}</p>
                     </div>
             }
-
+            <button
+                title={childrenLength === 0 ? "No Children Threads" : "Show Threads Directly Inspired By This Thread"}
+                disabled={childrenLength === 0}
+                onClick={() => setChildrenStatus(!toggleChildrenStatus)}>
+                {toggleChildrenStatus ? "Hide Children Threads" : "Show Children Threads"}
+            </button>
+            {
+                toggleChildrenStatus &&
+                <div id='projectheader-previews'>
+                    {childrenLength > 0 && props.projectMetaData.children.map((preview, index) =>
+                        <SimilarProjectInfo
+                            key={index}
+                            preview={preview}
+                        />)
+                    }
+                </div>
+            }
         </div>
     )
 }

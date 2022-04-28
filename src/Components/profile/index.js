@@ -441,6 +441,7 @@ class ProfilePageAuthenticated extends React.Component {
                 )
             }
             else if (this.state.contentType === PROJECT) {
+                console.log(this.state.selectedContent);
                 return (
                     <div id='profile-main-container'>
                         <ProjectController
@@ -452,10 +453,7 @@ class ProfilePageAuthenticated extends React.Component {
                             openMasterModal={this.props.openMasterModal}
                             closeMasterModal={this.props.closeMasterModal}
                             isContentOnlyView={this.state.isContentOnlyView}
-                            priorProjectID={this.state.selectedContent?.ancestors.length > 0 ?
-                                this.state.selectedContent.ancestors[this.state.selectedContent.ancestors.length - 1].project_id
-                                : null
-                            }
+                           
                         />
                     </div>
                 )

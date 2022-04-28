@@ -20,6 +20,7 @@ const TopButtonBar = (props) => {
             forkData={props.forkData}
             isOwner={props.isOwner}
             onPublish={props.onPublish}
+            status={props.status}
 
             returnModalStructure={props.returnModalStructure}
             modalState={props.modalState}

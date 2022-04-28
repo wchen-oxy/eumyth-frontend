@@ -18,7 +18,7 @@ const ForkWindow = (props) => {
         )
             .then((res) => {
                 alert("Done!");
-                props.toggleFork()
+                props.closeModal();
             })
             .catch(err => console.log(err));
     }

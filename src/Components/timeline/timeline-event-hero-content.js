@@ -1,22 +1,23 @@
 import React from 'react';
 import EventTextInfo from './sub-components/event-text-info';
-import { returnUserImageURL } from 'utils/url';
+import { returnContentImageURL } from 'utils/url';
 import { returnFormattedDate } from 'utils/constants/ui-text';
 import './timeline-event-hero-content.scss';
 
 const EventHeroContent = (props) => {
     const post = props.post;
+    const image = post.cover_photo_key ?
+    returnContentImageURL(post.cover_photo_key)
+    :
+    returnContentImageURL(post.image_data[0]);
     return (
         <div>
-            {post.cover_photo_key ?
+            {image ?
                 <div className='eventherocontent-with-cover-photo-container'>
                     <img
                         alt='short event cover photo'
                         className='eventherocontent-cover-photo'
-                        src={post.cover_photo_key ?
-                            returnUserImageURL(post.cover_photo_key)
-                            :
-                            returnUserImageURL(post.image_data[0])} />
+                        src={image} />
                 </div>
                 :
                 <div className='eventherocontent-no-cover-photo-container'>
