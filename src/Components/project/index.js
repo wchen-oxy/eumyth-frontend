@@ -257,7 +257,6 @@ class ProjectController extends React.Component {
     }
 
     clearedFeed() {
-        console.log("clear loaded feed")
         return {
             feedData: [],
             hasMore: true,
@@ -544,7 +543,6 @@ class ProjectController extends React.Component {
                     displayPhotoKey: this.props.authUser.croppedDisplayPhotoKey,
 
                 }
-                console.log(this.state.selectedProject);
                 return (
                     <>
                         <ProfileModal

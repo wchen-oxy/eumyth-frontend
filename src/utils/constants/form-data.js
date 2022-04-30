@@ -50,6 +50,8 @@ const LAST_NAME_FIELD = 'lastName';
 const NEW = 'new';
 const EXISTING = 'existing';
 
+const SHOULD_UPDATE_PREVIEW = 'shouldUpdatePreview';
+
 module.exports = {
     COVER_PHOTO_FIELD,
     PROJECT_ID_FIELD,
@@ -100,5 +102,7 @@ module.exports = {
     COMPLETE_PROJECT_FIELD,
     NEW,
     EXISTING,
+
+    SHOULD_UPDATE_PREVIEW
 
 }

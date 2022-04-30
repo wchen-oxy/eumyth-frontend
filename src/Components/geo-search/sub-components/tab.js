@@ -143,10 +143,8 @@ class Tab extends React.Component {
 
     render() {
         const distanceText = returnFormattedDistance(this.props.user.distance);
-        console.log(this.props.user);
         let count = 0;
         for (const pursuitObject of this.props.user.pursuits) {
-            console.log(pursuitObject)
             if (pursuitObject.name !== ALL && this.props.pursuits.includes(pursuitObject.name)) {
                 count++;
             }

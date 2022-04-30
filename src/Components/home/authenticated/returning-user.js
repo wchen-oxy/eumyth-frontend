@@ -73,7 +73,7 @@ class ReturningUserPage extends React.Component {
     }
 
     loadData() {
-        const error = (result) => { console.log(result); return [] ; };
+        const error = (result) => { console.log(result + " contains error"); return []; };
         const hasRecentPosts = this.props.authUser.recentPosts.length > 0;
         const hasFollowingPosts = this.props.authUser.followingFeed.length > 0;
         const promisedBasicInfo = [this.props.firebase.returnName()];
@@ -96,7 +96,6 @@ class ReturningUserPage extends React.Component {
 
         return Promise.all(promisedBasicInfo)
             .then(results => {
-                console.log(results);
                 this.setState(
                     ({
                         recentPosts: results[1],
@@ -355,9 +354,7 @@ class ReturningUserPage extends React.Component {
                     <div className='returninguser-feed-object-container'>
                         {feedItem}
                     </div>
-                )
-
-        console.log(this.state.feedData.length);
+                );
         return (
             <div id='returninguser-body-container'>
                 <div id='returninguser-top-title-container' >

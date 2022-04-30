@@ -94,7 +94,6 @@ class ShortPostViewer extends React.Component {
         if (projectPreviewID && !this.props.projectPreviewMap[projectPreviewID])
             return AxiosHelper.getSingleProjectPreview(projectPreviewID)
                 .then((result) => {
-                    console.log(result.data);
                     this.setState({
                         projectPreview: result.data
                     }, () => {

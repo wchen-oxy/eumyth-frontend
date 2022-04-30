@@ -7,7 +7,6 @@ import CustomMultiSelect from '../../custom-clickables/createable-single';
 import CoverPhotoControls from './sub-components/cover-photo-controls';
 import PrePostControls from './sub-components/pre-post-controls';
 import DateInput from './sub-components/data-input';
-import PursuitCategoryInput from './sub-components/pursuit-category-input';
 import DifficultyInput from './sub-components/difficulty-input';
 import ProgressInput from './sub-components/progress-input';
 import MinutesInput from './sub-components/minutes-input';
@@ -20,7 +19,6 @@ import {
     DATE_FIELD,
     DIFFICULTY_FIELD,
     DISPLAY_PHOTO_FIELD,
-    EXISTING,
     IMAGES_FIELD,
     LABELS_FIELD,
     IS_PAGINATED_FIELD,
@@ -59,7 +57,7 @@ const warn = () => alert(`One moment friend, I'm almost done compressing
 your photo`);
 const ReviewPost = (props) => {
     const findMatchedDraft = () => {
-        if (props.authUser.drafts && props.projectPreviewRaw.project_id) {
+        if (props.authUser.drafts && props.projectPreviewRaw?.project_id) {
             return iterateDrafts(props.authUser.drafts, props.projectPreviewRaw.project_id);
         }
         else return null;
@@ -87,18 +85,17 @@ const ReviewPost = (props) => {
     const [titlePrivacy, setTitlePrivacy] = useState(false);
     const [isCompleteProject, setCompleteProject] = useState(false);
 
-    const setFile = (file) => {
-        if (!file) return;
-        setUseCoverPhoto(true);
-        return imageCompression(file, {
-            maxSizeMB: 0.5,
-            maxWidthOrHeight: 250
-        })
-            .then((result) => {
-                setCoverPhoto(new File([result], 'Cover'))
-            })
-
-    }
+    // const setFile = (file, setPhotoBoolean, setPhoto) => {
+    //     if (!file) return;
+    //     setUseCoverPhoto(true);
+    //     return imageCompression(file, {
+    //         maxSizeMB: 0.5,
+    //         maxWidthOrHeight: 1000
+    //     })
+    //         .then((result) => {
+    //             setCoverPhoto(new File([result], 'Cover'))
+    //         })
+    // }
 
     const handleNewSubmit = (formData) => {
         if (threadToggleState) {

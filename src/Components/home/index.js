@@ -7,8 +7,6 @@ import { withFirebase } from 'store/firebase';
 import { AuthUserContext } from 'store/session';
 
 const HomePage = (props) => {
-
-    console.log(props);
     return (
         <>
             <AuthUserContext.Consumer>

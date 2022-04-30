@@ -441,7 +441,6 @@ class ProfilePageAuthenticated extends React.Component {
                 )
             }
             else if (this.state.contentType === PROJECT) {
-                console.log(this.state.selectedContent);
                 return (
                     <div id='profile-main-container'>
                         <ProjectController
@@ -453,7 +452,7 @@ class ProfilePageAuthenticated extends React.Component {
                             openMasterModal={this.props.openMasterModal}
                             closeMasterModal={this.props.closeMasterModal}
                             isContentOnlyView={this.state.isContentOnlyView}
-                           
+
                         />
                     </div>
                 )

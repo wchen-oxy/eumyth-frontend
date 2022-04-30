@@ -21,7 +21,6 @@ const ProjectHeader = (props) => {
                 blocklist.push(props.projectMetaData._id);
                 AxiosHelper.getSharedParentProjectPreview(parentID, status, blocklist)
                     .then(result => {
-                        console.log(result);
                         setProjectPreviews(result.data)
                     })
             }

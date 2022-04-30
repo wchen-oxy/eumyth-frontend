@@ -296,7 +296,6 @@ class Comments extends React.Component {
             );
         }
         else if (this.props.windowType === EXPANDED) {
-            console.log("asdf");
             return (
                 <div className='comments-main-container'>
                     {this.renderCommentInput(EXPANDED)}
