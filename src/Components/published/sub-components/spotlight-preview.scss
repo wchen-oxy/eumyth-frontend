@@ -17,8 +17,9 @@
 }
 .spotlightpreview-display-container {
     @include flex-display-row;
-    align-items: baseline;
-    margin: 5px auto;
+    align-items: center;
+    margin: 10px auto;
+    margin-top: 30px;
     img {
         @include tiny-profile-photo;
         border-radius: 50%;

@@ -27,6 +27,21 @@
     }
 }
 
+#projectheader-cover-container {
+    @include flex-display-row;
+    justify-content: center;
+    img {
+        max-height: 500px;
+        max-width: 100%;
+    }
+}
+
+#projectheader-button-container {
+    @include flex-display-row;
+    justify-content: center;
+    margin-top: 25px;
+}
+
 #projectheader-previews {
     @include flex-display-row;
 }

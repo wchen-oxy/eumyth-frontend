@@ -16,7 +16,8 @@ const selectClassStyle = (num) => {
         case (3):
             return 'event-last-container';
         default:
-            throw new Error('Element Index in Timeline Event is incorrect: ', num);
+            console.log("no column index");
+            return'event-middle-container';
     }
 }
 
@@ -29,16 +30,14 @@ const EventController = (props) => {
                     () => console.log('Selected')
                     :
                     () => props.onProjectClick(post)}
-                className={props.columnIndex ?
-                    selectClassStyle(props.columnIndex) : 'event-middle-container'}>
+                className={selectClassStyle(props.columnIndex)}>
                 <ProjectEvent post={post} />
             </div>
         );
     }
     else if (props.contentType === SPOTLIGHT_POST) {
         return (
-            <div className={props.columnIndex ?
-                selectClassStyle(props.columnIndex) : 'event-middle-container'}>
+            <div className={selectClassStyle(props.columnIndex)}>
                 <div onClick={props.disableModalPreview ?
                     () => console.log('Selected')
                     :
@@ -54,9 +53,9 @@ const EventController = (props) => {
     else if (props.contentType === POST || props.contentType === PROJECT_EVENT) {
         const eventClickParams = props.isRecentEvents ?
             [post, props.index] : [props.eventIndex];
+        console.log(props.columnIndex);
         return (
-            <div className={props.columnIndex ?
-                selectClassStyle(props.columnIndex) : 'event-middle-container'}>
+            <div className={selectClassStyle(props.columnIndex)}>
                 <div onClick={props.disableModalPreview ?
                     () => console.log('Selected')
                     :
@@ -88,8 +87,7 @@ const EventController = (props) => {
                     () => console.log('Selected')
                     :
                     () => props.onProjectClick(post)}
-                className={props.columnIndex !== null ?
-                    selectClassStyle(props.columnIndex) : 'event-middle-container'}>
+                className={selectClassStyle(props.columnIndex)}>
                 <ProjectEvent post={post} />
             </div>
         );

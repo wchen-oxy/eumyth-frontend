@@ -88,11 +88,10 @@ const SpotlightPreview = (props) => {
             {
                 metaState === OVERVIEW_STATE &&
                 <div>
-                    <h4>Overview</h4>
-                    <p>{props.project?.overview ?? "No Overview"}</p>
+                    {props.project.overview && <p>{props.project.overview}</p>}
                     {props.project.children_length !== 0
                         &&
-                        <p> Children: {props.project.children_length} </p>}
+                        <p> Children {props.project.children_length} </p>}
                 </div>
             }
             {metaState === STAT_STATE &&

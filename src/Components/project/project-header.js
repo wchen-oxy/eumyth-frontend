@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AxiosHelper from 'utils/axios';
-import { returnUserImageURL } from 'utils/url';
+import { returnUserImageURL, returnContentImageURL } from 'utils/url';
 import SimilarProjectInfo from './sub-components/similar-project-info';
 import "./project-header.scss";
 
@@ -11,6 +11,7 @@ const ProjectHeader = (props) => {
     const childrenLength = props.projectMetaData.children?.length ?? 0;
     const ancestorLength = props.projectMetaData.ancestors.length;
     const parentProjectID = props.projectMetaData.ancestors[ancestorLength - 1]?.project_id;
+    const coverPhotoKey = props.projectMetaData.coverPhoto;
     useEffect(() => {
         const status = props.projectMetaData.status;
         const ancestorLength = props.projectMetaData.ancestors.length;
@@ -27,11 +28,12 @@ const ProjectHeader = (props) => {
         }
 
     }, []);
+    console.log(props.projectMetaData);
     return (
         <div>
             <div id="projectheader-hero-text">
                 <h1>{props.titleValue}</h1>
-                <h4>{props.descriptionValue}</h4>
+                {props.descriptionValue && <h4>{props.descriptionValue}</h4>}
             </div>
             <div id="projectheader-user-fork">
                 {parentProjectID && <a href={'/c/' + parentProjectID.toString()}>See Predecessor Project</a>}
@@ -43,6 +45,9 @@ const ProjectHeader = (props) => {
                     <h5>{props.projectMetaData.username}</h5>
                 </a>
             </div>
+            {coverPhotoKey &&
+                <div id='projectheader-cover-container' >
+                    <img alt='cover' src={returnContentImageURL(coverPhotoKey)} /></div>}
             {projectPreviews.length > 0 &&
                 <button onClick={() => setSimilarProjects(!toggleSimilarProjectsStatus)}>
                     {toggleSimilarProjectsStatus ? 'Return To Overview' : 'See Other Threads With The Same Parent'}
@@ -62,12 +67,14 @@ const ProjectHeader = (props) => {
                         <p>{props.projectMetaData.pursuit}</p>
                     </div>
             }
-            <button
-                title={childrenLength === 0 ? "No Children Threads" : "Show Threads Directly Inspired By This Thread"}
-                disabled={childrenLength === 0}
-                onClick={() => setChildrenStatus(!toggleChildrenStatus)}>
-                {toggleChildrenStatus ? "Hide Children Threads" : "Show Children Threads"}
-            </button>
+            <div id="projectheader-button-container">
+                <button
+                    title={childrenLength === 0 ? "No Children Threads" : "Show Threads Directly Inspired By This Thread"}
+                    disabled={childrenLength === 0}
+                    onClick={() => setChildrenStatus(!toggleChildrenStatus)}>
+                    {toggleChildrenStatus ? "Hide Children Threads" : "Show Children Threads"}
+                </button>
+            </div>
             {
                 toggleChildrenStatus &&
                 <div id='projectheader-previews'>

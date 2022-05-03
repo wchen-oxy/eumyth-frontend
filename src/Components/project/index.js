@@ -50,16 +50,15 @@ const SortableItem = SortableElement(({ contentType, value, classColumnIndex }) 
 ));
 
 const SortableList = SortableContainer(({ contentType, items, onSortEnd }) => {
-    let classColumnIndex = 0;
+
     return (
         <ul>
             {items.map((value, index) => {
-                if (classColumnIndex === 4) classColumnIndex = 0;
                 return (
                     <SortableItem
                         key={`item-${index}`}
                         index={index}
-                        classColumnIndex={classColumnIndex++}
+                        classColumnIndex={index % 4}
                         value={value}
                         contentType={contentType}
                         onSortEnd={onSortEnd}
@@ -92,6 +91,7 @@ class ProjectController extends React.Component {
                 post_ids: this.props.content.post_ids,
                 username: this.props.content.username,
                 displayPhoto: this.props.content.display_photo_key,
+                coverPhoto: this.props.content.cover_photo_key,
                 ancestors: this.props.content.ancestors,
                 status: this.props.content.status,
                 remix: this.props.content.remix,
