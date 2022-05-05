@@ -92,6 +92,7 @@ class ProjectController extends React.Component {
                 username: this.props.content.username,
                 displayPhoto: this.props.content.display_photo_key,
                 coverPhoto: this.props.content.cover_photo_key,
+                miniCoverPhoto: this.props.content.mini_cover_photo_key,
                 ancestors: this.props.content.ancestors,
                 status: this.props.content.status,
                 remix: this.props.content.remix,

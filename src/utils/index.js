@@ -19,14 +19,19 @@ export const createPursuitArray = (pursuits) => {
 
 export const formatReactSelectOptions = (data) => data.map((value) => ({ label: value, value: value }));
 
-export const setFile = (file, setPhotoBoolean, setPhoto) => {
+export const setFile = (file, setPhotoBoolean, setPhoto, maxWidthOrHeight, filename) => {
     if (!file) return;
     setPhotoBoolean(true);
     return imageCompression(file, {
         maxSizeMB: 0.5,
-        maxWidthOrHeight: 1000
+        maxWidthOrHeight: maxWidthOrHeight
     })
         .then((result) => {
-            setPhoto(new File([result], 'Cover'))
+            setPhoto(new File([result], filename));
+            return true;
+        })
+        .catch((err) => {
+            console.log(err);
+            return false;
         })
 }

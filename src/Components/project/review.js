@@ -4,6 +4,7 @@ import CustomMultiSelect from '../custom-clickables/createable-single';
 import AxiosHelper from '../../utils/axios';
 import {
     COVER_PHOTO_FIELD,
+    MINI_COVER_PHOTO_FIELD,
     DISPLAY_PHOTO_FIELD,
     END_DATE_FIELD,
     INDEX_USER_ID_FIELD,
@@ -23,7 +24,8 @@ import {
     TITLE_FIELD,
     USERNAME_FIELD,
     USER_ID_FIELD,
-    USER_PREVIEW_ID_FIELD
+    USER_PREVIEW_ID_FIELD,
+    REMOVE_COVER_PHOTO
 } from 'utils/constants/form-data';
 import { EDIT, TITLE, OVERVIEW } from 'utils/constants/flags';
 import { setFile } from 'utils';
@@ -37,15 +39,24 @@ const ProjectReview = (props) => {
     const [endDate, setEndDate] = useState(props.projectMetaData?.end_date ?? null);
     const [isComplete, setIsComplete] = useState(false);
     const [duration, setDuration] = useState(0);
+    const [miniCoverPhoto, setMiniCoverPhoto] = useState(null);
+    const [miniCoverPhotoBoolean, setMiniCoverPhotoBoolean] = useState(false);
     const [coverPhoto, setCoverPhoto] = useState(null);
     const [coverPhotoBoolean, setCoverPhotoBoolean] = useState(false);
     const [labels, setLabels] = useState([]);
     const [removeCoverPhoto, setRemoveCoverPhoto] = useState(null);
     const [hasLabelsBeenModified, setLabelsHasBeenModified] = useState(false);
-
+    const [photoError, setPhotoError] = useState(false);
     const handleLabelChange = (labels) => {
         setLabelsHasBeenModified(true);
         setLabels(labels);
+    }
+
+    const clearPhotos = () => {
+        setCoverPhoto(null);
+        setMiniCoverPhoto(null);
+        setCoverPhotoBoolean(false);
+        setMiniCoverPhotoBoolean(false);
     }
 
     const handlePost = (status) => {
@@ -60,7 +71,10 @@ const ProjectReview = (props) => {
         if (endDate) formData.append(END_DATE_FIELD, endDate);
         if (isComplete) formData.append(IS_COMPLETE_FIELD, isComplete);
         if (duration !== 0) formData.append(MIN_DURATION_FIELD, duration);
-        if (coverPhoto) formData.append(COVER_PHOTO_FIELD, coverPhoto);
+        if (coverPhoto && miniCoverPhoto) {
+            formData.append(MINI_COVER_PHOTO_FIELD, miniCoverPhoto);
+            formData.append(COVER_PHOTO_FIELD, coverPhoto);
+        }
         if (labels.length > 0) {
             for (const label of labels) {
                 formData.append(LABELS_FIELD, label.value);
@@ -69,48 +83,60 @@ const ProjectReview = (props) => {
         if (props.authUser.smallCroppedDisplayPhotoKey) formData.append(DISPLAY_PHOTO_FIELD, props.authUser.smallCroppedDisplayPhotoKey)
         for (const post of props.selectedPosts) formData.append(SELECTED_POSTS_FIELD, post);
         if (props.isUpdate) {
-            const needsPreviewUpdates = hasLabelsBeenModified
-                || props.tite !== props.projectMetaData.title
-                || pursuit !== props.projectMetaData?.pursuit;
-            formData.append(SHOULD_UPDATE_PREVIEW, needsPreviewUpdates);
-            formData.append(PROJECT_ID_FIELD, props.projectMetaData._id);
-            formData.append(STATUS_FIELD, status);
-            if (needsPreviewUpdates) {
-                const isForked = props.projectMetaData?.children && props.projectMetaData?.children.length > 0;
-                formData.append(IS_FORKED_FIELD, isForked);
-                formData.append(PROJECT_PREVIEW_ID_FIELD, props.projectMetaData.project_preview_id);
-            }
-            if (removeCoverPhoto) {
-                if (!props.coverPhotoKey) throw new Error("Need cover Photo");
-                return AxiosHelper.deletePhotoByKey(props.coverPhotoKey)
-                    .then((result) => AxiosHelper.updateProject(formData))
-                    .then((result => {
-                        console.log(result);
-                        alert("success!");
-                        window.location.reload();
-                    }));
-            }
-            return AxiosHelper.updateProject(formData)
+            updateProject(formData, status);
+        }
+        else {
+            createProject(formData, status);
+        }
+    }
+
+    const createProject = (formData, status) => {
+        formData.append(USERNAME_FIELD, props.authUser.username);
+        formData.append(USER_ID_FIELD, props.authUser.profileID);
+        formData.append(INDEX_USER_ID_FIELD, props.authUser.indexProfileID);
+        formData.append(USER_PREVIEW_ID_FIELD, props.authUser.userPreviewID);
+        formData.append(STATUS_FIELD, status);
+        return AxiosHelper.createProject(formData)
+            .then((result) => {
+                console.log(result);
+                alert("Success!");
+                window.location.reload();
+            })
+            .catch(err => console.log(err));
+    }
+
+    const updateProject = (formData, status) => {
+        const needsPreviewUpdates = hasLabelsBeenModified
+            || props.tite !== props.projectMetaData.title
+            || pursuit !== props.projectMetaData?.pursuit;
+        formData.append(SHOULD_UPDATE_PREVIEW, needsPreviewUpdates);
+        formData.append(PROJECT_ID_FIELD, props.projectMetaData._id);
+        formData.append(STATUS_FIELD, status);
+        if (needsPreviewUpdates) {
+            const isForked = props.projectMetaData?.children && props.projectMetaData?.children.length > 0;
+            formData.append(IS_FORKED_FIELD, isForked);
+            formData.append(PROJECT_PREVIEW_ID_FIELD, props.projectMetaData.project_preview_id);
+        }
+        if (removeCoverPhoto) {
+            const cover = props.projectMetaData?.coverPhoto ?? null;
+            const miniCover = props.projectMetaData?.miniCoverPhoto ?? null;
+            formData.append(REMOVE_COVER_PHOTO, true);
+            if (!cover && !miniCover)
+                throw new Error("Need cover Photo");
+            return AxiosHelper.deleteManyPhotosByKey([cover, miniCover])
+                .then((result) => AxiosHelper.updateProject(formData))
                 .then((result => {
                     console.log(result);
                     alert("success!");
                     window.location.reload();
-                }))
+                }));
         }
-        else {
-            formData.append(USERNAME_FIELD, props.authUser.username);
-            formData.append(USER_ID_FIELD, props.authUser.profileID);
-            formData.append(INDEX_USER_ID_FIELD, props.authUser.indexProfileID);
-            formData.append(USER_PREVIEW_ID_FIELD, props.authUser.userPreviewID);
-            formData.append(STATUS_FIELD, status);
-            return AxiosHelper.createProject(formData)
-                .then((result) => {
-                    console.log(result);
-                    alert("Success!");
-                    window.location.reload();
-                })
-                .catch(err => console.log(err));
-        }
+        return AxiosHelper.updateProject(formData)
+            .then((result => {
+                console.log(result);
+                alert("success!");
+                window.location.reload();
+            }))
     }
 
     const isCompressing = coverPhotoBoolean && !coverPhoto;
@@ -177,8 +203,33 @@ const ProjectReview = (props) => {
                 <label>Cover Photo</label>
                 <input
                     type="file"
-                    onChange={(e) => setFile(e.target.files[0], setCoverPhotoBoolean, setCoverPhoto)}
+                    onChange={(e) => {
+                        setFile(
+                            e.target.files[0],
+                            setMiniCoverPhotoBoolean,
+                            setMiniCoverPhoto,
+                            250,
+                            "miniCoverPhoto");
+
+                        setFile(e.target.files[0],
+                            setCoverPhotoBoolean,
+                            setCoverPhoto,
+                            1000,
+                            "coverPhoto"
+                        );
+                    }
+                    }
                 />
+                {props.projectMetaData.coverPhoto &&
+                    <div>
+                        <label>Remove Cover Photo</label>
+                        <input
+                            type="checkbox"
+                            onClick={() => setRemoveCoverPhoto(!removeCoverPhoto)}
+                        />
+                    </div>
+                }
+                {coverPhotoBoolean || miniCoverPhotoBoolean && <button onClick={clearPhotos}>Clear Photos</button>}
                 <div>
                     <label>Tags</label>
                     <CustomMultiSelect

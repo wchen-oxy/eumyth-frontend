@@ -1,4 +1,5 @@
 const COVER_PHOTO_FIELD = 'coverPhoto';
+const MINI_COVER_PHOTO_FIELD = 'miniCoverPhoto';
 const POST_ID_FIELD = 'postID';
 const USER_ID_FIELD = 'userID';
 const INDEX_USER_ID_FIELD = 'indexUserID';
@@ -54,6 +55,7 @@ const SHOULD_UPDATE_PREVIEW = 'shouldUpdatePreview';
 
 module.exports = {
     COVER_PHOTO_FIELD,
+    MINI_COVER_PHOTO_FIELD,
     PROJECT_ID_FIELD,
     POST_ID_FIELD,
     USER_ID_FIELD,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { returnUserImageURL } from 'utils/url';
+import { returnContentImageURL } from 'utils/url';
 import './timeline-project-event.scss';
 
 const ProjectEvent = (props) => {
@@ -30,7 +30,7 @@ const ProjectEvent = (props) => {
         <div className={classType}>
             <div className='timelineprojectevent-cover-container'>
                 {post.cover_photo_key &&
-                    <img src={returnUserImageURL(post.cover_photo_key)}
+                    <img src={returnContentImageURL(post.mini_cover_photo_key)}
                     />
                 }
             </div>
