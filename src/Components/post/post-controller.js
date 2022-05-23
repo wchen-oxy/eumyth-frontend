@@ -34,7 +34,27 @@ class PostController extends React.Component {
     }
     componentDidMount() {
         this._isMounted = true;
+        const navPress = (type) => {
+            if (this.props.modalState === POST_VIEWER_MODAL_STATE) {
+                this.clearModal(true);
+            }
+            else if (!this.props.modalState) {
+                if (!this.state.selectedEventIndex) {
+                    window.location.reload();
+                }
+                else {
+                    this.setModal(this.state.feedData[this.state.selectedEventIndex]._id);
+                }// this.props.navigate(
+                //     returnPostURL(this.state.feedData[this.state.selectedEventIndex]._id)
+                // );
+            }
+
+        }
+        window.addEventListener('popstate', navPress);
+
+
     }
+
     saveProjectPreview(projectPreview) {
         if (!this.state.projectPreviewMap[projectPreview._id]) {
             let projectPreviewMap = this.state.projectPreviewMap;
@@ -48,7 +68,7 @@ class PostController extends React.Component {
         this.setState({
             hasMore: true,
             feedData: []
-        })
+        }, () => window.removeEventListener('popstate'))
     }
 
     componentDidUpdate() {
@@ -101,17 +121,14 @@ class PostController extends React.Component {
     }
 
     setModal(postID) {
-        this.props.navigate(returnPostURL(postID), { replace: true });
+        this.props.navigate(returnPostURL(postID), { replace: false });
         this.props.openMasterModal(POST_VIEWER_MODAL_STATE);
     }
 
-    clearModal() {
-        const username = this.state.feedData[this.state.selectedEventIndex].username;
-        this.setState(
-            { selectedEventIndex: null }, () => {
-                this.props.navigate(returnUsernameURL(username), { replace: true });
-                this.props.closeMasterModal();
-            });
+    clearModal(isBackPress) {
+        console.log("cleared", isBackPress);
+        if (!isBackPress) this.props.navigate(-1);
+        this.props.closeMasterModal();
     }
 
     handleCommentIDInjection(selectedEventIndex, rootCommentsArray) {

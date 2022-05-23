@@ -16,8 +16,7 @@ const selectClassStyle = (num) => {
         case (3):
             return 'event-last-container';
         default:
-            console.log("no column index");
-            return'event-middle-container';
+            return 'event-middle-container';
     }
 }
 
@@ -53,7 +52,6 @@ const EventController = (props) => {
     else if (props.contentType === POST || props.contentType === PROJECT_EVENT) {
         const eventClickParams = props.isRecentEvents ?
             [post, props.index] : [props.eventIndex];
-        console.log(props.columnIndex);
         return (
             <div className={selectClassStyle(props.columnIndex)}>
                 <div onClick={props.disableModalPreview ?

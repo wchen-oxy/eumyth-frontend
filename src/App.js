@@ -32,11 +32,11 @@ const App = () => {
                   <div>
                         <div
                               className='overlay'
-                              onClick={closeModalFunction}>
+                              onClick={() => closeModalFunction()}>
                         </div>
                         <span
                               className='close'
-                              onClick={closeModalFunction}>
+                              onClick={() => closeModalFunction()}>
                               X    </span>
                         {content}
                   </div>
@@ -54,7 +54,6 @@ const App = () => {
                         <Route path='/'
                               element={
                                     <HomePage
-
                                           returnModalStructure={returnModalStructure}
                                           openMasterModal={openModal}
                                           closeMasterModal={closeModal}
@@ -94,11 +93,10 @@ const App = () => {
                                           openMasterModal={openModal}
                                           closeMasterModal={closeModal}
                                           modalState={modalState}
-
                                     />
                               }
                         />
-                        <Route path='u/:username/project'
+                        <Route path='u/:username/threads'
                               element={
                                     <ProfilePage
                                           returnModalStructure={returnModalStructure}

@@ -18,7 +18,8 @@ import {
     FOLLOW_ACTION,
     UNFOLLOWED_STATE,
     FOLLOW_REQUESTED_STATE,
-    FOLLOWED_STATE
+    FOLLOWED_STATE,
+    THREADS
 } from 'utils/constants/flags';
 import { createPursuitArray } from 'utils';
 import './index.scss';
@@ -137,6 +138,7 @@ class ProfilePageAuthenticated extends React.Component {
         if (isNewURL) {
             return this.loadProfile(username, POST);
         }
+         
     }
 
     componentWillUnmount() {
@@ -275,14 +277,15 @@ class ProfilePageAuthenticated extends React.Component {
         this.setState({
             contentType: contentType,
             feedIDList: feedIDList
-        }, () => {
-            if (contentType === PROJECT) {
-                this.props.navigate(returnUsernameURL(this.state.profileData.username) + '/' + PROJECT.toLowerCase(), { replace: false })
-            }
-            else {
-                this.props.navigate(returnUsernameURL(this.state.profileData.username), { replace: true });
-            }
-        });
+        },
+            () => {
+                if (contentType === PROJECT) {
+                    this.props.navigate(returnUsernameURL(this.state.profileData.username) + '/' + THREADS.toLowerCase(), { replace: false });
+                }
+                else {
+                    this.props.navigate(returnUsernameURL(this.state.profileData.username), { replace: false });
+                }
+            });
     }
 
     handlePursuitToggle(index) {

@@ -33,6 +33,7 @@ export const ALL = 'ALL';
 export const DYNAMIC = 'DYNAMIC';
 export const POST = 'POST';
 export const PROJECT = 'PROJECT';
+export const THREADS = 'THREADS';
 export const PROJECT_EVENT = 'PROJECT_EVENT';
 export const PUBLISHED = 'PUBLISHED';
 export const PUBLISHED_EVENT = 'PUBLISHED_EVENT';

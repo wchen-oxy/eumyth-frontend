@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link  } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import withRouter from 'utils/withRouter';
 
 import ModalController from './sub-components/modal-controller';
@@ -71,7 +71,7 @@ class NavigationAuthorized extends React.Component {
 
     linkDecider() {
         if (window.location.pathname !== '/') {
-           this.props.navigate('', {replace: false})
+            this.props.navigate('')
         }
         else if (window.location.pathname.toString() === '/') {
             window.location.reload()
