@@ -35,18 +35,21 @@ class PostController extends React.Component {
     componentDidMount() {
         this._isMounted = true;
         const navPress = (type) => {
+            console.log("navPRess");
             if (this.props.modalState === POST_VIEWER_MODAL_STATE) {
                 this.clearModal(true);
             }
             else if (!this.props.modalState) {
-                if (!this.state.selectedEventIndex) {
-                    window.location.reload();
+                console.log(window.location.pathname);
+                if (window.location.pathname[1] === 'p') {
+                    console.log("adsf");
+                    if (!this.state.selectedEventIndex) {
+                        window.location.reload();
+                    }
+                    else {
+                        this.setModal(this.state.feedData[this.state.selectedEventIndex]._id, true);
+                    }
                 }
-                else {
-                    this.setModal(this.state.feedData[this.state.selectedEventIndex]._id);
-                }// this.props.navigate(
-                //     returnPostURL(this.state.feedData[this.state.selectedEventIndex]._id)
-                // );
             }
 
         }
@@ -120,13 +123,15 @@ class PostController extends React.Component {
         return masterArray;
     }
 
-    setModal(postID) {
-        this.props.navigate(returnPostURL(postID), { replace: false });
+    setModal(postID, isForwardPress) {
+        if (!isForwardPress) this.props.navigate(returnPostURL(postID), { replace: false });
         this.props.openMasterModal(POST_VIEWER_MODAL_STATE);
     }
 
     clearModal(isBackPress) {
         console.log("cleared", isBackPress);
+        // if (isBackPress) this.props.navigate("u/" + this.props.authUser.username, { replace: false });
+
         if (!isBackPress) this.props.navigate(-1);
         this.props.closeMasterModal();
     }
