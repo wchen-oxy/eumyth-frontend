@@ -29,7 +29,7 @@ const ProjectEvent = (props) => {
     return (
         <div className={classType}>
             <div className='timelineprojectevent-cover-container'>
-                {post.cover_photo_key &&
+                {post.mini_cover_photo_key &&
                     <img src={returnContentImageURL(post.mini_cover_photo_key)}
                     />
                 }

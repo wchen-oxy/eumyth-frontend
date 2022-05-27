@@ -35,7 +35,7 @@ class PostController extends React.Component {
     componentDidMount() {
         this._isMounted = true;
         const navPress = (type) => {
-            console.log("navPRess");
+            console.log("navPRess",this.props.modalState);
             if (this.props.modalState === POST_VIEWER_MODAL_STATE) {
                 this.clearModal(true);
             }

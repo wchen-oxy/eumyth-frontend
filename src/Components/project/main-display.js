@@ -52,6 +52,7 @@ const MainDisplay = (props) => {
                     descriptionValue={props.overview}
                     projectMetaData={props.projectMetaData}
                     onPriorForkClick={props.onPriorForkClick}
+                    isContentOnlyView={props.isContentOnlyView}
                 />
                 :
                 null

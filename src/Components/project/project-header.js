@@ -11,7 +11,8 @@ const ProjectHeader = (props) => {
     const childrenLength = props.projectMetaData.children?.length ?? 0;
     const ancestorLength = props.projectMetaData.ancestors.length;
     const parentProjectID = props.projectMetaData.ancestors[ancestorLength - 1]?.project_id;
-    const coverPhotoKey = props.projectMetaData.coverPhoto;
+    const coverPhotoKey = !props.isContentOnlyView ? props.projectMetaData.cover_photo_key
+        : props.projectMetaData.coverPhoto;
     useEffect(() => {
         const status = props.projectMetaData.status;
         const ancestorLength = props.projectMetaData.ancestors.length;
@@ -28,7 +29,6 @@ const ProjectHeader = (props) => {
         }
 
     }, []);
-    console.log(props.projectMetaData);
     return (
         <div>
             <div id="projectheader-hero-text">
@@ -39,15 +39,15 @@ const ProjectHeader = (props) => {
                 {parentProjectID && <a href={'/c/' + parentProjectID.toString()}>See Predecessor Project</a>}
                 {props.projectMetaData.remix && <p>{props.projectMetaData.remix}</p>}
             </div>
+            {coverPhotoKey &&
+                <div id='projectheader-cover-container' >
+                    <img alt='cover' src={returnContentImageURL(coverPhotoKey)} /></div>}
             <div id="projectheader-user-info-container">
                 <a href={'/u/' + props.projectMetaData.username}>
                     <img src={returnUserImageURL(props.projectMetaData.displayPhoto)}></img>
                     <h5>{props.projectMetaData.username}</h5>
                 </a>
             </div>
-            {coverPhotoKey &&
-                <div id='projectheader-cover-container' >
-                    <img alt='cover' src={returnContentImageURL(coverPhotoKey)} /></div>}
             {projectPreviews.length > 0 &&
                 <button onClick={() => setSimilarProjects(!toggleSimilarProjectsStatus)}>
                     {toggleSimilarProjectsStatus ? 'Return To Overview' : 'See Other Threads With The Same Parent'}

@@ -23,7 +23,7 @@ export const displayDifficulty = (value) => {
     if (isnum) value = parseInt(value);
     switch (value) {
         case (0):
-            return '';
+            return null;
         case (1):
             return CHALLENGING_TEXT;
         case (2):

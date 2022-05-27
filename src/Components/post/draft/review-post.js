@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
-import imageCompression from 'browser-image-compression';
 import AxiosHelper from 'utils/axios';
 
 import CustomMultiSelect from '../../custom-clickables/createable-single';

@@ -2,19 +2,26 @@
 
 .spotlightpreview-main-container {
     min-width: 400px;
-    padding:50px;
-    h4{
+    padding: 50px;
+    h4 {
         margin: 0 auto;
     }
 }
 
-.spotlightpreview-cover-container{
+.spotlightpreview-cover-container {
     img {
         height: auto;
         width: 100%;
         max-width: 400px;
     }
 }
+
+.spotlightpreview-cover-placeholder {
+    height: 250px;
+    width: 100%;
+    background-color: lightgray;
+}
+
 .spotlightpreview-display-container {
     @include flex-display-row;
     align-items: center;
@@ -28,7 +35,6 @@
         margin-right: 15px;
     }
 }
-
 
 .spotlightpreview-posts {
     @include flex-display-row;

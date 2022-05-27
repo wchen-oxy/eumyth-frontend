@@ -5,6 +5,10 @@ import EventLabels from "components/timeline/sub-components/event-labels";
 import "./short-post-meta.scss";
 
 const ShortPostMetaInfo = (props) => {
+    const progression = displayProgressionType(props.progression);
+    const difficulty = displayDifficulty(props.difficulty);
+
+
     return (
         <div>
             <div className="shortpostmetainfo-thread-container">
@@ -14,9 +18,9 @@ const ShortPostMetaInfo = (props) => {
                 </span></p>
             </div>
             <div className="shortpostmetainfo-stat-container">
-                {props.progression ? <p>{displayProgressionType(props.progression)}</p> : null}
-                {props.difficulty ? <p>{displayDifficulty(props.difficulty)}</p> : null}
-                {props.min ? <p>{props.min} minutes</p> : null}
+                {progression && <p>{progression} Progress</p>}
+                {difficulty && <p>{difficulty} Difficulty</p>}
+                {props.min && <p>{props.min} minutes</p>}
                 {(props.labels?.length ?? 0) > 0 &&
                     <EventLabels
                         isFullPage={props.isFullPage}

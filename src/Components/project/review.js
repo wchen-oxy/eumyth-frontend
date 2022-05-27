@@ -34,7 +34,7 @@ const DRAFT = 'DRAFT';
 const PUBLISHED = 'PUBLISHED';
 const ProjectReview = (props) => {
     const [remix, setRemix] = useState(props.projectMetaData?.remix ?? null);
-    const [pursuit, setPursuit] = useState(props.projectMetaData?.pursuit ?? null);
+    const [pursuit, setPursuit] = useState(props.projectMetaData?.pursuit ?? '');
     const [startDate, setStartDate] = useState(props.projectMetaData?.start_date ?? null);
     const [endDate, setEndDate] = useState(props.projectMetaData?.end_date ?? null);
     const [isComplete, setIsComplete] = useState(false);
@@ -47,9 +47,27 @@ const ProjectReview = (props) => {
     const [removeCoverPhoto, setRemoveCoverPhoto] = useState(null);
     const [hasLabelsBeenModified, setLabelsHasBeenModified] = useState(false);
     const [photoError, setPhotoError] = useState(false);
+
     const handleLabelChange = (labels) => {
         setLabelsHasBeenModified(true);
         setLabels(labels);
+    }
+
+    const uploadPhotos = (files) => {
+        setFile(
+            files[0],
+            setMiniCoverPhotoBoolean,
+            setMiniCoverPhoto,
+            250,
+            "miniCoverPhoto");
+
+        setFile(
+            files[0],
+            setCoverPhotoBoolean,
+            setCoverPhoto,
+            1000,
+            "coverPhoto"
+        );
     }
 
     const clearPhotos = () => {
@@ -140,12 +158,18 @@ const ProjectReview = (props) => {
     }
 
     const isCompressing = coverPhotoBoolean && !coverPhoto;
+    const existingCoverPhotoKey = props.projectMetaData ? props.projectMetaData.coverPhoto : props.projectMetaData.cover_photo_key;
+    const isCoverReplace = existingCoverPhotoKey && removeCoverPhoto;
+    const shouldShowCoverUpload = isCoverReplace || !existingCoverPhotoKey;
+
     return (
-        <div >
-            <div className="">
+        <div>
+            <div id="projectcontroller-return-container">
                 <button onClick={() => props.onWindowSwitch(EDIT)}    >
                     Return
                 </button>
+            </div>
+            <div id={props.isContentOnlyView ? "projectcontroller-content-only-container" : ""}>
             </div>
             <div id="projectcontroller-submit-container">
                 {isCompressing && <label>One Moment, We Are Compressing Your Photo</label>}
@@ -160,9 +184,9 @@ const ProjectReview = (props) => {
                     onChange={(e) => props.handleInputChange(OVERVIEW, e.target.value)}
                 />
                 {
-                    props.projectMetaData?.project_preview_id && <label>Remix</label>}
+                    props.projectMetaData?.parent_project_id && <label>Remix</label>}
                 {
-                    props.projectMetaData?.project_preview_id &&
+                    props.projectMetaData?.parent_project_id &&
 
                     <TextareaAutosize
                         value={remix}
@@ -195,40 +219,31 @@ const ProjectReview = (props) => {
                     value={duration}
                     onChange={(e) => setDuration(e.target.value)}
                 />
-                <label>Is Complete</label>
-                <input
-                    type="checkbox"
-                    onClick={() => setIsComplete(!isComplete)}
-                />
-                <label>Cover Photo</label>
-                <input
-                    type="file"
-                    onChange={(e) => {
-                        setFile(
-                            e.target.files[0],
-                            setMiniCoverPhotoBoolean,
-                            setMiniCoverPhoto,
-                            250,
-                            "miniCoverPhoto");
-
-                        setFile(e.target.files[0],
-                            setCoverPhotoBoolean,
-                            setCoverPhoto,
-                            1000,
-                            "coverPhoto"
-                        );
-                    }
-                    }
-                />
-                {props.projectMetaData.coverPhoto &&
-                    <div>
-                        <label>Remove Cover Photo</label>
+                <span className='projectcontroller-checkbox-span'>
+                    <input
+                        type="checkbox"
+                        onClick={() => setIsComplete(!isComplete)}
+                    /> <label>Is Complete</label>
+                </span>
+                {existingCoverPhotoKey &&
+                    <span className='projectcontroller-checkbox-span'>
                         <input
                             type="checkbox"
                             onClick={() => setRemoveCoverPhoto(!removeCoverPhoto)}
                         />
+                        <label>Remove Cover Photo</label>
+                    </span>
+                }
+                {shouldShowCoverUpload &&
+                    <div>
+                        <label>{existingCoverPhotoKey ? "Replace Your Cover Photo" : "Cover Photo"}</label>
+                        <input
+                            type="file"
+                            onChange={(e) => uploadPhotos(e.target.files)}
+                        />
                     </div>
                 }
+
                 {coverPhotoBoolean || miniCoverPhotoBoolean && <button onClick={clearPhotos}>Clear Photos</button>}
                 <div>
                     <label>Tags</label>

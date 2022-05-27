@@ -331,7 +331,10 @@ class ProjectController extends React.Component {
     }
 
     setModal(postID) {
-        this.props.navigate(returnPostURL(postID), { replace: false });
+        console.log(this.state.editProjectState);
+        if (!this.state.editProjectState) {
+            this.props.navigate(returnPostURL(postID), { replace: false });
+        }
         this.props.openMasterModal(POST_VIEWER_MODAL_STATE);
     }
 
@@ -341,7 +344,7 @@ class ProjectController extends React.Component {
             selectedEventIndex: null,
             header: null
         }, () => {
-            this.setNewURL(returnProjectURL(sourceContent._id));
+            if (!this.state.editProjectState) this.setNewURL(returnProjectURL(sourceContent._id));
             this.props.closeMasterModal();
         });
     }
@@ -581,7 +584,7 @@ class ProjectController extends React.Component {
                             window={this.state.window}
                             targetProfileID={this.props.targetProfileID}
                             hasMore={this.state.hasMore}
-
+                            isContentOnlyView={this.props.isContentOnlyView}
                             editProjectState={this.state.editProjectState}
                             title={this.state.title}
                             overview={this.state.overview}
@@ -646,6 +649,7 @@ class ProjectController extends React.Component {
                         projectMetaData={this.state.selectedProject}
                         pursuitSelects={pursuitSelects}
                         selectedPosts={this.state.semiFinalData.map(item => item._id)}
+                        isContentOnlyView={this.props.isContentOnlyView}
                         onWindowSwitch={this.handleWindowSwitch}
                         handleInputChange={this.handleInputChange}
                     />

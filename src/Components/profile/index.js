@@ -138,7 +138,7 @@ class ProfilePageAuthenticated extends React.Component {
         if (isNewURL) {
             return this.loadProfile(username, POST);
         }
-         
+
     }
 
     componentWillUnmount() {
@@ -403,7 +403,11 @@ class ProfilePageAuthenticated extends React.Component {
             );
         }
         else {
-            return this.renderHeroContent();
+            return (
+                <div key={this.state.selectedPursuitIndex}>
+                    {this.renderHeroContent()}
+                </div>
+            );
         }
     }
 

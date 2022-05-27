@@ -72,9 +72,12 @@ const SpotlightPreview = (props) => {
     return (
         <div className='spotlightpreview-main-container'>
             <a href={"/c/" + props.project._id}><h3>{props.project.title}</h3></a>
-            {props.project.cover_photo_key &&
+            {props.project.cover_photo_key ?
                 <div className='spotlightpreview-cover-container'>
                     <img src={returnUserImageURL(props.project.cover_photo_key)} />
+                </div>
+                :
+                <div className='spotlightpreview-cover-placeholder'>
                 </div>
             }
             {props.project.pursuit && <h4>{props.project.pursuit}</h4>}
