@@ -39,6 +39,10 @@ const ProjectDraftControls = (props) => {
                     </label>
                     <label>Create New Thread</label>
                 </span>
+                <h6>A thread is a collection of posts that have a common theme or idea.
+                    As you add more posts to a thread, you can see how your pursuit develops over time.
+                    While your threads grow you may be surprised who may interested in your hard work!
+                </h6>
             </div>
 
             {

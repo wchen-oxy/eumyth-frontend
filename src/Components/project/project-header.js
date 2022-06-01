@@ -34,6 +34,7 @@ const ProjectHeader = (props) => {
             <div id="projectheader-hero-text">
                 <h1>{props.titleValue}</h1>
                 {props.descriptionValue && <h4>{props.descriptionValue}</h4>}
+                {props.projectMetaData.status && <h6>In Progress</h6>}
             </div>
             <div id="projectheader-user-fork">
                 {parentProjectID && <a href={'/c/' + parentProjectID.toString()}>See Predecessor Project</a>}

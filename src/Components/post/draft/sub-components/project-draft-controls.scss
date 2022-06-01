@@ -1,3 +1,4 @@
+@import "../../../../_partials.scss";
 @import "../review-post.scss";
 
 #projectdraftcontrols-content {
@@ -12,18 +13,21 @@
     margin: 20px;
 }
 
+.projectdraftcontrols-header,
+.projectdraftcontrols-inner {
+    @include flex-display-column;
+    align-items: center;
+}
+
 .projectdraftcontrols-header {
-    display: flex;
-    justify-content: center;
+    h6 {
+        margin: 5px;
+        padding: 0 100px;
+    }
     label {
         margin: 10px;
         align-items: center;
     }
-}
-.projectdraftcontrols-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 // #projectdraftcontrols-content{

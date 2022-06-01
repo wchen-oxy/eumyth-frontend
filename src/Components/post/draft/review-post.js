@@ -96,6 +96,17 @@ const ReviewPost = (props) => {
     //         })
     // }
 
+    const addImages = (formData) => {
+        if (props.imageArray && props.imageArray.length > 0) {
+            for (const image of props.imageArray) {
+                formData.append(IMAGES_FIELD, image);
+            }
+        }
+        if (props.authUser.smallCroppedDisplayPhotoKey) {
+            formData.append(DISPLAY_PHOTO_FIELD, props.authUser.smallCroppedDisplayPhotoKey);
+        }
+    }
+
     const handleNewSubmit = (formData) => {
         if (threadToggleState) {
             formData.append(USER_ID_FIELD, props.authUser.profileID);
@@ -108,6 +119,7 @@ const ReviewPost = (props) => {
                     formData.append(SELECTED_DRAFT_ID, results.data.id);
                     formData.set(TITLE_FIELD, props.previewTitle);
                     console.log("New thread");
+                    addImages(formData);
                     return AxiosHelper.createPost(formData)
                 })
                 .then((result) => {
@@ -137,6 +149,7 @@ const ReviewPost = (props) => {
     }
 
     const handleUpdateSubmit = (formData) => {
+        addImages(formData);
         const updates = props.isUpdateToPost && props.projectPreviewID !== props.selectedDraft ?
             AxiosHelper.updatePostOwner(props.projectPreviewID, props.selectedDraft, props.postID) :
             AxiosHelper.updatePost(formData)
@@ -195,9 +208,7 @@ const ReviewPost = (props) => {
             console.log(selectedDraft);
             formData.append(SELECTED_DRAFT_ID, selectedDraft);
         }
-        if (props.authUser.smallCroppedDisplayPhotoKey) {
-            formData.append(DISPLAY_PHOTO_FIELD, props.authUser.smallCroppedDisplayPhotoKey);
-        }
+
         if (props.authUser.userPreviewID) formData.append(USER_PREVIEW_ID_FIELD, props.authUser.userPreviewID);
         if (props.authUser.indexProfileID) formData.append(INDEX_USER_ID_FIELD, props.authUser.indexProfileID);
         if (props.previewTitle) formData.append(TITLE_FIELD, _.trim(props.previewTitle));
@@ -215,11 +226,7 @@ const ReviewPost = (props) => {
                 JSON.stringify(props.textData);
             formData.append(TEXT_DATA_FIELD, text);
         }
-        if (props.imageArray && props.imageArray.length > 0) {
-            for (const image of props.imageArray) {
-                formData.append(IMAGES_FIELD, image);
-            }
-        }
+
 
         handlePostSpecificForm(formData, props.postType);
     }
@@ -256,6 +263,7 @@ const ReviewPost = (props) => {
                     <div id='reviewpost-header'>
                         <h2>Add your metadata!</h2>
                         {disableCond1 && <p>**Please Select or Create a Thread**</p>}
+                       
                     </div>
                     <div id="reviewpost-button-container">
                         <button

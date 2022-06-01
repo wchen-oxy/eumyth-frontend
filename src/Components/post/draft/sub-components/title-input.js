@@ -6,7 +6,7 @@ import './title-input.scss';
 const TitleInput = (props) => {
     return (
         <div id='titleinput-main'>
-            <label>Title</label>
+            <label>Post Title</label>
             <TextareaAutosize
                 name='title'
                 id='titleinput-content'
