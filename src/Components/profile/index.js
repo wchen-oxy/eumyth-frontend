@@ -509,13 +509,13 @@ class ProfilePageAuthenticated extends React.Component {
                                 disabled={this.state.contentType === POST ?
                                     true : false}
                                 onClick={() => this.handleMediaTypeSwitch(POST)}>
-                                Activities
+                                Posts
                             </button>
                             <button
                                 disabled={this.state.contentType === PROJECT ?
                                     true : false}
                                 onClick={() => this.handleMediaTypeSwitch(PROJECT)}>
-                                Threads
+                                Series
                             </button>
                         </div>
                         {this.state.contentType && this.decideHeroContentVisibility()}

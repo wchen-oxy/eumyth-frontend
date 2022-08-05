@@ -89,10 +89,10 @@ const ProjectVote = props => {
                 <p>{overallVoteScore}</p>
                 <button onClick={() => handleVote(-1)}>DownVote</button>
             </div>
-            <div className='projectvote-controls-container'>
+            {/* <div className='projectvote-controls-container'>
                 <p>{bookmarkState ? "Bookmarked" : "Bookmark"}</p>
                 <button onClick={handleBookmark}>Bookmark</button>
-            </div>
+            </div> */}
 
         </div>
     )

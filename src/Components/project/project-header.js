@@ -6,13 +6,12 @@ import "./project-header.scss";
 
 const ProjectHeader = (props) => {
     const [projectPreviews, setProjectPreviews] = useState([]);
-    const [toggleSimilarProjectsStatus, setSimilarProjects] = useState(false);
+    const [comparatorStatus, setComparatorStatus] = useState("PARENT");
     const [toggleChildrenStatus, setChildrenStatus] = useState(false);
     const childrenLength = props.projectMetaData.children?.length ?? 0;
     const ancestorLength = props.projectMetaData.ancestors.length;
     const parentProjectID = props.projectMetaData.ancestors[ancestorLength - 1]?.project_id;
-    const coverPhotoKey = !props.isContentOnlyView ? props.projectMetaData.cover_photo_key
-        : props.projectMetaData.coverPhoto;
+    const coverPhotoKey = props.projectMetaData.cover_photo_key;
     useEffect(() => {
         const status = props.projectMetaData.status;
         const ancestorLength = props.projectMetaData.ancestors.length;
@@ -29,15 +28,28 @@ const ProjectHeader = (props) => {
         }
 
     }, []);
+
+    const determineComparatorType = (type) => {
+        if (type === "PARENT") setComparatorStatus("CHILDREN");
+        else if (type === "CHILDREN") setComparatorStatus("PARENT");
+    }
+
+    const setComparatorText = (type) => {
+        if (type === "PARENT") return "Other Series With The Same Parent";
+        else if (type === "CHILDREN") return "See How This Influenced Others";
+    }
     return (
         <div>
+            <div id="projectheader-pursuit-container">
+                <h5>{props.projectMetaData.pursuit}</h5>
+            </div>
             <div id="projectheader-hero-text">
                 <h1>{props.titleValue}</h1>
                 {props.descriptionValue && <h4>{props.descriptionValue}</h4>}
-                {props.projectMetaData.status && <h6>In Progress</h6>}
+                {props.projectMetaData.status && <h6>Ongoing</h6>}
             </div>
             <div id="projectheader-user-fork">
-                {parentProjectID && <a href={'/c/' + parentProjectID.toString()}>See Predecessor Project</a>}
+                {parentProjectID && <a href={'/c/' + parentProjectID.toString()}>See Predecessor Series</a>}
                 {props.projectMetaData.remix && <p>{props.projectMetaData.remix}</p>}
             </div>
             {coverPhotoKey &&
@@ -45,16 +57,22 @@ const ProjectHeader = (props) => {
                     <img alt='cover' src={returnContentImageURL(coverPhotoKey)} /></div>}
             <div id="projectheader-user-info-container">
                 <a href={'/u/' + props.projectMetaData.username}>
-                    <img src={returnUserImageURL(props.projectMetaData.displayPhoto)}></img>
+                    <img src={returnUserImageURL(props.projectMetaData.display_photo_key)}></img>
                     <h5>{props.projectMetaData.username}</h5>
                 </a>
             </div>
-            {projectPreviews.length > 0 &&
-                <button onClick={() => setSimilarProjects(!toggleSimilarProjectsStatus)}>
-                    {toggleSimilarProjectsStatus ? 'Return To Overview' : 'See Other Threads With The Same Parent'}
-                </button>}
-            {
-                toggleSimilarProjectsStatus ?
+            <div>
+                <p>{props.projectMetaData.overview}</p>
+
+            </div>
+            <div >
+                <div id='projectheader-comparator-button-container'>
+                    <button onClick={() => determineComparatorType(comparatorStatus)}>
+                        {setComparatorText(comparatorStatus)}
+                    </button>
+                </div>
+                {
+                    comparatorStatus === "PARENT" &&
                     <div id='projectheader-previews'>
                         {projectPreviews.map((preview, index) =>
                             <SimilarProjectInfo
@@ -62,31 +80,20 @@ const ProjectHeader = (props) => {
                                 preview={preview}
                             />)}
                     </div>
-                    :
-                    <div>
-                        <p>{props.projectMetaData.overview}</p>
-                        <p>{props.projectMetaData.pursuit}</p>
+                }
+                {
+                    comparatorStatus === "CHILDREN" &&
+                    <div id='projectheader-previews'>
+                        {childrenLength > 0 && props.projectMetaData.children.map((preview, index) =>
+                            <SimilarProjectInfo
+                                key={index}
+                                preview={preview}
+                            />)
+                        }
                     </div>
-            }
-            <div id="projectheader-button-container">
-                <button
-                    title={childrenLength === 0 ? "No Children Threads" : "Show Threads Directly Inspired By This Thread"}
-                    disabled={childrenLength === 0}
-                    onClick={() => setChildrenStatus(!toggleChildrenStatus)}>
-                    {toggleChildrenStatus ? "Hide Children Threads" : "Show Children Threads"}
-                </button>
+                }
             </div>
-            {
-                toggleChildrenStatus &&
-                <div id='projectheader-previews'>
-                    {childrenLength > 0 && props.projectMetaData.children.map((preview, index) =>
-                        <SimilarProjectInfo
-                            key={index}
-                            preview={preview}
-                        />)
-                    }
-                </div>
-            }
+
         </div>
     )
 }

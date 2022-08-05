@@ -10,7 +10,7 @@ const ProjectEvent = (props) => {
     switch (props.post.status) {
         case ("DRAFT"):
             isDraft = true;
-            displayedType = "Draft";
+            displayedType = "Ongoing";
             classType = "timelineprojectevent-draft";
             break;
         case ("COMPLETE"):

@@ -5,7 +5,7 @@ import './spotlight.scss';
 const Spotlight = (props) => {
     return (
         <div>
-            <h2>Check out some projects</h2>
+            <h2>Check Out Some Series That Have Been Published By Others Around the World!</h2>
             <div id='spotlight-projects-container'>
                 {props.spotlight.map((project, index) =>
                     <SpotlightPreview

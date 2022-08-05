@@ -25,7 +25,7 @@ const RightManageButtons = (props) => {
             <div className='rightmanagebuttons-inner-container'>
                 <button onClick={() => alert("Temporary Report Button")}>Report</button>
                 <button onClick={() => props.onEditExistingProject()}>Edit</button>
-                <button onClick={toggleDelete}>Delete Project</button>
+                <button onClick={toggleDelete}>Delete Series</button>
             </div>
         )
         :
@@ -50,7 +50,7 @@ const RightManageButtons = (props) => {
                     {props.isOwner &&
                         <button
                             title={props.status === "PUBLISHED" ?
-                                "You've Already Published This" : "Publish Your Thread So The World Can See"}
+                                "You've Already Published This" : "Publish Your Series So The World Can See"}
                             className="rightmanagebuttons-buttons"
                             disabled={props.status === "PUBLISHED"}
                             onClick={() => props.onPublish(props.projectID)}>
@@ -62,7 +62,7 @@ const RightManageButtons = (props) => {
                         className="rightmanagebuttons-buttons"
                         onClick={openModal}
                     >
-                        Fork Project
+                        Create Branch
                     </button>
                     <div>
                         <button className="rightmanagebuttons-buttons" onClick={toggleButton}> ... </button>

@@ -262,7 +262,7 @@ const ReviewPost = (props) => {
                 <div>
                     <div id='reviewpost-header'>
                         <h2>Add your metadata!</h2>
-                        {disableCond1 && <p>**Please Select or Create a Thread**</p>}
+                        {disableCond1 && <p>**Please Select or Create a Series**</p>}
                        
                     </div>
                     <div id="reviewpost-button-container">

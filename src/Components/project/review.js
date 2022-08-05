@@ -156,9 +156,11 @@ const ProjectReview = (props) => {
                 window.location.reload();
             }))
     }
-
     const isCompressing = coverPhotoBoolean && !coverPhoto;
-    const existingCoverPhotoKey = props.projectMetaData ? props.projectMetaData.coverPhoto : props.projectMetaData.cover_photo_key;
+    let existingCoverPhotoKey = null;
+    if (props.projectMetaData) {
+        existingCoverPhotoKey = props.projectMetaData ? props.projectMetaData.coverPhoto : props.projectMetaData.cover_photo_key;
+    }
     const isCoverReplace = existingCoverPhotoKey && removeCoverPhoto;
     const shouldShowCoverUpload = isCoverReplace || !existingCoverPhotoKey;
 
@@ -255,13 +257,13 @@ const ProjectReview = (props) => {
                     />
                 </div>
                 <button
-                    disabled={isCompressing}
+                    disabled={isCompressing || !pursuit || !props.title}
                     onClick={() => handlePost(DRAFT)}
                 >
                     Save
                 </button>
                 <button
-                    disabled={isCompressing}
+                    disabled={isCompressing || !pursuit || !props.title}
                     onClick={() => handlePost(PUBLISHED)}
                 >
                     Publish

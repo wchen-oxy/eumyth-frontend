@@ -85,18 +85,19 @@ class ProjectController extends React.Component {
             title: this.props.content ? this.props.content.title : "",
             overview: this.props.content ? this.props.content?.overview : "",
             selectedProject: this.props.content.post_ids ? {
-                _id: this.props.content._id,
-                children: this.props.content.children,
-                index_user_id: this.props.content.index_user_id,
-                post_ids: this.props.content.post_ids,
-                username: this.props.content.username,
-                displayPhoto: this.props.content.display_photo_key,
-                coverPhoto: this.props.content.cover_photo_key,
-                miniCoverPhoto: this.props.content.mini_cover_photo_key,
-                ancestors: this.props.content.ancestors,
-                status: this.props.content.status,
-                remix: this.props.content.remix,
-                project_preview_id: this.props.content.project_preview_id
+                ...this.props.content
+                // _id: this.props.content._id,
+                // children: this.props.content.children,
+                // index_user_id: this.props.content.index_user_id,
+                // post_ids: this.props.content.post_ids,
+                // username: this.props.content.username,
+                // displayPhoto: this.props.content.display_photo_key,
+                // coverPhoto: this.props.content.cover_photo_key,
+                // miniCoverPhoto: this.props.content.mini_cover_photo_key,
+                // ancestors: this.props.content.ancestors,
+                // status: this.props.content.status,
+                // remix: this.props.content.remix,
+                // project_preview_id: this.props.content.project_preview_id
             } : null,
             selectedEventIndex: null,
             hasMore: true,
@@ -636,9 +637,14 @@ class ProjectController extends React.Component {
             case (REVIEW):
                 let pursuitSelects = [];
                 for (const pursuit of this.props.pursuitNames) {
-                    pursuitSelects.push(
-                        <option key={pursuit} value={pursuit}>{pursuit}</option>
-                    );
+                    if (pursuit === 'ALL') {
+                        pursuitSelects.push(<option key={'None'} value={null}>{ }</option>);
+                    }
+                    else {
+                        pursuitSelects.push(
+                            <option key={pursuit} value={pursuit}>{pursuit}</option>
+                        );
+                    }
                 }
                 return (
                     <ProjectReview

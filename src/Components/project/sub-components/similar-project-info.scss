@@ -1,13 +1,19 @@
-@import "../../../partials";
+@import "../../../_partials";
 
 .similarprojectinfo-container {
+    @include flex-display-column;
+    justify-content: center;
+    height: 65px;
     max-width: 250px;
     margin: 15px;
     border-radius: 1px;
-    h4 {
-        margin-bottom: 0px;
-    }
+    background-color: aliceblue;
+    padding: 0 5px;
+    border-radius: 2px;
+    border-style: solid;
+    a,
+    h4,
     p {
-        margin-top: 0px;
+        margin: 0;
     }
 }

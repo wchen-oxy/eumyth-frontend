@@ -43,7 +43,7 @@ const OptionalLinks = (props) => {
             return (
                 <a href={'/works'}>
                     <div className='optionallinks-action-buttons-container'>
-                        <h4>Works</h4>
+                        <h4>Published</h4>
                     </div>
                 </a>
             );

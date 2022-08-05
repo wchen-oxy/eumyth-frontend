@@ -32,16 +32,16 @@ const ProjectDraftControls = (props) => {
         <div id='projectdraftcontrols-main'>
             <div className='projectdraftcontrols-header'>
                 <span>
-                    <label>Add to Existing Thread:</label>
+                    <label>Add to Existing Series:</label>
                     <label class="switch">
                         <input type="checkbox" onChange={() => props.setToggleState(!props.toggleState)} />
                         <span class="slider round"></span>
                     </label>
-                    <label>Create New Thread</label>
+                    <label>Create New Series</label>
                 </span>
-                <h6>A thread is a collection of posts that have a common theme or idea.
-                    As you add more posts to a thread, you can see how your pursuit develops over time.
-                    While your threads grow you may be surprised who may interested in your hard work!
+                <h6>A Series is a collection of posts that have a common theme or idea.
+                    When you add more posts to a Series, you can see how your pursuit develops over time.
+                    As a Series grows, you may be surprised who may interested in your hard work!
                 </h6>
             </div>
 
@@ -52,7 +52,7 @@ const ProjectDraftControls = (props) => {
                             <TextareaAutosize
                                 name='subtitle'
                                 id='titleinput-content'
-                                placeholder='Write the Title of Your New Thread'
+                                placeholder='Write the Title of Your New Series'
                                 onChange={(e) => props.setThreadTitle(e.target.value)}
                                 minRows={2}
                                 maxLength={140} />
@@ -65,14 +65,14 @@ const ProjectDraftControls = (props) => {
                         />
 
                         <div className='projectdraftcontrols-inner'>
-                            <label>Make Title Private</label>
+                            <label>Make Series Title Private</label>
                             <input type="checkbox" onChange={() => props.setTitlePrivacy(!props.titlePrivacy)} />
                         </div>
                     </div>
 
                     :
                     <div className='projectdraftcontrols-inner'>
-                        <label>Threads</label>
+                        <label>Series</label>
                         <select
                             name='select'
                             id='projectdraftcontrols-content'
@@ -81,15 +81,15 @@ const ProjectDraftControls = (props) => {
                             {draftOptions}
                         </select>
                         <div className='projectdraftcontrols-inner'>
-                            <label>Complete Thread</label>
+                            <label>Complete Series</label>
                             <input type="checkbox" onChange={() => props.setCompleteProject(!props.isCompleteProject)} />
                         </div>
                     </div>
             }
             {props.isUpdateToPost && priorThread && priorThread !== props.selectedDraft &&
-                <p>Changing the thread this post belongs to may require you
-                    to reorder your posts in the new parent thread. You may do so
-                    by directly editing the parent thread. </p>}
+                <p>Changing the series this post belongs to may require you
+                    to reorder your posts in the new parent series. You may do so
+                    by directly editing the parent series. </p>}
         </div>
     )
 }

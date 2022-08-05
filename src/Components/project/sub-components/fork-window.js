@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import AxiosHelper from 'utils/axios';
+import withRouter from 'utils/withRouter';
+
 import './fork-window.scss';
 
 const ForkWindow = (props) => {
-    const [title, setTitle] = useState('Fork of ' + props.title);
+    const [title, setTitle] = useState('Branch of ' + props.title);
     const [remix, setRemix] = useState('');
     const forkProject = () => {
         return AxiosHelper.createFork(
@@ -17,8 +19,11 @@ const ForkWindow = (props) => {
             remix
         )
             .then((res) => {
-                alert("Done!");
                 props.closeModal();
+                console.log(res);
+                if (window.confirm("Done! Go To Newly Created Series?")) {
+                    window.location.replace("/c/" + res.data.projectID.toString())
+                }
             })
             .catch(err => console.log(err));
     }
@@ -27,7 +32,7 @@ const ForkWindow = (props) => {
         <div id={'forkwindow-delete-container'}>
             <div>
                 <h3>
-                    Fork This Project
+                    Create a Branch Of This Series
                 </h3>
                 <h4>Title</h4>
                 <input
@@ -50,4 +55,4 @@ const ForkWindow = (props) => {
         </div>)
 }
 
-export default ForkWindow;
+export default withRouter(ForkWindow);
