@@ -1,6 +1,5 @@
 import React from 'react';
 import { returnUserImageURL } from 'utils/url';
-import './event.scss';
 
 const SpotlightEvent = (props) => {
     return (

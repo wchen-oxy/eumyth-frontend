@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-import './project-draft-controls.scss';
 import PursuitCategoryInput from './pursuit-category-input';
 
 const ProjectDraftControls = (props) => {

@@ -1,0 +1,114 @@
+@import "src/_partials.scss";
+
+%title-texts {
+    font-size: $primary-large-font-size;
+    font-weight: 200;
+}
+
+#returninguser-body-container {
+    margin-top: 100px;
+}
+
+#returninguser-top-title-container {
+    padding-left: 2vh;
+}
+
+#returninguser-profile-container {
+    @include flex-display-row;
+}
+
+#returninguser-feed-container {
+    @include flex-display-column;
+}
+#returninguser-recent-posts-container {
+    margin-top: 2.5%;
+    margin-bottom: 2.5%;
+}
+
+#returninguser-recent-work-button {
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+#returninguser-recent-work-title {
+    text-decoration: none;
+    color: black;
+}
+#returninguser-recent-work-title:hover {
+    text-decoration: underline;
+}
+.returninguser-title {
+    @extend %title-texts;
+}
+
+.returninguser-main-row {
+    margin-top: 2.5%;
+    margin-bottom: 2.5%;
+    padding: 2vh;
+    #returninguser-hero-profile-column {
+        @include button-rounding;
+        background-color: $primary-color-faded;
+        a {
+            @include link-decoration;
+        }
+    }
+    #returninguser-hero-profile-column:hover {
+        background-color: $button-hover-color;
+    }
+
+    #returninguser-recent-work-container {
+        @include flex-display-column;
+    }
+
+    #returninguser-profile-photo {
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
+        margin: auto;
+        @include medium-profile-photo;
+    }
+
+    .returninguser-profile-text-container {
+        text-align: center;
+        p{
+            margin: 5px auto;
+            padding-left: 5px;
+            padding-right: 5px;
+            
+        }
+        
+         
+    }
+
+    .returninguser-profile-column {
+        @include flex-display-column;
+        margin: auto;
+    }
+
+    #returninguser-pursuit-info-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+
+        td,
+        th {
+            padding: 8px;
+        }
+    }
+}
+
+.returninguser-row {
+    @include flex-display-row;
+}
+
+#returninguser-infinite-scroll-container {
+    margin: auto;
+    width: 800px;
+    @include flex-display-column;
+
+    .returninguser-feed-object-container {
+        @include feed-or-event-container;
+        margin: 100px;
+    }
+}

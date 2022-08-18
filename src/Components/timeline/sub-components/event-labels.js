@@ -1,6 +1,4 @@
-
 import React from 'react';
-import './event-labels.scss';
 
 const EventLabels = (props) => {
     const labels = props.labels.map(

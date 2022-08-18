@@ -7,7 +7,6 @@ import {
     PROJECT_REARRANGE_STATE,
     PROJECT_SELECT_VIEW_STATE
 } from 'utils/constants/flags';
-import './top-button-bar.scss';
 
 const TopButtonBar = (props) => {
     const ManageButtons =

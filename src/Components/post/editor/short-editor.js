@@ -5,7 +5,6 @@ import TextContainer from './sub-components/text-container';
 import CustomImageSlider from 'components/image-carousel/custom-image-slider';
 import { withFirebase } from 'store/firebase';
 import { COLLAPSED } from 'utils/constants/flags';
-import './short-editor.scss';
 
 var isAdvancedUpload = function () {
     var div = document.createElement('div');

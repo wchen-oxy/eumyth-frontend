@@ -19,7 +19,6 @@ import {
     PROJECT_SELECT_VIEW_STATE,
     PROJECT
 } from "../../utils/constants/flags";
-import "./index.scss";
 
 const MAIN = "MAIN";
 const EDIT = "EDIT";
@@ -86,18 +85,6 @@ class ProjectController extends React.Component {
             overview: this.props.content ? this.props.content?.overview : "",
             selectedProject: this.props.content.post_ids ? {
                 ...this.props.content
-                // _id: this.props.content._id,
-                // children: this.props.content.children,
-                // index_user_id: this.props.content.index_user_id,
-                // post_ids: this.props.content.post_ids,
-                // username: this.props.content.username,
-                // displayPhoto: this.props.content.display_photo_key,
-                // coverPhoto: this.props.content.cover_photo_key,
-                // miniCoverPhoto: this.props.content.mini_cover_photo_key,
-                // ancestors: this.props.content.ancestors,
-                // status: this.props.content.status,
-                // remix: this.props.content.remix,
-                // project_preview_id: this.props.content.project_preview_id
             } : null,
             selectedEventIndex: null,
             hasMore: true,

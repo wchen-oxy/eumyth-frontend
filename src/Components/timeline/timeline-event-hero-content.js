@@ -2,7 +2,6 @@ import React from 'react';
 import EventTextInfo from './sub-components/event-text-info';
 import { returnContentImageURL } from 'utils/url';
 import { returnFormattedDate } from 'utils/constants/ui-text';
-import './timeline-event-hero-content.scss';
 
 const EventHeroContent = (props) => {
     const post = props.post;

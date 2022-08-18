@@ -1,6 +1,5 @@
 import React from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
-import './file-display-container.scss';
 
 const FileDisplayContainer = (props) => {
     const SortableItem =

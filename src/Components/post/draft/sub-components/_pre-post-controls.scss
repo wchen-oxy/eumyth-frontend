@@ -1,0 +1,10 @@
+#prepostcontrols-main {
+    @include flex-display-column;
+    align-items: center;
+    button {
+        width: fit-content;
+    }
+    select {
+       width: 100%;
+    }
+}

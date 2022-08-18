@@ -41,7 +41,6 @@ import {
     COMPLETE_PROJECT_FIELD,
 
 } from 'utils/constants/form-data';
-import './review-post.scss';
 const iterateDrafts = (drafts, projectID) => {
     let index = 0;
     for (const item of drafts) {
@@ -263,7 +262,7 @@ const ReviewPost = (props) => {
                     <div id='reviewpost-header'>
                         <h2>Add your metadata!</h2>
                         {disableCond1 && <p>**Please Select or Create a Series**</p>}
-                       
+
                     </div>
                     <div id="reviewpost-button-container">
                         <button

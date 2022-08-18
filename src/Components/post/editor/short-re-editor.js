@@ -4,7 +4,6 @@ import { returnUserImageURL } from '../../../utils/url';
 import CustomImageSlider from '../../image-carousel/custom-image-slider';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import './short-re-editor.scss';
 
 const adjustURLS = (inputArray) => (
     inputArray.map((url) => returnUserImageURL(url))

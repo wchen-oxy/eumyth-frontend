@@ -1,0 +1,31 @@
+#shorteditor-text-container {
+    max-width: 900px;
+    min-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+#shorteditor-main-container {
+    @include flex-display-row;
+}
+
+#shorteditor-file-manager-container {
+    @include flex-display-column;
+    h4{
+        text-align: center
+    }
+}
+
+#shorteditor-hero-container {
+    @include short-post-hero-image-container;
+
+    #shorteditor-image-slider-container {
+        background-color: black;
+    }
+}
+
+#shorteditor-side-container {
+    @include short-post-side-container;
+}
+
+// https://github.com/kenwheeler/slick/issues/982

@@ -1,7 +1,6 @@
 import React from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { PROJECT } from 'utils/constants/flags';
-import './title-input.scss';
 
 const TitleInput = (props) => {
     return (

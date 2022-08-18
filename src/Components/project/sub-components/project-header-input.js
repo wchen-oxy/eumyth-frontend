@@ -1,6 +1,5 @@
 import React from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-import './project-header-input.scss';
 
 const ProjectHeaderInput = (props) => {
     return (

@@ -1,6 +1,5 @@
 import React from 'react';
 import { SHORT } from 'utils/constants/flags';
-import './cover-photo-controls.scss';
 
 const CoverPhotoControls = (props) => {
     if (props.postType === SHORT) {

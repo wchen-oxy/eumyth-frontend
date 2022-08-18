@@ -1,9 +1,0 @@
-@import "../review-post.scss";
-
-#minutesinput-main {
-    @include meta-buttons;
-}
-
-#minutesinput-content{
-    @include number-input;
-}

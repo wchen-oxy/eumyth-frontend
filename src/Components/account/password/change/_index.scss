@@ -1,0 +1,14 @@
+@import "src/partials";
+
+#passwordchangeform-container {
+    @include flex-display-column;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    form{
+        @include flex-display-column;
+        width: 200px;
+    }
+}
+#passwordchangeform-reset-button {
+    margin-top: 1vh;
+}

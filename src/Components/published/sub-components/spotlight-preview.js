@@ -7,7 +7,6 @@ import { POST_VIEWER_MODAL_STATE, SPOTLIGHT_POST } from 'utils/constants/flags';
 import EventLabels from 'components/timeline/sub-components/event-labels';
 import SpotlightMeta from './spotlight-meta';
 import ProjectVote from './project-vote';
-import './spotlight-preview.scss';
 
 const OVERVIEW_STATE = 'OVERVIEW_STATE';
 const STAT_STATE = "STAT_STATE";

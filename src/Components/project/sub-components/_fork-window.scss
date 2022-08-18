@@ -1,0 +1,9 @@
+@import "src/partials";
+
+#forkwindow-delete-container{
+    @include small-post-window;
+}
+
+#rightmanagebuttons-submit-container{
+    padding-top: 25px;
+}

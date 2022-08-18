@@ -1,6 +1,5 @@
 import React from 'react';
 import { returnContentImageURL } from 'utils/url';
-import './timeline-project-event.scss';
 
 const ProjectEvent = (props) => {
     const post = props.post;

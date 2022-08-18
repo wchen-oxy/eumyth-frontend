@@ -1,7 +1,6 @@
 import React from 'react';
 import { POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
 import ShortPostViewer from '../post/viewer/short-post';
-import './profile-modal.scss';
 
 const ProfileModal = (props) => {
     if (props.eventData &&

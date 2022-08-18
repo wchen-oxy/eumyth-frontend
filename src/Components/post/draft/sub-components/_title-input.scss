@@ -1,0 +1,7 @@
+#titleinput-main{
+    @include meta-buttons;
+}
+
+#titleinput-content{
+    @include long-text-input;
+}

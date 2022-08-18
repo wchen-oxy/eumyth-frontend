@@ -22,7 +22,6 @@ import {
     THREADS
 } from 'utils/constants/flags';
 import { createPursuitArray } from 'utils';
-import './index.scss';
 
 const selectMessage = (action, isPrivate) => {
     switch (action) {

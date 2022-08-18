@@ -1,0 +1,22 @@
+@import "src/partials";
+
+
+#optionallinks-display-photo-container {
+    @include flex-display-row;
+    align-items: center;
+    img {
+        @include tiny-profile-photo;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+}
+
+.optionallinks-action-buttons-container {
+    @include flex-display-row;
+    @include button-rounding;
+    background-color: $primary-color-faded;
+}
+
+.optionallinks-action-buttons-container:hover {
+    background-color: $button-hover-color;
+}

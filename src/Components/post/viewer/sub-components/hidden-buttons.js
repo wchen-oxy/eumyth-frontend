@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { EDIT_STATE } from 'utils/constants/flags';
-import './hidden-buttons.scss';
 
 const HiddenButtons = (props) => {
     const [isButtonShowing, setButtonShow] = useState(false);

@@ -3,7 +3,6 @@ import React from 'react';
 import { SPOTLIGHT_POST } from 'utils/constants/flags';
 import { returnUserImageURL } from 'utils/url';
 import { returnFormattedDistance } from 'utils/constants/ui-text';
-import './results.scss';
 
 const Results = (props) => {
     const distanceText = returnFormattedDistance(props.person.distance)

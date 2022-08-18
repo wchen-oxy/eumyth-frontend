@@ -1,6 +1,5 @@
 import React from 'react';
 import Tab from './sub-components/tab';
-import './spotlight.scss';
 
 const GeoSpotlight = (props) => {
     const tabArray = props.users.map(user =>

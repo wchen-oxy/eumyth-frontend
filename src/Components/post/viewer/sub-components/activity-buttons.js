@@ -1,6 +1,5 @@
 import React from 'react';
 import HiddenButtons from './hidden-buttons';
-import './activity-buttons.scss';
 
 const ActivityButtons = (props) => {
     return (

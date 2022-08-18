@@ -19,8 +19,7 @@ import {
 } from 'utils/constants/flags';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import 'components/image-carousel/index.scss';
-import './short-post.scss';
+
 import CaptionText from './sub-components/caption-text';
 import ActivityButtons from './sub-components/activity-buttons';
 

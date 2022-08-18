@@ -1,6 +1,5 @@
 import React from 'react';
 import SpotlightPreview from './spotlight-preview.js';
-import './spotlight.scss';
 
 const Spotlight = (props) => {
     return (

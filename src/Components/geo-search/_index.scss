@@ -1,0 +1,15 @@
+#geosearch-header-container {
+    @include flex-display-column;
+}
+
+#geosearch-title-container {
+    @include flex-display-row;
+    h1 {
+        margin: 80px auto 0 auto;
+    }
+}
+
+#geosearch-results-container {
+    margin: 20px auto;
+}
+

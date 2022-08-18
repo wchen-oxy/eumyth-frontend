@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './content-gene.scss'
+
 const ANCESTORS = "ANCESTORS";
 const CHILDREN = "CHILDREN";
 

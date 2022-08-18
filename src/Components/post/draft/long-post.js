@@ -9,7 +9,6 @@ import {
   LONG,
   SHORT
 } from "../../../utils/constants/flags";
-import "./long-post.scss";
 import _ from 'lodash';
 
 // const  = (func) => _.debounce(func, 2000);

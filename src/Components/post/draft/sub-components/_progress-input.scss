@@ -1,0 +1,11 @@
+#progressinput-main {
+    @include meta-buttons;
+}
+
+#progressinput-content {
+    @include slider-input;
+}
+
+#progressinput-slider-container{
+    @include meta-slider;
+}

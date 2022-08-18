@@ -1,5 +1,4 @@
 import React from 'react';
-import './minutes-input.scss';
 
 const MinutesInput = (props) => {
     return (

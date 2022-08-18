@@ -1,7 +1,5 @@
 import React from 'react';
 import EventLabels from './event-labels';
-import './event-text-info.scss';
-
 
 const EventTextInfo = (props) => (
     <div className='eventtextinfo-text-container'>

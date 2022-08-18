@@ -1,6 +1,5 @@
 import React from 'react';
 import { displayProgressionType } from "../../../../utils/constants/ui-text";
-import './progress-input.scss';
 
 const ProgressInput = (props) => {
     return (

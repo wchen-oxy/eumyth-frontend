@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import "./verify.scss";
 
 const VerifyForm = (props) => {
     const [sentIndicator, setSentIndicator] = useState(null);

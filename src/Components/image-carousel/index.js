@@ -4,7 +4,6 @@ import Arrow from "./sub-components/arrow";
 import Annotator from "./annotator";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "./index.scss";
 
 // https://css-tricks.com/centering-css-complete-guide/#center-vertically
 //Explains the weird -50% and top 50% thing

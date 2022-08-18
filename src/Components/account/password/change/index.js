@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withFirebase } from '../../../../store/firebase';
-import './index.scss';
 
 const INITIAL_STATE = {
   passwordOne: '',

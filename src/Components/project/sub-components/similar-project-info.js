@@ -1,7 +1,6 @@
 import React from 'react';
 import withRouter from 'utils/withRouter';
 import { returnProjectURL } from 'utils/url';
-import './similar-project-info.scss';
 
 const SimilarProjectInfo = (props) => {
     return (

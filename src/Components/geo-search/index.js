@@ -7,7 +7,6 @@ import ShortPostViewer from 'components/post/viewer/short-post';
 import PeopleFields from './sub-components/people-fields';
 import { POST_VIEWER_MODAL_STATE, SPOTLIGHT_POST } from 'utils/constants/flags';
 import { DIFFICULTY_FIELD, DISTANCE_FIELD, PROGRESSION_FIELD, PURSUIT_FIELD } from 'utils/constants/form-data';
-import './index.scss';
 
 const SPOTLIGHT = 'SPOTLIGHT';
 const RESULTS = 'RESULTS';

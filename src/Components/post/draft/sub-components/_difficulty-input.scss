@@ -1,0 +1,11 @@
+#difficultyinput-main {
+    @include meta-buttons;
+}
+
+#difficultyinput-content {
+    @include slider-input;
+}
+
+#difficultyinput-slider-container {
+    @include meta-slider;
+}

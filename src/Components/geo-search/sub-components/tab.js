@@ -5,7 +5,6 @@ import { ALL, PROJECT, SPOTLIGHT_POST } from 'utils/constants/flags';
 import { returnUserImageURL } from 'utils/url';
 import { returnFormattedDistance } from 'utils/constants/ui-text';
 import withRouter from 'utils/withRouter';
-import './tab.scss';
 
 //FIXME The project is not being used
 

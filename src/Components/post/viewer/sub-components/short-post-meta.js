@@ -2,7 +2,6 @@ import React from "react";
 import { returnProjectURL } from '../../../../utils/url'
 import { displayDifficulty, displayProgressionType } from "utils/constants/ui-text";
 import EventLabels from "components/timeline/sub-components/event-labels";
-import "./short-post-meta.scss";
 
 const ShortPostMetaInfo = (props) => {
     const progression = displayProgressionType(props.progression);

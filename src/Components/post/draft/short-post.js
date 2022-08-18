@@ -4,7 +4,6 @@ import TextareaAutosize from 'react-textarea-autosize';
 import ShortEditor from '../editor/short-editor';
 import ReviewPost from './review-post';
 import { INITIAL_STATE, REVIEW_STATE, SHORT } from 'utils/constants/flags';
-import './short-post.scss';
 
 class ShortPost extends React.Component {
   constructor(props) {

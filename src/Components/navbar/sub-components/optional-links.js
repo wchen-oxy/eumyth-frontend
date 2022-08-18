@@ -1,6 +1,5 @@
 import React from 'react';
 import { NEW_ENTRY_MODAL_STATE, PEOPLE_SEARCH_STATE, RELATION_MODAL_STATE, WORKS_STATE } from 'utils/constants/flags';
-import './optional-links.scss';
 
 const OptionalLinks = (props) => {
     switch (props.linkType) {

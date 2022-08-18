@@ -4,7 +4,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import AxiosHelper from 'utils/axios';
 import { DYNAMIC, POST, PROJECT, PROJECT_EVENT } from 'utils/constants/flags';
 import { validateFeedIDs } from 'utils/validator';
-import './index.scss';
 
 const endMessage = (
     <div>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { withFirebase } from 'store/firebase';
-import './options-menu.scss';
 
 class OptionsMenu extends React.Component {
     constructor() {

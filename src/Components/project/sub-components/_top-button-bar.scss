@@ -1,0 +1,20 @@
+@import "src/partials";
+
+#topbuttonbar-right-only-button-bar {
+    @include flex-display-column;
+    align-items: flex-end;
+    padding-top: 20px;
+}
+
+#topbuttonbar-dual-button-bar {
+    @include flex-display-row;
+    justify-content: space-between;
+    padding-top: 20px;
+    #topbuttonbar-right-button-container {
+        float: right;
+        p {
+            font-size: 12px;
+            margin: 0;
+        }
+    }
+}

@@ -3,7 +3,6 @@ import Annotation from 'react-image-annotation';
 import TextareaAutosize from 'react-textarea-autosize';
 import ImageControls from './sub-components/image-controls';
 import { EXPANDED, COLLAPSED } from 'utils/constants/flags';
-import './custom-image-slider.scss';
 
 const returnStyleName = (windowType) => {
     if (windowType === EXPANDED) {

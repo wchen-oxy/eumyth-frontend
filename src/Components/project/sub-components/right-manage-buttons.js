@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
 import DeleteWindow from './delete-window';
 import ForkWindow from './fork-window';
-import './right-manage-buttons.scss';
 
 const RightManageButtons = (props) => {
     const [areButtonsShowing, setButtonShow] = useState(false);

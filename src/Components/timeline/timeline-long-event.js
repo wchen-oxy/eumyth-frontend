@@ -2,7 +2,6 @@ import React from 'react';
 import { returnUserImageURL } from 'utils/url';
 import { returnFormattedDate } from 'utils/constants/ui-text';
 import EventTextInfo from './sub-components/event-text-info';
-import './timeline-long-event.scss';
 
 const LongEvent = (props) => {
     if (props.post.text_data === undefined) return (<></>);

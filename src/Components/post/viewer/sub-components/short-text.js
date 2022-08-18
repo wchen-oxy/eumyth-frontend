@@ -1,5 +1,4 @@
 import React from 'react';
-import './short-text.scss';
 
 const ShortHeroText = (props) => {
     const styleType = props.length < 1000 ? 'tiny-amount-text-container' : 'medium-amount-text-container';

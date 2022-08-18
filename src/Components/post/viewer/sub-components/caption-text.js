@@ -1,5 +1,4 @@
 import React from "react";
-import './caption-text.scss'
 
 const CaptionText = (props) => {
     if (props.needsSideCaption)

@@ -1,5 +1,4 @@
 import React from 'react';
-import './image-drop.scss';
 
 const ImageDrop = (props) => (
     <div className='imagedrop-container'

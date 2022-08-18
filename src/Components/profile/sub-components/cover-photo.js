@@ -1,6 +1,5 @@
 import React from 'react';
 import { returnUserImageURL } from 'utils/url';
-import './cover-photo.scss';
 
 const CoverPhoto = (props) => {
     if (props.coverPhotoKey) {

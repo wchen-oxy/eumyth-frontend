@@ -1,0 +1,16 @@
+@import "src/partials";
+
+#rightmanagebuttons-master-button-container {
+    @include flex-display-column;
+}
+
+.rightmanagebuttons-outer-container {
+    @include flex-display-row;
+}
+.rightmanagebuttons-inner-container {
+    position: absolute;
+}
+
+.rightmanagebuttons-buttons {
+    margin: auto 5px;
+}

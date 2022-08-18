@@ -13,7 +13,6 @@ import {
     CANCEL_REQUEST_TEXT,
     FOLLOWING_BUTTON_TEXT,
 } from 'utils/constants/ui-text';
-import './relation-modal.scss';
 
 class RelationModal extends React.Component {
     _isMounted = false;

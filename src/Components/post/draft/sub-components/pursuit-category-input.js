@@ -1,5 +1,4 @@
 import React from 'react';
-import './pursuit-category-input.scss';
 
 const PursuitCategoryInput = (props) => {
     let pursuitSelects = [];

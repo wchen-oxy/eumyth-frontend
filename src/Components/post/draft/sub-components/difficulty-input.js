@@ -1,5 +1,4 @@
 import React from 'react';
-import './difficulty-input.scss';
 
 const DifficultyInput = (props) => {
     return (

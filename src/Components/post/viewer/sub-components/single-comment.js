@@ -3,7 +3,6 @@ import CommentInput from './comment-input';
 import AxiosHelper from 'utils/axios';
 import { TEMP_PROFILE_PHOTO_URL } from 'utils/constants/urls';
 import { returnUserImageURL } from 'utils/url';
-import './single-comment.scss';
 
 class SingleComment extends React.Component {
 

@@ -1,0 +1,52 @@
+.results-container {
+    @include flex-display-row;
+    margin: 20px auto;
+    background-color: gainsboro;
+}
+
+.results-profile-container {
+    width: 300px;
+    margin-top: 30px;
+    margin-left: 30px;
+    margin-bottom: 30px;
+    .results-image-container {
+        @include flex-display-row;
+
+        img {
+            @include tiny-profile-photo;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto;
+        }
+    }
+    .results-full-name {
+        text-align: center;
+        margin: 0;
+        color: black;
+        text-decoration: none; /* no underline */
+
+        h3 {
+            margin: 0 auto;
+            text-align: center;
+        }
+    }
+    .results-stats-container {
+        @include flex-display-column;
+        h4,
+        p {
+            margin: 0;
+        }
+    }
+}
+.results-post-content-container {
+    @include flex-display-column;
+
+    .results-title {
+        margin-left: 10px;
+    }
+
+    .results-post-preview-container {
+        @include flex-display-row;
+        width: fit-content;
+    }
+}

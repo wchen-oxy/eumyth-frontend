@@ -9,7 +9,6 @@ import { returnUserImageURL } from "../../../utils/url";
 import { LONG, INITIAL_STATE, EDIT_STATE, REVIEW_STATE, EXPANDED, COLLAPSED } from '../../../utils/constants/flags';
 import ReviewPost from "../draft/review-post";
 import { withFirebase } from "../../../store/firebase/index";
-import "./long-post.scss";
 
 const monthNames = ["January", "February", "March", "April", "May",
     "June", "July", "August", "September", "October", "November",

@@ -5,7 +5,6 @@ import WelcomeRegisterForm from './sub-components/register';
 import PasswordForgetForm from 'components/account/password/forget/index';
 import VerifyForm from './sub-components/verify';
 import { LOGIN_STATE, PASSWORD_STATE, REGISTER_STATE } from 'utils/constants/flags';
-import './index.scss';
 
 const INITIAL_STATE = {
   currentUser: '',

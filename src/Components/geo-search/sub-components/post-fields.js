@@ -1,6 +1,5 @@
 import React from 'react';
 import { DIFFICULTY_FIELD, DISTANCE_FIELD, PROGRESSION_FIELD } from 'utils/constants/form-data';
-import './post-field.scss';
 
 const PostFields = (props) => {
     return (

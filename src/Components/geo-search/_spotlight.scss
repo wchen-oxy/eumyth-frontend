@@ -1,0 +1,11 @@
+#spotlight-main-container {
+    @include flex-display-row;
+}
+
+#spotlight-highlight {
+    width: 300px;
+    padding-left: 60px;
+    h1{
+        font-size: 60px;
+    }
+}

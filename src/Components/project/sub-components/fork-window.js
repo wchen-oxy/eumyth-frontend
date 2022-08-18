@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import AxiosHelper from 'utils/axios';
 import withRouter from 'utils/withRouter';
 
-import './fork-window.scss';
-
 const ForkWindow = (props) => {
     const [title, setTitle] = useState('Branch of ' + props.title);
     const [remix, setRemix] = useState('');

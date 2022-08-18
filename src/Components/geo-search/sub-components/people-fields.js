@@ -2,8 +2,7 @@ import React from 'react';
 import CreatableSelect from 'react-select/creatable';
 import { PURSUIT_FIELD } from 'utils/constants/form-data';
 import { checkInputNotNull } from 'utils/validator';
-import './people-fields.scss'
-
+ 
 const defaultOption = { label: 'Search Only Your Pursuits', value: 'ALL' };
 const formatPrompt = (string) => string;
 const PeopleFields = (props) => {
@@ -21,6 +20,7 @@ const PeopleFields = (props) => {
             return props.onFieldChange(PURSUIT_FIELD, null);
         }
     }
+    
     return (
         <div id='peoplefields-main-container'>
             <div id='peoplefields-createable-container'

@@ -3,7 +3,6 @@ import SingleComment from './sub-components/single-comment';
 import CommentInput from './sub-components/comment-input';
 import AxiosHelper from 'utils/axios';
 import { SHORT, EXPANDED, COLLAPSED } from 'utils/constants/flags';
-import './comments.scss';
 
 class Comments extends React.Component {
     constructor(props) {

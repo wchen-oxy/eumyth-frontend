@@ -1,0 +1,9 @@
+.projectvote-main-container{
+    @include flex-display-row;
+}
+.projectvote-controls-container{
+    @include flex-display-row;
+    p{
+        margin: 0 3px;
+    }
+}

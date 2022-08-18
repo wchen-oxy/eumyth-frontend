@@ -4,7 +4,6 @@ import {
     PRIVATE,
     PUBLIC_FEED
 } from 'utils/constants/flags';
-import './pre-post-controls.scss';
 
 const PrePostControls = (props) => {
     return (

@@ -1,8 +1,6 @@
 import React from 'react';
 import { returnUserImageURL } from 'utils/url';
 import { returnFormattedDate } from 'utils/constants/ui-text';
-import './post-header.scss';
-
 
 const PostHeader = (props) => {
     const date = props.date ? returnFormattedDate(props.date) : null;

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { LOGIN_STATE, } from "../../../../utils/constants/flags";
-import "./register.scss";
 
 const WelcomeRegisterForm = (props) => {
   const [disableSubmit, setDisableSubmit] = useState(true);
@@ -53,7 +52,7 @@ const WelcomeRegisterForm = (props) => {
         onClick={props.onToggleLoginRegisterWindow}
       >
         Sign In
-        </button>
+      </button>
     </section>
 
   )

@@ -10,7 +10,6 @@ import withRouter from "utils/withRouter";
 import { returnUsernameURL, returnUserImageURL } from 'utils/url';
 import { TEMP_PROFILE_PHOTO_URL } from 'utils/constants/urls';
 import { POST, RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE, FOLLOWED_FEED } from 'utils/constants/flags';
-import './returning-user.scss';
 import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 
 class ReturningUserPage extends React.Component {

@@ -1,0 +1,14 @@
+@import "src/_partials.scss";
+#hiddenbuttons-main-container {
+    @include flex-display-row;
+    justify-content: center;
+    margin: auto 0;
+
+    #hiddenbuttons-optional-containers {
+        @include flex-display-column;
+        margin-left: -40px;
+        margin-top: -41px;
+        position: absolute;
+        z-index: 50;
+    }
+}

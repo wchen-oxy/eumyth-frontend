@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import AxiosHelper from 'utils/axios';
 import { returnUserImageURL, returnContentImageURL } from 'utils/url';
 import SimilarProjectInfo from './sub-components/similar-project-info';
-import "./project-header.scss";
 
 const ProjectHeader = (props) => {
     const [projectPreviews, setProjectPreviews] = useState([]);

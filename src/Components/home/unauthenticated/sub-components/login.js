@@ -1,6 +1,5 @@
 import React from 'react';
 import { PASSWORD_STATE, REGISTER_STATE } from "../../../../utils/constants/flags";
-import "./login.scss";
 
 const WelcomeLoginForm = (props) =>
 (

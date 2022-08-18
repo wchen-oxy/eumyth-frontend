@@ -8,7 +8,6 @@ import OptionsMenu from './sub-components/options-menu';
 import { withFirebase } from 'store/firebase';
 import { returnUserImageURL } from 'utils/url';
 import { NEW_ENTRY_MODAL_STATE, PEOPLE_SEARCH_STATE, RELATION_MODAL_STATE, WORKS_STATE } from 'utils/constants/flags';
-import './navigation-authorized.scss';
 
 class NavigationAuthorized extends React.Component {
     constructor(props) {

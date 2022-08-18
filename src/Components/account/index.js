@@ -13,7 +13,6 @@ import {
   TINY_CROPPED_IMAGE_FIELD,
   COVER_PHOTO_FIELD
 } from 'utils/constants/form-data';
-import './index.scss';
 import PhotoContainer from './photo-container';
 
 const AccountPage = (props) =>
@@ -31,15 +30,10 @@ const AccountPage = (props) =>
 const AuthenticatedAccountPage = (props) => {
   const [isEditingDisplay, setIsEditingDisplay] = useState(false);
   const [isEditingCover, setIsEditingCover] = useState(false);
-  const [indexUserID, setIndexUserID] = useState(null);
   const [displayPhoto, setDisplayPhoto] = useState(null);
   const [hasDisplayPhoto, setHasDisplayPhoto] = useState(true);
   const [coverPhoto, setCoverPhoto] = useState(null);
   const [bio, setBioText] = useState('');
-  const [previousTemplates, setPreviousTemplates] = useState(null);
-  const [templateText, setTemplateText] = useState('');
-  const [templateCategory, setTemplateCategory] = useState(null);
-  const [pursuitNames, setPursuitNames] = useState(null);
   const [displayPhotoScale, setDisplayPhotoScale] = useState(1);
   const [displayPhotoRotation, setDisplayPhotoRotation] = useState(0);
   const [AvatarEditorInstance, setAvatarEditorInstance] = useState(null);
@@ -62,11 +56,6 @@ const AuthenticatedAccountPage = (props) => {
         setHasDisplayPhoto(result.data.cropped_display_photo_key !== null);
         setBioText(result.data.bio);
         setIsPrivate(result.data.private);
-        setPursuitNames(pursuitNameArray);
-        setPreviousTemplates(pursuits);
-        setTemplateText(pursuits[pursuitNameArray[[0]]]);
-        setTemplateCategory(pursuitNameArray[[0]]);
-        setIndexUserID(result.data._id);
       });
   }, [props.firebase])
 
@@ -161,16 +150,6 @@ const AuthenticatedAccountPage = (props) => {
     );
   }
 
-  const handleTemplateTextSubmit = () => {
-    return (
-      AxiosHelper.updateTemplate(
-        indexUserID,
-        templateText,
-        templateCategory
-      )
-    )
-  }
-
   const handleProfilePrivacyChange = (privacySetting) => {
     const isPrivate = privacySetting === PRIVATE ? true : false;
     setIsPrivate(isPrivate);
@@ -248,29 +227,11 @@ const AuthenticatedAccountPage = (props) => {
     }
   }
 
-  const renderPursuitOptions = () => {
-    let pursuits = [];
-    if (pursuitNames !== null) {
-      for (const pursuit of pursuitNames) {
-        pursuits.push(
-          <option key={pursuit} value={pursuit}>
-            {pursuit}
-          </option >
-        )
-      }
-      return pursuits;
-    }
-  }
-
-  const handleTemplateTextSet = (templateCategory) => {
-    setTemplateText(previousTemplates[templateCategory]);
-    setTemplateCategory(templateCategory);
-  }
-
   const clearFile = () => {
     setImageKey(imageKey + 1);
     setDisplayPhoto(null);
   }
+
   const profilePhotoEditor =
     <ProfilePhotoEditor
       clearFile={clearFile}
@@ -282,7 +243,6 @@ const AuthenticatedAccountPage = (props) => {
       rotateImage={setDisplayPhotoRotation}
       setEditorRef={setAvatarEditorInstance}
     />;
-  console.log(props.authUser)
 
   return (
     <div id='account-container'>
@@ -342,30 +302,8 @@ const AuthenticatedAccountPage = (props) => {
       <div className='account-section-container'>
         <PasswordChangeForm />
       </div>
-      {/* 
-              <div
-                id='account-template-container'
-                className='account-section-container'>
-                <label>Add Template for Pursuit</label>
-                <p>Add a predefined text you can add to a post for ease of access</p>
-                <select
-                  name='pursuit-category'
-                  value={templateCategory}
-                  onChange={(e) => handleTemplateTextSet(e.target.value)}>
-                  {renderPursuitOptions()}
-                </select>
-                <textarea
-                  type='text'
-                  onChange={e => setTemplateText(e.target.value)}
-                  value={templateText}
-                />
-                <button onClick={handleTemplateTextSubmit}>
-                  Submit Template
-                </button>
-              </div> */}
     </div>
   );
-
 }
 
 const condition = authUser => !!authUser;

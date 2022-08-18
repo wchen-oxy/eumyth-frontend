@@ -1,6 +1,5 @@
 import React from 'react';
 import ContentGene from './content-gene';
-import './spotlight-meta.scss';
 
 const SpotlightMeta = (props) => {
 

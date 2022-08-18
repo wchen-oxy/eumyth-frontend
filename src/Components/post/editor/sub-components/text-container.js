@@ -1,7 +1,6 @@
 import React from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import CaptionButtons from './caption-buttons';
-import './text-container.scss';
 
 const TextContainer = (props) => (
     <div className='textcontainer-main-container'>

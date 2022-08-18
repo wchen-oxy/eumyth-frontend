@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AxiosHelper from 'utils/axios';
 import { PROJECT } from 'utils/constants/flags';
-import "./project-vote.scss";
 
 const validateInclusion = (array, ID) => {
     return array.length > 0 && array.includes(ID);

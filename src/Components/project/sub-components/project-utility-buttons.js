@@ -1,5 +1,4 @@
 import React from 'react';
-import './project-utility-buttons.scss';
 
 const ProjectUtilityButtons = (props) => {
     return (

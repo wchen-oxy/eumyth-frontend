@@ -16,8 +16,7 @@ import {
     USERNAME_FIELD
 } from 'utils/constants/form-data';
 import { testOptions} from 'utils/constants/options';
-import './initial-customization.scss';
-
+ 
 
 const INITIAL_STATE = {
     firstName: '',

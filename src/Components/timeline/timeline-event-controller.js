@@ -3,7 +3,6 @@ import EventHeroContent from './timeline-event-hero-content';
 import ProjectEvent from './timeline-project-event';
 import { POST, PROJECT, PROJECT_EVENT, SPOTLIGHT_POST, SPOTLIGHT_PROJECT } from 'utils/constants/flags';
 import EventCheckbox from './sub-components/event-checkbox';
-import './timeline-event.scss';
 
 const selectClassStyle = (num) => {
     switch (num) {
