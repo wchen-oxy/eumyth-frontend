@@ -1,33 +1,3 @@
-@mixin long-text-input {
-    width: 50%;
-}
-
-@mixin brief-text-input {
-    width: 30%;
-}
-
-@mixin number-input {
-    width: 25%;
-}
-
-@mixin slider-input {
-    width: 100%;
-}
-
-@mixin meta-buttons {
-    @include flex-display-column;
-    align-items: center;
-}
-
-@mixin meta-slider {
-    @include flex-display-column;
-    height: 40px;
-    justify-content: center;
-    p {
-        margin-top: 0px;
-        margin-bottom: 5px;
-    }
-}
 
 #reviewpost-header {
     text-align: center;

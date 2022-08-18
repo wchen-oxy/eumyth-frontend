@@ -1,22 +1,3 @@
-@mixin text-input {
-    height: 30px;
-    font-size: 20px;
-    box-sizing:border-box
-}
-
-@mixin content-switch-button {
-    height: 25px;
-}
-
-@mixin hero-button {
-    height: 50px;
-    width: 100%;
-    background-color: royalblue;
-    font-size: 18px;
-    color: white;
-}
-
-
 
 .welcome-login-register-section {
     @include flex-display-row;

@@ -24,3 +24,25 @@ $small-button-window: 19vh;
 $navbar: 25;
 $general-window: 24;
 $overlay: 10;
+
+%title-texts {
+    font-size: $primary-large-font-size;
+    font-weight: 200;
+}
+
+%navbar-text {
+    margin: auto;
+    color: white;
+}
+
+
+%event-container {
+    @include no-select;
+    text-align: initial;
+    width: 220px;
+    max-width: 220px;
+    background-color: white;
+    word-wrap: break-word;
+    border-radius: 5px;
+    cursor: pointer;
+}

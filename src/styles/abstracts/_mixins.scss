@@ -139,3 +139,99 @@
     user-select: none; /* Non-prefixed version, currently 
     supported by Chrome, Edge, Opera and Firefox */
 }
+
+@mixin text-input {
+    height: 30px;
+    font-size: 20px;
+    box-sizing:border-box
+}
+
+@mixin content-switch-button {
+    height: 25px;
+}
+
+@mixin hero-button {
+    height: 50px;
+    width: 100%;
+    background-color: royalblue;
+    font-size: 18px;
+    color: white;
+}
+
+//draft review
+@mixin long-text-input {
+    width: 50%;
+}
+
+@mixin brief-text-input {
+    width: 30%;
+}
+
+@mixin number-input {
+    width: 25%;
+}
+
+@mixin slider-input {
+    width: 100%;
+}
+
+@mixin meta-buttons {
+    @include flex-display-column;
+    align-items: center;
+}
+
+@mixin meta-slider {
+    @include flex-display-column;
+    height: 40px;
+    justify-content: center;
+    p {
+        margin-top: 0px;
+        margin-bottom: 5px;
+    }
+}
+
+//timeline event container
+@mixin with-cover-photo-container-size {
+    height: 120px;
+    overflow: hidden;
+}
+
+@mixin no-cover-photo-container-size {
+    height: 110px;
+    padding: 5px;
+    overflow: hidden;
+}
+
+@mixin cover-photo-size {
+    height: auto;
+    width: 100%;
+}
+
+@mixin lower-text-container {
+    padding: 5px 0;
+    min-height: 110px;
+    overflow: hidden;
+    margin: 0;
+    overflow-wrap: anywhere;
+
+}
+
+@mixin label-container {
+    padding: 0 5px;
+    border-radius: 5px;
+    background-color: grey;
+    width: fit-content
+}
+
+@mixin event {
+    min-height: 150px;
+}
+
+@mixin text {
+    h4,
+    p {
+        margin: 0;
+        padding-top: 10px;
+        text-align: center;
+    }
+}
