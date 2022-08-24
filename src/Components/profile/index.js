@@ -505,12 +505,14 @@ class ProfilePageAuthenticated extends React.Component {
 
                         <div id='profile-content-switch'>
                             <button
+                                className="btn-switch"
                                 disabled={this.state.contentType === POST ?
                                     true : false}
                                 onClick={() => this.handleMediaTypeSwitch(POST)}>
                                 Posts
                             </button>
                             <button
+                                className="btn-switch"
                                 disabled={this.state.contentType === PROJECT ?
                                     true : false}
                                 onClick={() => this.handleMediaTypeSwitch(PROJECT)}>

@@ -63,7 +63,7 @@ class PasswordChange extends Component {
             placeholder='Confirm New Password'
           />
           <button
-            className='btn-reg'
+            className='btn-round'
             disabled={isInvalid}
             type='submit'
           >

@@ -362,7 +362,7 @@ class ReturningUserPage extends React.Component {
                     id='returninguser-profile'
                     className='returninguser-main-row'
                 >
-                    <div className='returninguser-profile-column btn-reg'
+                    <div className='returninguser-profile-column btn-round'
                     >
                         <Link
                             to={returnUsernameURL(this.props.authUser.username)}

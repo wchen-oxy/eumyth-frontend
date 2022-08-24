@@ -22,7 +22,7 @@ const PhotoContainer = (props) => {
         <div id='photocontainer'>
             <label className="label-form">{labels[props.type].title}</label>
             <button
-                className='btn-reg'
+                className='btn-round'
                 onClick={() => {
                     props.setIsEditingPhoto(!props.isEditing)
                     props.showPhotoEditor(props.photoRef)
@@ -39,7 +39,7 @@ const PhotoContainer = (props) => {
                         }} />
                     {props.photoExists && props.type !== 'COVER' && props.profilePhotoEditor}
                     <button
-                        className='btn-reg'
+                        className='btn-round'
                         disabled={!props.photoExists}
                         onClick={() => props.submitPhoto(props.type)}>
                         {labels[props.type].submit}
@@ -48,7 +48,7 @@ const PhotoContainer = (props) => {
                 <div className='photocontainer-file-inner'>
                     <p>{labels[props.type].remove}</p>
                     <button
-                        className='btn-reg'
+                        className='btn-round'
                         onClick={() => props.removePhoto(props.type)}>
                         {labels[props.type].remove}
                     </button>

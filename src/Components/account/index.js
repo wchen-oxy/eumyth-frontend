@@ -284,7 +284,7 @@ const AuthenticatedAccountPage = (props) => {
           maxLength={500}
         />
         <button
-          className='btn-reg'
+          className='btn-round'
           onClick={handleBioSubmit}>
           Submit Bio
         </button>

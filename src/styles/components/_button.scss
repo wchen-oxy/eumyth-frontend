@@ -1,9 +1,14 @@
-.btn-reg {
+.btn-round {
     padding: 12px;
-    border-radius: 25px;
+    border-radius: 24px;
     background-color: $primary-color-faded;
 }
 
-.btn-reg:hover {
+.btn-round:hover {
     background-color: $button-hover-color;
+}
+
+.btn-switch {
+    padding: 8px;
+    border-radius: 12px;
 }

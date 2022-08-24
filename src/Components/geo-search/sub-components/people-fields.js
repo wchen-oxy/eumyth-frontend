@@ -47,6 +47,7 @@ const PeopleFields = (props) => {
             <div className='peoplefields-fields'>
                 <button
                     id="peoplefields-refresh"
+                    className="btn-round"
                     onClick={props.onRefreshClick}
                     disabled={!props.selectedPursuit}
                 >

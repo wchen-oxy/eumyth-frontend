@@ -38,7 +38,7 @@ const PostFields = (props) => {
                 </select>
             </div>
             <div className='postfield-toggle'>
-                <button className="btn-reg" onClick={props.onRefreshClick}> Refresh </button>
+                <button className="btn-round" onClick={props.onRefreshClick}> Refresh </button>
             </div>
         </div>
     )

@@ -32,7 +32,7 @@ const ProjectFields = (props) => {
             formatCreateLabel={formatPrompt}
             onChange={onValueChange}
         />
-        <button onClick={props.onSubmitSearch}>Submit</button>
+        <button className="btn-round" onClick={props.onSubmitSearch}>Submit</button>
                    
         </div>
     )
