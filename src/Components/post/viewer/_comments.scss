@@ -1,32 +1,5 @@
-#comments-return-parent {
+#comments-return {
     margin-left: 0;
-}
-.comments-main-container {
-    .comments-collapsed-input-container,
-    .comments-expanded-input-container {
-        @include flex-display-column;
-    }
-
-    .comments-expanded-input-container {
-        width: 60%;
-        align-items: center;
-        margin: auto;
-        button {
-            width: fit-content;
-        }
-
-        .comments-expanded-input {
-            width: 96%;
-        }
-    }
-    .comments-collapsed-input-container {
-        width: 96%;
-        padding: 2%;
-        button {
-            margin-left: auto;
-            margin-right: 0;
-        }
-    }
 }
 
 .comments-extended-thread {
@@ -36,4 +9,31 @@
     padding-left: 0;
     border: none;
     background-color: transparent;
+}
+
+.comments-collapsed,
+.comments-expanded {
+    @include flex-display-column;
+}
+
+.comments-expanded {
+    width: 60%;
+    align-items: center;
+    margin: auto;
+    button {
+        width: fit-content;
+    }
+}
+
+.comments-expanded-input {
+    width: 96%;
+}
+
+.comments-collapsed {
+    width: 96%;
+    padding: 2%;
+    button {
+        margin-left: auto;
+        margin-right: 0;
+    }
 }

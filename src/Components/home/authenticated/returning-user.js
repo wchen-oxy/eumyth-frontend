@@ -181,7 +181,6 @@ class ReturningUserPage extends React.Component {
     }
 
     fetchNextPosts() {
-        console.log("asdfadfadsf")
         const posts = this.props.authUser.followingFeed
         const slicedObjectIDs = posts.slice(
             this.state.nextOpenPostIndex,
@@ -350,39 +349,37 @@ class ReturningUserPage extends React.Component {
         const feed =
             this.createFeed(this.state.feedData)
                 .map((feedItem) =>
-                    <div className='returninguser-feed-object-container'>
+                    <div className='returninguser-feed-object'>
                         {feedItem}
                     </div>
                 );
         return (
-            <div id='returninguser-body-container'>
-                <div id='returninguser-top-title-container' >
+            <div id='returninguser'>
+                <div id='returninguser-top-title' >
                     <h4 className='returninguser-title'>Your Dashboard</h4>
                 </div>
                 <div
-                    id='returninguser-profile-container'
+                    id='returninguser-profile'
                     className='returninguser-main-row'
                 >
-                    <div
-                        id='returninguser-hero-profile-column'
-                        className='returninguser-profile-column'
+                    <div className='returninguser-profile-column btn-reg'
                     >
                         <Link
                             to={returnUsernameURL(this.props.authUser.username)}
                         >
                             <img
                                 alt=''
-                                id='returninguser-profile-photo'
+                                id='returninguser-dp'
                                 src={imageURL}>
                             </img>
-                            <div className='returninguser-profile-text-container'>
+                            <div className='returninguser-profile-text'>
                                 <p id='returninguser-username-text'>{this.props.authUser.username}</p>
                                 <p id='returninguser-name-text'>{this.state.firstName}</p>
                             </div>
                         </Link>
                     </div>
                     <div className='returninguser-profile-column'>
-                        <div className='returninguser-profile-text-container'>
+                        <div className='returninguser-profile-text'>
                             Total Hours Spent:
                             {Math.floor(this.state.pursuitObjects?.totalMin ?? 0 / 60)}
                         </div>
@@ -403,7 +400,7 @@ class ReturningUserPage extends React.Component {
                     </div>
                 </div>
                 {/* <div
-                    id='returninguser-recent-work-container'
+                    id='returninguser-recent-work'
                     className='returninguser-main-row'
                 >
                     <div className='returninguser-row'>
@@ -417,17 +414,17 @@ class ReturningUserPage extends React.Component {
                     </div>
                     <div
                         key={this.state.recentPostsKey}
-                        id='returninguser-recent-posts-container'
+                        id='returninguser-recent-posts'
                         className='returninguser-row'>
                         {renderedRecentPosts}
                     </div>
                 </div> */}
                 <div
-                    id='returninguser-feed-container'
+                    id='returninguser-feed'
                     className='returninguser-main-row'
                 >
                     <h4 className='returninguser-title'>Your Feed</h4>
-                    <div id='returninguser-infinite-scroll-container' >
+                    <div id='returninguser-infinite-scroll' >
                         <InfiniteScroll
                             dataLength={this.state.nextOpenPostIndex}
                             next={this.fetchNextPosts}

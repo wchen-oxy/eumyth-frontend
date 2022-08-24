@@ -235,8 +235,8 @@ class ShortPostViewer extends React.Component {
 
     renderImageSlider(windowType) {
         const sliderClassName = this.props.largeViewMode ?
-            'shortpostviewer-large-hero-image-container' :
-            'shortpostviewer-inline-hero-container';
+            'shortpostviewer-large-hero-image' :
+            'shortpostviewer-inline-hero';
         let imageArray = this.props.eventData.image_data.map((key, i) =>
             returnUserImageURL(key)
         );
@@ -509,11 +509,11 @@ class ShortPostViewer extends React.Component {
                 if (hasImages) {
                     return (
                         <div className='shortpostviewer-window'>
-                            <div id='shortpostviewer-large-main-container'
+                            <div id='shortpostviewer-large-hero'
                                 className='with-image'>
                                 {this.state.annotations && this.renderImageSlider(EXPANDED)}
                                 <div
-                                    className='shortpostviewer-large-side-container'
+                                    className='shortpostviewer-large-side'
                                     ref={this.heroRef}
                                 >
                                     <ShortPostMetaInfo
@@ -544,7 +544,7 @@ class ShortPostViewer extends React.Component {
                                 {...metaProps}
                             />
                             <CaptionText  {...textProps} />
-                            <div className='shortpostviewer-large-hero-text-container'>
+                            <div className='shortpostviewer-large-hero-text'>
                                 <ShortHeroText
                                     title={this.props.eventData.title}
                                     textData={this.props.textData} />
@@ -575,13 +575,13 @@ class ShortPostViewer extends React.Component {
                     return (
                         <>
                             <div
-                                id='shortpostviewer-inline-main-container'
+                                id='shortpostviewer-inline-hero'
                                 onClick={this.handleModalLaunch}
                             >
                                 <PostHeader
                                     {...headerProps}
                                 />
-                                <div className='shortpostviewer-inline-side-container'>
+                                <div className='shortpostviewer-inline-side'>
                                     {this.props.eventData.title &&
                                         <h2 className="shortpostviewer-title"> {this.props.eventData.title}</h2>}
                                     <ShortPostMetaInfo
@@ -601,9 +601,9 @@ class ShortPostViewer extends React.Component {
                 else {
                     return (
                         <div onClick={this.handleModalLaunch}>
-                            <div className='shortpostviewer-inline-main-container' >
+                            <div className='shortpostviewer-inline-hero' >
 
-                                <div className='shortpostviewer-inline-side-container'>
+                                <div className='shortpostviewer-inline-side'>
                                     <PostHeader
                                         {...headerProps}
                                     />
@@ -611,7 +611,7 @@ class ShortPostViewer extends React.Component {
                                         {...metaProps}
                                     />
                                 </div>
-                                <div className='shortpostviewer-inline-hero-container'>
+                                <div className='shortpostviewer-inline-hero'>
                                     {this.props.eventData.title &&
                                         <h2 className="shortpostviewer-title"> {this.props.eventData.title}</h2>}
                                     <ShortHeroText
@@ -631,7 +631,7 @@ class ShortPostViewer extends React.Component {
             return (
                 <div className='shortpostviewer-window' >
                     <h4>Edit your Post!</h4>
-                    <div className='shortpostviewer-button-container'>
+                    <div className='shortpostviewer-nav'>
                         <button
                             onClick={() => (this.handleWindowChange(INITIAL_STATE))}>
                             Return

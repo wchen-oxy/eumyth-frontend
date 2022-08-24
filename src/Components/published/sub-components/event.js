@@ -3,10 +3,10 @@ import { returnUserImageURL } from 'utils/url';
 
 const SpotlightEvent = (props) => {
     return (
-        <div className='spotlightevent-main-container'
+        <div className='spotlightevent'
             onClick={() => props.onEventClick(props.post)}
         >
-            <div className='spotlightevent-cover-container'>
+            <div className='spotlightevent-cover'>
                 {props.post.cover_photo_key &&
                     <img
                         alt='event cover photo'
@@ -15,7 +15,7 @@ const SpotlightEvent = (props) => {
                     />
                 }
             </div>
-            <div className='spotlightevent-description-container'>
+            <div className='spotlightevent-description'>
                 <h3>
                     {props.post.title}
                 </h3>

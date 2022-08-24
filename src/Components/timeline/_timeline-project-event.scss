@@ -1,4 +1,3 @@
-
 .timelineprojectevent-draft {
     background-color: rgba($color: #9be3ff, $alpha: 0.5);
     @include event;
@@ -16,9 +15,7 @@
     @include text;
 }
 
-.timelineprojectevent-cover-container {
-    img {
-        height: auto;
-        width: 100%;
-    }
+.timelineprojectevent-cover {
+    height: auto;
+    width: 100%;
 }

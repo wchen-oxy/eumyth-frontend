@@ -27,16 +27,14 @@ const ProjectEvent = (props) => {
     }
     return (
         <div className={classType}>
-            <div className='timelineprojectevent-cover-container'>
-                {post.mini_cover_photo_key &&
-                    <img src={returnContentImageURL(post.mini_cover_photo_key)}
-                    />
-                }
-            </div>
-            <h4 className='timelineprojectevent-title-container'>
+            {post.mini_cover_photo_key &&
+                <img className='timelineprojectevent-cover' src={returnContentImageURL(post.mini_cover_photo_key)}
+                />
+            }
+            <h4>
                 {post.title ? post.title : post.pursuit_category}
             </h4>
-            {post.overview && <h6 className='event-overview-container'>{post.overview}</h6>}
+            {post.overview && <h6 className='event-overview'>{post.overview}</h6>}
             <p> {displayedType}</p>
         </div>
     );

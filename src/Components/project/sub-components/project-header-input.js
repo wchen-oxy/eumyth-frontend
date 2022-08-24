@@ -3,7 +3,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 
 const ProjectHeaderInput = (props) => {
     return (
-        <div id='projectheaderinput-hero-title-overview-container'>
+        <div id='projectheaderinput-header'>
             <TextareaAutosize
                 id='projectheaderinput-title'
                 placeholder='Write a Title for your Post!'

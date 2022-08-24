@@ -27,7 +27,7 @@ const ForkWindow = (props) => {
     }
 
     return (
-        <div id={'forkwindow-delete-container'}>
+        <div id={'forkwindow-delete'}>
             <div>
                 <h3>
                     Create a Branch Of This Series
@@ -46,7 +46,7 @@ const ForkWindow = (props) => {
                     onChange={(e) => setRemix(e.target.value)}
                 />
             </div>
-            <div id='rightmanagebuttons-submit-container'>
+            <div id='rightmanagebuttons-submit'>
                 <button onClick={forkProject}>Confirm</button>
                 <button onClick={props.closeModal}>Cancel</button>
             </div>

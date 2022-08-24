@@ -1,17 +1,17 @@
 
-.event-first-container {
+.event-first {
     @extend %event-container;
     margin-right: 10px;
 }
 
-.event-middle-container {
+.event-middle {
     @extend %event-container;
     margin-left: 10px;
     margin-right: 10px;
     margin-bottom: 10px;
 }
 
-.event-last-container {
+.event-last {
     @extend %event-container;
     margin-left: 10px;
 }

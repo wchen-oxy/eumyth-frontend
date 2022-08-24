@@ -310,13 +310,13 @@ class InitialCustomizationPage extends React.Component {
                 null;
 
         return (
-            <div className='initialcustomization-container'>
+            <div id='initialcustomization'>
                 <form onSubmit={this.handleProfileSubmit}>
                     <h2>Let us know about you!</h2>
                     <label>
                         Don't worry this information won't be public if you don't want it to.
                     </label>
-                    <div className='initialcustomization-content-container'>
+                    <div className='initialcustomization-content'>
                         <label>Choose a display profile!</label>
                         <input
                             key={this.state.imageKey}
@@ -338,11 +338,11 @@ class InitialCustomizationPage extends React.Component {
                                 setEditorRef={this.setEditorRef}
                             />
                             : (
-                                <div id='initialcustomization-display-photo-container'>
+                                <div id='initialcustomization-dp'>
                                 </div>
                             )}
                     </div>
-                    <div className='initialcustomization-content-container'>
+                    <div className='initialcustomization-content'>
                         <label>
                             <p>Choose a username!</p>
                             <p>{this.state.username === '' ? 'Invalid' : isAvailable + upperCaseMessage + specialCharMessage}</p>
@@ -368,7 +368,7 @@ class InitialCustomizationPage extends React.Component {
                             onChange={this.handleTextChange}
                         />
                     </div>
-                    <div className='initialcustomization-content-container'>
+                    <div className='initialcustomization-content'>
                         <label>
                             Tell us what you want to
                             pursue or choose one from the list!

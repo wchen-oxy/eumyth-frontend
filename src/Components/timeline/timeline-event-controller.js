@@ -7,15 +7,15 @@ import EventCheckbox from './sub-components/event-checkbox';
 const selectClassStyle = (num) => {
     switch (num) {
         case (0):
-            return 'event-first-container';
+            return 'event-first';
         case (1):
-            return 'event-middle-container';
+            return 'event-middle';
         case (2):
-            return 'event-middle-container';
+            return 'event-middle';
         case (3):
-            return 'event-last-container';
+            return 'event-last';
         default:
-            return 'event-middle-container';
+            return 'event-middle';
     }
 }
 

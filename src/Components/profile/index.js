@@ -448,7 +448,7 @@ class ProfilePageAuthenticated extends React.Component {
             }
             else if (this.state.contentType === PROJECT) {
                 return (
-                    <div id='profile-main-container'>
+                    <div id='profile-main'>
                         <ProjectController
                             authUser={this.props.authUser}
                             content={this.state.selectedContent}
@@ -472,21 +472,21 @@ class ProfilePageAuthenticated extends React.Component {
             const targetProfilePhoto = returnUserImageURL(this.state.profileData?.cropped_display_photo_key ?? null);
             return (
                 <div>
-                    <div id='profile-main-container'>
-                        <div id='profile-cover-photo-container'>
+                    <div id='profile-main'>
+                        <div id='profile-cover'>
                             <CoverPhoto coverPhotoKey={this.state.profileData.cover_photo_key} />
                         </div>
-                        <div id='profile-intro-container'>
-                            <div id='profile-display-photo-container'>
+                        <div id='profile-intro'>
+                            <div id='profile-dp'>
                                 <img
                                     alt='user profile photo'
                                     src={targetProfilePhoto}
                                 />
 
-                                <div id='profile-name-container'>
+                                <div id='profile-name'>
                                     <h4>{targetUsername}</h4>
                                 </div>
-                                <div id='profile-follow-actions-container'>
+                                <div id='profile-actions'>
                                     <FollowButton
                                         isOwner={this.isOwner()}
                                         followerStatus={this.state.followerStatus}
@@ -498,12 +498,12 @@ class ProfilePageAuthenticated extends React.Component {
                             <div id='profile-biography'>
                                 {this.state.profileData.bio && <p>{this.state.profileData.bio}</p>}
                             </div>
-                            <div id='profile-pursuits-container'>
+                            <div id='profile-pursuits'>
                                 {pursuitHolderArray}
                             </div>
                         </div>
 
-                        <div id='profile-content-switch-container'>
+                        <div id='profile-content-switch'>
                             <button
                                 disabled={this.state.contentType === POST ?
                                     true : false}

@@ -36,7 +36,7 @@ const handleIndexUpdate = (index) => {
 
 const SortableItem = SortableElement(({ contentType, value, classColumnIndex }) =>
 (
-    <div className="projectcontroller-event-container">
+    <div className="projectcontroller-event">
         <EventController
             columnIndex={classColumnIndex}
             contentType={contentType}
@@ -611,7 +611,7 @@ class ProjectController extends React.Component {
                             handleWindowSwitch={this.handleWindowSwitch}
                         />
                         <h3>Rearrange Your Posts</h3>
-                        <div id="projectcontroller-sortable-list-container">
+                        <div id="projectcontroller-sortable-list">
                             <SortableList
                                 contentType={POST}
                                 items={this.state.semiFinalData}

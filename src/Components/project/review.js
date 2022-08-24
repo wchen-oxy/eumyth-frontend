@@ -166,14 +166,14 @@ const ProjectReview = (props) => {
 
     return (
         <div>
-            <div id="projectcontroller-return-container">
+            <div id="projectcontroller-return">
                 <button onClick={() => props.onWindowSwitch(EDIT)}    >
                     Return
                 </button>
             </div>
-            <div id={props.isContentOnlyView ? "projectcontroller-content-only-container" : ""}>
+            <div id={props.isContentOnlyView ? "projectcontroller-content" : ""}>
             </div>
-            <div id="projectcontroller-submit-container">
+            <div id="projectcontroller-submit">
                 {isCompressing && <label>One Moment, We Are Compressing Your Photo</label>}
                 <label>Title</label>
                 <TextareaAutosize

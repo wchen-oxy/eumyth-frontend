@@ -1,15 +1,15 @@
-#eventlabels-full-page-container {
+#eventlabels-full {
     @include flex-display-row;
     margin-left: 50px;
 }
-#eventlabels-partial-page-container {
+#eventlabels-partial {
     @include flex-display-row;
 }
 
-.eventlabels-outer-label-container {
+.eventlabels-background {
     padding: 1px;
 }
-.eventlabels-inner-label-container {
+.eventlabels-foreground {
     @include label-container;
     margin: 0 2px;
     p {

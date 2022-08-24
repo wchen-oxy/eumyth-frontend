@@ -4,9 +4,9 @@ const DifficultyInput = (props) => {
     return (
         <div id='difficultyinput-main'>
             <label>Difficulty</label>
-            <div id='difficultyinput-slider-container'>
+            <div id='difficultyinput-difficulty'>
                 <input
-                    id='difficultyinput-content'
+                    id='difficultyinput-slider'
                     defaultValue={props.difficulty}
                     type='range'
                     step={1}

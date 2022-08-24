@@ -19,16 +19,18 @@ const PhotoContainer = (props) => {
     }
 
     return (
-        <div>
-            <label>{labels[props.type].title}</label>
-            <button onClick={() => {
-                props.setIsEditingPhoto(!props.isEditing)
-                props.showPhotoEditor(props.photoRef)
-            }}>
+        <div id='photocontainer'>
+            <label className="label-form">{labels[props.type].title}</label>
+            <button
+                className='btn-reg'
+                onClick={() => {
+                    props.setIsEditingPhoto(!props.isEditing)
+                    props.showPhotoEditor(props.photoRef)
+                }}>
                 {props.isEditing ? 'Cancel' : labels[props.type].edit}
             </button>
-            <div ref={props.photoRef} className='account-photo-edit-container'>
-                <div className='account-photo-inner-container'>
+            <div ref={props.photoRef} className='photocontainer-file'>
+                <div className='photocontainer-file-inner'>
                     <p>{labels[props.type].select}</p>
                     <input
                         type='file'
@@ -37,14 +39,17 @@ const PhotoContainer = (props) => {
                         }} />
                     {props.photoExists && props.type !== 'COVER' && props.profilePhotoEditor}
                     <button
+                        className='btn-reg'
                         disabled={!props.photoExists}
                         onClick={() => props.submitPhoto(props.type)}>
                         {labels[props.type].submit}
                     </button>
                 </div>
-                <div className='account-photo-inner-container'>
+                <div className='photocontainer-file-inner'>
                     <p>{labels[props.type].remove}</p>
-                    <button onClick={() => props.removePhoto(props.type)}>
+                    <button
+                        className='btn-reg'
+                        onClick={() => props.removePhoto(props.type)}>
                         {labels[props.type].remove}
                     </button>
                 </div>

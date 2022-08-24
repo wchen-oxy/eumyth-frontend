@@ -1,4 +1,4 @@
-.initialcustomization-container {
+#initialcustomization {
     @include flex-display-row;
     justify-content: center;
     margin-bottom: 10vh;
@@ -9,10 +9,6 @@
         width: 55%;
     }
 
-    .initialcustomization-content-container {
-        @include flex-display-column;
-        padding: 2vh;
-    }
     p {
         margin: 0 auto;
     }
@@ -24,12 +20,17 @@
     span {
         margin-top: 1vh;
     }
+}
 
-    #initialcustomization-display-photo-container {
-        @include main-profile-photo-container;
-    }
+#initialcustomization-dp {
+    @include main-profile-photo-container;
 }
 
 .initialcustomization-select {
     @include flex-display-row;
+}
+
+.initialcustomization-content {
+    @include flex-display-column;
+    padding: 2vh;
 }

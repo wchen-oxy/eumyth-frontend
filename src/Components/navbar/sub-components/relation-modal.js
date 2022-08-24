@@ -92,7 +92,7 @@ class RelationModal extends React.Component {
         if (!relation.exists) {
             for (const user of data) {
                 const buttons = relation.type === "REQUESTED" ? (
-                    <div className='relationmodal-button-container'>
+                    <div className='relationmodal-reaction'>
                         <button
                             onClick={() => (
                                 this.handleStatusChange(
@@ -193,8 +193,8 @@ class RelationModal extends React.Component {
 
     render() {
         return (
-            <div id='relationmodal-window'>
-                <div id='relationmodal-hero-container'>
+            <div id='relationmodal'>
+                <div id='relationmodal-relations'>
                     <div className='relationmodal-column'>
                         <h2>Requests</h2>
                         {this.state.requests}

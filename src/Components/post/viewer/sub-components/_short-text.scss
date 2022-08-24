@@ -1,23 +1,26 @@
-#shortherotext-title-container{
-    h2{
-        text-align: center;
+#tiny-text,
+#medium-text {
+    pre {
+        overflow-x: auto;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
     }
 }
 
-#tiny-amount-text-container{
-    display:flex;
+#tiny-text {
+    display: flex;
     align-items: center;
 }
 
-#medium-amount-text-container{
+#medium-text {
     overflow: scroll;
 }
 
-pre {
-    overflow-x: auto;
-    white-space: pre-wrap;
-    white-space: -moz-pre-wrap;
-    white-space: -pre-wrap;
-    white-space: -o-pre-wrap;
-    word-wrap: break-word;
-  }
+#shortherotext-title-container {
+    h2 {
+        text-align: center;
+    }
+}

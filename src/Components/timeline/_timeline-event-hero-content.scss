@@ -1,9 +1,9 @@
-.eventherocontent-with-cover-photo-container {
+.eventherocontent-with-image {
     height: 120px;
     overflow: hidden;
 }
 
-.eventherocontent-no-cover-photo-container {
+.eventherocontent-no-image {
     @include flex-display-row;
     height: 110px;
     padding: 5px;
@@ -13,7 +13,7 @@
     }
 }
 
-.eventherocontent-cover-photo {
+.eventherocontent-image {
     height: auto;
     width: 100%;
 }

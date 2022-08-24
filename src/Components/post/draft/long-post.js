@@ -80,10 +80,10 @@ const LongPost = (props) => {
         className="longpost-window"
         ref={editorContainerRef}>
         <div ref={postHeaderRef}>
-          <div id="longpost-save-status-container">
+          <div id="longpost-status">
             {props.isSavePending ? (<h4>Saving</h4>) : (<h4>Saved</h4>)}
           </div>
-          <div className="longpost-button-container">
+          <div className="longpost-button">
             <span  >
               <button
                 value={NONE}

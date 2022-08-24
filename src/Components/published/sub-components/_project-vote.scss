@@ -1,9 +1,9 @@
-.projectvote-main-container{
+.projectvote {
     @include flex-display-row;
 }
-.projectvote-controls-container{
+.projectvote-controls {
     @include flex-display-row;
-    p{
+    p {
         margin: 0 3px;
     }
 }

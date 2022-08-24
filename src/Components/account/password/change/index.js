@@ -7,7 +7,7 @@ const INITIAL_STATE = {
   error: null,
 }
 
-class PasswordChangeForm extends Component {
+class PasswordChange extends Component {
   constructor(props) {
     super(props);
 
@@ -41,11 +41,14 @@ class PasswordChangeForm extends Component {
     const isInvalid = passwordOne !== passwordTwo || passwordOne === '';
 
     return (
-      <div id='passwordchangeform-container'>
-        <label>Update Password</label>
-        <form onSubmit={this.handlePasswordUpdateSubmit}>
+      <div id='passwordchange'>
+        <label className="label-form">Update Password</label>
+        <form
+          className="form-med"
+          onSubmit={this.handlePasswordUpdateSubmit}>
           <input
             name='passwordOne'
+            className='input-single'
             value={passwordOne}
             onChange={this.handleTextUpdate}
             type='password'
@@ -53,13 +56,14 @@ class PasswordChangeForm extends Component {
           />
           <input
             name='passwordTwo'
+            className='input-single'
             value={passwordTwo}
             onChange={this.handleTextUpdate}
             type='password'
             placeholder='Confirm New Password'
           />
           <button
-            id='passwordchangeform-reset-button'
+            className='btn-reg'
             disabled={isInvalid}
             type='submit'
           >
@@ -72,4 +76,4 @@ class PasswordChangeForm extends Component {
   }
 }
 
-export default withFirebase(PasswordChangeForm);
+export default withFirebase(PasswordChange);

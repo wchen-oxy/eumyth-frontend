@@ -244,9 +244,9 @@ class Comments extends React.Component {
         if (this.props.visitorUsername) {
             return (
                 <div className={viewingMode === COLLAPSED ?
-                    'comments-collapsed-input-container'
+                    'comments-collapsed'
                     :
-                    'comments-expanded-input-container'}
+                    'comments-expanded'}
                 >
                     <CommentInput
                         reference={this.props.reference}
@@ -288,7 +288,7 @@ class Comments extends React.Component {
     render() {
         if (this.props.windowType === COLLAPSED) {
             return (
-                <div className='comments-main-container'>
+                <div className='comments-main'>
                     {this.renderCommentSectionType(COLLAPSED)}
                     {this.renderCommentInput(COLLAPSED)}
                 </div>
@@ -296,11 +296,11 @@ class Comments extends React.Component {
         }
         else if (this.props.windowType === EXPANDED) {
             return (
-                <div className='comments-main-container'>
+                <div className='comments-main'>
                     {this.renderCommentInput(EXPANDED)}
                     {this.state.selectedCommentThread &&
                         <button
-                            id='comments-return-parent'
+                            id='comments-return'
                             className='comments-extended-thread'
                             onClick={() => this.setCommentThread(null)} >
                             &larr; Return To Parent Thread</button>}

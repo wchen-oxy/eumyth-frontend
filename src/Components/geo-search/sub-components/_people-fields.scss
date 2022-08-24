@@ -1,18 +1,23 @@
-#peoplefields-main-container {
+#peoplefields {
     @include flex-display-row;
     margin: 0 auto;
-    .peoplefields-toggle-container {
-        padding: 20px;
-    }
-    .peoplefields-label {
-        padding-right: 5px;
-    }
 }
 
-#peoplefields-createable-container{
+#peoplefields-createable {
     width: 300px;
 }
 
-#peoplefields-refresh-button {
+#peoplefieds-distance {
+}
+
+#peoplefields-refresh {
     height: fit-content;
+}
+
+.peoplefields-fields {
+    padding: 20px;
+}
+
+.peoplefields-label {
+    padding-right: 5px;
 }

@@ -6,7 +6,7 @@ const CoverPhotoControls = (props) => {
         const allowCoverPhoto = props.isUpdateToPost || !props.isUpdateToPost && props.imageArray;
         return (
             allowCoverPhoto &&
-            (<div id='coverphotocontrols-main'>
+            (<div id='coverphotocontrols'>
                 <label>Use First Image For Thumbnail</label>
                 <input
                     type='checkbox'

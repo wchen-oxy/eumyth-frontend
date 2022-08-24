@@ -1,40 +1,41 @@
-#relationmodal-window {
+#relationmodal {
     @include small-post-window;
-    #relationmodal-hero-container {
-        @include flex-display-row;
+}
 
-        .relationmodal-button-container {
-            button {
-                margin: 5px;
-            }
-        }
+#relationmodal-relations {
+    @include flex-display-row;
+}
 
-        .relationmodal-column {
-            width: 33.32%;
+.relationmodal-reaction {
+    button {
+        margin: 5px;
+    }
+}
 
-            h2 {
-                text-align: center;
-            }
+.relationmodal-column {
+    width: 33.32%;
 
-            .relationmodal-profile-row {
-                @include flex-display-column;
-                align-items: center;
+    h2 {
+        text-align: center;
+    }
+}
 
-                .relationmodal-profile-info-container {
-                    @include flex-display-row;
-                    a {
-                        @include link-decoration;
-                        margin: auto;
-                    }
-                }
+.relationmodal-profile-row {
+    @include flex-display-column;
+    align-items: center;
 
-                img {
-                    @include tiny-profile-photo;
-                    border-radius: 50%;
-                    padding-right: 5px;
-                    object-fit: cover;
-                }
-            }
-        }
+    img {
+        @include tiny-profile-photo;
+        border-radius: 50%;
+        padding-right: 5px;
+        object-fit: cover;
+    }
+}
+
+.relationmodal-profile-info-container {
+    @include flex-display-row;
+    a {
+        @include link-decoration;
+        margin: auto;
     }
 }

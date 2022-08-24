@@ -7,7 +7,7 @@ import {
 
 const PrePostControls = (props) => {
     return (
-        <div id='prepostcontrols-main'>
+        <div id='prepostcontrols'>
             <p>Post to:</p>
             <div>
                 <select

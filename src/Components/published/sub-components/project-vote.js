@@ -82,8 +82,8 @@ const ProjectVote = props => {
     }
 
     return (
-        <div className='projectvote-main-container'>
-            <div className='projectvote-controls-container'>
+        <div className='projectvote'>
+            <div className='projectvote-controls'>
                 <button onClick={() => handleVote(1)}>Upvote</button>
                 <p>{overallVoteScore}</p>
                 <button onClick={() => handleVote(-1)}>DownVote</button>

@@ -3,7 +3,7 @@ import React from "react";
 const CaptionText = (props) => {
     if (props.needsSideCaption)
         return (
-            <div className="captiontext-text-container">
+            <div className="captiontext">
                 <h2>{props.title}</h2>
                 <p>{props.isPaginated && props.textData ?
                     props.textData[props.index] : props.textData}</p>

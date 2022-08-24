@@ -8,11 +8,12 @@
     @include flex-display-row;
     justify-content: space-between;
     padding-top: 20px;
-    #topbuttonbar-right-button-container {
-        float: right;
-        p {
-            font-size: 12px;
-            margin: 0;
-        }
+}
+
+#topbuttonbar-right-button {
+    float: right;
+    p {
+        font-size: 12px;
+        margin: 0;
     }
 }

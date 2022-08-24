@@ -142,7 +142,7 @@ class SingleComment extends React.Component {
         for (let i = 0; i < levels; i++)
             threadIndicatorArray.push(
                 <div key={this.props.commentID + 'inner' + Math.random() * 2}
-                    className='singlecomment-thread-indicator'>
+                    className='singlecomment-thread-indicator-inner'>
                 </div>
             )
         return threadIndicatorArray;
@@ -183,20 +183,20 @@ class SingleComment extends React.Component {
     }
     render() {
         const masterClassName = this.props.level > 1 ?
-            'singlecomment-multiple-thread-style' : '';
+            'singlecomment-threads' : '';
         const displayPhotoURL = this.props.displayPhoto ?
             returnUserImageURL(this.props.displayPhoto) : TEMP_PROFILE_PHOTO_URL;
         return (
             <div>
                 <div className={masterClassName}>
                     {this.props.level > 1 && (
-                        <div className='singlecomment-thread-indicator-container'>
+                        <div className='singlecomment-thread-indicator'>
                             {this.renderThreadIndicators(this.props.level - 1)}
                         </div>
                     )}
-                    <div className='singlecomment-main-container'>
-                        <div className='singlecomment-header-container'>
-                            <div className='singlecomment-display-photo-container'>
+                    <div className='singlecomment-main'>
+                        <div className='singlecomment-header'>
+                            <div className='singlecomment-dp'>
                                 <img
                                     alt='Single Comment Display Photo Url'
                                     src={displayPhotoURL} />
@@ -205,15 +205,15 @@ class SingleComment extends React.Component {
                                 <p>{this.props.username}</p>
                             </div>
                         </div>
-                        <div className='singlecomment-body-container'>
-                            <div className='singlecomment-thread-indicator-container'>
+                        <div className='singlecomment-body'>
+                            <div className='singlecomment-thread-indicator'>
                                 {this.renderThreadIndicators(1)}
                             </div>
-                            <div className={'singlecomment-main-content-container'}>
+                            <div className={'singlecomment-main'}>
                                 {this.props.hasAnnotation &&
                                     <div className='singlecomment-annotation-indicator'>Annotation</div>
                                 }
-                                <div className='singlecomment-comment-container'
+                                <div className='singlecomment-comment'
 
                                     onMouseOver={() => (
                                         this.props.onMouseOver(this.props.commentID))}
@@ -224,7 +224,7 @@ class SingleComment extends React.Component {
                                 >
                                     <pre>{this.props.commentText}</pre>
                                 </div>
-                                <div className='singlecomment-management-container'>
+                                <div className='singlecomment-management'>
                                     <button onClick={() => this.handleVote(1)}>
                                         Upvote
                                     </button>

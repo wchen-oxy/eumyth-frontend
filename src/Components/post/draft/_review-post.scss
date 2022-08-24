@@ -1,23 +1,22 @@
+#reviewpost {
+    @include flex-display-column;
+    input,
+    select {
+        width: 50%;
+    }
+    
+    label {
+        font-weight: bold;
+    }
+    
+}
 
 #reviewpost-header {
     text-align: center;
 }
 
-#reviewpost-small-window {
-    @include flex-display-column;
-}
-
-#reviewpost-button-container {
+#reviewpost-nav {
     @include flex-display-row;
     justify-content: space-between;
     padding: 0 5px;
-}
-
-input,
-select {
-    width: 50%;
-}
-
-label{
-    font-weight: bold;
 }

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const VerifyForm = (props) => {
     const [sentIndicator, setSentIndicator] = useState(null);
     return (
-        <div id="verifyform-container">
+        <div id="verifyform">
             {
                 sentIndicator ?
                     <p>If you have verified your email, please refresh the page. </p>
@@ -15,20 +15,20 @@ const VerifyForm = (props) => {
                     </p>
             }
             <p>{sentIndicator}</p>
-            <button id="verifyform-resend-button" onClick={(e) => {
+            <button id="verifyform-resend" onClick={(e) => {
                 setSentIndicator(
                     `Email has been sent! Once you verify 
                     your email, try refreshing the page.`)
                 return props.onSendEmailVerification(e);
             }}>
                 Resend Email
-                </button>
-            <div id="verifyform-relogin-container">
+            </button>
+            <div id="verifyform-relogin">
                 <button
                     onClick={props.onSignOut}
                 >
                     Return to Login
-                    </button>
+                </button>
             </div>
         </div>
     );

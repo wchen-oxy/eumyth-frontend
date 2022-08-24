@@ -1,6 +1,3 @@
-//Sizes
-// Colors
-
 @mixin flex-display-row {
     display: flex;
     flex-direction: row;
@@ -14,6 +11,10 @@
 @mixin button-rounding {
     padding: 5px;
     border-radius: 25px;
+}
+
+@mixin button-padding{
+    padding: 5px;
 }
 
 @mixin link-decoration {

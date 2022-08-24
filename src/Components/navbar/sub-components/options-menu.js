@@ -28,8 +28,8 @@ class OptionsMenu extends React.Component {
 
     render() {
         return (
-            <div id='optionsmenu-main-container'>
-                <div id='optionsmenu-pre-click-container'>
+            <div id='optionsmenu'>
+                <div id='optionsmenu-pre-click'>
                     <button onClick={this.showMenu}>
                         <h4>...</h4>
                     </button>
@@ -37,19 +37,19 @@ class OptionsMenu extends React.Component {
                 {
                     this.state.showMenu &&
                     (
-                        <div id='optionsmenu-inner-menu-container'>
+                        <div id='optionsmenu-dropdown'>
                             {this.props.shouldHideFriendsTab ?
                                 null
                                 :
                                 <div
-                                    className='optionsmenu-button-container'
+                                    className='optionsmenu-button'
                                     onClick={() => this.props.closeModal()}
                                 >
                                     <Link to={'/account'}>Edit Your Profile</Link>
                                 </div>
                             }
 
-                            <div className='optionsmenu-button-container'>
+                            <div className='optionsmenu-button'>
                                 <button onClick={() => {
                                     this.props.closeModal();
                                     this.props.firebase.doSignOut();

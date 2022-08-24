@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import AxiosHelper from 'utils/axios';
-import SpotlightEvent from './event';
 import ShortPostViewer from 'components/post/viewer/short-post.js';
 import { returnUserImageURL } from 'utils/url';
 import { POST_VIEWER_MODAL_STATE, SPOTLIGHT_POST } from 'utils/constants/flags';
@@ -69,10 +68,10 @@ const SpotlightPreview = (props) => {
         setModal()
     }
     return (
-        <div className='spotlightpreview-main-container'>
+        <div className='spotlightpreview'>
             <a href={"/c/" + props.project._id}><h3>{props.project.title}</h3></a>
             {props.project.cover_photo_key ?
-                <div className='spotlightpreview-cover-container'>
+                <div className='spotlightpreview-cover-final'>
                     <img src={returnUserImageURL(props.project.cover_photo_key)} />
                 </div>
                 :
@@ -107,9 +106,9 @@ const SpotlightPreview = (props) => {
                     postListLength={props.project.postListLength}
                 />
             }
-            <div className='spotlightpreview-display-container'>
+            <div className='spotlightpreview-dp'>
                 <img src={returnUserImageURL(props.project.display_photo_key)} />
-                <a className='spotlightpreview-username' href={'/u/' + props.project.username}>
+                <a z href={'/u/' + props.project.username}>
                     <h4>{props.project.username}</h4>
                 </a>
             </div>

@@ -229,11 +229,10 @@ class ShortPost extends React.Component {
   render() {
     if (this.state.window === INITIAL_STATE) {
       return (
-        <div id='shortpost-window'>
-          <h2 id="shortpost-title">Short Post</h2>
-
+        <div id='shortpost'>
+          <h2 id="shortpost-header">Short Post</h2>
           {this.state.isCompressing && <p>Compressing Photos</p>}
-          <div id='shortpost-button-container'>
+          <div id='shortpost-nav'>
             <button onClick={this.props.onModalClose}>
               Discard
             </button>
@@ -245,9 +244,9 @@ class ShortPost extends React.Component {
               Review Post
             </button>
           </div>
-          <div id='shortpost-title-container'>
+          <div id='shortpost-title'>
             <TextareaAutosize
-              id='textcontainer-text-input'
+              id='textcontainer-text'
               placeholder='Title'
               onChange={(e) => this.handleTextChange(e.target.value, true)}
               minRows={1}
@@ -278,7 +277,7 @@ class ShortPost extends React.Component {
     }
     else {
       return (
-        <div id='shortpost-review-window'>
+        <div id='shortpost-review'>
           <ReviewPost
             date={
               new Date()

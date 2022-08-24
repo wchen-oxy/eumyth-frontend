@@ -12,14 +12,14 @@ const EventHeroContent = (props) => {
     return (
         <div>
             {image ?
-                <div className='eventherocontent-with-cover-photo-container'>
+                <div className='eventherocontent-with-image'>
                     <img
                         alt='short event cover photo'
-                        className='eventherocontent-cover-photo'
+                        className='eventherocontent-image'
                         src={image} />
                 </div>
                 :
-                <div className='eventherocontent-no-cover-photo-container'>
+                <div className='eventherocontent-no-image'>
                     <p>{post.text_snippet}</p>
                 </div>
             }

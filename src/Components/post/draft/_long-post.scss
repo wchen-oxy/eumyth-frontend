@@ -1,4 +1,4 @@
-#longpost-save-status-container {
+#longpost-status {
     padding-left: 2vh;
 }
 
@@ -24,7 +24,7 @@
     padding-top:10px;
 }
 
-.longpost-button-container {
+.longpost-button {
     @include long-post-button-container;
     display: flex;
     justify-content: space-between;

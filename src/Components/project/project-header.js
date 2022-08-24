@@ -39,22 +39,22 @@ const ProjectHeader = (props) => {
     }
     return (
         <div>
-            <div id="projectheader-pursuit-container">
+            <div id="projectheader-pursuit">
                 <h5>{props.projectMetaData.pursuit}</h5>
             </div>
-            <div id="projectheader-hero-text">
+            <div id="projectheader-hero">
                 <h1>{props.titleValue}</h1>
                 {props.descriptionValue && <h4>{props.descriptionValue}</h4>}
                 {props.projectMetaData.status && <h6>Ongoing</h6>}
             </div>
-            <div id="projectheader-user-fork">
+            <div id="projectheader-fork">
                 {parentProjectID && <a href={'/c/' + parentProjectID.toString()}>See Predecessor Series</a>}
                 {props.projectMetaData.remix && <p>{props.projectMetaData.remix}</p>}
             </div>
             {coverPhotoKey &&
-                <div id='projectheader-cover-container' >
+                <div id='projectheader-cover' >
                     <img alt='cover' src={returnContentImageURL(coverPhotoKey)} /></div>}
-            <div id="projectheader-user-info-container">
+            <div id="projectheader-user-meta">
                 <a href={'/u/' + props.projectMetaData.username}>
                     <img src={returnUserImageURL(props.projectMetaData.display_photo_key)}></img>
                     <h5>{props.projectMetaData.username}</h5>
@@ -65,7 +65,7 @@ const ProjectHeader = (props) => {
 
             </div>
             <div >
-                <div id='projectheader-comparator-button-container'>
+                <div id='projectheader-comparator'>
                     <button onClick={() => determineComparatorType(comparatorStatus)}>
                         {setComparatorText(comparatorStatus)}
                     </button>

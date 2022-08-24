@@ -12,7 +12,7 @@ const NewPost = (props) => {
     }
     return (
         <div id="newpost-window">
-            <div className="newpost-button-container">
+            <div className="newpost-buttons">
                 <h3>Document Your Progress</h3>
                 <h4>Make a Normal Post</h4>
                 <button

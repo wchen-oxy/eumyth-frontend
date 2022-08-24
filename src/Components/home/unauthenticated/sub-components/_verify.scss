@@ -1,14 +1,13 @@
-#verifyform-container{
-    p{
+#verifyform {
+    p {
         font-size: 14px;
     }
 }
-#verifyform-resend-button{
+#verifyform-resend {
     @include hero-button;
     margin: 0 auto;
-
 }
 
-#verifyform-relogin-container{
-    margin: 40px 0 ;
+#verifyform-relogin {
+    margin: 40px 0;
 }

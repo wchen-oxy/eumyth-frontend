@@ -1,6 +1,6 @@
 // $bg-img: url('img/bg.jpg');
 
-.sortableitem-status-bar {
+.sortableitem {
     width: 100%;
     vertical-align: top;
     margin-top: 10px;
@@ -20,7 +20,7 @@
     }
 }
 
-.sortableitem-status-bar > div {
+.sortableitem > div {
     overflow: hidden;
 }
 

@@ -2,7 +2,7 @@ import React from 'react';
 
 const DateInput = (props) =>
 (
-    <div id='datainput-main'>
+    <div id='datainput'>
         <label>Date</label>
         <input
             type='date'

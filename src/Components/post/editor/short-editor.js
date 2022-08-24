@@ -176,7 +176,7 @@ class ShortEditor extends React.Component {
         if (this.props.validFiles.length === 0) {
             return (
                 <>
-                    <div id='shorteditor-text-container'>
+                    <div id='shorteditor-text'>
                         {this.renderTextContainer()}
 
                     </div>
@@ -197,11 +197,11 @@ class ShortEditor extends React.Component {
         else {
             return (
                 <>
-                    <div id='shorteditor-main-container'>
-                        <div id='shorteditor-hero-container'>
+                    <div id='shorteditor-main'>
+                        <div id='shorteditor-hero'>
                             {this.props.unsupportedFiles.length ?
                                 <p>Please remove all unsupported files.</p> : ''}
-                            <div id='shorteditor-image-slider-container'>
+                            <div id='shorteditor-images'>
                                 <CustomImageSlider
                                     newPost
                                     hideAnnotations
@@ -213,11 +213,11 @@ class ShortEditor extends React.Component {
                                 />
                             </div>
                         </div>
-                        <div id='shorteditor-side-container'>
+                        <div id='shorteditor-side'>
                             {this.renderTextContainer()}
                         </div>
                     </div>
-                    <div id='shorteditor-file-manager-container'>
+                    <div id='shorteditor-files'>
                         <ImageDrop
                             reference={this.fileInputRef}
                             dragOver={this.dragOver}

@@ -149,18 +149,19 @@ class Tab extends React.Component {
             }
         }
         return (
-            <div key={this.props.user._id} className='tab-container'>
-                <div className='tab-profile-photo-container'>
+            <div key={this.props.user._id}
+                className='tab'>
+                <div className='tab-dp'>
                     <img src={returnUserImageURL(this.props.user.small_cropped_display_photo_key)}></img>
                 </div>
                 <a href={'/u/' + this.props.user.username}><h3>{this.props.user.first_name + " " + this.props.user.last_name}</h3></a>
-                <div className='tab-meta-container'>
+                <div className='tab-meta'>
                     {distanceText && <p>{distanceText}</p>}
                     {count !== 0 && <p>Shares {count} {count > 1 ? 'Pursuits With You' : 'Pursuit With You'} </p>}
                 </div>
 
                 <h4>Recent Work</h4>
-                <div className='tab-event-container'>
+                <div className='tab-event'>
 
                     {this.state.content.upper &&
                         this.renderUppercontent()

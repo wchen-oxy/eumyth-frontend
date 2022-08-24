@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ImageDrop = (props) => (
-    <div className='imagedrop-container'
+    <div className='imagedrop'
         onDragOver={props.dragOver}
         onDragEnter={props.dragEnter}
         onDragLeave={props.dragLeave}
@@ -9,7 +9,7 @@ const ImageDrop = (props) => (
         onClick={props.fileInputClicked}
     >
         <div id='imagedrop-message'>
-            <div id='imagedrop-upload-icon'></div>
+            <div id='imagedrop-upload'></div>
             Drag and Drop files here or click to select file(s)
         </div>
         <input

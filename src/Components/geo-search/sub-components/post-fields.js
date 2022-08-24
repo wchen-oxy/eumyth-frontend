@@ -3,8 +3,8 @@ import { DIFFICULTY_FIELD, DISTANCE_FIELD, PROGRESSION_FIELD } from 'utils/const
 
 const PostFields = (props) => {
     return (
-        <div id="postfield-main-container">
-            <div className='postfield-toggle-container'>
+        <div classname="postfield">
+            <div className='postfield-toggle'>
                 <label className={'postfield-label'}>Difficulty</label>
                 <select
                     id="postfield-difficulty"
@@ -15,7 +15,7 @@ const PostFields = (props) => {
                 </select>
             </div>
 
-            <div className='postfield-toggle-container'>
+            <div className='postfield-toggle'>
                 <label className={'postfield-label'}>Progress</label>
                 <select
                     id="postfield-progress"
@@ -26,7 +26,7 @@ const PostFields = (props) => {
 
                 </select>
             </div>
-            <div className='postfield-toggle-container'>
+            <div className='postfield-toggle'>
                 <label className={'postfield-label'}>Distance</label>
                 <select
                     id="postfield-distance"
@@ -37,8 +37,8 @@ const PostFields = (props) => {
                     <option value={50}>50 miles</option>
                 </select>
             </div>
-            <div className='postfield-toggle-container'>
-                <button id="postfield-refresh-button" onClick={props.onRefreshClick}> Refresh </button>
+            <div className='postfield-toggle'>
+                <button className="btn-reg" onClick={props.onRefreshClick}> Refresh </button>
             </div>
         </div>
     )

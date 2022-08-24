@@ -1,38 +1,52 @@
-.singlecomment-multiple-thread-style {
+.singlecomment-threads {
     @include flex-display-row;
 }
-.singlecomment-main-container {
+
+.singlecomment-thread-indicator {
+    @include flex-display-row;
+}
+
+.singlecomment-thread-indicator-inner {
+    background: grey;
+    width: 3px;
+    height: 100%;
+    margin-left: 16px;
+    margin-right: 5px;
+}
+
+.singlecomment-main {
     @include flex-display-column;
     width: 80%;
-
-    .singlecomment-header-container {
-        @include flex-display-row;
-        align-items: center;
-        .singlecomment-display-photo-container {
-            @include flex-display-row;
-            img {
-                @include tiny-profile-photo;
-                border-radius: 50%;
-            }
-            padding-right: 10px;
-        }
-    }
-
-    .singlecomment-annotation-indicator {
-        font-size: 10px;
-        font-style: italic;
-    }
-
-    .singlecomment-body-container {
-        @include flex-display-row;
-    }
 
     pre {
         margin-top: 0;
     }
 }
 
-.singlecomment-management-container {
+.singlecomment-header {
+    @include flex-display-row;
+    align-items: center;
+}
+
+.singlecomment-dp {
+    @include flex-display-row;
+    img {
+        @include tiny-profile-photo;
+        border-radius: 50%;
+    }
+    padding-right: 10px;
+}
+
+.singlecomment-annotation-indicator {
+    font-size: 10px;
+    font-style: italic;
+}
+
+.singlecomment-body {
+    @include flex-display-row;
+}
+
+.singlecomment-management {
     @include flex-display-row;
     p {
         margin: 0 5px;
@@ -41,18 +55,8 @@
         height: fit-content;
     }
 }
-.singlecomment-thread-indicator-container {
-    @include flex-display-row;
-    .singlecomment-thread-indicator {
-        background: grey;
-        width: 3px;
-        height: 100%;
-        margin-left: 16px;
-        margin-right: 5px;
-    }
-}
 
-.singlecomment-main-content-container {
+.singlecomment-main {
     padding-left: 20px;
 }
 

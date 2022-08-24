@@ -3,7 +3,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import CaptionButtons from './caption-buttons';
 
 const TextContainer = (props) => (
-    <div className='textcontainer-main-container'>
+    <div id='textcontainer'>
         <h4>{props.username}</h4>
 
         {props.validFilesLength > 1 &&

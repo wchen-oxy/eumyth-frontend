@@ -4,9 +4,9 @@ import { PASSWORD_STATE, REGISTER_STATE } from "../../../../utils/constants/flag
 const WelcomeLoginForm = (props) =>
 (
   <section>
-    <div id="welcomeloginform-form-container">
+    <div id="welcomeloginform-form">
       <form onSubmit={props.onLoginSubmit}>
-        <div className="welcomeloginform-text-input-container">
+        <div className="welcomeloginform-text">
           <input
             type="text"
             placeholder="Email"
@@ -15,7 +15,7 @@ const WelcomeLoginForm = (props) =>
             onChange={props.onLoginEmailChange}
           />
         </div>
-        <div className="welcomeloginform-text-input-container">
+        <div className="welcomeloginform-text">
           <input
             type="password"
             placeholder="Password"
@@ -25,14 +25,14 @@ const WelcomeLoginForm = (props) =>
           />
         </div>
         <input
-          id="welcomeloginform-login-button"
+          id="welcomeloginform-login"
           className="welcomeloginform-button"
           type="submit"
           value="Log in"
         />
       </form>
       <button
-        id="welcomelogin-forgot-button"
+        id="welcomelogin-forgot"
         value={PASSWORD_STATE}
         onClick={props.onToggleLoginRegisterWindow}
       >
@@ -41,7 +41,7 @@ const WelcomeLoginForm = (props) =>
     </div>
     <p>Don't Have An Account?</p>
     <button
-      id="welcomeloginform-switch-button"
+      id="welcomeloginform-switch"
       value={REGISTER_STATE}
       onClick={props.onToggleLoginRegisterWindow}
     >

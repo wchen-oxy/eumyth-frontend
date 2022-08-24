@@ -31,8 +31,8 @@ const ShortReEditor = (props) => {
         }
 
         return (
-            <div className='shortreeditor-main-container'>
-                <div className='shortreeditor-hero-container'>
+            <div className='shortreeditor-main'>
+                <div className='shortreeditor-hero'>
                     <CustomImageSlider
                         hideAnnotations
                         onArrowPress={props.onArrowPress}
@@ -40,7 +40,7 @@ const ShortReEditor = (props) => {
                         imageArray={newArray}
                     />
                 </div>
-                <div className='shortreeditor-side-container'>
+                <div className='shortreeditor-side'>
                     <TextContainer
                         validFilesLength={props.eventData.image_data.length}
                         isPaginated={props.isPaginated}

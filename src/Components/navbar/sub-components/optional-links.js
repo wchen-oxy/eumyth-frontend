@@ -5,7 +5,7 @@ const OptionalLinks = (props) => {
     switch (props.linkType) {
         case (NEW_ENTRY_MODAL_STATE):
             return (
-                <div className='optionallinks-action-buttons-container' >
+                <div className='optionallinks-actions' >
                     <button onClick={() => props.setModal(NEW_ENTRY_MODAL_STATE)}>
                         <h4>+ Add Activity</h4>
                     </button>
@@ -14,7 +14,7 @@ const OptionalLinks = (props) => {
         case (PEOPLE_SEARCH_STATE):
             return (
                 <a href={'/search'}>
-                    <div className='optionallinks-action-buttons-container'>
+                    <div className='optionallinks-actions'>
                         <h4>People Like You</h4>
                     </div>
                 </a>
@@ -24,14 +24,14 @@ const OptionalLinks = (props) => {
             return (
                 <>
                     <a href={'/u/'.concat(props.username)}>
-                        <div className='optionallinks-action-buttons-container'>
-                            <div id='optionallinks-display-photo-container'>
+                        <div className='optionallinks-actions'>
+                            <div id='optionallinks-dp'>
                                 <img src={props.tinyDisplayPhoto} />
                             </div>
                             <p>{props.username}</p>
                         </div>
                     </a>
-                    <div className='optionallinks-action-buttons-container'>
+                    <div className='optionallinks-actions'>
                         <button onClick={() => props.setModal(RELATION_MODAL_STATE)}>
                             <h4>Friends</h4>
                         </button>
@@ -41,7 +41,7 @@ const OptionalLinks = (props) => {
         case (WORKS_STATE):
             return (
                 <a href={'/works'}>
-                    <div className='optionallinks-action-buttons-container'>
+                    <div className='optionallinks-actions'>
                         <h4>Published</h4>
                     </div>
                 </a>

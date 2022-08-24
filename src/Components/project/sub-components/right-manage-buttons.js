@@ -21,7 +21,7 @@ const RightManageButtons = (props) => {
 
     const hiddenButtons = props.isOwner ?
         (
-            <div className='rightmanagebuttons-inner-container'>
+            <div className='rightmanagebuttons-dropdown'>
                 <button onClick={() => alert("Temporary Report Button")}>Report</button>
                 <button onClick={() => props.onEditExistingProject()}>Edit</button>
                 <button onClick={toggleDelete}>Delete Series</button>
@@ -29,7 +29,7 @@ const RightManageButtons = (props) => {
         )
         :
         (
-            <div className='rightmanagebuttons-inner-container'>
+            <div className='rightmanagebuttons-dropdown'>
                 <button onClick={() => alert("Temporary Report Button")}>Report</button>
             </div>
         );
@@ -44,13 +44,13 @@ const RightManageButtons = (props) => {
     }
     return (
         <div >
-            <div id="rightmanagebuttons-master-button-container">
-                <div className='rightmanagebuttons-outer-container'>
+            <div id="rightmanagebuttons-utilities">
+                <div className='rightmanagebuttons-utilities-inner'>
                     {props.isOwner &&
                         <button
                             title={props.status === "PUBLISHED" ?
                                 "You've Already Published This" : "Publish Your Series So The World Can See"}
-                            className="rightmanagebuttons-buttons"
+                            className="rightmanagebuttons-button"
                             disabled={props.status === "PUBLISHED"}
                             onClick={() => props.onPublish(props.projectID)}>
                             {props.status === "PUBLISHED" ? "Published" : "Publish"}
@@ -58,13 +58,13 @@ const RightManageButtons = (props) => {
                     }
                     <button
                         title="Reference This Project"
-                        className="rightmanagebuttons-buttons"
+                        className="rightmanagebuttons-button"
                         onClick={openModal}
                     >
                         Create Branch
                     </button>
                     <div>
-                        <button className="rightmanagebuttons-buttons" onClick={toggleButton}> ... </button>
+                        <button className="rightmanagebuttons-button" onClick={toggleButton}> ... </button>
                         {areButtonsShowing && hiddenButtons}
                     </div>
                 </div>

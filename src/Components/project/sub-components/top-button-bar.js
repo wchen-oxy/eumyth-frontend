@@ -36,7 +36,7 @@ const TopButtonBar = (props) => {
         case (PROJECT_MACRO_VIEW_STATE):
             return (
                 <div >
-                    <div id='topbuttonbar-left-button-container'>
+                    <div id='topbuttonbar-left-button'>
                         <button onClick={props.onNewProjectSelect} >
                             New
                         </button>
@@ -46,13 +46,13 @@ const TopButtonBar = (props) => {
         case (PROJECT_MICRO_VIEW_STATE):
             return (
                 <div id='topbuttonbar-dual-button-bar'>
-                    <div id='toepbuttonbar-left-button-container'>
+                    <div id='toepbuttonbar-left-button'>
                         <button onClick={props.onBackClick}>
                             Back
                         </button>
                     </div>
 
-                    <div id='topbuttonbar-right-button-container'>
+                    <div id='topbuttonbar-right-button'>
 
                         {ManageButtons}
                     </div>
@@ -61,13 +61,13 @@ const TopButtonBar = (props) => {
         case (PROJECT_SELECT_VIEW_STATE):
             return (
                 <div id='topbuttonbar-dual-button-bar'>
-                    <div id='topbuttonbar-left-button-container'>
+                    <div id='topbuttonbar-left-button'>
                         <button onClick={props.onBackClick}>
                             Back
                         </button>
                     </div>
 
-                    <div id='topbuttonbar-right-button-container'>
+                    <div id='topbuttonbar-right-button'>
                         <button
                             id='topbuttonbar-right-button'
                             onClick={() => {

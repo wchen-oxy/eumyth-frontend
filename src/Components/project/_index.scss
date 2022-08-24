@@ -2,25 +2,25 @@
     float: right;
 }
 
-.projectcontroller-event-container {
+.projectcontroller-event {
     display: inline-block;
 }
 
-#projectcontroller-submit-container {
+#projectcontroller-submit {
     @include flex-display-column;
 }
 
-#projectcontroller-sortable-list-container {
+#projectcontroller-sortable-list {
     ul {
         padding: 0;
     }
 }
 
-#projectcontroller-content-only-container {
+#projectcontroller-content {
     margin-top: 50px;
 }
 
-#projectcontroller-return-container {
+#projectcontroller-return {
     padding-top: 20px;
 }
 

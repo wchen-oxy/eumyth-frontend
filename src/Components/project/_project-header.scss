@@ -1,4 +1,4 @@
-#projectheader-pursuit-container {
+#projectheader-pursuit {
     @include flex-display-row;
     justify-content: center;
     h5 {
@@ -6,20 +6,20 @@
     }
 }
 
-#projectheader-hero-text {
+#projectheader-hero {
     text-align: center;
     h1 {
         margin-top: 10px;
     }
 }
 
-#projectheader-user-fork {
+#projectheader-fork {
     @include flex-display-column;
     align-items: center;
     justify-content: center;
 }
 
-#projectheader-user-info-container {
+#projectheader-user-meta {
     @include flex-display-row;
     justify-content: center;
 
@@ -35,7 +35,7 @@
     }
 }
 
-#projectheader-cover-container {
+#projectheader-cover {
     @include flex-display-row;
     justify-content: center;
     img {
@@ -44,12 +44,12 @@
     }
 }
 
-#projectheader-comparator-button-container {
+#projectheader-comparator {
     @include flex-display-row;
     justify-content: center;
 }
 
-#projectheader-button-container {
+#projectheader-button {
     @include flex-display-row;
     justify-content: center;
     margin-top: 25px;

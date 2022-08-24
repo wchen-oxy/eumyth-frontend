@@ -138,7 +138,7 @@ export default class WelcomePage extends React.Component {
   renderLoginRegister(state) {
     if (this.state.currentUser && !this.state.verified) {
       return (
-        <div className='welcome-hero-side-container'>
+        <div className='welcome-side'>
           <VerifyForm
             onToggleLoginRegisterWindow={this.handleWindowToggle}
             onSendEmailVerification={this.handleSendEmailVerication}
@@ -149,7 +149,7 @@ export default class WelcomePage extends React.Component {
 
     if (state === REGISTER_STATE)
       return (
-        <div className='welcome-hero-side-container'>
+        <div className='welcome-side'>
           <WelcomeRegisterForm
             onToggleLoginRegisterWindow={this.handleWindowToggle}
             onRegisterEmailChange={this.handleTextChange}
@@ -161,7 +161,7 @@ export default class WelcomePage extends React.Component {
 
     else if (state === LOGIN_STATE) {
       return (
-        <div className='welcome-hero-side-container'>
+        <div className='welcome-side'>
           <WelcomeLoginForm
             onToggleLoginRegisterWindow={this.handleWindowToggle}
             onLoginEmailChange={this.handleTextChange}
@@ -173,7 +173,7 @@ export default class WelcomePage extends React.Component {
     }
     else if (state === PASSWORD_STATE) {
       return (
-        <div className='welcome-hero-side-container'>
+        <div className='welcome-side'>
           <PasswordForgetForm
             onToggleLoginRegisterWindow={this.handleWindowToggle}
           />
@@ -184,8 +184,8 @@ export default class WelcomePage extends React.Component {
 
   render() {
     return (
-      <section className='welcome-login-register-section'>
-        <div className='welcome-hero-hero-container'>
+      <section className='welcome-description'>
+        <div className='welcome-description-inner'>
           <p>Welcome to interestHub! Login or sign up to get started!</p>
           <br></br>
           <p>(to try out this without signing up, use this test account)</p>

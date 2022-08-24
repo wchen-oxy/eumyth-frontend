@@ -29,7 +29,7 @@ const ContentGenes = (props) => {
                         if (props.contentType !== CHILDREN & index === 0)
                             return (
                                 <a key={index} href={"/c/" + info._id} target="_blank" rel='noreferrer'>
-                                    <div className='contentgene-container'>
+                                    <div className='contentgene'>
                                         <h4>Original: {info.title}</h4>
                                         <p>{info.remix}</p>
                                     </div>
@@ -38,7 +38,7 @@ const ContentGenes = (props) => {
                         else {
                             return (
                                 <a key={index} href={"/c/" + info._id} target="_blank" rel='noreferrer'>
-                                    <div className='contentgene-container'>
+                                    <div className='contentgene'>
                                         <h4>{index + 1}. {info.title}</h4>
                                         <p>{info.remix}</p>
                                     </div>

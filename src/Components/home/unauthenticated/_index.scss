@@ -1,5 +1,4 @@
-
-.welcome-login-register-section {
+.welcome-description {
     @include flex-display-row;
     height: calc(100vh - 50px);
     p {
@@ -7,21 +6,14 @@
     }
 }
 
-.welcome-hero-hero-container,
-.welcome-hero-side-container {
+.welcome-hero,
+.welcome-side{
     @include flex-display-column;
     margin: auto;
     justify-content: center;
 }
 
-.welcome-hero-hero-container {
-    width: 65%;
-    text-align: center;
-    font-size: $primary-medium-font-size;
-    height: 100%;
-}
-
-.welcome-hero-side-container {
+.welcome-hero-side {
     height: 100%;
     width: 35%;
     margin-left: 25px;
@@ -29,4 +21,11 @@
     button {
         width: fit-content;
     }
+}
+
+.welcome-description-inner {
+    width: 65%;
+    text-align: center;
+    font-size: $primary-medium-font-size;
+    height: 100%;
 }

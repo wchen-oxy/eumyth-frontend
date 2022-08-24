@@ -1,4 +1,4 @@
-#welcomeregisterform-form-container {
+#welcomeregisterform-form {
     margin-bottom: 25px;
     p {
         margin-top: 12px;
@@ -7,21 +7,21 @@
     }
 }
 
-.welcomeregisterform-text-input-container {
-    input {
-        @include text-input;
-        width: 100%;
-    }
-}
-
-#welcomeregisterform-button {
+#welcomeregisterform-register {
     @include hero-button;
 }
-#welcomeregisterform-button:disabled {
+#welcomeregisterform-register:disabled {
     @include hero-button;
     background-color: rgb(197, 197, 197);
 }
 
 #welcomeregisterform-login {
     @include content-switch-button;
+}
+
+.welcomeregisterform-text {
+    input {
+        @include text-input;
+        width: 100%;
+    }
 }

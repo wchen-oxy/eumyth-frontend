@@ -1,19 +1,15 @@
-#projectdraftcontrols-content {
-    @include brief-text-input;
-}
-#titleinput-content {
-    @include long-text-input;
-}
-#projectdraftcontrols-main {
+#projectdraftcontrols {
     border-radius: 2px;
     border-style: dashed;
     margin: 20px;
 }
 
-.projectdraftcontrols-header,
-.projectdraftcontrols-inner {
-    @include flex-display-column;
-    align-items: center;
+#titleinput-content {
+    @include long-text-input;
+}
+
+#projectdraftcontrols-content {
+    @include brief-text-input;
 }
 
 .projectdraftcontrols-header {
@@ -25,6 +21,12 @@
         margin: 10px;
         align-items: center;
     }
+}
+
+.projectdraftcontrols-header,
+.projectdraftcontrols-inner {
+    @include flex-display-column;
+    align-items: center;
 }
 
 // #projectdraftcontrols-content{

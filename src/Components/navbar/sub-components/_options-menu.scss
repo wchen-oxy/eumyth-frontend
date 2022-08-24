@@ -1,25 +1,27 @@
-#optionsmenu-pre-click-container {
-    @include flex-display-row;
-    padding: 5px;
-    border-radius: 25px;
-}
-
-.optionsmenu-button-container {
-    @include button-rounding;
-}
-
-#optionsmenu-pre-click-container:hover,
-.optionsmenu-button-container:hover {
-    background-color: $button-hover-color;
-}
-#optionsmenu-main-container {
+#optionsmenu {
     padding: 10px;
     h4,
     a {
         color: white;
     }
 }
-#optionsmenu-inner-menu-container {
+
+#optionsmenu-pre-click:hover,
+.optionsmenu-button:hover {
+    background-color: $button-hover-color;
+}
+
+#optionsmenu-pre-click {
+    @include flex-display-row;
+    padding: 5px;
+    border-radius: 25px;
+}
+
+.optionsmenu-button {
+    @include button-rounding;
+}
+
+#optionsmenu-dropdown {
     @include flex-display-column;
     position: absolute;
     background-color: #ed4071;
@@ -28,7 +30,7 @@
     right: 0;
 }
 
-.optionsmenu-button-container {
+.optionsmenu-button {
     height: 20px;
     width: 200px;
     padding: 5px;

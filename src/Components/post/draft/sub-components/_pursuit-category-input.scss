@@ -1,7 +1,7 @@
-#pursuitcategoryinput-main {
+#pursuitcategoryinput {
     @include meta-buttons;
 }
 
-#pursuitcategoryinput-content{
+#pursuitcategoryinput-select{
     @include brief-text-input;
 }

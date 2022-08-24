@@ -1,34 +1,32 @@
-.tab-container {
+.tab{
     background-color: lightcyan;
     height: auto;
     width: 250px;
     padding: 20px;
     margin: 10px;
 
-    .tab-profile-photo-container {
-        @include flex-display-row;
-        align-items: center;
-        img {
-            @include tiny-profile-photo;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto;
-        }
-    }
-    
-    a {
-        color: black;
-        text-decoration: none; /* no underline */
-    }
     h3 {
         margin: 0 auto;
         text-align: center;
     }
-    .tab-meta-container{
-        @include flex-display-column;
-        justify-content: center;
+}
+
+.tab-dp{
+    @include flex-display-row;
+    align-items: center;
+    img {
+        @include tiny-profile-photo;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto;
     }
-    .tab-event-container {
-        margin-top: 20px;
-    }
+}
+
+.tab-meta{
+    @include flex-display-column;
+    justify-content: center;
+}
+
+.tab-event{
+    margin-top: 20px;
 }

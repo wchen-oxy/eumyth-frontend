@@ -239,8 +239,8 @@ class AuthenticatedGeoSearch extends React.Component {
     render() {
         return (
             <div>
-                <div id="geosearch-header-container">
-                    {/* <div id="geosearch-title-container">
+                <div id="geosearch-header">
+                    {/* <div id="geosearch-titles">
                         <h1>See What People Like You Are Doing</h1>
                     </div> */}
                     <PeopleFields
@@ -258,7 +258,7 @@ class AuthenticatedGeoSearch extends React.Component {
                     /> */}
                 </div>
 
-                <div id="geosearch-results-container">
+                <div id="geosearch-results">
                     {this.state.resultState === "SPOTLIGHT" ?
                         <GeoSpotlight
                             users={this.state.spotlight}

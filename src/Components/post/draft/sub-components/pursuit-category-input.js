@@ -12,11 +12,11 @@ const PursuitCategoryInput = (props) => {
     }
 
     return (
-        <div id='pursuitcategoryinput-main'>
+        <div id='pursuitcategoryinput'>
             <label>Pursuit</label>
             <select
                 name="pursuit-category"
-                id='pursuitcategoryinput-content'
+                id='pursuitcategoryinput-select'
                 value={props.pursuit}
                 onChange={(e) => props.setPursuit(e.target.value)}
             >

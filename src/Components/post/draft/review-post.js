@@ -256,28 +256,26 @@ const ReviewPost = (props) => {
     const disableCond1 = !selectedDraft;
     const disableCond2 = threadTitle.length === 0 || !pursuit;
     return (
-        < div id='reviewpost-small-window' >
+        < div id='reviewpost'>
             <div>
-                <div>
-                    <div id='reviewpost-header'>
-                        <h2>Add your metadata!</h2>
-                        {disableCond1 && <p>**Please Select or Create a Series**</p>}
+                <div id='reviewpost-header'>
+                    <h2>Add your metadata!</h2>
+                    {disableCond1 && <p>**Please Select or Create a Series**</p>}
 
-                    </div>
-                    <div id="reviewpost-button-container">
-                        <button
-                            value={props.previousState}
-                            onClick={e => handleReturnClick(e.target.value)}
-                        >  Return
-                        </button>
-                        <button
-                            onClick={(e) => handleFormAppend()}
-                            disabled={isSubmitting || threadToggleState ? disableCond2 : disableCond1}>
-                            {props.isUpdateToPost ?
-                                isSubmitting ? 'Updating!' : 'Update!' :
-                                isSubmitting ? 'Posting!' : 'Post!'}
-                        </button>
-                    </div>
+                </div>
+                <div id="reviewpost-nav">
+                    <button
+                        value={props.previousState}
+                        onClick={e => handleReturnClick(e.target.value)}
+                    >  Return
+                    </button>
+                    <button
+                        onClick={(e) => handleFormAppend()}
+                        disabled={isSubmitting || threadToggleState ? disableCond2 : disableCond1}>
+                        {props.isUpdateToPost ?
+                            isSubmitting ? 'Updating!' : 'Update!' :
+                            isSubmitting ? 'Posting!' : 'Post!'}
+                    </button>
                 </div>
                 <div>
                     <ProjectDraftControls

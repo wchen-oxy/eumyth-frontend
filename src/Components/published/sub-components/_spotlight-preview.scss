@@ -1,4 +1,4 @@
-.spotlightpreview-main-container {
+.spotlightpreview {
     min-width: 400px;
     padding: 50px;
     h4 {
@@ -6,7 +6,7 @@
     }
 }
 
-.spotlightpreview-cover-container {
+.spotlightpreview-cover-final {
     img {
         height: auto;
         width: 100%;
@@ -20,7 +20,7 @@
     background-color: lightgray;
 }
 
-.spotlightpreview-display-container {
+.spotlightpreview-dp {
     @include flex-display-row;
     align-items: center;
     margin: 10px auto;

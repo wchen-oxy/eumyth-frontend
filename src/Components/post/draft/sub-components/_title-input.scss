@@ -1,7 +1,7 @@
-#titleinput-main{
+#titleinput {
     @include meta-buttons;
 }
 
-#titleinput-content{
+#titleinput-text {
     @include long-text-input;
 }

@@ -84,13 +84,13 @@ class NavigationAuthorized extends React.Component {
         return (
             <>
                 <nav>
-                    <div id='navbar-left-container'>
+                    <div id='navbar-left'>
                         <Link
                             to={''}
-                            className='navbar-navigation-link'
+                            className='navbar-link'
                             onClick={() => this.linkDecider()}
                         >
-                            <div id='navbar-logo-container'>
+                            <div id='navbar-logo'>
                                 <h3>Everfire</h3>
                             </div>
                         </Link>
@@ -112,7 +112,7 @@ class NavigationAuthorized extends React.Component {
                                 setModal={this.setModal}
                             />)}
                     </div>
-                    <div id='navbar-right-container'>
+                    <div id='navbar-right'>
                         {this.displayOptionalsDecider(
                             <OptionalLinks
                                 username={this.props.authUser.username}

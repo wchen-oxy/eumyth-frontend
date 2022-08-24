@@ -1,14 +1,15 @@
-#rightmanagebuttons-master-button-container {
+#rightmanagebuttons-utilities {
     @include flex-display-column;
 }
 
-.rightmanagebuttons-outer-container {
+.rightmanagebuttons-utilities-inner {
     @include flex-display-row;
 }
-.rightmanagebuttons-inner-container {
+
+.rightmanagebuttons-dropdown {
     position: absolute;
 }
 
-.rightmanagebuttons-buttons {
+.rightmanagebuttons-button {
     margin: auto 5px;
 }

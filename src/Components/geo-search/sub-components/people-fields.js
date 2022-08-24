@@ -2,7 +2,7 @@ import React from 'react';
 import CreatableSelect from 'react-select/creatable';
 import { PURSUIT_FIELD } from 'utils/constants/form-data';
 import { checkInputNotNull } from 'utils/validator';
- 
+
 const defaultOption = { label: 'Search Only Your Pursuits', value: 'ALL' };
 const formatPrompt = (string) => string;
 const PeopleFields = (props) => {
@@ -20,11 +20,11 @@ const PeopleFields = (props) => {
             return props.onFieldChange(PURSUIT_FIELD, null);
         }
     }
-    
+
     return (
-        <div id='peoplefields-main-container'>
-            <div id='peoplefields-createable-container'
-                className='peoplefields-toggle-container' >
+        <div id='peoplefields'>
+            <div id='peoplefields-createable'
+                className='peoplefields-fields' >
                 <CreatableSelect
                     isClearable
                     defaultValue={defaultOption}
@@ -33,7 +33,7 @@ const PeopleFields = (props) => {
                     onChange={onValueChange}
 
                 />
-                <div id='peoplefields-distance-container'>
+                <div id='peoplefields-distance'>
                     <select onChange={(e) => props.onDistanceChange(e.target.value)}>
                         <option value={10}>10 Miles</option>
                         <option value={50}>50 Miles</option>
@@ -44,10 +44,9 @@ const PeopleFields = (props) => {
 
                 </div>
             </div>
-
-            <div className='peoplefields-toggle-container'>
+            <div className='peoplefields-fields'>
                 <button
-                    id="peoplefields-refresh-button"
+                    id="peoplefields-refresh"
                     onClick={props.onRefreshClick}
                     disabled={!props.selectedPursuit}
                 >

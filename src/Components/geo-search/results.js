@@ -8,13 +8,13 @@ const Results = (props) => {
     const distanceText = returnFormattedDistance(props.person.distance)
     const profileURL = returnUserImageURL(props.person.small_cropped_display_photo_key);
     return (
-        <div key={props.person._id} className='results-container' >
-            <div className='results-profile-container'>
+        <div key={props.person._id} className='results' >
+            <div className='results-profile'>
                 <div>
-                    <div className='results-image-container'>
+                    <div className='results-image'>
                         <img src={profileURL} />
                     </div>
-                    <a className='results-full-name' href={'/u/' + props.person.username}>
+                    <a className='results-name' href={'/u/' + props.person.username}>
                         <h3>{props.person.first_name + " " + props.person.last_name}</h3>
                     </a>
                     {distanceText && <p>{distanceText}</p>}
@@ -25,7 +25,7 @@ const Results = (props) => {
                 {props.person.pursuits.map(
                     (pursuit, index) => {
                         if (index !== 0) return (
-                            <div key={index} className='results-stats-container'>
+                            <div key={index} className='results-stats'>
                                 <h4>{pursuit.name}</h4>
                                 <p> {pursuit.num_milestones} Milestones</p>
                                 <p> {pursuit.total_min} Total Minutes</p>
@@ -41,11 +41,11 @@ const Results = (props) => {
                     
                 </div>
             </div> */}
-            <div className='results-post-content-container'>
+            <div className='results-post'>
                 <div className='results-title'>
                     <h4>Recent Posts</h4>
                 </div>
-                <div className='results-post-preview-container'>
+                <div className='results-post-preview'>
                     {
                         props.person.pursuits[0].posts.length > 0 ?
                             props.person.pursuits[0].loaded.map(

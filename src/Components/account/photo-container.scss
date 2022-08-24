@@ -1,0 +1,12 @@
+#photocontainer{
+    @include flex-display-column;
+}
+.photocontainer-file {
+    @include flex-display-row;
+    display: none;
+    padding: 10px;
+    border: 2px solid black;
+}
+.photocontainer-file-inner {
+    @include flex-display-column;
+}

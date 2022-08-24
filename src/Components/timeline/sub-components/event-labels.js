@@ -5,8 +5,8 @@ const EventLabels = (props) => {
         (value, index) => {
             return (
                 <div key={index}
-                    className={'eventlabels-outer-label-container'}>
-                    <div className={'eventlabels-inner-label-container'}>
+                    className={'eventlabels-background'}>
+                    <div className={'eventlabels-foreground'}>
                         <p>
                             {value}
                         </p>
@@ -16,7 +16,7 @@ const EventLabels = (props) => {
         });
 
     return (
-        <div id={props.isFullPage ? 'eventlabels-full-page-container' : 'eventlabels-partial-page-container'}>
+        <div id={props.isFullPage ? 'eventlabels-full' : 'eventlabels-partial'}>
             {labels}
         </div>
     )

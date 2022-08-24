@@ -1,30 +1,26 @@
-#shortpost-window {
+#shortpost {
     @include flex-display-column;
     @include small-post-window;
 }
-#shortpost-review-window {
-    @include small-post-window;
-}
 
-#shortpost-title {
+#shortpost-header {
     text-align: center;
 }
 
-#shortpost-title-container {
-    width: 50%;
-    margin: 0 auto;
-}
-
-.shortpost-special-button-container {
-    @include flex-display-column;
-    margin: 0 auto;
-}
-
-#shortpost-button-container {
+#shortpost-nav {
     @include flex-display-row;
     justify-content: space-between;
 
     p {
         margin: 0;
     }
+}
+
+#shortpost-title {
+    width: 50%;
+    margin: 0 auto;
+}
+
+#shortpost-review {
+    @include small-post-window;
 }

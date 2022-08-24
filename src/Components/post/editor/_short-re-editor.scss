@@ -1,14 +1,14 @@
-.shortreeditor-main-container {
+.shortreeditor-main {
   @include flex-display-row;
 }
 
-.shortreeditor-hero-container {
+.shortreeditor-hero {
   @include short-post-hero-image-container;
   margin: 0 auto;
   height: auto;
 }
 
-.shortreeditor-side-container {
+.shortreeditor-side {
   background-color: white;
   @include short-post-side-container;
 }

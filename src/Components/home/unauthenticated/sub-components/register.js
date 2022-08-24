@@ -16,9 +16,9 @@ const WelcomeRegisterForm = (props) => {
   }
   return (
     <section>
-      <div id="welcomeregisterform-form-container">
+      <div id="welcomeregisterform-form">
         <form onSubmit={props.onRegisterSubmit}>
-          <div className="welcomeregisterform-text-input-container">
+          <div className="welcomeregisterform-text">
             <input
               type="text"
               placeholder="Email"
@@ -27,7 +27,7 @@ const WelcomeRegisterForm = (props) => {
               onChange={props.onRegisterEmailChange}
             />
           </div>
-          <div className="welcomeregisterform-text-input-container">
+          <div className="welcomeregisterform-text">
             <input
               type="password"
               placeholder="Password"
@@ -38,7 +38,7 @@ const WelcomeRegisterForm = (props) => {
           </div>
           <p>{disableSubmit ? "Password must be at least 6 characters" : null}</p>
           <input
-            id="welcomeregisterform-button"
+            id="welcomeregisterform-register"
             type="submit"
             value="Sign Up"
             disabled={disableSubmit}

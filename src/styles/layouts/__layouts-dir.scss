@@ -1,5 +1,6 @@
 @import "src/components/account/index";
 @import "src/components/account/password/change/index";
+@import "src/components/account/photo-container";
 
 @import "src/components/geo-search/index";
 @import "src/components/geo-search/results";
@@ -54,7 +55,6 @@
 @import "src/components/post/viewer/sub-components/short-post-meta";
 @import "src/components/post/viewer/sub-components/short-text";
 @import "src/components/post/viewer/sub-components/single-comment";
-
 
 @import "src/components/profile/index";
 @import "src/components/profile/profile-modal";

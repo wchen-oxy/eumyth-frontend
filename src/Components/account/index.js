@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import imageCompression from 'browser-image-compression';
-import PasswordChangeForm from './password/change';
+import PasswordChange from './password/change';
 import ProfilePhotoEditor from '../profile-photo-editor.js/index.js';
 import AxiosHelper from 'utils/axios';
 import { AuthUserContext, withAuthorization } from 'store/session';
@@ -245,9 +245,9 @@ const AuthenticatedAccountPage = (props) => {
     />;
 
   return (
-    <div id='account-container'>
+    <div id='account'>
       <h1>Account: {props.authUser.email}</h1>
-      <div className='account-section-container'>
+      <div className='account-section'>
         <PhotoContainer
           type={DISPLAY}
           isEditing={isEditingDisplay}
@@ -261,7 +261,7 @@ const AuthenticatedAccountPage = (props) => {
           removePhoto={removePhoto}
         />
       </div>
-      <div className='account-section-container'>
+      <div className='account-section'>
         <PhotoContainer
           type={COVER}
           isEditing={isEditingCover}
@@ -275,21 +275,23 @@ const AuthenticatedAccountPage = (props) => {
           removePhoto={removePhoto}
         />
       </div>
-      <div id='account-bio-container' className='account-section-container'>
-        <label>Bio</label>
+      <div className='account-section'>
+        <label className="label-form">Bio</label>
         <textarea
           type='text'
           onChange={e => setBioText(e.target.value)}
           value={bio}
           maxLength={500}
         />
-        <button onClick={handleBioSubmit}>
+        <button
+          className='btn-reg'
+          onClick={handleBioSubmit}>
           Submit Bio
         </button>
       </div>
 
-      <div className='account-section-container'>
-        <label>
+      <div className='account-section'>
+        <label className="label-form">
           Choose the privacy of your profile!
         </label>
         <select
@@ -299,8 +301,8 @@ const AuthenticatedAccountPage = (props) => {
           <option key='public' value={PUBLIC}>Public</option>
         </select>
       </div>
-      <div className='account-section-container'>
-        <PasswordChangeForm />
+      <div className='account-section'>
+        <PasswordChange />
       </div>
     </div>
   );

@@ -6,10 +6,10 @@ const HiddenButtons = (props) => {
     if (!props.editProjectState &&
         props.isOwnProfile)
         return (
-            <div id='hiddenbuttons-main-container'>
+            <div id='hiddenbuttons'>
                 <button onClick={() => setButtonShow(!isButtonShowing)}>...</button>
                 {isButtonShowing && (
-                    <div id='hiddenbuttons-optional-containers'>
+                    <div id='hiddenbuttons-options'>
                         <button onClick={props.onDeletePost}>Remove</button>
                         <button onClick={() => props.onEditClick(EDIT_STATE)}>Edit</button>
                     </div>

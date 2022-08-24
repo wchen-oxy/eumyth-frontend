@@ -1,32 +1,26 @@
-.eventtextinfo-text-container {
+.eventtextinfo {
     @include flex-display-column;
     @include lower-text-container;
     position: relative;
 
-    .eventtextinfo-progression-container {
+    .eventtextinfo-progression {
         padding: 0 4px;
     }
 
-    .eventtextinfo-dynamic-container {
+    .eventtextinfo-dynamic {
         @include flex-display-column;
         flex-grow: 1;
         justify-content: space-between;
-        .eventtextinfo-all-labels-container {
+        .eventtextinfo-labels {
             @include flex-display-row;
             flex-wrap: wrap;
         }
     }
-    .eventtextinfo-comment-text-container {
+    .eventtextinfo-comment {
         padding: 0 4px;
-    }
-    h4,
-    p {
-        margin: 0 auto;
-    }
-    h4 {
-        font-size: 18px;
-    }
-    p {
-        font-size: 14px;
+        p {
+            margin: 0 auto;
+            font-size: 14px;
+        }
     }
 }
