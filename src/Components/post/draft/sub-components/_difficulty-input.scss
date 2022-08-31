@@ -1,11 +1,3 @@
-#difficultyinput {
-    @include meta-buttons;
-}
-
-#difficultyinput-difficulty {
-    @include meta-slider;
-}
-
 #difficultyinput-slider {
-    @include slider-input;
+    width: $input-slider-width;
 }

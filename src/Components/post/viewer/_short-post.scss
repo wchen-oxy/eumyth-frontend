@@ -11,7 +11,6 @@
 }
 
 .shortpostviewer-large-hero-image {
-    @include short-post-hero-image-container;
     height: auto;
 }
 
@@ -19,24 +18,21 @@
     height: auto;
 }
 
-.shortpostviewer-window {
-    @include small-post-window;
-    z-index: 22;
-}
-
 .with-image {
     background-color: black;
 }
 
 .shortpostviewer-large-side {
-    @include short-post-side-container;
-    background-color: white;
     @include flex-display-column;
+    background-color: white;
 }
 
 .shortpostviewer-large-hero-text {
-    @include short-post-hero-text-container;
     height: auto;
+    width: 65%;
+    margin: auto;
+    padding: 20px;
+    justify-content: center;
 }
 
 .shortpostviewer-inline-hero {

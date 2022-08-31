@@ -2,66 +2,37 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { withFirebase } from 'store/firebase';
 
-class OptionsMenu extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            showMenu: false,
-        };
-        this.showMenu = this.showMenu.bind(this);
-        this.closeMenu = this.closeMenu.bind(this);
+const OptionsMenu = (props) => {
+
+
+    if (!props.showMenu) {
+        return null;
     }
-
-    showMenu(event) {
-        event.preventDefault();
-
-        this.setState({ showMenu: true }, () => {
-            document.addEventListener('click', this.closeMenu);
-        });
-    }
-
-    closeMenu() {
-        this.setState({ showMenu: false }, () => {
-            document.removeEventListener('click', this.closeMenu);
-        });
-    }
-
-    render() {
+    else
         return (
-            <div id='optionsmenu'>
-                <div id='optionsmenu-pre-click'>
-                    <button onClick={this.showMenu}>
-                        <h4>...</h4>
+            <div id='optionsmenu-dropdown'>
+                {props.shouldHideFriendsTab ?
+                    null
+                    :
+                    <div
+                        className='optionsmenu-dropdown-inner'
+                        onClick={() => props.closeModal()}
+                    >
+                        <Link to={'/account'}>Edit Your Profile</Link>
+                    </div>
+                }
+
+                <div className='optionsmenu-dropdown-inner'>
+                    <button onClick={() => {
+                        props.closeModal();
+                        props.firebase.doSignOut();
+                    }}>
+                        <h4>Sign Out</h4>
                     </button>
                 </div>
-                {
-                    this.state.showMenu &&
-                    (
-                        <div id='optionsmenu-dropdown'>
-                            {this.props.shouldHideFriendsTab ?
-                                null
-                                :
-                                <div
-                                    className='optionsmenu-button'
-                                    onClick={() => this.props.closeModal()}
-                                >
-                                    <Link to={'/account'}>Edit Your Profile</Link>
-                                </div>
-                            }
-
-                            <div className='optionsmenu-button'>
-                                <button onClick={() => {
-                                    this.props.closeModal();
-                                    this.props.firebase.doSignOut();
-                                }}>
-                                    <h4>Sign Out</h4>
-                                </button>
-                            </div>
-                        </div>
-                    )
-                }
             </div>
+
         );
-    }
 }
+
 export default withFirebase(OptionsMenu);

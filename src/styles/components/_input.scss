@@ -3,4 +3,18 @@
     margin-bottom: 8px;
 }
 
+.input-text {
+    height: 30px;
+    font-size: 20px;
+    box-sizing: border-box;
+}
 
+.input-slider {
+    @include flex-display-column;
+    height: 40px;
+    justify-content: center;
+    p {
+        margin-top: 0px;
+        margin-bottom: 5px;
+    }
+}

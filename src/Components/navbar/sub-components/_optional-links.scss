@@ -1,19 +1,18 @@
-#optionallinks-dp{
+#optionallinks-dp {
     @include flex-display-row;
     align-items: center;
+    padding: 4px $button-action-padding;
     img {
         @include tiny-profile-photo;
         border-radius: 50%;
         object-fit: cover;
+        padding-right: 8px;
+    }
+    p {
+        @extend %navbar-text;
     }
 }
 
 .optionallinks-actions {
     @include flex-display-row;
-    @include button-rounding;
-    background-color: $primary-color-faded;
-}
-
-.optionallinks-actions:hover {
-    background-color: $button-hover-color;
 }

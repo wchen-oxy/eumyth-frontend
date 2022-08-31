@@ -5,11 +5,11 @@
 }
 
 #titleinput-content {
-    @include long-text-input;
+    width: 50%;
 }
 
 #projectdraftcontrols-content {
-    @include brief-text-input;
+    width: $brief-text-input;
 }
 
 .projectdraftcontrols-header {

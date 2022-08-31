@@ -198,7 +198,8 @@ class ShortEditor extends React.Component {
             return (
                 <>
                     <div id='shorteditor-main'>
-                        <div id='shorteditor-hero'>
+                        <div id='shorteditor-hero'
+                            className='short-post-hero-image-container' >
                             {this.props.unsupportedFiles.length ?
                                 <p>Please remove all unsupported files.</p> : ''}
                             <div id='shorteditor-images'>
@@ -213,7 +214,7 @@ class ShortEditor extends React.Component {
                                 />
                             </div>
                         </div>
-                        <div id='shorteditor-side'>
+                        <div className='short-post-side-container'>
                             {this.renderTextContainer()}
                         </div>
                     </div>

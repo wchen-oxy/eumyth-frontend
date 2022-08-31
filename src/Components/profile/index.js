@@ -22,6 +22,7 @@ import {
     THREADS
 } from 'utils/constants/flags';
 import { createPursuitArray } from 'utils';
+import HeroContent from './hero-content';
 
 const selectMessage = (action, isPrivate) => {
     switch (action) {
@@ -84,12 +85,10 @@ class ProfilePageAuthenticated extends React.Component {
             }
         }
 
-        this.decideHeroContentVisibility = this.decideHeroContentVisibility.bind(this);
         this.loadMacroProjectData = this.loadMacroProjectData.bind(this);
         this.loadMicroProjectData = this.loadMicroProjectData.bind(this);
         this.loadMicroPostData = this.loadMicroPostData.bind(this);
         this.setContentOnlyData = this.setContentOnlyData.bind(this);
-        this.renderHeroContent = this.renderHeroContent.bind(this);
         this.handleFollowClick = this.handleFollowClick.bind(this);
         this.handleFollowerStatusChange = this.handleFollowerStatusChange.bind(this);
         this.handlePursuitToggle = this.handlePursuitToggle.bind(this);
@@ -325,39 +324,6 @@ class ProfilePageAuthenticated extends React.Component {
         return NOT_A_FOLLOWER_STATE;
     }
 
-
-    renderHeroContent() {
-        const selectedPursuit = this.state.profileData.pursuits[this.state.selectedPursuitIndex];
-        if (this.state.contentType === POST) {
-            return (
-                <PostController
-                    authUser={this.props.authUser}
-                    returnModalStructure={this.props.returnModalStructure}
-                    modalState={this.props.modalState}
-                    openMasterModal={this.props.openMasterModal}
-                    closeMasterModal={this.props.closeMasterModal}
-                    pursuitNames={this.state.pursuitNames}
-                    selectedPursuitIndex={this.state.selectedPursuitIndex}
-                    feedData={selectedPursuit.posts.map((item) => item.content_id)}
-                />
-            )
-        }
-        else if (this.state.contentType === PROJECT) {
-            return (
-                <ProjectController
-                    authUser={this.props.authUser}
-                    content={this.state.profileData.pursuits[this.state.selectedPursuitIndex]}
-                    selectedPursuitIndex={this.state.selectedPursuitIndex}
-                    pursuitNames={this.state.pursuitNames}
-                    isContentOnlyView={this.state.isContentOnlyView}
-                    returnModalStructure={this.props.returnModalStructure}
-                    modalState={this.props.modalState}
-                    openMasterModal={this.props.openMasterModal}
-                    closeMasterModal={this.props.closeMasterModal}
-                />)
-        }
-    }
-
     handleFollowerStatusChange(action) {
         AxiosHelper.setFollowerStatus(
             this.props.authUser.userRelationID,
@@ -386,29 +352,6 @@ class ProfilePageAuthenticated extends React.Component {
         }
     }
 
-    decideHeroContentVisibility() {
-        const hideFromAll = !this.props.authUser?.username && this.state.profileData.private;
-        const hideFromUnauthorized = (!this.isOwner() && this.state.profileData.private)
-            && (this.state.followerStatus !== 'FOLLOWING' &&
-                this.state.followerStatus !== 'REQUEST_ACCEPTED');
-        if (this.state.fail) {
-            return (
-                <p>The user you're looking for does not exist.</p>)
-        }
-        else if (hideFromAll || hideFromUnauthorized) {
-            return (
-                <p>This profile is private. To see
-                    these posts, please request access. </p>
-            );
-        }
-        else {
-            return (
-                <div key={this.state.selectedPursuitIndex}>
-                    {this.renderHeroContent()}
-                </div>
-            );
-        }
-    }
 
     render() {
         if (this.state.loading) return null;
@@ -470,6 +413,26 @@ class ProfilePageAuthenticated extends React.Component {
         else if (!this.state.isContentOnlyView) {
             const targetUsername = this.state.profileData?.username ?? '';
             const targetProfilePhoto = returnUserImageURL(this.state.profileData?.cropped_display_photo_key ?? null);
+            const hideFromAll = !this.props.authUser?.username
+                && this.state.profileData.private;
+            const hideFromUnauthorized = (!this.isOwner()
+                && this.state.profileData.private)
+                && (this.state.followerStatus !== 'FOLLOWING' &&
+                    this.state.followerStatus !== 'REQUEST_ACCEPTED');
+            const specificContent = {}
+
+            if (this.state.contentType === POST) {
+                const selectedPursuit = this.state.profileData
+                    .pursuits[this.state.selectedPursuitIndex];
+                specificContent.feedData = selectedPursuit.posts.map((item) => item.content_id);
+            }
+
+            else if (this.state.contentType === PROJECT) {
+                specificContent.content = this.state.profileData.pursuits[this.state.selectedPursuitIndex];
+                specificContent.selectedPursuitIndex = this.state.selectedPursuitIndex;
+                specificContent.isContentOnlyView = this.state.isContentOnlyView;
+            }
+
             return (
                 <div>
                     <div id='profile-main'>
@@ -482,7 +445,6 @@ class ProfilePageAuthenticated extends React.Component {
                                     alt='user profile photo'
                                     src={targetProfilePhoto}
                                 />
-
                                 <div id='profile-name'>
                                     <h4>{targetUsername}</h4>
                                 </div>
@@ -519,7 +481,25 @@ class ProfilePageAuthenticated extends React.Component {
                                 Series
                             </button>
                         </div>
-                        {this.state.contentType && this.decideHeroContentVisibility()}
+                        {this.state.contentType &&
+                            <HeroContent
+                                {...specificContent}
+                                contentType={this.state.contentType}
+                                visibility={{
+                                    shouldHide: hideFromAll || hideFromUnauthorized,
+                                    fail: this.state.fail
+                                }}
+                                authUser={this.props.authUser}
+                                returnModalStructure={this.props.returnModalStructure}
+                                modalState={this.props.modalState}
+                                openMasterModal={this.props.openMasterModal}
+                                closeMasterModal={this.props.closeMasterModal}
+                                pursuitNames={this.state.pursuitNames}
+                                selectedPursuitIndex={this.state.selectedPursuitIndex}
+
+
+                            />
+                        }
                     </div>
 
                 </div>

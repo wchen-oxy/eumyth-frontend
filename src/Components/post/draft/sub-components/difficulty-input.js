@@ -2,9 +2,9 @@ import React from 'react';
 
 const DifficultyInput = (props) => {
     return (
-        <div id='difficultyinput-main'>
+        <div className='btn-meta'>
             <label>Difficulty</label>
-            <div id='difficultyinput-difficulty'>
+            <div className='input-slider'>
                 <input
                     id='difficultyinput-slider'
                     defaultValue={props.difficulty}

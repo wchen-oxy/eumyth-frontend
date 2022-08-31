@@ -1,16 +1,20 @@
 .longevent-with-cover-photo-container {
-    @include with-cover-photo-container-size;
+    height: 120px;
+    overflow: hidden;
 }
 
 .longevent-no-cover-photo-container {
-    @include no-cover-photo-container-size;
-    p{
+    height: 110px;
+    padding: 5px;
+    overflow: hidden;
+    p {
         font-size: 14px;
     }
 }
 
 .longevent-cover-photo {
-    @include cover-photo-size;
+    height: auto;
+    width: 100%;
 }
 
 .longevent-subtitle-container {

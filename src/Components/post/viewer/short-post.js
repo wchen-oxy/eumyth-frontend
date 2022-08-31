@@ -235,7 +235,7 @@ class ShortPostViewer extends React.Component {
 
     renderImageSlider(windowType) {
         const sliderClassName = this.props.largeViewMode ?
-            'shortpostviewer-large-hero-image' :
+            'shortpostviewer-large-hero-image short-post-hero-image-container' :
             'shortpostviewer-inline-hero';
         let imageArray = this.props.eventData.image_data.map((key, i) =>
             returnUserImageURL(key)
@@ -508,12 +508,12 @@ class ShortPostViewer extends React.Component {
     /> */
                 if (hasImages) {
                     return (
-                        <div className='shortpostviewer-window'>
+                        <div className='small-post-window'>
                             <div id='shortpostviewer-large-hero'
                                 className='with-image'>
                                 {this.state.annotations && this.renderImageSlider(EXPANDED)}
                                 <div
-                                    className='shortpostviewer-large-side'
+                                    className='shortpostviewer-large-side  short-post-side-container'
                                     ref={this.heroRef}
                                 >
                                     <ShortPostMetaInfo

@@ -15,7 +15,7 @@ const VerifyForm = (props) => {
                     </p>
             }
             <p>{sentIndicator}</p>
-            <button id="verifyform-resend" onClick={(e) => {
+            <button id="verifyform-resend" className="btn-hero" onClick={(e) => {
                 setSentIndicator(
                     `Email has been sent! Once you verify 
                     your email, try refreshing the page.`)

@@ -1,24 +1,5 @@
-#optionsmenu {
-    padding: 10px;
-    h4,
-    a {
-        color: white;
-    }
-}
-
-#optionsmenu-pre-click:hover,
-.optionsmenu-button:hover {
-    background-color: $button-hover-color;
-}
-
 #optionsmenu-pre-click {
     @include flex-display-row;
-    padding: 5px;
-    border-radius: 25px;
-}
-
-.optionsmenu-button {
-    @include button-rounding;
 }
 
 #optionsmenu-dropdown {
@@ -30,8 +11,8 @@
     right: 0;
 }
 
-.optionsmenu-button {
+.optionsmenu-dropdown-inner {
     height: 20px;
     width: 200px;
-    padding: 5px;
+    padding: 8px;
 }

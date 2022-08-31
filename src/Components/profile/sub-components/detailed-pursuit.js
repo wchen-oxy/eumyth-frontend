@@ -1,20 +1,22 @@
 import React from 'react';
-class DetailedPursuit extends React.Component{
+
+class DetailedPursuit extends React.Component {
     _isMounted = false;
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
         }
     }
-    componentDidMount(){
+
+    componentDidMount() {
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this._isMounted = false;
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <div className='detailed-pursuit-container flex-display'>
                 <p>Test</p>
             </div>

@@ -1,6 +1,5 @@
 #shortpost {
     @include flex-display-column;
-    @include small-post-window;
 }
 
 #shortpost-header {
@@ -19,8 +18,4 @@
 #shortpost-title {
     width: 50%;
     margin: 0 auto;
-}
-
-#shortpost-review {
-    @include small-post-window;
 }

@@ -1,7 +1,6 @@
 .btn-round {
-    padding: 12px;
-    border-radius: 24px;
-    background-color: $primary-color-faded;
+    padding: $button-action-padding;
+    border-radius: $button-action-border-radius;
 }
 
 .btn-round:hover {
@@ -11,4 +10,38 @@
 .btn-switch {
     padding: 8px;
     border-radius: 12px;
+}
+
+.btn-hero {
+    height: 50px;
+    width: 100%;
+    background-color: royalblue;
+    font-size: 18px;
+    color: white;
+}
+
+.btn-meta {
+    @include flex-display-column;
+    align-items: center;
+}
+//navbar specific
+
+.btn-navbar-div {
+    background-color: $primary-color;
+    border-radius: $button-action-border-radius;
+    h4 {
+        padding: $button-action-padding;
+    }
+}
+
+.btn-navbar {
+    padding: $button-action-padding;
+    background-color: $primary-color;
+    border-radius: $button-action-border-radius;
+}
+
+.btn-navbar-div:hover,
+.btn-navbar:hover {
+    cursor: pointer;
+    background-color: $primary-color-faded;
 }

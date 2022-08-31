@@ -51,7 +51,11 @@
     @include flex-display-column;
 
     .returninguser-feed-object {
-        @include feed-or-event-container;
+        border-style: solid;
+        border-width: 1px;
+        background-color: white;
+        border-color: rgba(0, 0, 0, 0.2);
+        border-radius: 3px;
         margin: 100px;
     }
 }

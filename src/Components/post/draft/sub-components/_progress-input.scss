@@ -1,11 +1,3 @@
-#progressinput {
-    @include meta-buttons;
-}
-
-#progressinput-progression{
-    @include meta-slider;
-}
-
 #progressinput-slider {
-    @include slider-input;
+    width: $input-slider-width;
 }

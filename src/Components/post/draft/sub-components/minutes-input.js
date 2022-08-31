@@ -2,7 +2,7 @@ import React from 'react';
 
 const MinutesInput = (props) => {
     return (
-        <div id='minutesinput'>
+        <div className='btn-meta'>
             <label>Total Minutes</label>
             <input
                 id='minutesinput-number'

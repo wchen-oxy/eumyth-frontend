@@ -1,18 +1,28 @@
 $default-font: "Open Sans", sans-serif;
 $primary-color: #ed4071;
-$primary-color-faded: rgba(
-    $color: grey,
-    $alpha: 0.1,
-);
+$primary-color-faded: #ff8aa5;
 $primary-text-color: black;
 $primary-calc-medium-font-size: calc(10px + 2vmin);
 $primary-extra-large-font-size: 30px;
 $primary-large-font-size: 22.5px;
 $primary-medium-font-size: 15px;
+
 $button-hover-color: rgba(
     $color: #ffffff,
     $alpha: 0.3,
 );
+
+$event-min-height: 150px;
+
+//input
+$brief-text-input: 30%;
+$input-slider-width: 100%;
+$input-number: 25%;
+$input-text-long: 50%;
+
+//buttons
+$button-action-padding: 12px;
+$button-action-border-radius: 16px;
 
 //post related measurments
 $small-post-draft-height: 350px;
@@ -31,10 +41,11 @@ $overlay: 10;
 }
 
 %navbar-text {
+    @include no-select;
     margin: auto;
     color: white;
+    font-family: $default-font;
 }
-
 
 %event-container {
     @include no-select;

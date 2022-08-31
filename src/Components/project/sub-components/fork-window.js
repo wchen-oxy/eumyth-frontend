@@ -27,7 +27,7 @@ const ForkWindow = (props) => {
     }
 
     return (
-        <div id={'forkwindow-delete'}>
+        <div className='small-post-window'>
             <div>
                 <h3>
                     Create a Branch Of This Series

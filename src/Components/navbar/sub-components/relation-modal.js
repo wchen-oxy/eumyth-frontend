@@ -193,7 +193,7 @@ class RelationModal extends React.Component {
 
     render() {
         return (
-            <div id='relationmodal'>
+            <div className='small-post-window'>
                 <div id='relationmodal-relations'>
                     <div className='relationmodal-column'>
                         <h2>Requests</h2>

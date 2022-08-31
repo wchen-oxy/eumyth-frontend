@@ -3,9 +3,9 @@ import { displayProgressionType } from "../../../../utils/constants/ui-text";
 
 const ProgressInput = (props) => {
     return (
-        <div id='progressinput'>
+        <div className='btn-meta'>
             <label>Progress</label>
-            <div id='progressinput-progression'>
+            <div className='input-slider'>
                 <input
                     id='progressinput-slider'
                     defaultValue={props.progression}

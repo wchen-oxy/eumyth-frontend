@@ -31,3 +31,16 @@
     transition: 0.3s;
     z-index: 24;
 }
+
+.small-post-window {
+    background-color: white;
+    position: fixed;
+    margin-top: calc(#{$small-post-height / -2} + 25px);
+    margin-left: calc(#{$small-post-width / -2});
+    top: 50%;
+    left: 50%;
+    z-index: 23;
+    height: $small-post-height;
+    width: $small-post-width;
+    overflow: scroll;
+}

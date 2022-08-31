@@ -13,12 +13,15 @@ class NavigationAuthorized extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            showMenu: false,
             isUserStillLoading: true,
             isExistingUser: false,
             isPostModalShowing: false,
             isRequestModalShowing: false,
         };
 
+        this.showMenu = this.showMenu.bind(this);
+        this.closeMenu = this.closeMenu.bind(this);
         this.clearModal = this.clearModal.bind(this);
         this.setModal = this.setModal.bind(this);
         this.setBasicInfo = this.setBasicInfo.bind(this);
@@ -37,6 +40,19 @@ class NavigationAuthorized extends React.Component {
                     displayPhoto
                 )
             });
+    }
+
+    showMenu(event) {
+        event.preventDefault();
+        this.setState({ showMenu: true }, () => {
+            document.addEventListener('click', this.closeMenu);
+        });
+    }
+
+    closeMenu() {
+        this.setState({ showMenu: false }, () => {
+            document.removeEventListener('click', this.closeMenu);
+        });
     }
     setBasicInfo(isExistingUser, isUserStillLoading, tinyDisplayPhoto) {
         this.setState({
@@ -119,8 +135,15 @@ class NavigationAuthorized extends React.Component {
                                 linkType={RELATION_MODAL_STATE}
                                 tinyDisplayPhoto={this.state.tinyDisplayPhoto}
                                 setModal={this.setModal}
-                            />)}
+                            />)
+                        }
+                        <div id='optionsmenu-pre-click'>
+                            <button className="btn-navbar" onClick={this.showMenu}>
+                                <h4>•••</h4>
+                            </button>
+                        </div>
                         <OptionsMenu
+                            showMenu={this.state.showMenu}
                             shouldHideFriendsTab={
                                 !this.state.isUserStillLoading && !this.state.isExistingUser
                             }

@@ -114,7 +114,6 @@ class AuthenticatedProjectSearch extends React.Component {
                     hasMore: results.data.length !== DYNAMIC_CONTENT_LENGTH ? false : true
                 })
             })
-
     }
 
     render() {

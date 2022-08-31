@@ -1,7 +1,3 @@
-#pursuitcategoryinput {
-    @include meta-buttons;
-}
-
-#pursuitcategoryinput-select{
-    @include brief-text-input;
+#pursuitcategoryinput-select {
+    width: $brief-text-input;
 }

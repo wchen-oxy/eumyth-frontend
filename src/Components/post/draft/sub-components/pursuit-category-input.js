@@ -12,7 +12,7 @@ const PursuitCategoryInput = (props) => {
     }
 
     return (
-        <div id='pursuitcategoryinput'>
+        <div className='btn-meta'>
             <label>Pursuit</label>
             <select
                 name="pursuit-category"

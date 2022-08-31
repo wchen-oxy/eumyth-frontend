@@ -1,7 +1,3 @@
-#titleinput {
-    @include meta-buttons;
-}
-
 #titleinput-text {
-    @include long-text-input;
+    width: 50%;
 }

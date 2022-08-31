@@ -4,7 +4,7 @@ import { PROJECT } from 'utils/constants/flags';
 
 const TitleInput = (props) => {
     return (
-        <div id='titleinput'>
+        <div className='btn-meta'>
             <label>Post Title</label>
             <TextareaAutosize
                 name='title'

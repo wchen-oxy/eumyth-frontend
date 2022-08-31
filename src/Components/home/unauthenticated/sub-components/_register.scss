@@ -7,21 +7,12 @@
     }
 }
 
-#welcomeregisterform-register {
-    @include hero-button;
-}
 #welcomeregisterform-register:disabled {
-    @include hero-button;
     background-color: rgb(197, 197, 197);
 }
-
-#welcomeregisterform-login {
-    @include content-switch-button;
-}
-
+ 
 .welcomeregisterform-text {
     input {
-        @include text-input;
         width: 100%;
     }
 }

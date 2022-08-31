@@ -2,7 +2,7 @@ import React from 'react';
 
 const DateInput = (props) =>
 (
-    <div id='datainput'>
+    <div className='btn-meta'>
         <label>Date</label>
         <input
             type='date'

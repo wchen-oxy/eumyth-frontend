@@ -1,7 +1,3 @@
-#minutesinput {
-    @include meta-buttons;
-}
-
 #minutesinput-number{
-    @include number-input;
+    width: $input-number;
 }

@@ -22,6 +22,7 @@ const WelcomeRegisterForm = (props) => {
             <input
               type="text"
               placeholder="Email"
+              className='input-text'
               name="email"
               autoComplete="off"
               onChange={props.onRegisterEmailChange}
@@ -31,6 +32,7 @@ const WelcomeRegisterForm = (props) => {
             <input
               type="password"
               placeholder="Password"
+              className='input-text'
               name="password"
               autoComplete="off"
               onChange={checkPasswordValid}
@@ -39,6 +41,7 @@ const WelcomeRegisterForm = (props) => {
           <p>{disableSubmit ? "Password must be at least 6 characters" : null}</p>
           <input
             id="welcomeregisterform-register"
+            className='btn-hero'
             type="submit"
             value="Sign Up"
             disabled={disableSubmit}
@@ -47,7 +50,6 @@ const WelcomeRegisterForm = (props) => {
       </div>
       <p>Already Have An Account?</p>
       <button
-        id="welcomeregisterform-login"
         value={LOGIN_STATE}
         onClick={props.onToggleLoginRegisterWindow}
       >

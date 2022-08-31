@@ -229,7 +229,8 @@ class ShortPost extends React.Component {
   render() {
     if (this.state.window === INITIAL_STATE) {
       return (
-        <div id='shortpost'>
+        <div id='shortpost'
+          className="small-post-window">
           <h2 id="shortpost-header">Short Post</h2>
           {this.state.isCompressing && <p>Compressing Photos</p>}
           <div id='shortpost-nav'>
@@ -277,7 +278,7 @@ class ShortPost extends React.Component {
     }
     else {
       return (
-        <div id='shortpost-review'>
+        <div className='small-post-window'>
           <ReviewPost
             date={
               new Date()

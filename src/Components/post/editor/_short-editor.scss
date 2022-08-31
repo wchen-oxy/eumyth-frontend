@@ -10,14 +10,9 @@
 }
 
 #shorteditor-hero {
-    @include short-post-hero-image-container;
     #shorteditor-images {
         background-color: black;
     }
-}
-
-#shorteditor-side {
-    @include short-post-side-container;
 }
 
 #shorteditor-files {
