@@ -4,19 +4,19 @@ import { displayDifficulty, displayProgressionType } from "utils/constants/ui-te
 import EventLabels from "components/timeline/sub-components/event-labels";
 
 const ShortPostMetaInfo = (props) => {
-    const progression = displayProgressionType(props.progression);
+    // const progression = displayProgressionType(props.progression);
     const difficulty = displayDifficulty(props.difficulty);
 
     return (
         <div>
             <div className="shortpostmetainfo-thread">
-                <p>{props.pursuit} | <span>
+                <p>{props.pursuit_catgory} | <span>
                     {props.projectPreview &&
                         <a href={returnProjectURL(props.projectPreview.project_id)}>{props.projectPreview.title}</a>}
                 </span></p>
             </div>
             <div className="shortpostmetainfo-stat">
-                {progression && <p>{progression} Progress</p>}
+                {/* {progression && <p>{progression} Progress</p>} */}
                 {difficulty && <p>{difficulty} Difficulty</p>}
                 {props.min && <p>{props.min} minutes</p>}
                 {(props.labels?.length ?? 0) > 0 &&

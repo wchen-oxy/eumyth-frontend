@@ -1,5 +1,10 @@
 import imageCompression from 'browser-image-compression';
 
+export const formatPostText = (eventData) => {
+    return eventData?.text_data && eventData.is_paginated ?
+        JSON.parse(eventData.text_data) : eventData.text_data;
+};
+
 export const createPursuitArray = (pursuits) => {
     let pursuitNameArray = [];
     let projectArray = [];

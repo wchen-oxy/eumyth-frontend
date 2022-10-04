@@ -20,8 +20,8 @@ const TextContainer = (props) => (
             minRows={10}
             value={
                 props.isPaginated ?
-                    props.textPageText[props.imageIndex] :
-                    props.textPageText
+                    props.text[props.imageIndex] :
+                    props.text
             }
         />
         <p>{props.validFilesLength > 1 ? props.imageIndex + 1 : null}</p>

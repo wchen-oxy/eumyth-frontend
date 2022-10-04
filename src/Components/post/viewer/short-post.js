@@ -1,9 +1,6 @@
 import React from 'react';
 import imageCompression from 'browser-image-compression';
 import Comments from './comments';
-import PostHeader from './sub-components/post-header';
-import ShortHeroText from './sub-components/short-text';
-import ShortPostMetaInfo from './sub-components/short-post-meta';
 import ShortReEditor from '../editor/short-re-editor';
 import ReviewPost from '../draft/review-post';
 import CustomImageSlider from 'components/image-carousel/custom-image-slider';
@@ -13,40 +10,53 @@ import {
     EXPANDED,
     COLLAPSED,
     SHORT,
-    INITIAL_STATE,
-    EDIT_STATE,
-    REVIEW_STATE
 } from 'utils/constants/flags';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import ShortPostLargeContent from './large-content';
+import ShortPostInlineContent from './inline-content';
+import ShortPostMeta from '../draft/short-post-meta';
 
-import CaptionText from './sub-components/caption-text';
-import ActivityButtons from './sub-components/activity-buttons';
 
 
+const iterateDrafts = (drafts, projectID) => {
+    let index = 0;
+    for (const item of drafts) {
+        if (item.content_id === projectID) {
+            return drafts[index].content_id;
+        }
+        index++;
+    };
+    return null;
+}
+
+const findMatchedDraft = (drafts, projectPreviewRaw) => {
+    if (drafts && projectPreviewRaw?.project_id) {
+        return iterateDrafts(drafts, projectPreviewRaw.project_id);
+    }
+    else return null;
+}
 class ShortPostViewer extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            imageIndex: 0,
+
             annotations: null,
             activeAnnotations: [],
             fullCommentData: [],
             areAnnotationsHidden: true,
             selectedAnnotationIndex: null,
-            imageIndex: 0,
-            selectedFiles: [],
-            validFiles: [],
-            unsupportedFiles: [],
             showPromptOverlay: false,
-            date: this.props.eventData.date,
-            min: this.props.eventData.min_duration,
-            pursuitCategory: this.props.eventData.pursuit_category,
-            isPaginated: this.props.eventData.is_paginated,
-            progression: this.props.eventData.progression,
-            postDisabled: true,
-            window: INITIAL_STATE,
+
+            //shortpost meta
             tempTextForEdit: this.props.textData,
+
+            //reviewPost
+            projectPreview: null,
+            useImageForThumbnail: this.props.coverPhotoKey,
+
         };
 
         this.heroRef = React.createRef();
@@ -63,10 +73,11 @@ class ShortPostViewer extends React.Component {
         this.handleMouseOut = this.handleMouseOut.bind(this);
         this.handleMouseClick = this.handleMouseClick.bind(this);
         this.handleAnnotationSubmit = this.handleAnnotationSubmit.bind(this);
-        this.handleWindowChange = this.handleWindowChange.bind(this);
+        this.handlePaginatedChange = this.handlePaginatedChange.bind(this);
+        this.setUseImageForThumbnail = this.setUseImageForThumbnail.bind(this);
+        this.setUseCoverPhoto = this.setUseCoverPhoto.bind(this);
         this.handleIndexChange = this.handleIndexChange.bind(this);
         this.handleTextChange = this.handleTextChange.bind(this);
-        this.handlePaginatedChange = this.handlePaginatedChange.bind(this);
         this.handleModalLaunch = this.handleModalLaunch.bind(this);
         this.handleCommentDataInjection = this.handleCommentDataInjection.bind(this);
         this.deletePostCallback = this.deletePostCallback.bind(this);
@@ -83,6 +94,16 @@ class ShortPostViewer extends React.Component {
         }
         this.setState({ annotations: annotationArray }, this.loadProjectPreview);
     }
+
+    setUseImageForThumbnail(useImageForThumbnail) {
+        this.setState({ useImageForThumbnail })
+    }
+
+    setUseCoverPhoto(useCoverPhoto) {
+        this.setState({ useCoverPhoto })
+    }
+
+
     jumpToComment() {
         this.commentRef.current.scrollIntoView({ block: 'center' });
         this.commentRef.current.focus();
@@ -90,20 +111,29 @@ class ShortPostViewer extends React.Component {
 
     loadProjectPreview() {
         const projectPreviewID = this.props.eventData.project_preview_id;
-        if (projectPreviewID && !this.props.projectPreviewMap[projectPreviewID])
+        if (projectPreviewID && !this.props.projectPreviewMap[projectPreviewID]) {
             return AxiosHelper.getSingleProjectPreview(projectPreviewID)
                 .then((result) => {
                     this.setState({
-                        projectPreview: result.data
+                        projectPreview: result.data,
+
                     }, () => {
                         if (this.props.saveProjectPreview) {
-                            this.props.saveProjectPreview(result.data)
+                            this.props.saveProjectPreview(result.data);
                         }
+                        const draftData = findMatchedDraft(this.props.authUser.drafts, result.data);
+                        this.props.setDraft(draftData)
                     })
                 });
+        }
         else {
+            const projectPreview = this.props.projectPreviewMap[projectPreviewID];
             this.setState({
-                projectPreview: this.props.projectPreviewMap[projectPreviewID]
+                projectPreview,
+                selectedDraft: findMatchedDraft(this.props.authUser.drafts, projectPreview)
+            }, () => {
+                const draftData = findMatchedDraft(this.props.authUser.drafts, projectPreview);
+                this.props.setDraft(draftData)
             });
         }
     }
@@ -115,9 +145,8 @@ class ShortPostViewer extends React.Component {
                 this.props.authUser.profileID,
                 this.props.authUser.indexProfileID,
                 this.props.eventData._id,
-                this.props.eventData.pursuit_category,
-                this.props.eventData.min_duration,
-                this.props.eventData.progression,
+                this.props.pursuit,
+                this.props.minDuration,
             )
             .then((result) => {
                 if (this.props.projectID) {
@@ -393,31 +422,29 @@ class ShortPostViewer extends React.Component {
             })
     }
 
-    handleWindowChange(newWindow) {
-        if (newWindow === EDIT_STATE && !this.props.eventData.cover_photo_key) {
-            this.retrieveThumbnail();
-        }
-
-        this.setState({ window: newWindow });
-    }
-
     handleIndexChange(value) {
         this.setState({ imageIndex: value });
     }
 
-    handleTextChange(text) {
-        let prevText = this.state.tempTextForEdit;
-        if (this.state.isPaginated) {
-            prevText[this.state.imageIndex] = text;
+    handleTextChange(text, isTitle) {
+        if (isTitle) {
+            //Add Preview Title Stuff
+            this.props.setPreviewTitle(text);
         }
         else {
-            prevText = text;
+            let prevText = this.state.tempTextForEdit;
+            if (this.props.isPaginated) {
+                prevText[this.state.imageIndex] = text;
+            }
+            else {
+                prevText = text;
+            }
+            this.setState({ tempTextForEdit: prevText });
         }
-        this.setState({ tempTextForEdit: prevText });
     }
 
     handlePaginatedChange() {
-        if (this.state.isPaginated === false) {
+        if (this.props.isPaginated === false) {
             const imageCount = this.props.eventData.image_data.length;
             let postArray = [];
             for (let i = 0; i < imageCount; i++) {
@@ -428,14 +455,14 @@ class ShortPostViewer extends React.Component {
                     postArray.push([]);
                 }
             }
-            this.setState({ tempTextForEdit: postArray, isPaginated: true });
+            this.setState({ tempTextForEdit: postArray }, () => this.props.setIsPaginated(true));
         }
         else {
             if (window.confirm(`Switching back will remove all your captions except 
                                 for the current one. Keep going?`
             )) {
                 const textData = this.state.tempTextForEdit[this.state.imageIndex];
-                this.setState({ tempTextForEdit: textData, isPaginated: false });
+                this.setState({ tempTextForEdit: textData }, () => this.props.setIsPaginated(false));
             }
         }
     }
@@ -470,174 +497,81 @@ class ShortPostViewer extends React.Component {
     }
 
     render() {
+        console.log(this.props.eventData);
         const isOwnProfile = this.props.authUser?.username === this.props.eventData.username;
         const headerProps = {
             isOwnProfile,
             editProjectState: this.props.editProjectState,
-            date: this.state.date,
+            date: this.props.date,
             displayPhoto: this.props.eventData.display_photo_key,
             username: this.props.eventData.username
         }
         const metaProps = {
-            isPaginated: this.state.isPaginated,
-            progression: this.state.progression,
-            labels: this.props.eventData.labels,
-            pursuit: this.state.pursuitCategory,
-            min: this.state.min,
+            isPaginated: this.props.isPaginated,
+            labels: this.props.labels,
+
+
+            minDuration: this.props.minDuration,
             projectPreview: this.state.projectPreview,
-            difficulty: this.props.eventData.difficulty
+            difficulty: this.props.difficulty
 
         };
-
         const textProps = {
-            isPaginated: this.state.isPaginated,
+            isPaginated: this.props.isPaginated,
             textData: this.props.textData,
             title: this.props.eventData.title
-        }
-
-        if (this.state.window === INITIAL_STATE) {
+        };
+        if (this.props.window === 1) { //1
             const hasImages = this.props.eventData.image_data?.length ?? true;
+            const sharedProps = {
+                headerProps,
+                metaProps,
+                textProps,
+                hasImages,
+                annotations: this.state.annotations,
+                imageIndex: this.state.imageIndex,
+                title: this.props.eventData.title,
+                textData: this.props.textData,
+                renderImageSlider: this.renderImageSlider,
+                renderComments: this.renderComments,
 
+            };
             if (this.props.largeViewMode) {
 
-
-                /* <PostHeader
-        {...headerProps}
-        onEditClick={this.handleWindowChange}
-        onDeletePost={this.handleDeletePost}
-    /> */
-                if (hasImages) {
-                    return (
-                        <div className='small-post-window'>
-                            <div id='shortpostviewer-large-hero'
-                                className='with-image'>
-                                {this.state.annotations && this.renderImageSlider(EXPANDED)}
-                                <div
-                                    className='shortpostviewer-large-side  short-post-side-container'
-                                    ref={this.heroRef}
-                                >
-                                    <ShortPostMetaInfo
-                                        {...metaProps}
-                                    />
-                                    <CaptionText
-                                        needsSideCaption
-                                        index={this.state.imageIndex}
-                                        {...textProps} />
-                                    <ActivityButtons
-                                        {...headerProps}
-                                        jumpToComment={this.jumpToComment}
-                                        onEditClick={this.handleWindowChange}
-                                        onDeletePost={this.handleDeletePost}
-                                    />
-                                </div>
-                            </div>
-                            {this.renderComments(EXPANDED)}
-                        </div>
-                    )
-
+                const activityFunctions = {
+                    jumpToComment: this.jumpToComment,
+                    onEditClick: this.props.setPostStage,
+                    onDeletePost: this.handleDeletePost
                 }
-                else {
-                    return (
-                        <div className='shortpostviewer-window'>
-
-                            <ShortPostMetaInfo
-                                {...metaProps}
-                            />
-                            <CaptionText  {...textProps} />
-                            <div className='shortpostviewer-large-hero-text'>
-                                <ShortHeroText
-                                    title={this.props.eventData.title}
-                                    textData={this.props.textData} />
-                                <ActivityButtons
-                                    {...headerProps}
-                                    jumpToComment={this.jumpToComment}
-                                    onEditClick={this.handleWindowChange}
-                                    onDeletePost={this.handleDeletePost}
-                                />
-                            </div>
-
-                            {this.renderComments(EXPANDED)}
-                        </div>
-                    );
-                }
+                return (
+                    <ShortPostLargeContent
+                        heroRef={this.heroRef}
+                        activityFunctions={activityFunctions}
+                        {...sharedProps}
+                    />
+                );
             }
-            //with images
-
-            /* {!headerProps.editProjectState && headerProps.isOwnProfile &&
-                                        <HiddenButtons
-                                            isOwnProfile={headerProps.isOwnProfile}
-                                            onEditClick={this.handleWindowChange}
-                                            onDeletePost={this.handleDeletePost}
-                                        />
-                                    } */
             else {
-                if (hasImages) {
-                    return (
-                        <>
-                            <div
-                                id='shortpostviewer-inline-hero'
-                                onClick={this.handleModalLaunch}
-                            >
-                                <PostHeader
-                                    {...headerProps}
-                                />
-                                <div className='shortpostviewer-inline-side'>
-                                    {this.props.eventData.title &&
-                                        <h2 className="shortpostviewer-title"> {this.props.eventData.title}</h2>}
-                                    <ShortPostMetaInfo
-                                        {...metaProps}
-                                    />
+                return (
+                    <ShortPostInlineContent
+                        onModalLaunch={this.handleModalLaunch}
+                        {...sharedProps}
+                    />)
 
-                                    <CaptionText
-                                        index={this.state.imageIndex}
-                                        {...textProps} />
-                                </div>
-                                {this.state.annotations && this.renderImageSlider(COLLAPSED)}
-                            </div>
-                            {this.renderComments(COLLAPSED)}
-                        </>
-                    );
-                }
-                else {
-                    return (
-                        <div onClick={this.handleModalLaunch}>
-                            <div className='shortpostviewer-inline-hero' >
 
-                                <div className='shortpostviewer-inline-side'>
-                                    <PostHeader
-                                        {...headerProps}
-                                    />
-                                    <ShortPostMetaInfo
-                                        {...metaProps}
-                                    />
-                                </div>
-                                <div className='shortpostviewer-inline-hero'>
-                                    {this.props.eventData.title &&
-                                        <h2 className="shortpostviewer-title"> {this.props.eventData.title}</h2>}
-                                    <ShortHeroText
-                                        index={this.state.imageIndex}
-                                        isPaginated={this.state.isPaginated}
-                                        textData={this.props.textData} />
-                                </div>
-                            </div>
-                            {this.renderComments(COLLAPSED)}
-                        </div>
-                    )
-
-                }
             }
         }
-        else if (this.state.window === EDIT_STATE) {
+        else if (this.props.window === 2) {//2
             return (
-                <div className='shortpostviewer-window' >
+                <div className='shortpostviewer-window small-post-window' >
                     <h4>Edit your Post!</h4>
                     <div className='shortpostviewer-nav'>
                         <button
-                            onClick={() => (this.handleWindowChange(INITIAL_STATE))}>
+                            onClick={() => (this.props.setPostStage(1))}>
                             Return
                         </button>
                         <button
-                            onClick={() => this.handleWindowChange(REVIEW_STATE)}>
+                            onClick={() => this.props.setPostStage(3)}>
                             Review Post
                         </button>
 
@@ -646,7 +580,7 @@ class ShortPostViewer extends React.Component {
                         imageIndex={this.state.imageIndex}
                         eventData={this.props.eventData}
                         textData={this.state.tempTextForEdit}
-                        isPaginated={this.state.isPaginated}
+                        isPaginated={this.props.isPaginated}
                         onArrowPress={this.handleArrowPress}
                         onTextChange={this.handleTextChange}
                         onPaginatedChange={this.handlePaginatedChange}
@@ -654,40 +588,102 @@ class ShortPostViewer extends React.Component {
                 </div>
             )
         }
-        else if (this.state.window === REVIEW_STATE) {
+        else if (this.props.window === 3) {
             let formattedDate = new Date().toISOString().substr(0, 10);
-            if (this.props.eventData.date) {
+            if (this.props.date) {
                 formattedDate =
-                    new Date(this.props.eventData.date)
+                    new Date(this.props.date)
                         .toISOString()
                         .substring(0, 10);
             }
             return (
-                <div className='shortpostviewer-window'>
+                <ShortPostMeta
+                    authUser={this.props.authUser}
+                    current={this.props.window}
+                    date={formattedDate}
+                    difficulty={this.props.difficulty}
+                    previousState={2}
+                    previewTitle={this.props.previewTitle}
+
+                    isPaginated={this.props.isPaginated}
+                    postPrivacyType={this.state.postPrivacyType}
+                    setPostPrivacyType={this.props.setPostPrivacyType}
+                    setPostStage={this.props.setPostStage}
+                    handleTitleChange={this.handleTextChange}
+
+                    threadTitle={this.props.threadTitle}
+                    titlePrivacy={this.props.titlePrivacy}
+                    threadToggleState={this.props.threadToggleState}
+                    isCompleteProject={this.props.isCompleteProject}
+                    setDifficulty={this.props.setDifficulty}
+                    setDate={this.props.setDate}
+                    setMinDuration={this.props.setMinDuration}
+                    setUseCoverPhoto={this.setUseCoverPhoto}
+                    setUseImageForThumbnail={this.setUseImageForThumbnail}
+                />
+            );
+        }
+        else if (this.props.window === 4) {
+
+            const required = {
+                selectedDraft: this.state.selectedDraft,
+                textData: this.state.textData,
+                selectedPursuit: this.props.selectedPursuit,
+                date: this.props.date,
+                threadTitle: this.props.threadTitle,
+                titlePrivacy: this.props.titlePrivacy,
+                threadToggleState: this.props.threadToggleState,
+                isCompleteProject: this.props.isCompleteProject,
+                drafts: this.props.authUser.drafts,
+                pursuitNames: this.props.authUser.pursuits,
+            }
+
+            const optional = {
+                coverPhoto: this.state.coverPhoto,
+                useImageForThumbnail: this.state.useImageForThumbnail,
+            }
+
+            return (
+                <div className='shortpostviewer-window small-post-window'>
                     <ReviewPost
+                        {...required}
+                        {...optional}
                         isUpdateToPost
-                        authUser={this.props.authUser}
                         isPostOnlyView={this.props.isPostOnlyView}
-                        selectedLabels={this.props.eventData.labels}
-                        difficulty={this.props.eventData.difficulty}
-                        progression={this.props.eventData.progression}
-                        previousState={EDIT_STATE}
-                        postID={this.props.eventData._id}
-                        coverPhoto={this.state.coverPhoto}
-                        coverPhotoKey={this.props.eventData?.cover_photo_key ?? null}
-                        isPaginated={this.state.isPaginated}
-                        projectPreviewID={this.props.eventData.project_preview_id}
-                        projectPreviewRaw={this.state.projectPreview}
-                        previewTitle={this.props.eventData.title}
-                        previewSubtitle={this.props.eventData.subtitle}
-                        date={formattedDate}
-                        min={this.props.eventData.min_duration}
-                        selectedPursuit={this.props.eventData.pursuit_category}
+                        previousState={3}
+
+                        // coverPhoto={this.state.coverPhoto}
+                        // selectedDraft={this.state.selectedDraft}
+                        // textData={this.state.tempTextForEdit}
+                        // isPaginated={this.props.isPaginated}
+
+                        // authUser={this.props.authUser}
+                        // postPrivacyType={this.state.postPrivacyType}
+                        // selectedLabels={this.props.eventData.labels}
+                        // difficulty={this.props.difficulty}
+                        // postID={this.props.eventData._id}
+                        // coverPhotoKey={this.props.eventData?.cover_photo_key ?? null}
+                        // projectPreviewID={this.props.eventData.project_preview_id}
+                        // previewTitle={this.props.previewTitle}
+                        // previewSubtitle={this.props.eventData.subtitle}
+                        // minDuration={this.props.minDuration}
+
+                        // labels={this.props.labels}
+                        // selectedPursuit={this.props.selectedPursuit}
+                        // threadTitle={this.props.threadTitle}
+                        // titlePrivacy={this.props.titlePrivacy}
+                        // threadToggleState={this.props.threadToggleState}
+                        // isCompleteProject={this.props.isCompleteProject}
+                        setDraft={this.props.setDraft}
+                        setThreadTitle={this.setThreadTitle}
+                        setThreadToggleState={this.props.setThreadToggleState}
+                        setTitlePrivacy={this.props.setTitlePrivacy}
+                        setIsCompleteProject={this.props.setIsCompleteProject}
+                        setSelectedPursuit={this.props.setSelectedPursuit}
+
                         closeModal={this.props.closeModal}
-                        postType={SHORT}
-                        textData={this.state.tempTextForEdit}
-                        handlePreferredPostPrivacyChange={this.handlePreferredPostPrivacyChange}
-                        setPostStage={this.handleWindowChange}
+                        setPostStage={this.props.setPostStage}
+                        handleFormAppend={this.props.handleFormAppend}
                     />
                 </div>
             );
@@ -695,8 +691,7 @@ class ShortPostViewer extends React.Component {
         else {
             throw new Error('No stage matched');
         }
+
     }
-
 }
-
 export default ShortPostViewer;

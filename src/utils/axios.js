@@ -101,8 +101,7 @@ export default class AxiosHelper {
                 indexUserID,
                 postID,
                 pursuit,
-                duration,
-                progression
+                duration
             }
         });
     }
@@ -344,7 +343,7 @@ export default class AxiosHelper {
         });
     }
 
-    static publishProject(projectID){
+    static publishProject(projectID) {
         return axios.put(urls.PROJECT_PUBLISH_URL, {
             projectID: projectID
         })

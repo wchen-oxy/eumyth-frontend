@@ -1,0 +1,27 @@
+#shortpostinitial {
+    @include flex-display-column;
+}
+
+#shortpostinitial-title {
+    text-align: center;
+}
+
+.shortpostinitial-nav {
+    @include flex-display-row;
+    justify-content: space-between;
+    button {
+        height: fit-content;
+    }
+    p {
+        margin: 0;
+    }
+}
+
+#shortpostinitial-title {
+    width: 50%;
+    margin: 0 auto;
+}
+
+#shortpostinitial-input {
+    width: 100%;
+}

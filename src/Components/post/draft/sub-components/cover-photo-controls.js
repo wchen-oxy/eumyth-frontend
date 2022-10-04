@@ -1,28 +1,21 @@
 import React from 'react';
-import { SHORT } from 'utils/constants/flags';
 
 const CoverPhotoControls = (props) => {
-    if (props.postType === SHORT) {
-        const allowCoverPhoto = props.isUpdateToPost || !props.isUpdateToPost && props.imageArray;
-        return (
-            allowCoverPhoto &&
-            (<div className='btn-meta'>
-                <label>Use First Image For Thumbnail</label>
-                <input
-                    type='checkbox'
-                    id='coverphotocontrols-content'
-                    defaultChecked={props.useImageForThumbnail}
-                    onChange={() => {
-                        props.setUseImageForThumbnail(!props.useImageForThumbnail)
-                    }}
-                />
-            </div>)
-        )
-
-    }
-    else {
-        throw new Error('No Post Types Matched for Cover Photo Controls');
-    }
+    const allowCoverPhoto = props.isUpdateToPost || !props.isUpdateToPost && props.imageArray;
+    return (
+        allowCoverPhoto &&
+        (<div className='btn-meta'>
+            <label>Use First Image For Thumbnail</label>
+            <input
+                type='checkbox'
+                id='coverphotocontrols-content'
+                defaultChecked={props.useImageForThumbnail}
+                onChange={() => {
+                    props.setUseImageForThumbnail(!props.useImageForThumbnail)
+                }}
+            />
+        </div>)
+    )
 }
 
 export default CoverPhotoControls;

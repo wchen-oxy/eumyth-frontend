@@ -1,27 +1,29 @@
 import React from 'react';
 import imageCompression from 'browser-image-compression';
-import TextareaAutosize from 'react-textarea-autosize';
-import ShortEditor from '../editor/short-editor';
 import ReviewPost from './review-post';
-import { INITIAL_STATE, REVIEW_STATE, SHORT } from 'utils/constants/flags';
+import ShortPostMeta from './short-post-meta';
+import ShortPostInitial from './short-post-initial';
 
 class ShortPost extends React.Component {
   constructor(props) {
     super(props);
+
+    // const complexDraftStates =
+    //   draftStateSetter(this.props);
     this.state = {
+      window: 1,
+      imageIndex: 0,
+
       selectedFiles: [],
       validFiles: [],
       unsupportedFiles: [],
       imageArray: [],
-      imageIndex: 0,
-      textData: '',
-      isPaginated: false,
-      postDisabled: true,
-      window: INITIAL_STATE,
-      previewTitle: '',
       tinyPhotos: null,
-    };
 
+      textData: '',
+
+    };
+    this.warnModalClose = this.warnModalClose.bind(this);
     this.handleIndexChange = this.handleIndexChange.bind(this);
     this.setSelectedFiles = this.setSelectedFiles.bind(this);
     this.setValidFiles = this.setValidFiles.bind(this);
@@ -31,7 +33,6 @@ class ShortPost extends React.Component {
     this.handleUnsupportedFileChange = this.handleUnsupportedFileChange.bind(this);
     this.handleSelectedFileChange = this.handleSelectedFileChange.bind(this);
     this.handleDisablePost = this.handleDisablePost.bind(this);
-    this.setPostStage = this.setPostStage.bind(this);
     this.generateValidFiles = this.generateValidFiles.bind(this);
     this.handlePaginatedChange = this.handlePaginatedChange.bind(this);
     this.handleSortEnd = this.handleSortEnd.bind(this);
@@ -40,6 +41,12 @@ class ShortPost extends React.Component {
     this.createTinyFiles = this.createTinyFiles.bind(this);
     this.handleArrowPress = this.handleArrowPress.bind(this);
 
+  }
+
+  warnModalClose() {
+    if (window.confirm('Do you want to discard this post?')) {
+      this.props.closeModal();
+    }
   }
 
   transformImageProp(validFiles) {
@@ -103,21 +110,21 @@ class ShortPost extends React.Component {
   }
 
   handlePaginatedChange() {
-    if (this.state.isPaginated === false) {
+    if (this.props.isPaginated === false) {
       let postArray = [];
       const imageCount = this.state.validFiles.length;
       postArray.push(this.state.textData);
       for (let i = 1; i < imageCount; i++) {
         postArray.push([]);
       }
-      this.setState({ textData: postArray, isPaginated: true });
+      this.setState({ textData: postArray }, () => this.props.setIsPaginated(true));
     }
     else {
       if (window.confirm(`Switching back will remove all your captions except 
                           for the first one. Keep going?`
       )) {
         const textData = this.state.textData[0];
-        this.setState({ textData: textData, isPaginated: false });
+        this.setState({ textData: textData }, () => this.props.setIsPaginated(false));
       }
     }
   }
@@ -162,15 +169,16 @@ class ShortPost extends React.Component {
         })));
     }
   }
-  handleTextChange(text, isPostText) {
-    if (isPostText) {
-      this.setState({ previewTitle: text });
+
+  handleTextChange(text, isTitle) {
+    if (isTitle) {
+      this.props.setPreviewTitle(text);
     }
     else {
       let newState;
       const areFilesValid = this.state.validFiles.length === 0
         || this.state.unsupportedFiles.length > 0;
-      if (this.state.isPaginated) {
+      if (this.props.isPaginated) {
         let updatedArray = this.state.textData;
         updatedArray[this.state.imageIndex] = text;
         newState = updatedArray;
@@ -202,10 +210,6 @@ class ShortPost extends React.Component {
     this.setState({ postDisabled: disabled });
   }
 
-  setPostStage(value) {
-    this.setState({ window: value });
-  }
-
   generateValidFiles() {
     let selectedFiles = this.state.selectedFiles;
     let filteredArr = selectedFiles.reduce((accumulator, current) => {
@@ -227,82 +231,122 @@ class ShortPost extends React.Component {
   }
 
   render() {
-    if (this.state.window === INITIAL_STATE) {
+    const editorStates = {
+      selectedFiles: this.state.selectedFiles,
+      validFiles: this.state.validFiles,
+      imageArray: this.state.imageArray,
+      unsupportedFiles: this.state.unsupportedFiles,
+      isPaginated: this.props.isPaginated,
+      text: this.state.textData,
+      imageIndex: this.state.imageIndex,
+    };
+
+    const metaStates = {
+      difficulty: this.props.difficulty,
+      imageArray: this.state.tinyPhotos,
+      min: this.props.minDuration,
+      date: this.props.date,
+      previewTitle: this.props.previewTitle,
+      selectedLabels: this.props.labels
+    }
+
+
+    if (this.props.window === 1) {
+      const navFunctions = {
+        onModalClose: this.warnModalClose,
+        setPostStage: this.props.setPostStage,
+      }
+      const navStates = {
+        previewTitle: this.props.previewTitle,
+        isPostDisabled: this.state.postDisabled,
+        isCompressing: this.state.isCompressing,
+        window: this.props.window,
+      }
+
+      const editorFunctions = {
+        onSortEnd: this.handleSortEnd,
+        setImageArray: this.setImageArray,
+        onPaginatedChange: this.handlePaginatedChange,
+        handleArrowPress: this.handleArrowPress,
+        onSelectedFileChange: this.handleSelectedFileChange,
+        onUnsupportedFileChange: this.handleUnsupportedFileChange,
+        onDisablePost: this.handleDisablePost,
+        setValidFiles: this.setValidFiles,
+        setSelectedFiles: this.setSelectedFiles,
+        setUnsupportedFiles: this.setUnsupportedFiles,
+        onTextChange: this.handleTextChange,
+      };
+
       return (
-        <div id='shortpost'
-          className="small-post-window">
-          <h2 id="shortpost-header">Short Post</h2>
-          {this.state.isCompressing && <p>Compressing Photos</p>}
-          <div id='shortpost-nav'>
-            <button onClick={this.props.onModalClose}>
-              Discard
-            </button>
-            <button
-              value={REVIEW_STATE}
-              disabled={this.state.postDisabled}
-              onClick={e => this.setPostStage(e.target.value)}
-            >
-              Review Post
-            </button>
-          </div>
-          <div id='shortpost-title'>
-            <TextareaAutosize
-              id='textcontainer-text'
-              placeholder='Title'
-              onChange={(e) => this.handleTextChange(e.target.value, true)}
-              minRows={1}
-              value={this.state.previewTitle} />
-          </div>
-          <ShortEditor
-            selectedFiles={this.state.selectedFiles}
-            validFiles={this.state.validFiles}
-            imageArray={this.state.imageArray}
-            unsupportedFiles={this.state.unsupportedFiles}
-            isPaginated={this.state.isPaginated}
-            textPageText={this.state.textData}
-            onSortEnd={this.handleSortEnd}
-            setImageArray={this.setImageArray}
-            onPaginatedChange={this.handlePaginatedChange}
-            imageIndex={this.state.imageIndex}
-            handleArrowPress={this.handleArrowPress}
-            onTextChange={this.handleTextChange}
-            onSelectedFileChange={this.handleSelectedFileChange}
-            onUnsupportedFileChange={this.handleUnsupportedFileChange}
-            onDisablePost={this.handleDisablePost}
-            setValidFiles={this.setValidFiles}
-            setSelectedFiles={this.setSelectedFiles}
-            setUnsupportedFiles={this.setUnsupportedFiles}
-          />
-        </div>
+        <ShortPostInitial
+          {...navStates}
+          {...navFunctions}
+          editorStates={editorStates}
+          editorFunctions={editorFunctions}
+        />
       );
     }
-    else {
+    else if (this.props.window === 2) {
+
+      return (
+        <ShortPostMeta
+          {...metaStates}
+          authUser={this.props.authUser}
+          current={this.props.window}
+          previousState={1}
+          handleTitleChange={this.handleTextChange}
+          postPrivacyType={this.props.postPrivacyType}
+          setPostPrivacyType={this.props.setPostPrivacyType}
+          difficulty={this.props.difficulty}
+          setDifficulty={this.props.setDifficulty}
+          date={this.props.date}
+          setDate={this.props.setDate}
+          setMinDuration={this.props.setMinDuration}
+          setLabels={this.props.setLabels}
+
+          closeModal={this.props.closeModal}
+          setPostStage={this.props.setPostStage}
+        />
+      );
+    }
+    else if (this.props.window === 3) {
+      const required = {
+        selectedDraft: this.props.selectedDraft,
+        textData: this.state.textData,
+        selectedPursuit: this.props.selectedPursuit,
+        date: this.props.date,
+        threadTitle: this.props.threadTitle,
+        titlePrivacy: this.props.titlePrivacy,
+        threadToggleState: this.props.threadToggleState,
+        isCompleteProject: this.props.isCompleteProject,
+        drafts: this.props.authUser.drafts,
+        pursuitNames: this.props.authUser.pursuits
+      }
+
+      const optional = {
+        coverPhoto: this.state.coverPhoto,
+        compressedPhotos: this.state.tinyPhotos,
+      }
+
       return (
         <div className='small-post-window'>
           <ReviewPost
-            date={
-              new Date()
-                .toISOString()
-                .substr(0, 10)
-            }
-            difficulty={0}
-            progression={1}
-            previousState={INITIAL_STATE}
-            authUser={this.props.authUser}
-            isPaginated={this.state.isPaginated}
-            previewTitle={this.state.previewTitle}
+            {...required}
+            {...optional}
+            previousState={2}
+
+            setDraft={this.props.setDraft}
+            setThreadTitle={this.props.setThreadTitle}
+            setThreadToggleState={this.props.setThreadToggleState}
+            setTitlePrivacy={this.props.setTitlePrivacy}
+            setIsCompleteProject={this.props.setIsCompleteProject}
+            setSelectedPursuit={this.props.setSelectedPursuit}
+
             closeModal={this.props.closeModal}
-            postType={SHORT}
-            imageArray={this.state.tinyPhotos}
-            coverPhoto={this.state.coverPhoto}
-            textData={this.state.textData}
-            preferredPostPrivacy={this.props.authUser.preferredPostType}
-            handlePreferredPostPrivacyChange={this.props.handlePreferredPostPrivacyChange}
-            setPostStage={this.setPostStage}
-            handleTitleChange={this.handleTextChange}
+            setPostStage={this.props.setPostStage}
+            handleFormAppend={this.props.handleFormAppend}
           />
         </div>
-
       );
     }
   }

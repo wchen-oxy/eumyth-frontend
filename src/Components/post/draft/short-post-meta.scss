@@ -1,0 +1,17 @@
+#shortpostmeta-title{
+    text-align: center;
+}
+
+#shortpostmeta-desc{
+
+}
+
+.shortpostmeta-nav{
+    @include flex-display-row;
+    justify-content: space-between;
+    padding-left: 8px;
+    padding-right: 8px;
+    button{
+        height: fit-content;
+    }
+}

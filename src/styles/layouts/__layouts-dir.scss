@@ -26,6 +26,9 @@
 
 @import "src/components/post/draft/review-post";
 @import "src/components/post/draft/short-post";
+@import "src/components/post/draft/short-post-initial";
+@import "src/components/post/draft/short-post-meta";
+
 
 @import "src/components/post/draft/sub-components/cover-photo-controls";
 @import "src/components/post/draft/sub-components/data-input";
@@ -36,6 +39,8 @@
 @import "src/components/post/draft/sub-components/project-draft-controls";
 @import "src/components/post/draft/sub-components/pursuit-category-input";
 @import "src/components/post/draft/sub-components/title-input";
+@import "src/components/post/draft/sub-components/steps";
+@import "src/components/post/draft/sub-components/step";
 
 @import "src/components/post/editor/short-editor";
 @import "src/components/post/editor/short-re-editor";

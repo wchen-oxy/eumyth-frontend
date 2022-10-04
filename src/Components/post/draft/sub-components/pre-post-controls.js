@@ -12,8 +12,8 @@ const PrePostControls = (props) => {
             <div>
                 <select
                     name='posts'
-                    value={props.preferredPostPrivacy ?
-                        props.preferredPostPrivacy : PUBLIC_FEED}
+                    value={props.postPrivacyType ?
+                        props.postPrivacyType : PUBLIC_FEED}
                     onChange={(e) => props.setPostPrivacyType(e.target.value)}
                 >
                     <option value={PRIVATE}>

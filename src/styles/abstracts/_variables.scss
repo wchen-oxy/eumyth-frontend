@@ -1,7 +1,42 @@
-$default-font: "Open Sans", sans-serif;
+//colors
 $primary-color: #ed4071;
 $primary-color-faded: #ff8aa5;
 $primary-text-color: black;
+
+//reds
+$red-900: #4e0e2e;
+$red-800: #700230;
+$red-700: #8d0130;
+$red-600: #c41d43;
+$red-500: #e8264d;
+$red-400: #f54d6b;
+$red-300: #f7788f;
+$red-200: #feb3c0;
+$red-100: #ffebee;
+
+//blues
+$blue-900: #042153;
+$blue-800: #0c2d6f;
+$blue-700: #0b329d;
+$blue-600: #1d43c4;
+$blue-500: #5374e9;
+$blue-400: #738afc;
+$blue-300: #98aafb;
+$blue-200: #dce1ff;
+$blue-100: #f1f2fe;
+
+//black
+$black-900: #2c2c2c;
+$black-800: #464444;
+$black-700: #5a5959;
+$black-600: #747272;
+$black-500: #8d8d8d;
+$black-400: #a2a1a1;
+$black-300: #c7c5c5;
+$black-200: #e0dddd;
+$black-100: #f8f8f8;
+
+$default-font: "Open Sans", sans-serif;
 $primary-calc-medium-font-size: calc(10px + 2vmin);
 $primary-extra-large-font-size: 30px;
 $primary-large-font-size: 22.5px;
@@ -29,6 +64,9 @@ $small-post-draft-height: 350px;
 $small-post-height: calc(100vh - 50px);
 $small-post-width: 76vw;
 $small-button-window: 19vh;
+
+//step indicator
+$size-step-indicator: 48px;
 
 //z-indexes
 $navbar: 25;

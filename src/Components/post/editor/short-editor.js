@@ -131,7 +131,7 @@ class ShortEditor extends React.Component {
     }
 
     updateDisabilityState = (invalidFound) => {
-        invalidFound && this.props.textPageText.length === 0 ?
+        invalidFound && this.props.text.length === 0 ?
             (this.props.onDisablePost(true))
             :
             (this.props.onDisablePost(false));
@@ -162,7 +162,7 @@ class ShortEditor extends React.Component {
                 isPaginated={this.props.isPaginated}
                 onPaginatedChange={this.props.onPaginatedChange}
                 onTextChange={this.props.onTextChange}
-                textPageText={this.props.textPageText}
+                text={this.props.text}
                 imageIndex={this.props.imageIndex}
             />
         )

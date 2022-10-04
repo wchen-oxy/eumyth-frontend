@@ -4,6 +4,7 @@ export const NOT_A_FOLLOWER_STATE = 'NOT_A_FOLLOWER';
 export const FOLLOWED_STATE = 'FOLLOWING';
 export const UNFOLLOWED_STATE = 'UNFOLLOWED';
 export const INITIAL_STATE = 'INITIAL_STATE';
+export const EXTRAS_STATE = 'EXTRAS_STATE';
 export const EDIT_STATE = 'EDIT_STATE';
 export const REVIEW_STATE = 'REVIEW_STATE';
 export const LOGIN_STATE = 'LOGIN_STATE';

@@ -1,0 +1,35 @@
+.step{
+    h4{
+        margin: 0;
+    }
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.step-number,
+.step-number-disabled {
+    // justify-content: center;
+    // margin: auto;
+    height: $size-step-indicator;
+    width: $size-step-indicator;
+    h3 {
+        text-align: center;
+        margin: auto;
+        line-height: $size-step-indicator;
+    }
+}
+
+.step-number {
+    border-radius: 50%;
+    background-color: $blue-500;
+    h3 {
+        color: $blue-100;
+    }
+}
+
+.step-number-disabled {
+    border-radius: 50%;
+    background-color: $black-500;
+    h3 {
+        color: $black-100;
+    }
+}

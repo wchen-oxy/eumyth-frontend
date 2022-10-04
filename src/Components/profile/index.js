@@ -3,9 +3,8 @@ import PursuitHolder from './sub-components/pursuit-holder';
 import AxiosHelper from 'utils/axios';
 import { AuthUserContext } from 'store/session';
 import FollowButton from './sub-components/follow-buttons';
-import ShortPostViewer from '../post/viewer/short-post';
+import PostController from '../post/index';
 import ProjectController from '../project/index';
-import PostController from '../post/post-controller';
 import CoverPhoto from './sub-components/cover-photo';
 import { withFirebase } from 'store/firebase';
 import { returnUserImageURL, returnUsernameURL } from 'utils/url';
@@ -21,7 +20,7 @@ import {
     FOLLOWED_STATE,
     THREADS
 } from 'utils/constants/flags';
-import { createPursuitArray } from 'utils';
+import { createPursuitArray, formatPostText } from 'utils';
 import HeroContent from './hero-content';
 
 const selectMessage = (action, isPrivate) => {
@@ -75,6 +74,7 @@ class ProfilePageAuthenticated extends React.Component {
             followerStatus: null,
             feedIDList: null,
             contentType: null,
+            selectedContent: null,
             selectedPursuit: 'ALL',
             selectedPursuitIndex: 0,
             preferredPostPrivacy: null,
@@ -238,6 +238,7 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     loadMicroPostData(postID) {
+        console.log(postID);
         return AxiosHelper
             .retrievePost(postID, false)
             .then(result => this.loadedContentCallback(POST, result.data))
@@ -372,20 +373,21 @@ class ProfilePageAuthenticated extends React.Component {
         }
         if (this.state.isContentOnlyView) {
             if (this.state.contentType === POST) {
-                const formattedTextData = this.state.selectedContent?.text_data && this.state.selectedContent.is_paginated ?
-                    JSON.parse(this.state.selectedContent.text_data) : this.state.selectedContent.text_data;
+                const formattedTextData = formatPostText(this.state.selectedContent);
+                const viewerObject = {
+                    key: this.state.selectedContent._id,
+                    largeViewMode: true,
+                    textData: formattedTextData,
+                    isPostOnlyView: this.state.isContentOnlyView,
+                    pursuitNames: this.state.pursuitNames,
+                    eventData: this.state.selectedContent,
+                    projectPreviewMap: {}
+                }
                 return (
-                    <ShortPostViewer
+                    <PostController
+                        isViewer
                         authUser={this.props.authUser}
-                        key={this.state.selectedContent._id}
-                        largeViewMode={true}
-                        isPostOnlyView={this.state.isContentOnlyView}
-                        preferredPostPrivacy={this.state.preferredPostPrivacy}
-                        postType={this.state.postType}
-                        pursuitNames={this.state.pursuitNames}
-                        eventData={this.state.selectedContent}
-                        textData={formattedTextData}
-                        projectPreviewMap={{}}
+                        viewerObject={viewerObject}
                     />
                 )
             }
@@ -496,8 +498,6 @@ class ProfilePageAuthenticated extends React.Component {
                                 closeMasterModal={this.props.closeMasterModal}
                                 pursuitNames={this.state.pursuitNames}
                                 selectedPursuitIndex={this.state.selectedPursuitIndex}
-
-
                             />
                         }
                     </div>

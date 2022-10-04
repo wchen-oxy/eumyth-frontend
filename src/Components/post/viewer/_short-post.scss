@@ -1,9 +1,7 @@
 #shortpostviewer-large-hero {
     @include flex-display-row;
     height: $small-post-height;
-}
-
-#shortpostviewer-inline-hero {
+    z-index: 25;
 }
 
 #shortpostviewer-large-inline-header {

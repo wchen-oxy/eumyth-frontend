@@ -7,7 +7,7 @@ import { POST, POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
 import withRouter from 'utils/withRouter';
 import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 
-class PostController extends React.Component {
+class ProfileController extends React.Component {
     _isMounted = false;
 
     constructor(props) {
@@ -35,7 +35,7 @@ class PostController extends React.Component {
     componentDidMount() {
         this._isMounted = true;
         const navPress = (type) => {
-            console.log("navPRess",this.props.modalState);
+            console.log("navPRess", this.props.modalState);
             if (this.props.modalState === POST_VIEWER_MODAL_STATE) {
                 this.clearModal(true);
             }
@@ -161,16 +161,13 @@ class PostController extends React.Component {
                     authUser={this.props.authUser}
                     modalState={this.props.modalState}
                     postIndex={this.state.selectedEventIndex}
-                    postType={this.state.postType}
                     pursuitNames={this.props.pursuitNames}
                     eventData={this.state.feedData[this.state.selectedEventIndex]}
-                    textData={this.state.textData}
+                    projectPreviewMap={this.state.projectPreviewMap}
+
                     closeModal={this.clearModal}
                     onCommentIDInjection={this.handleCommentIDInjection}
-
                     returnModalStructure={this.props.returnModalStructure}
-
-                    projectPreviewMap={this.state.projectPreviewMap}
                     saveProjectPreview={this.saveProjectPreview}
 
                 />
@@ -179,9 +176,9 @@ class PostController extends React.Component {
                     requestLength={REGULAR_CONTENT_REQUEST_LENGTH}
                     feedID={this.props.selectedPursuitIndex}
                     allPosts={this.props.feedData}
-                    loadedFeed={this.createRenderedPosts()}
                     hasMore={this.state.hasMore}
 
+                    loadedFeed={this.createRenderedPosts()}
                     shouldPull={this.shouldPull}
                     createTimelineRow={this.createTimelineRow}
                 />
@@ -199,4 +196,4 @@ class PostController extends React.Component {
     }
 }
 
-export default withRouter(PostController);
+export default withRouter(ProfileController);

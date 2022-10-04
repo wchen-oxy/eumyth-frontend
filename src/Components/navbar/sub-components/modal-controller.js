@@ -1,5 +1,5 @@
 import React from 'react';
-import PostDraftController from 'components/post/draft/index';
+import PostController from 'components/post/index';
 import RelationModal from './relation-modal';
 import { NEW_ENTRY_MODAL_STATE, POST_VIEWER_MODAL_STATE, RELATION_MODAL_STATE } from 'utils/constants/flags';
 
@@ -7,7 +7,7 @@ const ModalController = (props) => {
     switch (props.modalState) {
         case (NEW_ENTRY_MODAL_STATE):
             return (
-                <PostDraftController
+                <PostController
                     authUser={props.authUser}
                     username={props.authUser.username}
                     closeModal={props.closeModal}

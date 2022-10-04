@@ -1,6 +1,6 @@
 import React from 'react';
 import ProjectController from '../project/index';
-import PostController from '../post/post-controller';
+import { default as PostController } from '../post/profile-controller';
 import { POST, PROJECT } from 'utils/constants/flags';
 
 const HeroContent = (props) => {
