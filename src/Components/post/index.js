@@ -1,41 +1,48 @@
 import React from 'react';
+import imageCompression from 'browser-image-compression';
 import { default as ShortPostDraft } from './draft/short-post';
 import { withFirebase } from 'store/firebase';
 import ShortPostViewer from './viewer/short-post';
 import { appendDefaultPostFields, appendImageFields } from './draft/helpers';
+import AxiosHelper from 'utils/axios';
 
 
 class PostController extends React.Component {
   _isMounted = false;
   constructor(props) {
     super(props);
+    const data = this.props.viewerObject?.eventData ?? null;
+    console.log(!!data ?
+      data.difficulty : 0);
     this.state = {
       window: 1,
-      date: this.props.eventData ?
-        this.props.eventData.date :
+      date: data?.date ?
+        new Date(data.date)
+          .toISOString()
+          .substring(0, 10) :
         new Date()
           .toISOString()
           .substr(0, 10)
       ,
-      difficulty: this.props.eventData ?
-        this.props.eventData.difficulty : 0,
-      isPaginated: this.props.eventData ?
-        this.props.eventData.is_paginated : false,
-      minDuration: this.props.eventData ?
-        this.props.eventData.min_duration : null,
-      previewTitle: this.props.eventData ?
-        this.props.eventData.title : '',
-      postPrivacyType: this.props.eventData ?
-        this.props.eventData.post_privacy_type : this.props.authUser.preferredPostType,
+      difficulty: !!data ?
+        data.difficulty : 0,
+      isPaginated: !!data ?
+        data.is_paginated : false,
+      minDuration: !!data ?
+        data.min_duration : null,
+      previewTitle: !!data ?
+        data.title : '',
+      postPrivacyType: !!data ?
+        data.post_privacy_type : this.props.authUser.preferredPostType,
 
       //editors
       //initial
       //shortpost meta
-      labels: this.props.eventData ?
-        this.props.eventData.labels : null,
-      //reviewpost
-      selectedPursuit: this.props.eventData ? this.props.eventData.pursuit_category : null,
-      pursuit: this.props.eventData ? this.props.eventData.pursuit_category : null,
+      labels: data ?
+        data.labels : null,
+      //review stage
+      selectedPursuit: data ? data.pursuit_category : null,
+      // pursuit: data ? data.pursuit_category : null,
       // loading: false, //maybe
       // error: false, //maybe
       threadToggleState: false,
@@ -66,6 +73,8 @@ class PostController extends React.Component {
     this.handleIndexChange = this.handleIndexChange.bind(this);
     this.setIsPaginated = this.setIsPaginated.bind(this);
     this.handleFormAppend = this.handleFormAppend.bind(this);
+    this.retrieveThumbnail = this.retrieveThumbnail.bind(this);
+
   }
 
   componentDidMount() {
@@ -85,9 +94,30 @@ class PostController extends React.Component {
   }
 
 
+  retrieveThumbnail() {
+    const data = this.props.viewerObject.eventData;
+    if (data.image_data?.length > 0) {
+      return AxiosHelper.returnImage(data.image_data[0])
+        .then((result) => {
+          return fetch(result.data.image)
+        })
+        .then((result) => result.blob())
+        .then((result) => {
+          const file = new File([result], 'Thumbnail', {
+            type: result.type
+          });
+          return imageCompression(file, {
+            maxSizeMB: 0.5,
+            maxWidthOrHeight: 250
+          })
+        })
+        .then((result) => this.setState({ coverPhoto: result }));
+    }
+  }
+
   setPostStage(value) {
     if (this.props.isViewer
-      && !this.props.eventData?.cover_photo_key
+      && !this.props.viewerObject.eventData?.cover_photo_key
       && value === 2) {
       this.retrieveThumbnail();
     }
@@ -167,10 +197,10 @@ class PostController extends React.Component {
       ...(this.props.isViewer && {
         isUpdateToPost: true,
         isPostOnlyView: true,
-        coverPhotoKey: this.props.eventData?.cover_photo_key ?? null,
-        projectPreviewID: this.props.eventData.project_preview_id,
+        coverPhotoKey: this.props.viewerObject.eventData?.cover_photo_key ?? null,
+        projectPreviewID: this.props.viewerObject.eventData.project_preview_id,
         selectedDraft: this.state.selectedDraft,
-        postID: this.props.eventData._id,
+        postID: this.props.viewerObject.eventData._id,
       }),
       threadToggleState: this.state.threadToggleState,
       isCompleteProject: this.state.isCompleteProject,
@@ -182,57 +212,111 @@ class PostController extends React.Component {
   }
 
   render() {
+    const miniAuthObject = {
+      pastLabels: this.props.authUser.labels,
+      userPreviewID: this.props.authUser.userPreviewID,
+      profileID: this.props.authUser.profileID,
+      indexProfileID: this.props.authUser.indexProfileID,
+      username: this.props.authUser.username,
+      drafts: this.props.authUser.drafts,
+      pursuitNames: this.props.authUser.pursuits
+    }
+
     const shared = {
       window: this.state.window,
-      minDuration: this.state.minDuration,
-      date: this.state.date,
-      eventData: this.props.eventData,
-      previewTitle: this.state.previewTitle,
-      postPrivacyType: this.state.postPrivacyType,
-      difficulty: this.state.difficulty,
-      pursuit: this.state.pursuit,
       isPaginated: this.state.isPaginated,
+ 
+      setPostStage: this.setPostStage,
+      setIsPaginated: this.setIsPaginated,
+      setPreviewTitle: this.setPreviewTitle,
+    }
+
+    const initialSharedObject = {
+      previewTitle: this.state.previewTitle,
+    }
+
+    const initialDraftObject = {
+      ...initialSharedObject,
+    }
+
+    const initialViewerObject = {
+      ...initialSharedObject,
+      date: this.state.date,
       labels: this.state.labels,
-      titlePrivacy: this.state.titlePrivacy,
+      minDuration: this.state.minDuration,
+      difficulty: this.state.difficulty,
+    }
+
+    const metaObject = {
+      date: this.state.date,
+      difficulty: this.state.difficulty,
+      pastLabels: this.props.authUser.labels,
+      selectedLabels: this.state.labels,
+      minDuration: this.state.minDuration,
+      postPrivacyType: this.state.postPrivacyType,
       threadTitle: this.state.threadTitle,
-      threadToggleState: this.state.threadToggleState,
-      isCompleteProject: this.state.isCompleteProject,
+      titlePrivacy: this.state.titlePrivacy,
+    }
+
+    const metaFunctions = {
+      setDate: this.setDate,
+      setDifficulty: this.setDifficulty,
+      setLabels: this.setLabels,
+      setMinDuration: this.setMinDuration,
+      setPostPrivacyType: this.setPostPrivacyType,
+    }
+
+    const threadObject = {
+      date: this.state.date,
+      drafts: this.props.authUser.drafts,
       selectedDraft: this.state.selectedDraft,
       selectedPursuit: this.state.selectedPursuit,
+      isCompleteProject: this.state.isCompleteProject,
+      pursuitNames: this.props.authUser.pursuits,
+      threadTitle: this.state.threadTitle,
+      titlePrivacy: this.state.titlePrivacy,
+      threadToggleState: this.state.threadToggleState,
+    }
 
-      setDifficulty: this.setDifficulty,
+    const threadFunction = {
       setDraft: this.setDraft,
-      setPostStage: this.setPostStage,
-      setMinDuration: this.setMinDuration,
-      setIsCompleteProject: this.setIsCompleteProject,
-      setThreadToggleState: this.setThreadToggleState,
       setThreadTitle: this.setThreadTitle,
-      setLabels: this.setLabels,
       setTitlePrivacy: this.setTitlePrivacy,
-      setIsPaginated: this.setIsPaginated,
-      setPostPrivacyType: this.setPostPrivacyType,
       setSelectedPursuit: this.setSelectedPursuit,
-      setPreviewTitle: this.setPreviewTitle,
+      setIsCompleteProject: this.setIsCompleteProject,
       handleFormAppend: this.handleFormAppend,
+      setThreadToggleState: this.setThreadToggleState,
+
     }
 
 
-    if (this.props.eventData === null) { return null };
     if (this.props.isViewer) {
       return (
         <ShortPostViewer
-          authUser={this.props.authUser}
-          closeModal={this.props.closeModal}
-          {...shared}
+          {...miniAuthObject}
           {...this.props.viewerObject}
+          {...shared}
+          {...initialViewerObject}
+          metaObject={metaObject}
+          metaFunctions={metaFunctions}
+          threadObject={threadObject}
+          threadFunction={threadFunction}
+          closeModal={this.props.closeModal}
+
         />);
     }
+
     else
       return (
         <ShortPostDraft
-          authUser={this.props.authUser}
-          closeModal={this.props.closeModal}
+          {...miniAuthObject}
           {...shared}
+          {...initialDraftObject}
+          metaObject={metaObject}
+          metaFunctions={metaFunctions}
+          threadObject={threadObject}
+          threadFunction={threadFunction}
+          closeModal={this.props.closeModal}
 
         />
       );

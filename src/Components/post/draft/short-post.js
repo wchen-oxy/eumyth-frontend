@@ -1,8 +1,8 @@
 import React from 'react';
 import imageCompression from 'browser-image-compression';
-import ReviewPost from './review-post';
-import ShortPostMeta from './short-post-meta';
-import ShortPostInitial from './short-post-initial';
+import ReviewStage from './review-stage';
+ import ShortPostInitial from './short-post-initial';
+import MetaStage from './meta-stage';
 
 class ShortPost extends React.Component {
   constructor(props) {
@@ -21,6 +21,7 @@ class ShortPost extends React.Component {
       tinyPhotos: null,
 
       textData: '',
+      postDisabled: true,
 
     };
     this.warnModalClose = this.warnModalClose.bind(this);
@@ -231,31 +232,12 @@ class ShortPost extends React.Component {
   }
 
   render() {
-    const editorStates = {
-      selectedFiles: this.state.selectedFiles,
-      validFiles: this.state.validFiles,
-      imageArray: this.state.imageArray,
-      unsupportedFiles: this.state.unsupportedFiles,
-      isPaginated: this.props.isPaginated,
-      text: this.state.textData,
-      imageIndex: this.state.imageIndex,
-    };
-
-    const metaStates = {
-      difficulty: this.props.difficulty,
-      imageArray: this.state.tinyPhotos,
-      min: this.props.minDuration,
-      date: this.props.date,
-      previewTitle: this.props.previewTitle,
-      selectedLabels: this.props.labels
-    }
-
-
     if (this.props.window === 1) {
       const navFunctions = {
         onModalClose: this.warnModalClose,
         setPostStage: this.props.setPostStage,
       }
+
       const navStates = {
         previewTitle: this.props.previewTitle,
         isPostDisabled: this.state.postDisabled,
@@ -263,7 +245,16 @@ class ShortPost extends React.Component {
         window: this.props.window,
       }
 
-      const editorFunctions = {
+      const editorStates = {
+        selectedFiles: this.state.selectedFiles,
+        validFiles: this.state.validFiles,
+        imageArray: this.state.imageArray,
+        unsupportedFiles: this.state.unsupportedFiles,
+        text: this.state.textData,
+        imageIndex: this.state.imageIndex,
+      };
+
+      const imageEditorFunctions = {
         onSortEnd: this.handleSortEnd,
         setImageArray: this.setImageArray,
         onPaginatedChange: this.handlePaginatedChange,
@@ -282,46 +273,34 @@ class ShortPost extends React.Component {
           {...navStates}
           {...navFunctions}
           editorStates={editorStates}
-          editorFunctions={editorFunctions}
+          editorFunctions={imageEditorFunctions}
         />
       );
     }
     else if (this.props.window === 2) {
+      const required = {
+        previousState: 1,
+        setPostStage: this.props.setPostStage,
+        handleTitleChange: this.handleTextChange
+      }
+
+
+      const optional = {
+        imageArray: this.state.tinyPhotos,
+        closeModal: this.props.closeModal
+      }
+
 
       return (
-        <ShortPostMeta
-          {...metaStates}
-          authUser={this.props.authUser}
-          current={this.props.window}
-          previousState={1}
-          handleTitleChange={this.handleTextChange}
-          postPrivacyType={this.props.postPrivacyType}
-          setPostPrivacyType={this.props.setPostPrivacyType}
-          difficulty={this.props.difficulty}
-          setDifficulty={this.props.setDifficulty}
-          date={this.props.date}
-          setDate={this.props.setDate}
-          setMinDuration={this.props.setMinDuration}
-          setLabels={this.props.setLabels}
-
-          closeModal={this.props.closeModal}
-          setPostStage={this.props.setPostStage}
+        <MetaStage
+          {...required}
+          {...optional}
+          {...this.props.metaObject}
+          {...this.props.metaFunctions}
         />
       );
     }
     else if (this.props.window === 3) {
-      const required = {
-        selectedDraft: this.props.selectedDraft,
-        textData: this.state.textData,
-        selectedPursuit: this.props.selectedPursuit,
-        date: this.props.date,
-        threadTitle: this.props.threadTitle,
-        titlePrivacy: this.props.titlePrivacy,
-        threadToggleState: this.props.threadToggleState,
-        isCompleteProject: this.props.isCompleteProject,
-        drafts: this.props.authUser.drafts,
-        pursuitNames: this.props.authUser.pursuits
-      }
 
       const optional = {
         coverPhoto: this.state.coverPhoto,
@@ -330,22 +309,15 @@ class ShortPost extends React.Component {
 
       return (
         <div className='small-post-window'>
-          <ReviewPost
-            {...required}
+          <ReviewStage
             {...optional}
+            {...this.props.threadObject}
+            {...this.props.threadFunction}
             previousState={2}
-
-            setDraft={this.props.setDraft}
-            setThreadTitle={this.props.setThreadTitle}
-            setThreadToggleState={this.props.setThreadToggleState}
-            setTitlePrivacy={this.props.setTitlePrivacy}
-            setIsCompleteProject={this.props.setIsCompleteProject}
-            setSelectedPursuit={this.props.setSelectedPursuit}
-
+            textData={this.state.textData}
             closeModal={this.props.closeModal}
             setPostStage={this.props.setPostStage}
-            handleFormAppend={this.props.handleFormAppend}
-          />
+           />
         </div>
       );
     }

@@ -24,10 +24,10 @@
 @import "src/components/navbar/sub-components/options-menu";
 @import "src/components/navbar/sub-components/relation-modal";
 
-@import "src/components/post/draft/review-post";
+@import "src/components/post/draft/review-stage";
 @import "src/components/post/draft/short-post";
 @import "src/components/post/draft/short-post-initial";
-@import "src/components/post/draft/short-post-meta";
+@import "src/components/post/draft/meta-stage";
 
 
 @import "src/components/post/draft/sub-components/cover-photo-controls";
@@ -54,7 +54,7 @@
 @import "src/components/post/viewer/sub-components/caption-text";
 @import "src/components/post/viewer/sub-components/hidden-buttons";
 @import "src/components/post/viewer/sub-components/post-header";
-@import "src/components/post/viewer/sub-components/short-post-meta";
+@import "src/components/post/viewer/sub-components/meta-info";
 @import "src/components/post/viewer/sub-components/short-text";
 @import "src/components/post/viewer/sub-components/single-comment";
 

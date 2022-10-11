@@ -1,9 +1,9 @@
-.shortpostmetainfo-thread {
+.metainfo-thread {
     display: flex;
     justify-content: center;
 }
 
-.shortpostmetainfo-stat {
+.metainfo-stat {
     display: flex;
     p {
         margin: 0 auto;
@@ -11,7 +11,7 @@
     }
 }
 
-.shortpostmetainfo-label {
+.metainfo-label {
     background-color: black;
     width: fit-content;
     p {

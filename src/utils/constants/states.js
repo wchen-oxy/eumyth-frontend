@@ -7,7 +7,7 @@ export const draft = {
     //shortpost meta
 
     labels: null,
-    //reviewpost
+    //review stage
     // loading: false, //maybe
     // error: false, //maybe
     threadToggleState: false,

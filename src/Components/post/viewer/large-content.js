@@ -2,7 +2,7 @@ import React from 'react';
 import { EXPANDED } from 'utils/constants/flags';
 import ActivityButtons from './sub-components/activity-buttons';
 import CaptionText from './sub-components/caption-text';
-import ShortPostMetaInfo from './sub-components/short-post-meta';
+import MetaInfo from './sub-components/meta-info';
 import ShortHeroText from './sub-components/short-text';
 
 const ShortPostLargeContent = (props) => {
@@ -16,7 +16,7 @@ const ShortPostLargeContent = (props) => {
                         className='shortpostviewer-large-side  short-post-side-container'
                         ref={props.heroRef}
                     >
-                        <ShortPostMetaInfo
+                        <MetaInfo
                             {...props.metaProps}
                         />
                         <CaptionText
@@ -24,8 +24,7 @@ const ShortPostLargeContent = (props) => {
                             index={props.imageIndex}
                             {...props.textProps} />
                         <ActivityButtons
-                            {...props.headerProps}
-                            {...props.activityFunctions}
+                             {...props.activityFunctions}
                         />
                     </div>
                 </div>
@@ -37,7 +36,7 @@ const ShortPostLargeContent = (props) => {
     else {
         return (
             <div className='small-post-window'>
-                <ShortPostMetaInfo
+                <MetaInfo
                     {...props.metaProps}
                 />
                 <CaptionText  {...props.textProps} />
@@ -46,8 +45,7 @@ const ShortPostLargeContent = (props) => {
                         title={props.title}
                         textData={props.textData} />
                     <ActivityButtons
-                        {...props.headerProps}
-                        {...props.activityFunctions}
+                         {...props.activityFunctions}
                     />
                 </div>
 

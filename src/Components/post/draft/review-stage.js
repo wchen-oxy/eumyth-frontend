@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ProjectDraftControls from './sub-components/project-draft-controls';
 
-const ReviewPost = (props) => {
+const ReviewStage = (props) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,14 +37,14 @@ const ReviewPost = (props) => {
     const disableCond2 = props.threadTitle.length === 0 || !props.selectedPursuit;
 
     return (
-        < div id='reviewpost'>
+        < div id='reviewstage'>
             <div>
-                <div id='reviewpost-header'>
+                <div id='reviewstage-header'>
                     <h2>Add your metadata!</h2>
                     {disableCond1 && <p>**Please Select or Create a Series**</p>}
 
                 </div>
-                <div id="reviewpost-nav">
+                <div id="reviewstage-nav">
                     <button
                         value={props.previousState}
                         onClick={e => handleReturnClick(e.target.value)}
@@ -86,4 +86,4 @@ const ReviewPost = (props) => {
     );
 }
 
-export default ReviewPost;
+export default ReviewStage;

@@ -3,13 +3,13 @@ import { returnProjectURL } from '../../../../utils/url'
 import { displayDifficulty, displayProgressionType } from "utils/constants/ui-text";
 import EventLabels from "components/timeline/sub-components/event-labels";
 
-const MetaInfo = (props) => {
+const ShortPostMetaInfo = (props) => {
     // const progression = displayProgressionType(props.progression);
     const difficulty = displayDifficulty(props.difficulty);
 
     return (
         <div>
-            <div className="metainfo-thread">
+            <div className="shortpostmetainfo-thread">
                 <p>{props.pursuit} | <span>
                     {props.projectPreview &&
                         <a href={returnProjectURL(props.projectPreview.project_id)}>
@@ -17,7 +17,7 @@ const MetaInfo = (props) => {
                         </a>}
                 </span></p>
             </div>
-            <div className="metainfo-stat">
+            <div className="shortpostmetainfo-stat">
                 {/* {progression && <p>{progression} Progress</p>} */}
                 {difficulty && <p>{difficulty} Difficulty</p>}
                 {props.min && <p>{props.min} minutes</p>}
@@ -31,4 +31,4 @@ const MetaInfo = (props) => {
     )
 }
 
-export default MetaInfo;
+export default ShortPostMetaInfo;

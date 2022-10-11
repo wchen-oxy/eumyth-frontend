@@ -2,7 +2,7 @@ import React from 'react';
 import { COLLAPSED } from 'utils/constants/flags';
 import CaptionText from './sub-components/caption-text';
 import PostHeader from './sub-components/post-header';
-import ShortPostMetaInfo from './sub-components/short-post-meta';
+import MetaInfo from './sub-components/meta-info';
 import ShortHeroText from './sub-components/short-text';
 
 const ShortPostInlineContent = (props) => {
@@ -20,7 +20,7 @@ const ShortPostInlineContent = (props) => {
                     <div className='shortpostviewer-inline-side'>
                         {props.title &&
                             <h2 className="shortpostviewer-title"> {props.title}</h2>}
-                        <ShortPostMetaInfo
+                        <MetaInfo
                             {...props.metaProps}
                         />
 
@@ -42,7 +42,7 @@ const ShortPostInlineContent = (props) => {
                         <PostHeader
                             {...props.headerProps}
                         />
-                        <ShortPostMetaInfo
+                        <MetaInfo
                             {...props.metaProps}
                         />
                     </div>

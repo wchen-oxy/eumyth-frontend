@@ -1,4 +1,4 @@
-#reviewpost {
+#reviewstage {
     @include flex-display-column;
     input,
     select {
@@ -11,11 +11,11 @@
     
 }
 
-#reviewpost-header {
+#reviewstage-header {
     text-align: center;
 }
 
-#reviewpost-nav {
+#reviewstage-nav {
     @include flex-display-row;
     justify-content: space-between;
     padding: 0 5px;

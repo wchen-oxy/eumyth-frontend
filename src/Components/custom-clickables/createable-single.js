@@ -24,7 +24,6 @@ const CustomMultiSelect = (props) => {
 
   const defaults = checkInputNotNull(props.selectedLabels, formatReactSelectOptions);
   const options = checkInputNotNull(props.options, formatReactSelectOptions);
-  console.log(defaults);
   return (
     <CreatableSelect
       isMulti

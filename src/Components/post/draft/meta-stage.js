@@ -10,11 +10,11 @@ import TitleInput from './sub-components/title-input';
 import { displayDifficulty, } from 'utils/constants/ui-text';
 import PrePostControls from './sub-components/pre-post-controls';
 
-const ShortPostMeta = (props) => {
+const MetaStage = (props) => {
     return (
         <div className="small-post-window">
-            <h2 id="shortpostmeta-title">Post Info</h2>
-            <div className='shortpostmeta-nav'>
+            <h2 id="metastage-title">Post Info</h2>
+            <div className='metastage-nav'>
                 <button value={props.previousState} onClick={e => props.setPostStage(e.target.value)}>
                     Return
                 </button>
@@ -27,7 +27,7 @@ const ShortPostMeta = (props) => {
                 </button>
             </div>
             <div>
-                <div id='shortpostmeta-desc'>
+                <div id='metastage-desc'>
                     <h4>Post</h4>
                     <p>Add any additional information you&#39;d like
                         before you submit your post!</p>
@@ -41,7 +41,7 @@ const ShortPostMeta = (props) => {
                         <DateInput date={props.date} setDate={props.setDate} />
 
                         <MinutesInput
-                            min={props.min}
+                            minDuration={props.minDuration}
                             setMinDuration={props.setMinDuration}
                         />
                         <DifficultyInput
@@ -53,14 +53,14 @@ const ShortPostMeta = (props) => {
                     <div>
                         <label>Tags</label>
                         <CustomMultiSelect
-                            options={props.authUser.labels}
+                            options={props.pastLabels}
                             selectedLabels={props.selectedLabels}
                             name={'Tags'}
                             onSelect={props.setLabels}
                         />
 
                     </div>
-                    <div className='reviewpost-button-container'>
+                    <div className='reviewstage-button-container'>
                         <PrePostControls
                             postPrivacyType={props.postPrivacyType}
                             setPostPrivacyType={props.setPostPrivacyType}
@@ -73,4 +73,4 @@ const ShortPostMeta = (props) => {
     );
 }
 
-export default ShortPostMeta;
+export default MetaStage;
