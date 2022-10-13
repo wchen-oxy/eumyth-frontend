@@ -35,7 +35,6 @@ const findMatchedDraft = (drafts, projectPreviewRaw) => {
     else return null;
 }
 class ShortPostViewer extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -479,31 +478,36 @@ class ShortPostViewer extends React.Component {
 
         if (this.props.window === 1) { //1
             const hasImages = this.props.eventData.image_data?.length ?? true;
-            const headerProps = {
+            const header = {
                 isOwnProfile,
                 editProjectState: this.props.editProjectState,
             }
 
-            const eventDataProps = {
-                title: this.props.eventData.title,
+            const user = {
                 displayPhoto: this.props.eventData.display_photo_key,
                 username: this.props.eventData.username
             };
 
+            const caption = {
+                title: this.props.eventData.title,
+                textData: this.props.textData,
+                isPaginated: this.props.isPaginated,
+            }
+
+            const meta = {
+                ...this.props.initialViewerObject,
+                projectPreview: this.state.projectPreview,
+            };
+
             const sharedProps = {
-                ...this.props.initialViewer,
-                headerProps,
-                 eventDataProps,
+                header,
+                user,
+                caption,
+                meta,
                 hasImages,
                 annotations: this.state.annotations,
-                imageIndex: this.state.imageIndex,
-                projectPreview: this.state.projectPreview,
-                textData: this.props.textData,
-
-
                 renderImageSlider: this.renderImageSlider,
                 renderComments: this.renderComments,
-
             };
             if (this.props.largeViewMode) {
                 const activityFunctions = {
@@ -574,8 +578,7 @@ class ShortPostViewer extends React.Component {
                     {...optional}
                     {...this.props.metaObject}
                     {...this.props.metaFunctions}
-
-                />
+                 />
             );
         }
         else if (this.props.window === 4) {
@@ -594,9 +597,10 @@ class ShortPostViewer extends React.Component {
                         {...this.props.threadObject}
                         {...this.props.threadFunction}
                         previousState={3}
-                        textData={this.state.textData}
+                        textData={this.state.tempTextForEdit}
                         closeModal={this.props.closeModal}
                         setPostStage={this.props.setPostStage}
+                        setDraft={this.props.setDraft}
                     />
                 </div>
             );

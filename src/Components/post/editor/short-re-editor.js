@@ -17,7 +17,7 @@ const ShortReEditor = (props) => {
                 isPaginated={props.isPaginated}
                 onPaginatedChange={props.onPaginatedChange}
                 onTextChange={props.onTextChange}
-                textPageText={props.textData}
+                textData={props.textData}
                 imageIndex={props.imageIndex}
             />
         );
@@ -48,7 +48,7 @@ const ShortReEditor = (props) => {
                         isPaginated={props.isPaginated}
                         onPaginatedChange={props.onPaginatedChange}
                         onTextChange={props.onTextChange}
-                        textPageText={props.textData}
+                        textData={props.textData}
                         imageIndex={props.imageIndex}
                     />
                 </div>

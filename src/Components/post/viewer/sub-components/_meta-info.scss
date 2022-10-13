@@ -1,13 +1,29 @@
 .metainfo-thread {
-    display: flex;
+    @include flex-display-row;
     justify-content: center;
+}
+.metainfo-right-border{
+    border-right: 2px solid grey;
 }
 
 .metainfo-stat {
-    display: flex;
+    @include flex-display-row;
+    justify-content: center;
+}
+
+.metainfo-stat-inner {
+    @include flex-display-column;
+    justify-content: flex-start;
+    padding-right: 24px;
+    margin-right: 24px;
+
     p {
-        margin: 0 auto;
-        font-size: 14px;
+        margin: 0px;
+        color: grey;
+        font-size: 12px;
+    }
+    h4 {
+        margin: 0px;
     }
 }
 

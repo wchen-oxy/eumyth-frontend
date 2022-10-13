@@ -1,10 +1,11 @@
 import React from 'react';
 
 const ShortHeroText = (props) => {
-    const styleType = props.length < 1000 ? 'tiny-text' : 'medium-text';
-    const heroText = (
+    const heroText =
         props.isPaginated && props.textData ?
-            <pre>{props.textData[props.index]}</pre> : <pre>{props.textData}</pre>);
+            props.textData[props.imageIndex] : props.textData;
+    const styleType = heroText.length < 1000 ? 'tiny-text' : 'medium-text';
+
 
     return (
         <div>
@@ -12,7 +13,7 @@ const ShortHeroText = (props) => {
                 <h2>{props.title}</h2>
             </div>
             <div id={styleType}>
-                {heroText}
+                <pre>{heroText}</pre>
             </div>
         </div>
 

@@ -17,14 +17,15 @@ const ShortPostLargeContent = (props) => {
                         ref={props.heroRef}
                     >
                         <MetaInfo
-                            {...props.metaProps}
+                            {...props.meta}
                         />
                         <CaptionText
                             needsSideCaption
-                            index={props.imageIndex}
-                            {...props.textProps} />
+                            {...props.caption}
+                        />
                         <ActivityButtons
-                             {...props.activityFunctions}
+                            {...props.header}
+                            {...props.activityFunctions}
                         />
                     </div>
                 </div>
@@ -37,15 +38,16 @@ const ShortPostLargeContent = (props) => {
         return (
             <div className='small-post-window'>
                 <MetaInfo
-                    {...props.metaProps}
+                    {...props.meta}
                 />
-                <CaptionText  {...props.textProps} />
+                <CaptionText  {...props.caption} />
                 <div className='shortpostviewer-large-hero-text'>
                     <ShortHeroText
-                        title={props.title}
-                        textData={props.textData} />
+                        {...props.caption} />
                     <ActivityButtons
-                         {...props.activityFunctions}
+                        {...props.header}
+
+                        {...props.activityFunctions}
                     />
                 </div>
 

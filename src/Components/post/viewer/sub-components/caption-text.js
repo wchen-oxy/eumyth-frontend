@@ -6,7 +6,7 @@ const CaptionText = (props) => {
             <div className="captiontext">
                 <h2>{props.title}</h2>
                 <p>{props.isPaginated && props.textData ?
-                    props.textData[props.index] : props.textData}</p>
+                    props.textData[props.imageIndex] : props.textData}</p>
             </div>
         )
         else{

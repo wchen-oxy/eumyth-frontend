@@ -11,6 +11,7 @@ import { displayDifficulty, } from 'utils/constants/ui-text';
 import PrePostControls from './sub-components/pre-post-controls';
 
 const MetaStage = (props) => {
+    console.log(props);
     return (
         <div className="small-post-window">
             <h2 id="metastage-title">Post Info</h2>

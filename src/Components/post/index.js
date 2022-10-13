@@ -12,8 +12,6 @@ class PostController extends React.Component {
   constructor(props) {
     super(props);
     const data = this.props.viewerObject?.eventData ?? null;
-    console.log(!!data ?
-      data.difficulty : 0);
     this.state = {
       window: 1,
       date: data?.date ?
@@ -196,7 +194,7 @@ class PostController extends React.Component {
     const completeOptionals = {
       ...(this.props.isViewer && {
         isUpdateToPost: true,
-        isPostOnlyView: true,
+        isPostOnlyView: this.props.isPostOnlyView,
         coverPhotoKey: this.props.viewerObject.eventData?.cover_photo_key ?? null,
         projectPreviewID: this.props.viewerObject.eventData.project_preview_id,
         selectedDraft: this.state.selectedDraft,
@@ -225,7 +223,8 @@ class PostController extends React.Component {
     const shared = {
       window: this.state.window,
       isPaginated: this.state.isPaginated,
- 
+
+      setDraft: this.setDraft,
       setPostStage: this.setPostStage,
       setIsPaginated: this.setIsPaginated,
       setPreviewTitle: this.setPreviewTitle,
@@ -245,9 +244,11 @@ class PostController extends React.Component {
       labels: this.state.labels,
       minDuration: this.state.minDuration,
       difficulty: this.state.difficulty,
+      pursuit: this.state.selectedPursuit
     }
 
     const metaObject = {
+      ...initialSharedObject,
       date: this.state.date,
       difficulty: this.state.difficulty,
       pastLabels: this.props.authUser.labels,
@@ -279,24 +280,22 @@ class PostController extends React.Component {
     }
 
     const threadFunction = {
-      setDraft: this.setDraft,
       setThreadTitle: this.setThreadTitle,
       setTitlePrivacy: this.setTitlePrivacy,
       setSelectedPursuit: this.setSelectedPursuit,
       setIsCompleteProject: this.setIsCompleteProject,
       handleFormAppend: this.handleFormAppend,
       setThreadToggleState: this.setThreadToggleState,
-
     }
 
-
+    console.log(this.props.viewerObject);
     if (this.props.isViewer) {
       return (
         <ShortPostViewer
           {...miniAuthObject}
           {...this.props.viewerObject}
           {...shared}
-          {...initialViewerObject}
+          initialViewerObject={initialViewerObject}
           metaObject={metaObject}
           metaFunctions={metaFunctions}
           threadObject={threadObject}
@@ -311,13 +310,12 @@ class PostController extends React.Component {
         <ShortPostDraft
           {...miniAuthObject}
           {...shared}
-          {...initialDraftObject}
+          initialDraftObject={initialDraftObject}
           metaObject={metaObject}
           metaFunctions={metaFunctions}
           threadObject={threadObject}
           threadFunction={threadFunction}
           closeModal={this.props.closeModal}
-
         />
       );
   }

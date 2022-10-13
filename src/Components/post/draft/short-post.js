@@ -1,7 +1,7 @@
 import React from 'react';
 import imageCompression from 'browser-image-compression';
 import ReviewStage from './review-stage';
- import ShortPostInitial from './short-post-initial';
+import ShortPostInitial from './short-post-initial';
 import MetaStage from './meta-stage';
 
 class ShortPost extends React.Component {
@@ -272,6 +272,7 @@ class ShortPost extends React.Component {
         <ShortPostInitial
           {...navStates}
           {...navFunctions}
+          {...this.props.initialDraftObject}
           editorStates={editorStates}
           editorFunctions={imageEditorFunctions}
         />
@@ -289,15 +290,13 @@ class ShortPost extends React.Component {
         imageArray: this.state.tinyPhotos,
         closeModal: this.props.closeModal
       }
-
-
       return (
         <MetaStage
           {...required}
           {...optional}
           {...this.props.metaObject}
           {...this.props.metaFunctions}
-        />
+         />
       );
     }
     else if (this.props.window === 3) {
@@ -306,7 +305,6 @@ class ShortPost extends React.Component {
         coverPhoto: this.state.coverPhoto,
         compressedPhotos: this.state.tinyPhotos,
       }
-
       return (
         <div className='small-post-window'>
           <ReviewStage
@@ -317,7 +315,8 @@ class ShortPost extends React.Component {
             textData={this.state.textData}
             closeModal={this.props.closeModal}
             setPostStage={this.props.setPostStage}
-           />
+            setDraft={this.props.setDraft}
+          />
         </div>
       );
     }
