@@ -30,7 +30,6 @@ class Annotator extends React.Component {
   renderEditor(props) {
     const { geometry } = props.annotation
     if (!geometry) return null
-    console.log(geometry);
     return (
       <div
         style={{

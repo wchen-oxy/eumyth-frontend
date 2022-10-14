@@ -3,10 +3,11 @@ import imageCompression from 'browser-image-compression';
 import { default as ShortPostDraft } from './draft/short-post';
 import { withFirebase } from 'store/firebase';
 import ShortPostViewer from './viewer/short-post';
-import { appendDefaultPostFields, appendImageFields } from './draft/helpers';
+import { appendDefaultPostFields, appendImageFields, handleNewSubmit, handleUpdateSubmit } from './draft/helpers';
 import AxiosHelper from 'utils/axios';
+import fileDisplayContainer from './editor/sub-components/file-display-container';
 
-
+const labelFormatter = (value) => { return { label: value, value: value } };
 class PostController extends React.Component {
   _isMounted = false;
   constructor(props) {
@@ -37,7 +38,7 @@ class PostController extends React.Component {
       //initial
       //shortpost meta
       labels: data ?
-        data.labels : null,
+        data.labels.map(labelFormatter) : null,
       //review stage
       selectedPursuit: data ? data.pursuit_category : null,
       // pursuit: data ? data.pursuit_category : null,
@@ -119,7 +120,6 @@ class PostController extends React.Component {
       && value === 2) {
       this.retrieveThumbnail();
     }
-    console.log(value);
     this.setState({ window: parseInt(value) });
 
   }
@@ -194,7 +194,6 @@ class PostController extends React.Component {
     const completeOptionals = {
       ...(this.props.isViewer && {
         isUpdateToPost: true,
-        isPostOnlyView: this.props.isPostOnlyView,
         coverPhotoKey: this.props.viewerObject.eventData?.cover_photo_key ?? null,
         projectPreviewID: this.props.viewerObject.eventData.project_preview_id,
         selectedDraft: this.state.selectedDraft,
@@ -207,6 +206,24 @@ class PostController extends React.Component {
     }
     appendDefaultPostFields(formData, { ...defaults, ...completeOptionals });
     appendImageFields(formData, images, functions);
+    const params = [
+      formData,
+      images,
+      functions,
+      this.props.viewerObject.isPostOnlyView
+    ]
+    if (this.props.isViewer) {
+      if (!images.useImageForThumbnail && images.coverPhotoKey) {
+        return AxiosHelper
+          .deletePhotoByKey(images.coverPhotoKey)
+          .then(() =>
+            handleUpdateSubmit(...params));
+      }
+      return handleUpdateSubmit(...params);
+    }
+    else {
+      return handleNewSubmit(...params);
+    }
   }
 
   render() {
@@ -288,7 +305,6 @@ class PostController extends React.Component {
       setThreadToggleState: this.setThreadToggleState,
     }
 
-    console.log(this.props.viewerObject);
     if (this.props.isViewer) {
       return (
         <ShortPostViewer

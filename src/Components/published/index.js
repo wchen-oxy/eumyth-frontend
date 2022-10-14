@@ -57,8 +57,6 @@ class AuthenticatedProjectSearch extends React.Component {
     }
 
     createTimeline(inputArray) {
-        console.log(inputArray);
-        console.log('HHJK')
         const hasMore = inputArray.length !== DYNAMIC_CONTENT_LENGTH ? false : true;
         const results = this.state.results
             .concat(inputArray);

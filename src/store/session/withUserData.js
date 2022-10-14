@@ -11,11 +11,10 @@ const withUserData = Component => {
                 indexUserData: null
             }
         }
+        
         componentDidMount() {
-            console.log('Mounted data');
             this.listener = this.props.firebase.auth.onAuthStateChanged(
                 authUser => {
-
                     return AxiosHelper.returnIndexUser(authUser.displayName)
                         .then(result => this.setState({ indexUserData: result }))
                         .catch((err) => console.log(err));

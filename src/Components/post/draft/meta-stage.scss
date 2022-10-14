@@ -1,12 +1,12 @@
-#shortpostmeta-title{
+#metastage-title{
     text-align: center;
 }
 
-#shortpostmeta-desc{
+#metastage-desc{
 
 }
 
-.shortpostmeta-nav{
+.metastage-nav{
     @include flex-display-row;
     justify-content: space-between;
     padding-left: 8px;

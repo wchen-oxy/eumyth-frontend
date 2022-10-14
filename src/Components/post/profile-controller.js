@@ -35,14 +35,11 @@ class ProfileController extends React.Component {
     componentDidMount() {
         this._isMounted = true;
         const navPress = (type) => {
-            console.log("navPRess", this.props.modalState);
             if (this.props.modalState === POST_VIEWER_MODAL_STATE) {
                 this.clearModal(true);
             }
             else if (!this.props.modalState) {
-                console.log(window.location.pathname);
                 if (window.location.pathname[1] === 'p') {
-                    console.log("adsf");
                     if (!this.state.selectedEventIndex) {
                         window.location.reload();
                     }
@@ -129,9 +126,7 @@ class ProfileController extends React.Component {
     }
 
     clearModal(isBackPress) {
-        console.log("cleared", isBackPress);
         // if (isBackPress) this.props.navigate("u/" + this.props.authUser.username, { replace: false });
-
         if (!isBackPress) this.props.navigate(-1);
         this.props.closeMasterModal();
     }

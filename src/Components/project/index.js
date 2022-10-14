@@ -297,8 +297,7 @@ class ProjectController extends React.Component {
                         PROJECT_CONTENT_ONLY_VIEW_STATE : PROJECT_MACRO_VIEW_STATE;
                     // const stopEdits = this.props.isContentOnlyView && this.projectSelectSubState === 1;
                     // const state = stopEdits ? {} : { barType: decideClearedPageType };
-                    // console.log(state);
-                    this.setState({
+                     this.setState({
                         barType: decideClearedPageType,
                         editProjectState: false,
                         projectSelectSubState: 1,
@@ -319,8 +318,7 @@ class ProjectController extends React.Component {
     }
 
     setModal(postID) {
-        console.log(this.state.editProjectState);
-        if (!this.state.editProjectState) {
+         if (!this.state.editProjectState) {
             this.props.navigate(returnPostURL(postID), { replace: false });
         }
         this.props.openMasterModal(POST_VIEWER_MODAL_STATE);

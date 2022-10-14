@@ -116,7 +116,6 @@ const ProjectReview = (props) => {
         formData.append(STATUS_FIELD, status);
         return AxiosHelper.createProject(formData)
             .then((result) => {
-                console.log(result);
                 alert("Success!");
                 window.location.reload();
             })
@@ -144,7 +143,6 @@ const ProjectReview = (props) => {
             return AxiosHelper.deleteManyPhotosByKey([cover, miniCover])
                 .then((result) => AxiosHelper.updateProject(formData))
                 .then((result => {
-                    console.log(result);
                     alert("success!");
                     window.location.reload();
                 }));

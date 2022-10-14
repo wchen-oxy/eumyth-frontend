@@ -8,7 +8,6 @@ const ProjectDraftControls = (props) => {
     let draftOptions = doDraftsExist ? props.drafts.map(
         (item) => {
             if (props.isUpdateToPost && item.content_id === props.selectedDraft) {
-                console.log(props.selectedDraft, item.title)
                 return (
                     <option selected value={item.content_id}>
                         {item.title}

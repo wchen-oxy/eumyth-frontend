@@ -8,7 +8,7 @@ const EventLabels = (props) => {
                     className={'eventlabels-background'}>
                     <div className={'eventlabels-foreground'}>
                         <p>
-                            {value}
+                            {value.label}
                         </p>
                     </div>
                 </div>

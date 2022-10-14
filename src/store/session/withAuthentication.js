@@ -33,7 +33,6 @@ const withAuthentication = Component => {
 
     createUserInfoObject(authUser) {
       if (!authUser.displayName) {
-        console.log(authUser)
         const combined = {
           email: authUser.email,
           emailVerified: authUser.emailVerified,

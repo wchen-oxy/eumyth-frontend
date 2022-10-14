@@ -149,7 +149,6 @@ class SingleComment extends React.Component {
     }
 
     renderReply(commentData, pastLevel) {
-        console.log(pastLevel);
         const currentLevel = pastLevel + 1;
         const annotation =
             commentData.annotation ?

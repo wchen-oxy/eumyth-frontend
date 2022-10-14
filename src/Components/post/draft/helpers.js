@@ -49,7 +49,7 @@ const handleError = (setLoading, setError) => {
     setError(true);
 }
 
-const handleUpdateSubmit = (formData, fields, functions) => {
+export const handleUpdateSubmit = (formData, fields, functions, isPostOnlyView) => {
     // addImages(formData, fields.compressedPhotos); //DELETE?
     const updates = fields.isUpdateToPost && fields.projectPreviewID !== fields.selectedDraft ?
         AxiosHelper.updatePostOwner(fields.projectPreviewID, fields.selectedDraft, fields.postID) :
@@ -57,7 +57,7 @@ const handleUpdateSubmit = (formData, fields, functions) => {
     return updates.then((result) => {
         functions.setIsSubmitting(false);
         result.status === 200 ?
-            handleSuccess(fields.isPostOnlyView, functions.closeModal)
+            handleSuccess(isPostOnlyView, functions.closeModal)
             : handleError(functions.setLoading, functions.setError);
     }).catch((result) => {
         console.log(result.error);
@@ -67,7 +67,7 @@ const handleUpdateSubmit = (formData, fields, functions) => {
 }
 
 
-const handleNewSubmit = (formData, fields, functions) => {
+export const handleNewSubmit = (formData, fields, functions, isPostOnlyView) => {
     if (fields.threadToggleState) {
         formData.append(USER_ID_FIELD, fields.profileID);
         formData.append(STATUS_FIELD, "DRAFT");
@@ -83,7 +83,7 @@ const handleNewSubmit = (formData, fields, functions) => {
             .then((result) => {
                 console.log(result);
                 functions.setIsSubmitting(false);
-                result.status === 201 ? handleSuccess(fields.isPostOnlyView, functions.closeModal)
+                result.status === 201 ? handleSuccess(isPostOnlyView, functions.closeModal)
                     : handleError(functions.setLoading, functions.setError);
             })
             .catch((result) => {
@@ -97,7 +97,7 @@ const handleNewSubmit = (formData, fields, functions) => {
         return AxiosHelper.createPost(formData)
             .then((result) => {
                 functions.setIsSubmitting(false);
-                result.status === 201 ? handleSuccess(fields.isPostOnlyView, functions.closeModal)
+                result.status === 201 ? handleSuccess(isPostOnlyView, functions.closeModal)
                     : handleError(functions.setLoading, functions.setError);
             })
             .catch((result) => {
@@ -120,32 +120,21 @@ export const appendImageFields = (formData, fields, functions) => {
             else {
                 formData.append(COVER_PHOTO_FIELD, fields.coverPhoto);
                 formData.append(REMOVE_COVER_PHOTO, fields.shouldRemoveSavedCoverPhoto);//should remove this?
-
-                return handleUpdateSubmit(formData, fields, functions);
             }
         }
         else if (!fields.useImageForThumbnail && fields.coverPhotoKey) {
             formData.append(REMOVE_COVER_PHOTO, fields.shouldRemoveSavedCoverPhoto);//should remove this?
+        }
+    }
+    else if (fields.useImageForThumbnail) {
+        if (!fields.coverPhoto) { return warn(); }
+        formData.append(COVER_PHOTO_FIELD, fields.coverPhoto);
+    }
 
-            return AxiosHelper.deletePhotoByKey(fields.coverPhotoKey)
-                .then(() => handleUpdateSubmit(formData, fields, functions));
-        }
-        else {
-            return handleUpdateSubmit(formData, fields, functions);
-        }
-    }
-    else {
-        if (fields.useImageForThumbnail) {
-            if (!fields.coverPhoto) { return warn(); }
-            formData.append(COVER_PHOTO_FIELD, fields.coverPhoto);
-        }
-        return handleNewSubmit(formData, fields, functions);
-    }
 }
 
 
 export const appendDefaultPostFields = (formData, defaults) => {
-    
     formData.append(DATE_FIELD, defaults.date);
     formData.append(POST_TYPE_FIELD, defaults.postType);
     formData.append(USERNAME_FIELD, defaults.username);
@@ -172,7 +161,7 @@ export const appendDefaultPostFields = (formData, defaults) => {
         }
     }
     if (defaults.textData) {
-        const text = defaults.postType === SHORT && !defaults.isPaginated ?
+        const text = !defaults.isPaginated ?
             defaults.textData :
             JSON.stringify(defaults.textData);
         formData.append(TEXT_DATA_FIELD, text);

@@ -221,7 +221,6 @@ class AuthenticatedGeoSearch extends React.Component {
                 this.state.long,
             )
             .then(results => {
-                console.log(results);
                 if (results.data.users.length === 0 && this.state.people.length === 0) {
                     return;
                 }

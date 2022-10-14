@@ -33,7 +33,6 @@ const selectMessage = (action, isPrivate) => {
         case ('UNFOLLOW'):
             return NOT_A_FOLLOWER_STATE;
         default:
-            console.log('shit');
             break;
     }
 }
@@ -238,7 +237,6 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     loadMicroPostData(postID) {
-        console.log(postID);
         return AxiosHelper
             .retrievePost(postID, false)
             .then(result => this.loadedContentCallback(POST, result.data))

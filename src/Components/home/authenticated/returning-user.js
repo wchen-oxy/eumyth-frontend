@@ -190,15 +190,11 @@ class ReturningUserPage extends React.Component {
             this.state.nextOpenPostIndex + slicedObjectIDs.length
             : this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH;
         const hasMore = nextOpenPostIndex >= posts.length || feedLimitReached;
-        console.log(this.state.hasMore);
         return (AxiosHelper
             .returnMultiplePosts(
                 slicedObjectIDs,
                 true)
-            .then((result) => {
-                console.log(result);
-                console.log(this.state.feedData.concat(result.data.posts));
-
+            .then((result) => { 
                 if (result.data) {
                     this.setState((state) => ({
                         feedData: state.feedData.concat(result.data.posts),

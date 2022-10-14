@@ -83,7 +83,6 @@ class ShortPostViewer extends React.Component {
     }
 
     componentDidMount() {
-        console.log("mounted");
         let annotationArray = [];
         for (let i = 0; i < this.props.eventData.image_data.length; i++) {
             annotationArray.push([]);
@@ -223,7 +222,6 @@ class ShortPostViewer extends React.Component {
     renderComments(windowType) {
         if (windowType === EXPANDED) {
             if (this.props.disableCommenting) {
-                console.log("Commenting Disbled");
                 return null;
             }
             const isImageOnly = this.props.eventData.image_data.length ? true : false;
@@ -534,7 +532,7 @@ class ShortPostViewer extends React.Component {
             }
         }
         else if (this.props.window === 2) {//2
-            return (
+             return (
                 <div className='shortpostviewer-window small-post-window' >
                     <h4>Edit your Post!</h4>
                     <div className='shortpostviewer-nav'>
