@@ -115,6 +115,8 @@ class ProjectController extends React.Component {
         this.createTimelineRow = this.createTimelineRow.bind(this);
         this.createRenderedPosts = this.createRenderedPosts.bind(this);
         this.handlePublish = this.handlePublish.bind(this);
+        this.handleCommentIDInjection = this.handleCommentIDInjection.bind(this);
+        this.saveProjectPreview = this.saveProjectPreview.bind(this);
     }
 
     componentDidUpdate() {
@@ -125,6 +127,21 @@ class ProjectController extends React.Component {
                 hasMore: true,
                 feedID: this.state.feedID + 1
             })
+        }
+    }
+
+    handleCommentIDInjection(selectedEventIndex, rootCommentsArray) {
+        const feedData = this.state.feedData;
+        feedData[selectedEventIndex].comments = rootCommentsArray;
+        feedData[selectedEventIndex].comment_count += 1;
+        this.setState({ feedData });
+    }
+
+    saveProjectPreview(projectPreview) {
+        if (!this.state.projectPreviewMap[projectPreview._id]) {
+            let projectPreviewMap = this.state.projectPreviewMap;
+            projectPreviewMap[projectPreview._id] = projectPreview;
+            this.setState({ projectPreviewMap: projectPreviewMap });
         }
     }
 
@@ -535,23 +552,28 @@ class ProjectController extends React.Component {
                     displayPhotoKey: this.props.authUser.croppedDisplayPhotoKey,
 
                 }
+
                 const projectPreviewMap = {
                     title: this.state.title,
                     project_id: this.state.selectedProject?._id,
                     parent_project_id: this.state.priorProjectID,
                     remix: this.state.selectedProject?.remix
                 }
+
                 const viewerObject = {
-                    textData: formatPostText(event),
+                    largeViewMode: true,
+                    textData: event ? formatPostText(event) : null,
                     eventData: event,
                     projectID: this.state.selectedProject?._id,
                     editProjectState: this.state.editProjectState,
-                    postIndex: this.state.selectedPostIndex,
+                    postIndex: this.state.selectedEventIndex,
                     postType: this.state.postType,
                     pursuitNames: this.props.pursuitNames,
-                    projectPreviewMap
-                }
+                    projectPreviewMap,
 
+                    onCommentIDInjection: this.handleCommentIDInjection,
+
+                }
                 return (
                     <>
                         <ProfileModal

@@ -157,8 +157,8 @@ class SingleComment extends React.Component {
             commentData.comment : annotation.text;
         const replies = this.state.replies;
         replies.push(
-
             <SingleComment
+                key={currentLevel}
                 hasAnnotation={!!annotation}
                 level={currentLevel}
                 postID={this.props.postID}

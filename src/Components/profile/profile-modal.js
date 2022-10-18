@@ -4,8 +4,7 @@ import { POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
  
 const ProfileModal = (props) => {
     if (props.viewerObject.eventData &&
-        props.viewerObject.modalState === POST_VIEWER_MODAL_STATE) {
-            console.log("Hit");
+        props.modalState === POST_VIEWER_MODAL_STATE) {
         return (
             props.returnModalStructure(
                 <PostController
@@ -13,7 +12,6 @@ const ProfileModal = (props) => {
                     viewerObject={props.viewerObject}
                     authUser={props.authUser}
                     closeModal={props.closeModal}
-
                 />
                 ,
                 props.closeModal));

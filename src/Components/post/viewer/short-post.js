@@ -111,7 +111,6 @@ class ShortPostViewer extends React.Component {
                 .then((result) => {
                     this.setState({
                         projectPreview: result.data,
-
                     }, () => {
                         if (this.props.saveProjectPreview) {
                             this.props.saveProjectPreview(result.data);
@@ -473,7 +472,6 @@ class ShortPostViewer extends React.Component {
 
     render() {
         const isOwnProfile = this.props.username === this.props.eventData.username;
-        console.log(this.props.eventData.image_data);
         if (this.props.window === 1) { //1
             const hasImages = this.props.eventData.image_data?.length  > 0 ? true : false;
             const header = {

@@ -349,8 +349,8 @@ class ReturningUserPage extends React.Component {
             this.renderRecentPosts(this.state.recentPosts) : null;
         const feed =
             this.createFeed(this.state.feedData)
-                .map((feedItem) =>
-                    <div className='returninguser-feed-object'>
+                .map((feedItem, index) =>
+                    <div key={index} className='returninguser-feed-object'>
                         {feedItem}
                     </div>
                 );

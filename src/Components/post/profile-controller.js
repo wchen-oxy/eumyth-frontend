@@ -121,6 +121,12 @@ class ProfileController extends React.Component {
         return masterArray;
     }
 
+    handleEventClick(selectedEventIndex) {
+        this.setState({
+            selectedEventIndex
+        }, this.setModal(this.state.feedData[selectedEventIndex]._id))
+    }
+
     setModal(postID, isForwardPress) {
         if (!isForwardPress) this.props.navigate(returnPostURL(postID), { replace: false });
         this.props.openMasterModal(POST_VIEWER_MODAL_STATE);
@@ -139,11 +145,6 @@ class ProfileController extends React.Component {
         this.setState({ feedData });
     }
 
-    handleEventClick(selectedEventIndex) {
-        this.setState({
-            selectedEventIndex
-        }, this.setModal(this.state.feedData[selectedEventIndex]._id))
-    }
 
     shouldPull(value) {
         this.setState({ hasMore: value });
@@ -170,7 +171,6 @@ class ProfileController extends React.Component {
                     viewerObject={viewerObject}
                     authUser={this.props.authUser}
                     modalState={this.props.modalState}
-                    onCommentIDInjection={this.handleCommentIDInjection}
                     saveProjectPreview={this.saveProjectPreview}
                     closeModal={this.clearModal}
                     returnModalStructure={this.props.returnModalStructure}
