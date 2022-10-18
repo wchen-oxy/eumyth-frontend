@@ -6,6 +6,7 @@ import { returnUsernameURL, returnPostURL } from 'utils/url';
 import { POST, POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
 import withRouter from 'utils/withRouter';
 import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
+import { formatPostText } from 'utils';
 
 class ProfileController extends React.Component {
     _isMounted = false;
@@ -150,20 +151,29 @@ class ProfileController extends React.Component {
 
 
     render() {
+        const event = this.state.feedData[this.state.selectedEventIndex];
+        const viewerObject = {
+            largeViewMode: true,
+            textData: event ? formatPostText(event) : null,
+            isPostOnlyView: false,
+            pursuitNames: this.props.pursuitNames,
+            eventData: event,
+            projectPreviewMap: this.state.projectPreviewMap,
+
+            postIndex: this.state.selectedEventIndex,
+            onCommentIDInjection: this.handleCommentIDInjection,
+            saveProjectPreview: this.saveProjectPreview
+        }
         return (
             <>
                 <ProfileModal
+                    viewerObject={viewerObject}
                     authUser={this.props.authUser}
                     modalState={this.props.modalState}
-                    postIndex={this.state.selectedEventIndex}
-                    pursuitNames={this.props.pursuitNames}
-                    eventData={this.state.feedData[this.state.selectedEventIndex]}
-                    projectPreviewMap={this.state.projectPreviewMap}
-
-                    closeModal={this.clearModal}
                     onCommentIDInjection={this.handleCommentIDInjection}
-                    returnModalStructure={this.props.returnModalStructure}
                     saveProjectPreview={this.saveProjectPreview}
+                    closeModal={this.clearModal}
+                    returnModalStructure={this.props.returnModalStructure}
 
                 />
                 <Timeline

@@ -1,34 +1,16 @@
 import React from 'react';
 import { POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
-import ShortPostViewer from '../post/viewer/short-post';
-import PostController from "../post/index";
-import { formatPostText } from 'utils';
-
+ import PostController from "../post/index";
+ 
 const ProfileModal = (props) => {
-    if (props.eventData &&
-        props.modalState === POST_VIEWER_MODAL_STATE) {
-        const formattedTextData = formatPostText(props.eventData)
-
-        const viewerObject = {
-            largeViewMode: true,
-            textData: formattedTextData,
-            isPostOnlyView: false,
-            pursuitNames: props.pursuitNames,
-            eventData: props.eventData,
-            projectPreviewMap: props.projectPreviewMap,
-            
-            disableCommenting: props.disableCommenting,
-            projectID: props.projectID,
-            postIndex: props.postIndex,
-            editProjectState: props.editProjectState,
-            onCommentIDInjection: props.onCommentIDInjection,
-            saveProjectPreview: props.saveProjectPreview
-        }
+    if (props.viewerObject.eventData &&
+        props.viewerObject.modalState === POST_VIEWER_MODAL_STATE) {
+            console.log("Hit");
         return (
             props.returnModalStructure(
                 <PostController
                     isViewer
-                    viewerObject={viewerObject}
+                    viewerObject={props.viewerObject}
                     authUser={props.authUser}
                     closeModal={props.closeModal}
 

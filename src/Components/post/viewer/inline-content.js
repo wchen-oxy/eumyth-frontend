@@ -11,22 +11,20 @@ const ShortPostInlineContent = (props) => {
             <>
                 <div
                     id='shortpostviewer-inline-hero'
-                    className='small-post-window'
                     onClick={props.onModalLaunch}
                 >
                     <PostHeader
-                        {...props.headerProps}
+                        {...props.header}
                     />
                     <div className='shortpostviewer-inline-side'>
-                        {props.title &&
-                            <h2 className="shortpostviewer-title"> {props.title}</h2>}
+                        {props.caption.title &&
+                            <h2 className="shortpostviewer-title"> {props.caption.title}</h2>}
                         <MetaInfo
-                            {...props.metaProps}
+                            {...props.meta}
                         />
 
                         <CaptionText
-                            index={props.imageIndex}
-                            {...props.textProps} />
+                            {...props.caption} />
                     </div>
                     {props.annotations && props.renderImageSlider(COLLAPSED)}
                 </div>
@@ -37,25 +35,22 @@ const ShortPostInlineContent = (props) => {
     else {
         return (
             <div onClick={props.onModalLaunch}>
-                <div className='shortpostviewer-inline-hero  small-post-window' >
+                <div className='shortpostviewer-inline-hero ' >
                     <div className='shortpostviewer-inline-side'>
                         <PostHeader
-                            {...props.headerProps}
+                            {...props.header}
                         />
                         <MetaInfo
-                            {...props.metaProps}
+                            {...props.meta}
                         />
                     </div>
                     <div className='shortpostviewer-inline-hero'>
-                        {props.title &&
-                            <h2 className="shortpostviewer-title"> {props.title}</h2>}
-                        <ShortHeroText
-                            index={props.imageIndex}
-                            isPaginated={props.metaProps.isPaginated}
-                            textData={props.textData} />
+                        <ShortHeroText  {...props.caption} />
                     </div>
                 </div>
-                {props.renderComments(COLLAPSED)}
+                <div className="shortpostviewer-inline-comments">
+                    {props.renderComments(COLLAPSED)}
+                </div>
             </div>
         )
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ShortHeroText = (props) => {
-    const heroText =
+     const heroText =
         props.isPaginated && props.textData ?
             props.textData[props.imageIndex] : props.textData;
     const styleType = heroText.length < 1000 ? 'tiny-text' : 'medium-text';

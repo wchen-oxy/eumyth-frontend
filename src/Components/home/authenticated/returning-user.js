@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ShortPostViewer from 'components/post/viewer/short-post';
+import PostController from "components/post/index";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import EventController from 'components/timeline/timeline-event-controller';
 import AxiosHelper from 'utils/axios';
+import { formatPostText } from 'utils';
 import { withAuthorization } from 'store/session';
 import { withFirebase } from 'store/firebase';
 import withRouter from "utils/withRouter";
@@ -153,30 +155,29 @@ class ReturningUserPage extends React.Component {
         let nextOpenPostIndex = this.state.nextOpenPostIndex;
 
         return inputArray.map((feedItem, index) => {
-            const preferredPostPrivacy = feedItem.username === this.state.username ? (
-                this.state.preferredPostPrivacy) : (null);
+            const formattedTextData = formatPostText(feedItem);
+            const viewerObject = {
+                key: nextOpenPostIndex++,
+                largeViewMode: false,
+                textData: formattedTextData,
+                isPostOnlyView: false,
+                pursuitNames: this.state.pursuitObjects.names,
+                projectPreviewMap: this.state.projectPreviewMap,
+                eventData: feedItem,
 
+                onCommentIDInjection: this.handleCommentIDInjection,
+                saveProjectPreview: this.saveProjectPreview,
+                passDataToModal: this.passDataToModal,
+            }
             return (
-                <ShortPostViewer
-                    labels={this.state.labels}
-                    targetProfileID={this.state.fullUserDataID}
-                    targetIndexUserID={this.state.indexUserDataID}
-                    key={nextOpenPostIndex++}
-                    postIndex={index++}
-                    postID={feedItem._id}
-                    visitorUsername={this.state.username}
-                    isOwnProfile={feedItem.username === this.state.username}
-                    displayPhoto={feedItem.display_photo_key}
-                    preferredPostPrivacy={preferredPostPrivacy}
-                    pursuitNames={this.state.pursuitObjects.names}
-                    eventData={feedItem}
-                    textData={feedItem.text_data}
-                    passDataToModal={this.passDataToModal}
-                    largeViewMode={false}
-                    onCommentIDInjection={this.handleCommentIDInjection}
-                    projectPreviewMap={this.state.projectPreviewMap}
-                    saveProjectPreview={this.saveProjectPreview}
-                />)
+                <PostController
+                    isViewer
+                    viewerObject={viewerObject}
+                    authUser={this.props.authUser}
+                    closeModal={this.clearModal}
+                />
+
+            );
         });
     }
 
@@ -194,7 +195,7 @@ class ReturningUserPage extends React.Component {
             .returnMultiplePosts(
                 slicedObjectIDs,
                 true)
-            .then((result) => { 
+            .then((result) => {
                 if (result.data) {
                     this.setState((state) => ({
                         feedData: state.feedData.concat(result.data.posts),
@@ -306,23 +307,27 @@ class ReturningUserPage extends React.Component {
     renderModal() {
         if (this.props.modalState === POST_VIEWER_MODAL_STATE &&
             this.state.selectedEvent) {
-            const content = (
-                <ShortPostViewer
-                    authUser={this.props.authUser}
-                    largeViewMode={true}
-                    postIndex={this.state.selectedPostIndex}
-                    isOwnProfile={true}
-                    isPostOnlyView={false}
-                    preferredPostPrivacy={this.state.preferredPostPrivacy}
-                    pursuitNames={this.state.pursuitObjects.names}
-                    eventData={this.state.selectedEvent}
-                    selectedPostFeedType={this.state.selectedPostFeedType}
-                    textData={this.state.selectedEvent.text_data}
-                    closeModal={this.clearModal}
-                    onCommentIDInjection={this.handleCommentIDInjection}
-                    projectPreviewMap={this.state.projectPreviewMap}
-                    saveProjectPreview={this.saveProjectPreview}
+            const formattedTextData = formatPostText(this.state.selectedEvent);
+            const viewerObject = {
+                key: this.state.selectedPostIndex,
+                largeViewMode: true,
+                textData: formattedTextData,
+                isPostOnlyView: false,
+                pursuitNames: this.state.pursuitObjects.names,
+                projectPreviewMap: this.state.projectPreviewMap,
+                eventData: this.state.selectedEvent,
+                selectedPostFeedType: this.state.selectedPostFeedType,
+                postIndex: this.state.selectedPostIndex,
 
+                onCommentIDInjection: this.handleCommentIDInjection,
+                saveProjectPreview: this.saveProjectPreview,
+            };
+            const content = (
+                <PostController
+                    isViewer
+                    viewerObject={viewerObject}
+                    authUser={this.props.authUser}
+                    closeModal={this.clearModal}
                 />
             );
             return this.props.returnModalStructure(

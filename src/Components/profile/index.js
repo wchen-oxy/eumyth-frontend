@@ -21,7 +21,7 @@ import {
     THREADS
 } from 'utils/constants/flags';
 import { createPursuitArray, formatPostText } from 'utils';
-import HeroContent from './hero-content';
+import HeroContentDecider from './hero-content-decider';
 
 const selectMessage = (action, isPrivate) => {
     switch (action) {
@@ -482,7 +482,7 @@ class ProfilePageAuthenticated extends React.Component {
                             </button>
                         </div>
                         {this.state.contentType &&
-                            <HeroContent
+                            <HeroContentDecider
                                 {...specificContent}
                                 contentType={this.state.contentType}
                                 visibility={{

@@ -35,10 +35,15 @@
 
 .shortpostviewer-inline-hero {
     @include flex-display-column;
+    padding: 5px;
 }
 
 .shortpostviewer-inline-side {
     width: 100%;
+}
+
+.shortpostviewer-inline-comments {
+    padding: 5px;
 }
 
 .shortpostviewer-title {

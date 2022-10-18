@@ -19,6 +19,7 @@ import {
     PROJECT_SELECT_VIEW_STATE,
     PROJECT
 } from "../../utils/constants/flags";
+import { formatPostText } from 'utils';
 
 const MAIN = "MAIN";
 const EDIT = "EDIT";
@@ -297,7 +298,7 @@ class ProjectController extends React.Component {
                         PROJECT_CONTENT_ONLY_VIEW_STATE : PROJECT_MACRO_VIEW_STATE;
                     // const stopEdits = this.props.isContentOnlyView && this.projectSelectSubState === 1;
                     // const state = stopEdits ? {} : { barType: decideClearedPageType };
-                     this.setState({
+                    this.setState({
                         barType: decideClearedPageType,
                         editProjectState: false,
                         projectSelectSubState: 1,
@@ -318,7 +319,7 @@ class ProjectController extends React.Component {
     }
 
     setModal(postID) {
-         if (!this.state.editProjectState) {
+        if (!this.state.editProjectState) {
             this.props.navigate(returnPostURL(postID), { replace: false });
         }
         this.props.openMasterModal(POST_VIEWER_MODAL_STATE);
@@ -524,6 +525,7 @@ class ProjectController extends React.Component {
         switch (this.state.window) {
             case (MAIN):
                 const sourceContent = this.props.isContentOnlyView ? this.props.content : this.state.selectedProject;
+                const event = this.state.feedData[this.state.selectedEventIndex];
                 const forkData = {
                     sourceContent,
                     profileID: this.props.authUser.profileID,
@@ -533,27 +535,31 @@ class ProjectController extends React.Component {
                     displayPhotoKey: this.props.authUser.croppedDisplayPhotoKey,
 
                 }
+                const projectPreviewMap = {
+                    title: this.state.title,
+                    project_id: this.state.selectedProject?._id,
+                    parent_project_id: this.state.priorProjectID,
+                    remix: this.state.selectedProject?.remix
+                }
+                const viewerObject = {
+                    textData: formatPostText(event),
+                    eventData: event,
+                    projectID: this.state.selectedProject?._id,
+                    editProjectState: this.state.editProjectState,
+                    postIndex: this.state.selectedPostIndex,
+                    postType: this.state.postType,
+                    pursuitNames: this.props.pursuitNames,
+                    projectPreviewMap
+                }
+
                 return (
                     <>
                         <ProfileModal
+                            viewerObject={viewerObject}
                             authUser={this.props.authUser}
-                            projectID={this.state.selectedProject?._id}
-                            editProjectState={this.state.editProjectState}
                             modalState={this.props.modalState}
-                            postIndex={this.state.selectedPostIndex}
-                            postType={this.state.postType}
-                            pursuitNames={this.props.pursuitNames}
-                            eventData={this.state.feedData[this.state.selectedEventIndex]}
-                            returnModalStructure={this.props.returnModalStructure}
                             closeModal={this.clearModal}
-                            projectPreviewMap={
-                                {
-                                    title: this.state.title,
-                                    project_id: this.state.selectedProject?._id,
-                                    parent_project_id: this.state.priorProjectID,
-                                    remix: this.state.selectedProject?.remix
-                                }
-                            }
+                            returnModalStructure={this.props.returnModalStructure}
                         />
                         <MainDisplay
                             userInfo={{

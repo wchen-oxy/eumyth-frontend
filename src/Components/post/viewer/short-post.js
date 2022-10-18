@@ -473,9 +473,9 @@ class ShortPostViewer extends React.Component {
 
     render() {
         const isOwnProfile = this.props.username === this.props.eventData.username;
-
+        console.log(this.props.eventData.image_data);
         if (this.props.window === 1) { //1
-            const hasImages = this.props.eventData.image_data?.length ?? true;
+            const hasImages = this.props.eventData.image_data?.length  > 0 ? true : false;
             const header = {
                 isOwnProfile,
                 editProjectState: this.props.editProjectState,
@@ -490,6 +490,7 @@ class ShortPostViewer extends React.Component {
                 title: this.props.eventData.title,
                 textData: this.props.textData,
                 isPaginated: this.props.isPaginated,
+                imageIndex: this.state.imageIndex,
             }
 
             const meta = {
@@ -507,6 +508,7 @@ class ShortPostViewer extends React.Component {
                 renderImageSlider: this.renderImageSlider,
                 renderComments: this.renderComments,
             };
+ 
             if (this.props.largeViewMode) {
                 const activityFunctions = {
                     jumpToComment: this.jumpToComment,
@@ -518,7 +520,7 @@ class ShortPostViewer extends React.Component {
                         heroRef={this.heroRef}
                         activityFunctions={activityFunctions}
                         {...sharedProps}
-                    />
+                     />
                 );
             }
             else {

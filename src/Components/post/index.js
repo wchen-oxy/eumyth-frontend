@@ -304,8 +304,8 @@ class PostController extends React.Component {
       handleFormAppend: this.handleFormAppend,
       setThreadToggleState: this.setThreadToggleState,
     }
-
-    if (this.props.isViewer) {
+     if (this.props.isViewer) {
+      console.log(this.state.window);
       return (
         <ShortPostViewer
           {...miniAuthObject}

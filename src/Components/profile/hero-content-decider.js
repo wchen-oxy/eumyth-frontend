@@ -3,7 +3,7 @@ import ProjectController from '../project/index';
 import { default as PostController } from '../post/profile-controller';
 import { POST, PROJECT } from 'utils/constants/flags';
 
-const HeroContent = (props) => {
+const HeroContentDecider = (props) => {
     if (props.visibility.fail) {
         return (
             <p>The user you're looking for does not exist.</p>)
@@ -33,4 +33,4 @@ const HeroContent = (props) => {
     return new Error("Missing Content Type Field");
 }
 
-export default HeroContent;
+export default HeroContentDecider;
