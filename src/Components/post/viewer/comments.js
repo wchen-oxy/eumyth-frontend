@@ -8,7 +8,6 @@ class Comments extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
             commentText: '',
             selectedCommentThread: false,
             loadingComments: true,

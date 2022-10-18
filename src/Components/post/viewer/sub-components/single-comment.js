@@ -177,9 +177,10 @@ class SingleComment extends React.Component {
                 onMouseClick={this.props.onMouseClick}
             />
         );
-        this.setState({ replies })
-
+        this.setState({ replies });
+        console.log(this.state.replies);
     }
+
     render() {
         const masterClassName = this.props.level > 1 ?
             'singlecomment-threads' : '';
@@ -258,7 +259,7 @@ class SingleComment extends React.Component {
 
                     </div>
                 </div>
-                <div key={'Reply' + Math.random() * 2}>
+                <div key={'Reply' + this.props.level}>
                     {this.state.replies}
                 </div>
             </div>
