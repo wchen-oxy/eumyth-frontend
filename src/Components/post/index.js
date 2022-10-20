@@ -3,7 +3,7 @@ import imageCompression from 'browser-image-compression';
 import { default as ShortPostDraft } from './draft/short-post';
 import { withFirebase } from 'store/firebase';
 import ShortPostViewer from './viewer/short-post';
-import { appendDefaultPostFields, appendImageFields, handleNewSubmit, handleUpdateSubmit } from './draft/helpers';
+import { appendPrimaryPostFields, appendImageFields, handleNewSubmit, handleUpdateSubmit } from './draft/helpers';
 import AxiosHelper from 'utils/axios';
 import fileDisplayContainer from './editor/sub-components/file-display-container';
 
@@ -44,7 +44,7 @@ class PostController extends React.Component {
       // pursuit: data ? data.pursuit_category : null,
       // loading: false, //maybe
       // error: false, //maybe
-      threadToggleState: false,
+      isNewSeriesToggled: false,
       titlePrivacy: false,
       threadTitle: '',
       isCompleteProject: false,
@@ -129,6 +129,7 @@ class PostController extends React.Component {
   }
 
   setLabels(labels) {
+    console.log(labels);
     this.setState({ labels: labels });
   }
 
@@ -156,8 +157,8 @@ class PostController extends React.Component {
     this.setState({ postPrivacyType })
   }
 
-  setThreadToggleState(threadToggleState) {
-    this.setState({ threadToggleState })
+  setThreadToggleState(isNewSeriesToggled) {
+    this.setState({ isNewSeriesToggled })
   }
 
   setTitlePrivacy(titlePrivacy) {
@@ -174,6 +175,24 @@ class PostController extends React.Component {
   }
 
   handleFormAppend(formData, required, images, functions) {
+    //required
+    //selectedDraft
+    //textData
+
+    //optional
+    //useImageForThumbnail
+    //coverPhoto
+    //compressedPhotos
+
+    //viewerObject
+    // key: this.state.selectedContent._id,
+    // largeViewMode: true,
+    // textData: formattedTextData,
+    // isPostOnlyView: this.state.isContentOnlyView,
+    // pursuitNames: this.state.pursuitNames,
+    // eventData: this.state.selectedContent,
+    // projectPreviewMap: {}
+
     const defaults = {
       ...required,
       postPrivacyType: this.state.postPrivacyType,
@@ -187,8 +206,8 @@ class PostController extends React.Component {
       username: this.props.authUser.username,
       userPreviewID: this.props.authUser.userPreviewID,
       indexProfileID: this.props.authUser.indexProfileID,
-      smallCroppedDisplayPhotoKey: this.props.authUser.smallCroppedDisplayPhotoKey,
       profileID: this.props.authUser.profileID,
+      smallCroppedDisplayPhotoKey: this.props.authUser.smallCroppedDisplayPhotoKey,
     }
 
     const completeOptionals = {
@@ -196,21 +215,23 @@ class PostController extends React.Component {
         isUpdateToPost: true,
         coverPhotoKey: this.props.viewerObject.eventData?.cover_photo_key ?? null,
         projectPreviewID: this.props.viewerObject.eventData.project_preview_id,
-        selectedDraft: this.state.selectedDraft,
         postID: this.props.viewerObject.eventData._id,
       }),
-      threadToggleState: this.state.threadToggleState,
       isCompleteProject: this.state.isCompleteProject,
       titlePrivacy: this.state.titlePrivacy,
       threadTitle: this.state.threadTitle,
     }
-    appendDefaultPostFields(formData, { ...defaults, ...completeOptionals });
+    appendPrimaryPostFields(formData, { ...defaults, ...completeOptionals });
     appendImageFields(formData, images, functions);
     const params = [
       formData,
-      images,
+      {
+        ...completeOptionals,
+        ...required
+      },
       functions,
-      this.props.viewerObject.isPostOnlyView
+      this.props.viewerObject?.isPostOnlyView ?? false,
+      this.state.isNewSeriesToggled
     ]
     if (this.props.isViewer) {
       if (!images.useImageForThumbnail && images.coverPhotoKey) {
@@ -222,11 +243,18 @@ class PostController extends React.Component {
       return handleUpdateSubmit(...params);
     }
     else {
-      return handleNewSubmit(...params);
+      return handleNewSubmit(
+        formData,
+        images,
+        functions,
+        this.props.viewerObject?.isPostOnlyView ?? false,
+        this.state.isNewSeriesToggled
+      );
     }
   }
 
   render() {
+    console.log(this.props.isViewer);
     const miniAuthObject = {
       pastLabels: this.props.authUser.labels,
       userPreviewID: this.props.authUser.userPreviewID,
@@ -293,7 +321,7 @@ class PostController extends React.Component {
       pursuitNames: this.props.authUser.pursuits,
       threadTitle: this.state.threadTitle,
       titlePrivacy: this.state.titlePrivacy,
-      threadToggleState: this.state.threadToggleState,
+      threadToggleState: this.state.isNewSeriesToggled,
     }
 
     const threadFunction = {
@@ -304,7 +332,8 @@ class PostController extends React.Component {
       handleFormAppend: this.handleFormAppend,
       setThreadToggleState: this.setThreadToggleState,
     }
-     if (this.props.isViewer) {
+    if (this.props.isViewer) {
+      console.log(this.state.selectedDraft);
       return (
         <ShortPostViewer
           {...miniAuthObject}

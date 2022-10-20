@@ -25,6 +25,7 @@ import {
     STATUS_FIELD,
     THREAD_TITLE_PRIVACY_FIELD,
     COMPLETE_PROJECT_FIELD,
+    PROJECT_PREVIEW_ID_FIELD,
 
 } from 'utils/constants/form-data';
 import { SHORT, LONG, } from 'utils/constants/flags';
@@ -49,36 +50,86 @@ const handleError = (setLoading, setError) => {
     setError(true);
 }
 
-export const handleUpdateSubmit = (formData, fields, functions, isPostOnlyView) => {
+const handleProjectCreation = (formData, fields) => {
+    formData.append(STATUS_FIELD, "DRAFT");
+    formData.set(TITLE_FIELD, fields.threadTitle);
+    formData.append(THREAD_TITLE_PRIVACY_FIELD, fields.titlePrivacy);
+    return AxiosHelper.createProject(formData);
+}
+
+export const handleUpdateSubmit = (
+    formData,
+    fields,
+    functions,
+    isPostOnlyView,
+    isNewSeriesToggled
+) => {
     // addImages(formData, fields.compressedPhotos); //DELETE?
-    const updates = fields.isUpdateToPost && fields.projectPreviewID !== fields.selectedDraft ?
-        AxiosHelper.updatePostOwner(fields.projectPreviewID, fields.selectedDraft, fields.postID) :
-        AxiosHelper.updatePost(formData)
-    return updates.then((result) => {
-        functions.setIsSubmitting(false);
-        result.status === 200 ?
-            handleSuccess(isPostOnlyView, functions.closeModal)
-            : handleError(functions.setLoading, functions.setError);
-    }).catch((result) => {
-        console.log(result.error);
-        functions.setIsSubmitting(false);
-        alert(result);
-    });
+    if (isNewSeriesToggled) {
+        console.log("new series toggled");
+        return handleProjectCreation(formData, fields)
+            .then(results => {
+                const updates = fields.isUpdateToPost && fields.projectPreviewID !== fields.selectedDraft ?
+                    AxiosHelper
+                        .updatePostOwner(fields.projectPreviewID, results.data.id, fields.postID)
+                        .then(results => {
+                            formData.set(PROJECT_PREVIEW_ID_FIELD, results.data.project_preview_id);
+                            return AxiosHelper.updatePost(formData)
+                        }) :
+                    AxiosHelper.updatePost(formData);
+                return updates
+                    //updaTE POST ITSELF NOW
+                    .then((result) => {
+                        functions.setIsSubmitting(false);
+                        result.status === 200 ?
+                            handleSuccess(isPostOnlyView, functions.closeModal)
+                            : handleError(functions.setLoading, functions.setError);
+                    })
+            })
+            .catch((result) => {
+                console.log(result.error);
+                functions.setIsSubmitting(false);
+                alert(result);
+            });
+    }
+    else {//get previewID and then chain the each update
+        console.log(fields);
+        const updates = fields.isUpdateToPost && fields.projectPreviewID !== fields.selectedDraft ?
+            AxiosHelper
+                .updatePostOwner(fields.projectPreviewID, fields.selectedDraft, fields.postID)
+                .then(results => {
+                    formData.set(PROJECT_PREVIEW_ID_FIELD, results.data.project_preview_id);
+                    return AxiosHelper.updatePost(formData)
+                }) :
+            AxiosHelper.updatePost(formData);
+        return updates.then((result) => {
+            functions.setIsSubmitting(false);
+            result.status === 200 ?
+                handleSuccess(isPostOnlyView, functions.closeModal)
+                : handleError(functions.setLoading, functions.setError);
+        }).catch((result) => {
+            console.log(result.error);
+            functions.setIsSubmitting(false);
+            alert(result);
+        });
+    }
 }
 
 
-export const handleNewSubmit = (formData, fields, functions, isPostOnlyView) => {
-    if (fields.threadToggleState) {
-        formData.append(USER_ID_FIELD, fields.profileID);
-        formData.append(STATUS_FIELD, "DRAFT");
-        formData.set(TITLE_FIELD, fields.threadTitle);
-        formData.append(THREAD_TITLE_PRIVACY_FIELD, fields.titlePrivacy);
-        return AxiosHelper.createProject(formData)
-            .then((results) => {
+export const handleNewSubmit = (
+    formData,
+    fields,
+    functions,
+    isPostOnlyView,
+    isNewSeriesToggled
+) => {
+    if (isNewSeriesToggled) {
+        return handleProjectCreation(formData, fields)
+            .then(results => {
                 formData.append(SELECTED_DRAFT_ID, results.data.id);
                 formData.set(TITLE_FIELD, fields.previewTitle);
                 addImages(formData, fields.compressedPhotos);
-                return AxiosHelper.createPost(formData)
+                return AxiosHelper.createPost(formData);
             })
             .then((result) => {
                 console.log(result);
@@ -134,27 +185,21 @@ export const appendImageFields = (formData, fields, functions) => {
 }
 
 
-export const appendDefaultPostFields = (formData, defaults) => {
-    formData.append(DATE_FIELD, defaults.date);
-    formData.append(POST_TYPE_FIELD, defaults.postType);
+export const appendPrimaryPostFields = (formData, defaults) => {
     formData.append(USERNAME_FIELD, defaults.username);
+    formData.append(USER_ID_FIELD, defaults.profileID);
     formData.append(IS_PAGINATED_FIELD, defaults.isPaginated);
-    // formData.append(PROGRESSION_FIELD, (progression));
     formData.append(DIFFICULTY_FIELD, defaults.difficulty);
-    if (defaults.smallCroppedDisplayPhotoKey) {
-        formData.append(DISPLAY_PHOTO_FIELD, defaults.smallCroppedDisplayPhotoKey);
-    }
-    if (defaults.selectedPursuit) formData.append(PURSUIT_FIELD, defaults.selectedPursuit);
-    if (defaults.isUpdateToPost) formData.append(POST_ID_FIELD, defaults.postID);
-    if (defaults.selectedDraft) {
-        formData.append(SELECTED_DRAFT_ID, defaults.selectedDraft);
-    }
-    if (defaults.userPreviewID) formData.append(USER_PREVIEW_ID_FIELD, defaults.userPreviewID);
-    if (defaults.indexProfileID) formData.append(INDEX_USER_ID_FIELD, defaults.indexProfileID);
-    if (defaults.previewTitle) formData.append(TITLE_FIELD, _.trim(defaults.previewTitle));
-    if (defaults.postPrivacyType) formData.append(POST_PRIVACY_TYPE_FIELD, defaults.postPrivacyType);
-    if (defaults.minDuration) formData.append(MIN_DURATION_FIELD, defaults.minDuration);
-    // if(subtitle) { formData.append(SUBTITLE_FIELD, _.trim(subtitle)); }
+    formData.append(PURSUIT_FIELD, defaults.selectedPursuit);
+    formData.append(USER_PREVIEW_ID_FIELD, defaults.userPreviewID);
+    formData.append(INDEX_USER_ID_FIELD, defaults.indexProfileID);
+    defaults.date && formData.append(DATE_FIELD, defaults.date);
+    defaults.smallCroppedDisplayPhotoKey && formData.append(DISPLAY_PHOTO_FIELD, defaults.smallCroppedDisplayPhotoKey);
+    defaults.isUpdateToPost && formData.append(POST_ID_FIELD, defaults.postID);
+    defaults.threadTitle && formData.append(TITLE_FIELD, defaults.threadTitle);
+    defaults.previewTitle && formData.append(TITLE_FIELD, _.trim(defaults.previewTitle));
+    defaults.postPrivacyType && formData.append(POST_PRIVACY_TYPE_FIELD, defaults.postPrivacyType);
+    defaults.minDuration && formData.append(MIN_DURATION_FIELD, defaults.minDuration);
     if (defaults.labels) {
         for (const label of defaults.labels) {
             formData.append(LABELS_FIELD, label.value);

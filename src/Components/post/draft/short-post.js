@@ -300,8 +300,7 @@ class ShortPost extends React.Component {
       );
     }
     else if (this.props.window === 3) {
-
-      const optional = {
+       const optional = {
         coverPhoto: this.state.coverPhoto,
         compressedPhotos: this.state.tinyPhotos,
       }

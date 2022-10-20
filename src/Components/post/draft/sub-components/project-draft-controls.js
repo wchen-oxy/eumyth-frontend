@@ -5,36 +5,34 @@ import PursuitCategoryInput from './pursuit-category-input';
 const ProjectDraftControls = (props) => {
     const [priorThread, setPriorThread] = useState(props.selectedDraft);
     const doDraftsExist = props.drafts.length > 0;
+    let defaultValue = null;
     let draftOptions = doDraftsExist ? props.drafts.map(
         (item) => {
             if (props.isUpdateToPost && item.content_id === props.selectedDraft) {
-                return (
-                    <option selected value={item.content_id}>
-                        {item.title}
-                    </option>)
+                console.log(defaultValue);
+                defaultValue = item.content_id;
             }
-            else {
-                return (
-                    <option value={item.content_id}>
-                        {item.title}
-                    </option>);
-            }
+            return (
+                <option key={item.title} value={item.content_id}>
+                    {item.title}
+                </option>)
         }) :
         [<option value={null} disabled>No Drafts Available</option>];
 
     if (doDraftsExist && !props.isUpdateToPost) {
-        draftOptions.unshift(<option selected value={null}></option>);
+        draftOptions.unshift(
+            <option key="null" value={null}></option>);
     }
 
     return (
         <div id='projectdraftcontrols'>
             <div className='projectdraftcontrols-header'>
                 <span>
-                    <label>Add to Existing Series:</label>
-                    <label className="switch">
+                    <label>{props.isUpdateToPost ? "Change The Series the Post Belongs To:" : "Add to Existing Series:"}</label>
+                    {<label className="switch">
                         <input type="checkbox" onChange={() => props.setToggleState(!props.toggleState)} />
                         <span className="slider round"></span>
-                    </label>
+                    </label>}
                     <label>Create New Series</label>
                 </span>
                 <h6>A Series is a collection of posts that have a common theme or idea.
@@ -74,6 +72,7 @@ const ProjectDraftControls = (props) => {
                         <select
                             name='select'
                             id='projectdraftcontrols-content'
+                            defaultValue={defaultValue}
                             value={props.selectedDraft}
                             onChange={e => props.setDraft(e.target.value)}>
                             {draftOptions}
