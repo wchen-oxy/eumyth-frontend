@@ -1,4 +1,5 @@
 import React from 'react';
+import { toTitleCase } from 'utils';
 import EventLabels from './event-labels';
 
 const EventTextInfo = (props) => (
@@ -9,7 +10,7 @@ const EventTextInfo = (props) => (
             &&
             (
                 <div className='eventtextinfo-progression'>
-                    <h5>{props.pursuitCategory}</h5>
+                    <h5>{toTitleCase(props.pursuitCategory)}</h5>
                     <p> {props.progression === 2 && ' ' + 'MileStone'}     </p>
                 </div>
             )}

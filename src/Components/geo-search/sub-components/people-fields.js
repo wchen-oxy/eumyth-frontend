@@ -2,6 +2,7 @@ import React from 'react';
 import CreatableSelect from 'react-select/creatable';
 import { PURSUIT_FIELD } from 'utils/constants/form-data';
 import { checkInputNotNull } from 'utils/validator';
+import { toTitleCase } from 'utils';
 
 const defaultOption = { label: 'Search Only Your Pursuits', value: 'ALL' };
 const formatPrompt = (string) => string;
@@ -9,7 +10,7 @@ const PeopleFields = (props) => {
     const formatOptions = (data) => data.map((value) => {
         if (value === 'ALL') return ({ label: 'Search Only Your Pursuits', value: value });
         else
-            return ({ label: value, value: value });
+            return ({ label: toTitleCase(value), value: value });
     });
     const options = checkInputNotNull(props.pursuits, formatOptions)
     const onValueChange = (object) => {
@@ -18,6 +19,12 @@ const PeopleFields = (props) => {
         }
         else {
             return props.onFieldChange(PURSUIT_FIELD, null);
+        }
+    }
+
+    const onEnter = (e) => {
+        if (e.key === 'Enter') {
+            props.onRefreshClick()
         }
     }
 
@@ -31,6 +38,9 @@ const PeopleFields = (props) => {
                     options={options}
                     formatCreateLabel={formatPrompt}
                     onChange={onValueChange}
+                    onInputChange={onValueChange}
+                    onKeyDown={onEnter}
+
 
                 />
                 <div id='peoplefields-distance'>

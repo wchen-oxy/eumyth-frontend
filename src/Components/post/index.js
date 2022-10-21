@@ -254,7 +254,6 @@ class PostController extends React.Component {
   }
 
   render() {
-    console.log(this.props.isViewer);
     const miniAuthObject = {
       pastLabels: this.props.authUser.labels,
       userPreviewID: this.props.authUser.userPreviewID,

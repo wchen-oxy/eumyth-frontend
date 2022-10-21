@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ProjectDraftControls from './sub-components/project-draft-controls';
+import Steps from './sub-components/steps';
 
 const ReviewStage = (props) => {
     const [loading, setLoading] = useState(false);
@@ -50,6 +51,7 @@ const ReviewStage = (props) => {
                         onClick={e => handleReturnClick(e.target.value)}
                     >  Return
                     </button>
+                    <Steps current={3} />
                     <button
                         onClick={(e) => handleFormAppend()}
                         disabled={isSubmitting || props.threadToggleState ? disableCond2 : disableCond1}>

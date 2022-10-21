@@ -2,6 +2,7 @@ import React from "react";
 import { returnProjectURL } from '../../../../utils/url'
 import { displayDifficulty, displayProgressionType } from "utils/constants/ui-text";
 import EventLabels from "components/timeline/sub-components/event-labels";
+import { toTitleCase } from "utils";
 
 const MetaInfo = (props) => {
     const difficulty = displayDifficulty(props.difficulty);
@@ -9,7 +10,7 @@ const MetaInfo = (props) => {
     return (
         <div>
             <div className="metainfo-thread">
-                <p>{props.pursuit} | <span>
+                <p>{toTitleCase(props.pursuit)} | <span>
                     {props.projectPreview &&
                         <a href={returnProjectURL(props.projectPreview.project_id)}>
                             {props.projectPreview.title}

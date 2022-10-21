@@ -3,6 +3,7 @@ import React from 'react';
 import { SPOTLIGHT_POST } from 'utils/constants/flags';
 import { returnUserImageURL } from 'utils/url';
 import { returnFormattedDistance } from 'utils/constants/ui-text';
+import { toTitleCase } from 'utils';
 
 const Results = (props) => {
     const distanceText = returnFormattedDistance(props.person.distance)
@@ -26,7 +27,7 @@ const Results = (props) => {
                     (pursuit, index) => {
                         if (index !== 0) return (
                             <div key={index} className='results-stats'>
-                                <h4>{pursuit.name}</h4>
+                                <h4>{toTitleCase(pursuit.name)}</h4>
                                 <p> {pursuit.num_milestones} Milestones</p>
                                 <p> {pursuit.total_min} Total Minutes</p>
                             </div>)

@@ -18,7 +18,7 @@ const MetaStage = (props) => {
                 <button value={props.previousState} onClick={e => props.setPostStage(e.target.value)}>
                     Return
                 </button>
-                <Steps current={props.current} />
+                <Steps current={2} />
                 <button
                     value={props.previousState + 2}
                     onClick={e => props.setPostStage(e.target.value)}

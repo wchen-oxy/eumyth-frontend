@@ -16,9 +16,6 @@ const options = {
     timeout: 5000,
     maximumAge: 0
 };
-function capitalize(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-}
 
 
 const GeoSearch = (props) =>
@@ -40,9 +37,10 @@ class AuthenticatedGeoSearch extends React.Component {
             lat: null,
             long: null,
             resultState: SPOTLIGHT,
+            hasTextChanged: false,
             spotlight: [],
             people: [],
-            pursuits: this.props.authUser.pursuits.map(item => item.name),
+            pursuits: this.props.authUser.pursuits.map(item => item.name.toUpperCase()),
             selectedContent: null,
 
             distance: 10,
@@ -187,10 +185,10 @@ class AuthenticatedGeoSearch extends React.Component {
                 this.setState({ progression: value });
                 break;
             case (DISTANCE_FIELD):
-                this.setState({ distance: value });
+                this.setState({ distance: value, });
                 break;
             case (PURSUIT_FIELD):
-                this.setState({ selectedPursuit: value });
+                this.setState({ selectedPursuit: value, hasTextChanged: true });
                 break;
             default:
                 throw new Error("No fields matched");
@@ -208,10 +206,10 @@ class AuthenticatedGeoSearch extends React.Component {
 
     refreshResults() {
         const selectedPursuit = this.state.selectedPursuit === 'ALL' ?
-            this.state.pursuits.slice(1) : [capitalize(this.state.selectedPursuit)];
-        const selectedPeople = this.state.people.map(person => person._id);
+            this.state.pursuits.slice(1) : [this.state.selectedPursuit.toUpperCase()];
+        // const selectedPeople = this.state.people.map(person => person._id); save this for when you need to pull more people in.
+        const selectedPeople = [];
         selectedPeople.push(this.props.authUser.userPreviewID);
-
         AxiosHelper
             .getSimilarPeople(
                 this.state.distance,
@@ -221,17 +219,29 @@ class AuthenticatedGeoSearch extends React.Component {
                 this.state.long,
             )
             .then(results => {
-                if (results.data.users.length === 0 && this.state.people.length === 0) {
-                    return;
-                }
-                else {
-                    let people = this.state.people.concat(results.data.users);
-                    this.setState({
-                        people,
-                        loading: false,
-                        resultState: RESULTS
-                    })
-                }
+                console.log(results);
+                // this.setState({
+                //     people: [],
+                //     loading: false,
+                //     resultState: RESULTS
+                // })  
+                // if (results.data.users.length === 0) {
+
+                //     this.setState({
+                //         people: [],
+                //         loading: false,
+                //         resultState: RESULTS
+                //     })
+                //     return;
+                // }
+                // else {
+                // let people = this.state.people.concat(results.data.users);
+                this.setState({
+                    people: results.data.users,
+                    loading: false,
+                    resultState: RESULTS
+                })
+                // }
             })
     }
 

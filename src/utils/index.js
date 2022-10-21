@@ -1,5 +1,14 @@
 import imageCompression from 'browser-image-compression';
 
+export const toTitleCase = (str) => {
+    return str.replace(
+        /\w\S*/g,
+        function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        }
+    );
+}
+
 export const formatPostText = (eventData) => {
     return eventData?.text_data && eventData.is_paginated ?
         JSON.parse(eventData.text_data) : eventData.text_data;
