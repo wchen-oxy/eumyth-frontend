@@ -4,29 +4,35 @@ import { PURSUIT_FIELD } from 'utils/constants/form-data';
 import { checkInputNotNull } from 'utils/validator';
 import { toTitleCase } from 'utils';
 
-const defaultOption = { label: 'Search Only Your Pursuits', value: 'ALL' };
+const defaultOption = { label: 'Search Only Your Pursuits', value: 'Search Only Your Pursuits' };
 const formatPrompt = (string) => string;
 const PeopleFields = (props) => {
     const formatOptions = (data) => data.map((value) => {
-        if (value === 'ALL') return ({ label: 'Search Only Your Pursuits', value: value });
+        if (value === 'All') return ({ label: 'Search Only Your Pursuits', value: value });
         else
             return ({ label: toTitleCase(value), value: value });
     });
-    const options = checkInputNotNull(props.pursuits, formatOptions)
-    const onValueChange = (object) => {
-        if (object) {
-            return props.onFieldChange(PURSUIT_FIELD, object.value);
+    const options = checkInputNotNull(props.pursuits, formatOptions);
+    const onValueChange = (event) => {
+        return props.onFieldChange(PURSUIT_FIELD, event?.value ?? "");
+    }
+
+    const handleInputChange = (input, action) => {
+        if (action.action !== "input-blur"
+            && action.action !== "menu-close"
+            && input !== undefined) {
+            props.onFieldChange(PURSUIT_FIELD, input);
         }
-        else {
-            return props.onFieldChange(PURSUIT_FIELD, null);
-        }
+
     }
 
     const onEnter = (e) => {
+        console.log("OnEnterPressed");
         if (e.key === 'Enter') {
-            props.onRefreshClick()
+            props.onRefreshClick();
         }
     }
+    console.log(props.selectedPursuit);
 
     return (
         <div id='peoplefields'>
@@ -34,13 +40,16 @@ const PeopleFields = (props) => {
                 className='peoplefields-fields' >
                 <CreatableSelect
                     isClearable
-                    defaultValue={defaultOption}
+                    onCloseResetsInput={false}
+                    onBlurResetsInput={false}
+                   
+                    noOptionsMessage={() => null}
+                    inputValue={props.selectedPursuit}
                     options={options}
-                    formatCreateLabel={formatPrompt}
                     onChange={onValueChange}
-                    onInputChange={onValueChange}
+                    onInputChange={handleInputChange}
                     onKeyDown={onEnter}
-
+                    createOptionPosition='first'
 
                 />
                 <div id='peoplefields-distance'>
@@ -58,8 +67,11 @@ const PeopleFields = (props) => {
                 <button
                     id="peoplefields-refresh"
                     className="btn-round"
-                    onClick={props.onRefreshClick}
-                    disabled={!props.selectedPursuit}
+                    disabled={props.selectedPursuit.length === 0}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        props.onRefreshClick();
+                    }}
                 >
                     Search
                 </button>

@@ -290,6 +290,7 @@ class ShortPost extends React.Component {
         imageArray: this.state.tinyPhotos,
         closeModal: this.props.closeModal
       }
+      console.log(this.props.metaObject);
       return (
         <MetaStage
           {...required}

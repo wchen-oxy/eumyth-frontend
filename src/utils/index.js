@@ -32,7 +32,7 @@ export const createPursuitArray = (pursuits) => {
 };
 
 export const formatReactSelectOptions =
-    (data) => data.map((option) => ({ label: option.label, value: option.value }));
+    (data) => data.map((option) => ({ label: option, value: option }));
 
 export const setFile = (file, setPhotoBoolean, setPhoto, maxWidthOrHeight, filename) => {
     if (!file) return;

@@ -7,6 +7,7 @@ import ShortPostViewer from 'components/post/viewer/short-post';
 import PeopleFields from './sub-components/people-fields';
 import { POST_VIEWER_MODAL_STATE, SPOTLIGHT_POST } from 'utils/constants/flags';
 import { DIFFICULTY_FIELD, DISTANCE_FIELD, PROGRESSION_FIELD, PURSUIT_FIELD } from 'utils/constants/form-data';
+import { toTitleCase } from 'utils';
 
 const SPOTLIGHT = 'SPOTLIGHT';
 const RESULTS = 'RESULTS';
@@ -40,13 +41,13 @@ class AuthenticatedGeoSearch extends React.Component {
             hasTextChanged: false,
             spotlight: [],
             people: [],
-            pursuits: this.props.authUser.pursuits.map(item => item.name.toUpperCase()),
+            pursuits: this.props.authUser.pursuits.map(item => toTitleCase(item.name)),
             selectedContent: null,
 
             distance: 10,
             difficulty: 0,
             progression: 1,
-            selectedPursuit: 'ALL',
+            selectedPursuit: '',
 
             projectPreviewMap: {}
 
@@ -188,6 +189,7 @@ class AuthenticatedGeoSearch extends React.Component {
                 this.setState({ distance: value, });
                 break;
             case (PURSUIT_FIELD):
+                console.log(value);
                 this.setState({ selectedPursuit: value, hasTextChanged: true });
                 break;
             default:
@@ -197,6 +199,8 @@ class AuthenticatedGeoSearch extends React.Component {
     }
 
     handleRefreshClick() {
+        console.log("refreshed", this.state.selectedPursuit);
+        if (!this.state.selectedPursuit) {console.log("numb"); return;}
         this.setState({ loading: true }, this.refreshResults)
     }
 
@@ -205,7 +209,7 @@ class AuthenticatedGeoSearch extends React.Component {
     }
 
     refreshResults() {
-        const selectedPursuit = this.state.selectedPursuit === 'ALL' ?
+        const selectedPursuit = this.state.selectedPursuit === 'Search Only Your Pursuits' ?
             this.state.pursuits.slice(1) : [this.state.selectedPursuit.toUpperCase()];
         // const selectedPeople = this.state.people.map(person => person._id); save this for when you need to pull more people in.
         const selectedPeople = [];
@@ -260,11 +264,6 @@ class AuthenticatedGeoSearch extends React.Component {
                         onDistanceChange={this.handleDistanceChange}
 
                     />
-                    {/* <PostFields
-                        onFieldChange={this.handleFieldChange}
-                        onRefreshClick={this.handleRefreshClick}
-
-                    /> */}
                 </div>
 
                 <div id="geosearch-results">
