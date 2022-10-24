@@ -9,6 +9,10 @@
     box-sizing: border-box;
 }
 
+.input-hero-search {
+    height: $input-hero-search;
+}
+
 .input-slider {
     @include flex-display-column;
     height: 40px;

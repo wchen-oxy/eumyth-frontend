@@ -1,57 +1,43 @@
-import React from 'react';
-import CreatableSelect from 'react-select/creatable';
-import { PURSUIT_FIELD } from 'utils/constants/form-data';
-import { checkInputNotNull } from 'utils/validator';
-import { toTitleCase } from 'utils';
+import React, { useState, useRef } from 'react';
+import PursuitOption from './pursuit-option';
 
-const defaultOption = { label: 'Search Only Your Pursuits', value: 'Search Only Your Pursuits' };
-const formatPrompt = (string) => string;
+
 const PeopleFields = (props) => {
-    const formatOptions = (data) => data.map((value) => {
-        if (value === 'All') return ({ label: 'Search Only Your Pursuits', value: value });
-        else
-            return ({ label: toTitleCase(value), value: value });
-    });
-    const options = checkInputNotNull(props.pursuits, formatOptions);
-    const onValueChange = (event) => {
-        return props.onFieldChange(PURSUIT_FIELD, event?.value ?? "");
-    }
-
-    const handleInputChange = (input, action) => {
-        if (action.action !== "input-blur"
-            && action.action !== "menu-close"
-            && input !== undefined) {
-            props.onFieldChange(PURSUIT_FIELD, input);
+    const [isPursuitsVisible, setIsPursuitVisible] = useState(false);
+    const pursuitDropdown = useRef(null);
+    const overlay = useRef(null);
+    const handlePursuitClick = () => {
+        if (isPursuitsVisible) {
+            pursuitDropdown.current.style.display = 'none';
+            overlay.current.style.display = 'none';
+            setIsPursuitVisible(false);
         }
-
-    }
-
-    const onEnter = (e) => {
-        console.log("OnEnterPressed");
-        if (e.key === 'Enter') {
-            props.onRefreshClick();
+        else {
+            pursuitDropdown.current.style.display = 'block';
+            overlay.current.style.display = "block";
+            setIsPursuitVisible(true);
         }
     }
-    console.log(props.selectedPursuit);
 
     return (
         <div id='peoplefields'>
+            <div id='peoplefields-overlay' ref={overlay} onClick={handlePursuitClick}>
+            </div>
             <div id='peoplefields-createable'
-                className='peoplefields-fields' >
-                <CreatableSelect
-                    isClearable
-                    onCloseResetsInput={false}
-                    onBlurResetsInput={false}
-                   
-                    noOptionsMessage={() => null}
-                    inputValue={props.selectedPursuit}
-                    options={options}
-                    onChange={onValueChange}
-                    onInputChange={handleInputChange}
-                    onKeyDown={onEnter}
-                    createOptionPosition='first'
+                className='peoplefields-fields input-hero-search' >
+                <input id='peoplefields-input-text' type='text' />
+                <button onClick={handlePursuitClick}>
+                    Your Pursuits
+                </button>
+                <div ref={pursuitDropdown} id='peoplefields-pursuit-dropdown'>
+                    {props.pursuits.map(
+                        pursuit =>
+                            <PursuitOption
+                                pursuit={pursuit}
+                                onPursuitClick={handlePursuitClick} />
+                    )}
+                </div>
 
-                />
                 <div id='peoplefields-distance'>
                     <select onChange={(e) => props.onDistanceChange(e.target.value)}>
                         <option value={10}>10 Miles</option>

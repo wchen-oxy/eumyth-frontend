@@ -1,0 +1,12 @@
+.pursuitoption {
+    @include flex-display-column;
+    text-align: center; 
+    p{
+        color: white;
+        font-family: $default-font;
+    }
+}
+
+.pursuitoption:hover{
+    background-color: $primary-color-faded;
+}

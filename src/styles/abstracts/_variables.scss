@@ -54,6 +54,7 @@ $brief-text-input: 30%;
 $input-slider-width: 100%;
 $input-number: 25%;
 $input-text-long: 50%;
+$input-hero-search: 48px;
 
 //buttons
 $button-action-padding: 12px;
@@ -72,6 +73,8 @@ $size-step-indicator: 48px;
 $navbar: 25;
 $general-window: 24;
 $overlay: 10;
+$overlay-super: 35;
+$window-upper: 36;
 
 %title-texts {
     font-size: $primary-large-font-size;

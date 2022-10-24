@@ -1,14 +1,40 @@
+$searchbar-width: 384px;
+
 #peoplefields {
     @include flex-display-row;
     margin: 0 auto;
 }
 
-#peoplefields-createable {
-    width: 300px;
+#peoplefields-overlay{
+    display:none;
+    width: 100%;
+    height: 100%;
+    background-color:rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top:0;
+    left:0;
+    z-index: $overlay-super;
 }
 
-#peoplefieds-distance {
+#peoplefields-createable {
+    @include flex-display-row;
 }
+
+#peoplefields-input-text{
+    width: $searchbar-width;
+}
+
+#peoplefields-pursuit-dropdown {
+    display: none;
+    position: absolute;
+    margin-top: $input-hero-search;
+    background-color: $primary-color;
+    width:( $searchbar-width + 4px);
+    border-radius: 2px;
+    border-style: solid;
+    border-color: $primary-color;
+    z-index: $window-upper;
+ }
 
 #peoplefields-refresh {
     height: fit-content;
