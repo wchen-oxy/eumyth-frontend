@@ -1,12 +1,13 @@
 import React, { useState, useRef } from 'react';
+import { PURSUIT_FIELD } from 'utils/constants/form-data';
 import PursuitOption from './pursuit-option';
 
 
 const PeopleFields = (props) => {
     const [isPursuitsVisible, setIsPursuitVisible] = useState(false);
-    const pursuitDropdown = useRef(null);
+     const pursuitDropdown = useRef(null);
     const overlay = useRef(null);
-    const handlePursuitClick = () => {
+    const handleDisplayClick = () => {
         if (isPursuitsVisible) {
             pursuitDropdown.current.style.display = 'none';
             overlay.current.style.display = 'none';
@@ -18,15 +19,27 @@ const PeopleFields = (props) => {
             setIsPursuitVisible(true);
         }
     }
+    const handlePursuitClick = (e) => {
+        props.onFieldChange(e);
+        handleDisplayClick();
+    }
 
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') props.onRefreshClick();
+    }
     return (
         <div id='peoplefields'>
-            <div id='peoplefields-overlay' ref={overlay} onClick={handlePursuitClick}>
+            <div id='peoplefields-overlay' ref={overlay} onClick={handleDisplayClick}>
             </div>
             <div id='peoplefields-createable'
                 className='peoplefields-fields input-hero-search' >
-                <input id='peoplefields-input-text' type='text' />
-                <button onClick={handlePursuitClick}>
+                <input
+                    id='peoplefields-input-text'
+                    type='text'
+                    value={props.selectedPursuit}
+                    onKeyDown={e => handleKeyPress(e)}
+                    onChange={(e) => props.onFieldChange(PURSUIT_FIELD, e.target.value)} />
+                <button onClick={handleDisplayClick}>
                     Your Pursuits
                 </button>
                 <div ref={pursuitDropdown} id='peoplefields-pursuit-dropdown'>
