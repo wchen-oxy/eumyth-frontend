@@ -442,7 +442,7 @@ class ProfilePageAuthenticated extends React.Component {
                         <div id='profile-intro'>
                             <div id='profile-dp'>
                                 <img
-                                    alt='user profile photo'
+                                    alt='user profile'
                                     src={targetProfilePhoto}
                                 />
                                 <div id='profile-name'>

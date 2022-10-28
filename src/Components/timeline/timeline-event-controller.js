@@ -34,7 +34,7 @@ const EventController = (props) => {
         );
     }
     else if (props.contentType === SPOTLIGHT_POST) {
-        return (
+         return (
             <div className={selectClassStyle(props.columnIndex)}>
                 <div onClick={props.disableModalPreview ?
                     () => console.log('Selected')
@@ -78,6 +78,7 @@ const EventController = (props) => {
         );
     }
     else if (props.contentType === SPOTLIGHT_PROJECT) {
+        console.log("asdfffff")
         return (
             <div
                 onClick={props.disableModalPreview ?

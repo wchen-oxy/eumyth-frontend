@@ -13,6 +13,7 @@ class PostController extends React.Component {
   constructor(props) {
     super(props);
     const data = this.props.viewerObject?.eventData ?? null;
+    console.log(this.props.viewerObject);
     this.state = {
       window: 1,
       date: data?.date ?

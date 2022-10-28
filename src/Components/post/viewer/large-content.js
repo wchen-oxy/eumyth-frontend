@@ -6,6 +6,7 @@ import MetaInfo from './sub-components/meta-info';
 import ShortHeroText from './sub-components/short-text';
 
 const ShortPostLargeContent = (props) => {
+    console.log(props.meta);
     if (props.hasImages) {
         return (
             <div className='small-post-window'>

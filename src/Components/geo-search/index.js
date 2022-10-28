@@ -4,6 +4,7 @@ import AxiosHelper from 'utils/axios';
 import Results from './results';
 import GeoSpotlight from './geo-spotlight';
 import ShortPostViewer from 'components/post/viewer/short-post';
+import PostController from 'components/post/index';
 import PeopleFields from './sub-components/people-fields';
 import { ALL, POST_VIEWER_MODAL_STATE, SPOTLIGHT_POST } from 'utils/constants/flags';
 import { DIFFICULTY_FIELD, DISTANCE_FIELD, PROGRESSION_FIELD, PURSUIT_FIELD } from 'utils/constants/form-data';
@@ -141,6 +142,7 @@ class AuthenticatedGeoSearch extends React.Component {
     }
 
     handleEventClick(selectedContent, postIndex) {
+
         this.setState({
             selectedContent,
         }, this.setModal());
@@ -153,20 +155,27 @@ class AuthenticatedGeoSearch extends React.Component {
             const formattedTextData = this.state.selectedContent?.text_data && this.state.selectedContent.is_paginated ?
                 JSON.parse(this.state.selectedContent.text_data) : this.state.selectedContent.text_data;
 
+            const viewerObject = {
+                key: this.state.selectedContent._id,
+                largeViewMode: true,
+                textData: formattedTextData,
+                isPostOnlyView: false,
+                eventData: this.state.selectedContent,
+
+                projectPreviewMap: this.state.projectPreviewMap,
+                saveProjectPreview: this.saveProjectPreview
+
+            }
             const content = (
-                <ShortPostViewer
+                <PostController
+                    isViewer
+                    viewerObject={viewerObject}
                     authUser={this.props.authUser}
-                    key={this.state.selectedContent._id}
-                    largeViewMode={true}
-                    isPostOnlyView={false}
-                    postType={SPOTLIGHT_POST}
-                    eventData={this.state.selectedContent}
-                    textData={formattedTextData}
-                    projectPreviewMap={this.state.projectPreviewMap}
-                    saveProjectPreview={this.saveProjectPreview}
+                    closeModal={this.clearModal}
 
                 />
             )
+
             return this.props.returnModalStructure(
                 content,
                 this.clearModal

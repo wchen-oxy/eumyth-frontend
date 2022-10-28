@@ -116,7 +116,7 @@ class Tab extends React.Component {
     }
 
     renderUppercontent() {
-        if (this.state.containsProject) {
+         if (this.state.containsProject) {
             return (
                 < EventController
                     isRecentEvents={false}
