@@ -5,7 +5,7 @@ import PostController from "components/post/index";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import EventController from 'components/timeline/timeline-event-controller';
 import AxiosHelper from 'utils/axios';
-import { formatPostText } from 'utils';
+import { formatPostText, toTitleCase } from 'utils';
 import { withAuthorization } from 'store/session';
 import { withFirebase } from 'store/firebase';
 import withRouter from "utils/withRouter";
@@ -273,7 +273,7 @@ class ReturningUserPage extends React.Component {
             pursuitInfoArray.push(
                 <tr key={pursuit.name}>
                     <th key={pursuit.name + ' name'}>
-                        {pursuit.name}
+                        {toTitleCase(pursuit.name)}
                     </th>
                     <td key={pursuit.name + ' experience'}>
                         {pursuit.experience_level}

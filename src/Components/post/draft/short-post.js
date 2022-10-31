@@ -287,7 +287,6 @@ class ShortPost extends React.Component {
 
 
       const optional = {
-        imageArray: this.state.tinyPhotos,
         closeModal: this.props.closeModal
       }
       console.log(this.props.metaObject);
@@ -297,11 +296,11 @@ class ShortPost extends React.Component {
           {...optional}
           {...this.props.metaObject}
           {...this.props.metaFunctions}
-         />
+        />
       );
     }
     else if (this.props.window === 3) {
-       const optional = {
+      const optional = {
         coverPhoto: this.state.coverPhoto,
         compressedPhotos: this.state.tinyPhotos,
       }

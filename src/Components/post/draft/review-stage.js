@@ -17,7 +17,7 @@ const ReviewStage = (props) => {
         const images = {
             useImageForThumbnail: props.useImageForThumbnail, //viewer only //keep
             coverPhoto: props.coverPhoto,  //draft only  //keep
-            compressedPhotos: props.compressedPhotos,
+            imageArray: props.compressedPhotos,
         }
 
         const functions = {

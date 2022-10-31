@@ -244,9 +244,10 @@ class PostController extends React.Component {
       return handleUpdateSubmit(...params);
     }
     else {
+
       return handleNewSubmit(
         formData,
-        images,
+        {...defaults, ...completeOptionals, ...images},
         functions,
         this.props.viewerObject?.isPostOnlyView ?? false,
         this.state.isNewSeriesToggled

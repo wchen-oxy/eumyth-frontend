@@ -32,6 +32,7 @@ import { SHORT, LONG, } from 'utils/constants/flags';
 import AxiosHelper from 'utils/axios';
 
 const addImages = (formData, fields) => {
+    console.log(fields.imageArray);
     if (fields.imageArray && fields.imageArray.length > 0) {
         for (const image of fields.imageArray) {
             formData.append(IMAGES_FIELD, image);
@@ -123,12 +124,13 @@ export const handleNewSubmit = (
     isPostOnlyView,
     isNewSeriesToggled
 ) => {
+    console.log(fields);
     if (isNewSeriesToggled) {
         return handleProjectCreation(formData, fields)
             .then(results => {
                 formData.append(SELECTED_DRAFT_ID, results.data.id);
                 formData.set(TITLE_FIELD, fields.previewTitle);
-                addImages(formData, fields.compressedPhotos);
+                addImages(formData, fields);
                 return AxiosHelper.createPost(formData);
             })
             .then((result) => {
@@ -162,7 +164,7 @@ export const handleNewSubmit = (
 export const appendImageFields = (formData, fields, functions) => {
     const warn = () => alert(`One moment friend, I'm almost done compressing
     your photo`);
-
+    
     if (fields.isUpdateToPost) { //isupdate
         if (fields.useImageForThumbnail) {
             if (!fields.coverPhoto && !fields.coverPhotoKey) {
