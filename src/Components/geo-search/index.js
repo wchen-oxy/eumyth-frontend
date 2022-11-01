@@ -198,7 +198,6 @@ class AuthenticatedGeoSearch extends React.Component {
                 this.setState({ distance: value, });
                 break;
             case (PURSUIT_FIELD):
-                console.log(value);
                 this.setState({ selectedPursuit: value, hasTextChanged: true });
                 break;
             default:
@@ -208,7 +207,6 @@ class AuthenticatedGeoSearch extends React.Component {
     }
 
     handleRefreshClick() {
-        console.log("refreshed", this.state.selectedPursuit);
         if (!this.state.selectedPursuit) { console.log("numb"); return; }
         this.setState({ loading: true }, this.refreshResults)
     }
@@ -223,16 +221,15 @@ class AuthenticatedGeoSearch extends React.Component {
         // const selectedPeople = this.state.people.map(person => person._id); save this for when you need to pull more people in.
         const selectedPeople = [];
         selectedPeople.push(this.props.authUser.userPreviewID);
-        AxiosHelper
-            .getSimilarPeople(
-                this.state.distance,
-                selectedPursuit,
-                selectedPeople,
-                this.state.lat,
-                this.state.long,
-            )
+
+        return AxiosHelper.getSimilarPeople(
+            this.state.distance,
+            selectedPursuit,
+            selectedPeople,
+            this.state.lat,
+            this.state.long,
+        )
             .then(results => {
-                console.log(results);
                 // this.setState({
                 //     people: [],
                 //     loading: false,
@@ -284,11 +281,14 @@ class AuthenticatedGeoSearch extends React.Component {
                         /> :
                         this.state.people.length > 0 ?
                             this.state.people.map(
-                                person =>
-                                    <Results
-                                        person={person}
-                                        onEventClick={this.handleEventClick}
-                                    />)
+                                (person, index) =>
+                                    <div key={index}>
+                                        <Results
+                                            person={person}
+                                            onEventClick={this.handleEventClick}
+                                        />
+                                    </div>
+                            )
 
                             :
                             <p>No Results Found</p>

@@ -162,7 +162,6 @@ class Tab extends React.Component {
 
                 <h4>Recent Work</h4>
                 <div className='tab-event'>
-
                     {this.state.content.upper &&
                         this.renderUppercontent()
                     }

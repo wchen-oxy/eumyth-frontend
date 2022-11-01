@@ -19,8 +19,8 @@ const PeopleFields = (props) => {
             setIsPursuitVisible(true);
         }
     }
-    const handlePursuitClick = (e) => {
-        props.onFieldChange(e);
+    const handlePursuitClick = (value) => {
+        props.onFieldChange(PURSUIT_FIELD, value);
         handleDisplayClick();
     }
 

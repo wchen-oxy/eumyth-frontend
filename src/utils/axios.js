@@ -111,7 +111,7 @@ export default class AxiosHelper {
     }
 
     static getSimilarPeople(distance, pursuit, userPreviewIDList, latitude, longitude) {
-        return axios.get(urls.PEOPLE_URL,
+        return axios.get(urls.SIMPLE_PEOPLE_URL,
             { params: { distance, pursuit, userPreviewIDList, latitude, longitude } })
     }
 

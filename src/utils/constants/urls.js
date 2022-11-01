@@ -63,8 +63,6 @@ const PROJECT_BOOKMARK_URL = PROJECT_BASE_URL + '/bookmark';
 const PROJECT_THREAD_URL = PROJECT_BASE_URL + '/thread';
 const PROJECT_PUBLISH_URL = PROJECT_BASE_URL + '/publish';
 
- 
-
 //project preview
 const PROJECT_PREVIEW_BASE_URL = ROOT_URL + '/project-preview';
 const PROJECT_PREVIEW_SINGLE_URL = PROJECT_PREVIEW_BASE_URL + '/single';
@@ -77,7 +75,8 @@ const ALL_POSTS = PURSUITS_BASE_URL + '/all-posts';
 //search
 const SEARCH_BASE_URL = ROOT_URL + '/search';
 const SPOTLIGHT_URL = SEARCH_BASE_URL + '/spotlight';
-const PEOPLE_URL = SEARCH_BASE_URL + '/people';
+const SIMPLE_PEOPLE_URL = SEARCH_BASE_URL + '/simple_people';
+const ADVANCED_PEOPLE_URL = SEARCH_BASE_URL + '/advanced_people';
 const SEARCH_PROJECT_URL = SEARCH_BASE_URL + '/projects';
 
 
@@ -120,7 +119,8 @@ module.exports = {
     RELATION_STATUS_URL,
     RELATION_INFO_URL,
     RELATION_SET_FOLLOWER_URL,
-    PEOPLE_URL,
+    SIMPLE_PEOPLE_URL,
+    ADVANCED_PEOPLE_URL,
     SPOTLIGHT_URL,
     POST_BASE_URL,
     PROJECT_BASE_URL,
