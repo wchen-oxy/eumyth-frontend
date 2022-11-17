@@ -115,6 +115,11 @@ export default class AxiosHelper {
             { params: { distance, pursuit, userPreviewIDList, latitude, longitude } })
     }
 
+    static getSimilarPeopleAdvanced(distance, pursuit, userPreviewIDList, latitude, longitude) {
+        return axios.get(urls.ADVANCED_PEOPLE_URL,
+            { params: { distance, pursuit, userPreviewIDList, latitude, longitude } })
+    }
+
     static getSpotlight(distance, latitude, longitude, userPreviewIDList) {
         return axios.get(urls.SPOTLIGHT_URL, { params: { distance, latitude, longitude, userPreviewIDList } });
     }

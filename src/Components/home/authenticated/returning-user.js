@@ -1,9 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import ShortPostViewer from 'components/post/viewer/short-post';
 import PostController from "components/post/index";
-import InfiniteScroll from 'react-infinite-scroll-component';
-import EventController from 'components/timeline/timeline-event-controller';
 import AxiosHelper from 'utils/axios';
 import { formatPostText, toTitleCase } from 'utils';
 import { withAuthorization } from 'store/session';
@@ -11,8 +8,10 @@ import { withFirebase } from 'store/firebase';
 import withRouter from "utils/withRouter";
 import { returnUsernameURL, returnUserImageURL } from 'utils/url';
 import { TEMP_PROFILE_PHOTO_URL } from 'utils/constants/urls';
-import { POST, RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE, FOLLOWED_FEED } from 'utils/constants/flags';
+import { RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE, FOLLOWED_FEED } from 'utils/constants/flags';
 import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
+import FriendFeed from './friend-feed';
+import ExtraFeed from './extra-feed';
 
 class ReturningUserPage extends React.Component {
     _isMounted = false;
@@ -29,7 +28,6 @@ class ReturningUserPage extends React.Component {
             fullUserDataID: null,
             preferredPostPrivacy: null,
             followedUserPostIDs: [],
-            hasMore: true,
             nextOpenPostIndex: 0,
             feedData: [],
             isModalShowing: false,
@@ -38,7 +36,8 @@ class ReturningUserPage extends React.Component {
             recentPosts: null,
             recentPostsKey: 0,
 
-            projectPreviewMap: {}
+            projectPreviewMap: {},
+            isExtraFeedToggled: false
         }
 
         this.handlePursuitClick = this.handlePursuitClick.bind(this);
@@ -49,13 +48,12 @@ class ReturningUserPage extends React.Component {
         this.passDataToModal = this.passDataToModal.bind(this);
         this.clearModal = this.clearModal.bind(this);
         this.handleDeletePost = this.handleDeletePost.bind(this);
-        this.fetchNextPosts = this.fetchNextPosts.bind(this);
-        this.createFeed = this.createFeed.bind(this);
+        this.setFeedData = this.setFeedData.bind(this);
         this.renderModal = this.renderModal.bind(this);
-        this.renderRecentPosts = this.renderRecentPosts.bind(this);
         this.handleCommentIDInjection = this.handleCommentIDInjection.bind(this);
         this.loadData = this.loadData.bind(this);
         this.saveProjectPreview = this.saveProjectPreview.bind(this);
+        this.toggleFeedState = this.toggleFeedState.bind(this);
     }
 
     componentDidMount() {
@@ -71,6 +69,14 @@ class ReturningUserPage extends React.Component {
 
     componentWillUnmount() {
         this._isMounted = false;
+    }
+
+
+    setFeedData(feedData) {
+        this.setState({ feedData })
+    }
+    toggleFeedState(isExtraFeedToggled) {
+        this.setState({ isExtraFeedToggled: !isExtraFeedToggled })
     }
 
     loadData() {
@@ -103,7 +109,6 @@ class ReturningUserPage extends React.Component {
                         feedData: results[2],
                         firstName: results[0].firstName,
                         lastName: results[0].lastName,
-                        hasMore: results[2].length < this.props.authUser.followingFeed.length
                     }));
 
             })
@@ -112,24 +117,7 @@ class ReturningUserPage extends React.Component {
                 alert('Could Not Load Feed.' + err);
             });
     }
-    renderRecentPosts(data) {
-        let postIndex = 0;
-        let array = []
-        for (const value of data) {
-            array.push(
-                <EventController
-                    columnIndex={2}
-                    isRecentEvents={true}
-                    index={postIndex}
-                    contentType={POST}
-                    key={postIndex}
-                    eventData={value}
-                    onEventClick={this.handleEventClick}
-                />);
-            postIndex++;
-        }
-        return array;
-    }
+
 
     handleCommentIDInjection(postIndex, rootCommentsArray, feedType) {
         if (feedType === RECENT_POSTS) {
@@ -150,66 +138,36 @@ class ReturningUserPage extends React.Component {
         }
     }
 
-    createFeed(inputArray) {
-        if (!inputArray || inputArray.length === 0) return [];
-        let nextOpenPostIndex = this.state.nextOpenPostIndex;
+    // createFeed(inputArray) {
+    //     if (!inputArray || inputArray.length === 0) return [];
+    //     let nextOpenPostIndex = this.state.nextOpenPostIndex;
 
-        return inputArray.map((feedItem, index) => {
-            const formattedTextData = formatPostText(feedItem);
-            const viewerObject = {
-                key: nextOpenPostIndex++,
-                largeViewMode: false,
-                textData: formattedTextData,
-                isPostOnlyView: false,
-                pursuitNames: this.state.pursuitObjects.names,
-                projectPreviewMap: this.state.projectPreviewMap,
-                eventData: feedItem,
+    //     return inputArray.map((feedItem, index) => {
+    //         const formattedTextData = formatPostText(feedItem);
+    //         const viewerObject = {
+    //             key: nextOpenPostIndex++,
+    //             largeViewMode: false,
+    //             textData: formattedTextData,
+    //             isPostOnlyView: false,
+    //             pursuitNames: this.state.pursuitObjects.names,
+    //             projectPreviewMap: this.state.projectPreviewMap,
+    //             eventData: feedItem,
 
-                onCommentIDInjection: this.handleCommentIDInjection,
-                saveProjectPreview: this.saveProjectPreview,
-                passDataToModal: this.passDataToModal,
-            }
-            return (
-                <PostController
-                    isViewer
-                    viewerObject={viewerObject}
-                    authUser={this.props.authUser}
-                    closeModal={this.clearModal}
-                />
+    //             onCommentIDInjection: this.handleCommentIDInjection,
+    //             saveProjectPreview: this.saveProjectPreview,
+    //             passDataToModal: this.passDataToModal,
+    //         }
+    //         return (
+    //             <PostController
+    //                 isViewer
+    //                 viewerObject={viewerObject}
+    //                 authUser={this.props.authUser}
+    //                 closeModal={this.clearModal}
+    //             />
 
-            );
-        });
-    }
-
-    fetchNextPosts() {
-        const posts = this.props.authUser.followingFeed
-        const slicedObjectIDs = posts.slice(
-            this.state.nextOpenPostIndex,
-            this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH);
-        const feedLimitReached = slicedObjectIDs.length !== REGULAR_CONTENT_REQUEST_LENGTH
-        const nextOpenPostIndex = feedLimitReached ?
-            this.state.nextOpenPostIndex + slicedObjectIDs.length
-            : this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH;
-        const hasMore = nextOpenPostIndex >= posts.length || feedLimitReached;
-        return (AxiosHelper
-            .returnMultiplePosts(
-                slicedObjectIDs,
-                true)
-            .then((result) => {
-                if (result.data) {
-                    this.setState((state) => ({
-                        feedData: state.feedData.concat(result.data.posts),
-                        nextOpenPostIndex: nextOpenPostIndex,
-                        hasMore: !hasMore
-                    }))
-                }
-
-            })
-            .catch((error) => {
-                console.log(error);
-                alert(error);
-            }));
-    }
+    //         );
+    //     });
+    // }
 
     handleDeletePost() {
         return AxiosHelper.deletePost(
@@ -296,6 +254,7 @@ class ReturningUserPage extends React.Component {
             totalMin: totalMin
         }
     }
+
     saveProjectPreview(projectPreview) {
         if (!this.state.projectPreviewMap[projectPreview._id]) {
             let projectPreviewMap = this.state.projectPreviewMap;
@@ -345,15 +304,14 @@ class ReturningUserPage extends React.Component {
             returnUserImageURL(this.props.authUser.croppedDisplayPhotoKey))
             : (
                 TEMP_PROFILE_PHOTO_URL);
-        const renderedRecentPosts = this.state.recentPosts ?
-            this.renderRecentPosts(this.state.recentPosts) : null;
-        const feed =
-            this.createFeed(this.state.feedData)
-                .map((feedItem, index) =>
-                    <div key={index} className='returninguser-feed-object'>
-                        {feedItem}
-                    </div>
-                );
+
+        // const feed =
+        //     this.createFeed(this.state.feedData)
+        //         .map((feedItem, index) =>
+        //             <div key={index} className='returninguser-feed-object'>
+        //                 {feedItem}
+        //             </div>
+        //         );
         return (
             <div id='returninguser'>
                 <div id='returninguser-top-title' >
@@ -400,44 +358,42 @@ class ReturningUserPage extends React.Component {
                         </table>
                     </div>
                 </div>
-                {/* <div
-                    id='returninguser-recent-work'
-                    className='returninguser-main-row'
-                >
-                    <div className='returninguser-row'>
-                        <Link
-                            id='returninguser-recent-work-title'
-                            className='returninguser-title'
-                            to={returnUsernameURL(this.state.username)}
-                        >
-                            Your Recent Work
-                        </Link>
-                    </div>
-                    <div
-                        key={this.state.recentPostsKey}
-                        id='returninguser-recent-posts'
-                        className='returninguser-row'>
-                        {renderedRecentPosts}
-                    </div>
-                </div> */}
                 <div
                     id='returninguser-feed'
                     className='returninguser-main-row'
                 >
                     <h4 className='returninguser-title'>Your Feed</h4>
-                    <div id='returninguser-infinite-scroll' >
-                        <InfiniteScroll
-                            dataLength={this.state.nextOpenPostIndex}
-                            next={this.fetchNextPosts}
-                            hasMore={this.state.hasMore}
-                            loader={<h4>Loading...</h4>}
-                            endMessage={
-                                <p style={{ textAlign: 'center' }}>
-                                    <b>Yay! You have seen it all</b>
-                                </p>}>
-                            {feed}
-                        </InfiniteScroll>
-                    </div>
+                    <label className="switch">
+                        <input type="checkbox" onChange={() => this.toggleFeedState(this.state.isExtraFeedToggled)} />
+                        <span className="slider round"></span>
+                    </label>
+
+                    {
+                        !this.state.isExtraFeedToggled &&
+                        <div id='returninguser-infinite-scroll'>
+                            <FriendFeed
+                                authUser={this.props.authUser}
+                                nextOpenPostIndex={this.state.nextOpenPostIndex}
+                                fetchNextPosts={this.fetchNextPosts}
+                                pursuitObjects={this.state.pursuitObjects}
+                                projectPreviewMap={this.state.projectPreviewMap}
+
+                                setFeedData={this.setFeedData}
+                                onCommentIDInjection={this.handleCommentIDInjection}
+                                saveProjectPreview={this.saveProjectPreview}
+                                passDataToModal={this.passDataToModal}
+                                clearModal={this.clearModal}
+                                feedData={this.state.feedData}
+                            />
+                        </div>
+                    }
+                    {
+                        this.state.isExtraFeedToggled &&
+                        <ExtraFeed
+                            authUser={this.props.authUser}
+                            pursuitObjects={this.state.pursuitObjects}
+                        />
+                    }
                 </div>
                 {this.renderModal()}
             </div>

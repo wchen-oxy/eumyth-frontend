@@ -16,3 +16,16 @@ export const draft = {
     isCompleteProject: false,
     selectedDraft: null
 }
+
+export const distanceSwitch = (distance) => {
+    switch (distance) {
+        case (undefined):
+            return 50;
+        case (50):
+            return 100;
+        case (100):
+            return 200;
+        default:
+            return 1000;
+    }
+}

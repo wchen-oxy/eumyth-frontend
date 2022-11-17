@@ -3,22 +3,14 @@ import { AuthUserContext } from 'store/session';
 import AxiosHelper from 'utils/axios';
 import Results from './results';
 import GeoSpotlight from './geo-spotlight';
-import ShortPostViewer from 'components/post/viewer/short-post';
 import PostController from 'components/post/index';
 import PeopleFields from './sub-components/people-fields';
 import { ALL, POST_VIEWER_MODAL_STATE, SPOTLIGHT_POST } from 'utils/constants/flags';
 import { DIFFICULTY_FIELD, DISTANCE_FIELD, PROGRESSION_FIELD, PURSUIT_FIELD } from 'utils/constants/form-data';
-import { toTitleCase } from 'utils';
+import { geoLocationOptions } from 'utils/constants/settings';
 
 const SPOTLIGHT = 'SPOTLIGHT';
 const RESULTS = 'RESULTS';
-
-const options = {
-    enableHighAccuracy: true,
-    timeout: 5000,
-    maximumAge: 0
-};
-
 
 const GeoSearch = (props) =>
 (<AuthUserContext.Consumer>
@@ -64,26 +56,34 @@ class AuthenticatedGeoSearch extends React.Component {
         this.handleRefreshClick = this.handleRefreshClick.bind(this);
         this.handleDistanceChange = this.handleDistanceChange.bind(this);
         this.refreshResults = this.refreshResults.bind(this);
-
+        this.getLocation = this.getLocation.bind(this);
         this.saveProjectPreview = this.saveProjectPreview.bind(this);
+        this.setCoordinates = this.setCoordinates.bind(this);
 
     }
     componentDidMount() {
+        this.getLocation();
+    }
+
+    getLocation() {
         return AxiosHelper.getLocation(this.props.authUser.userPreviewID)
             .then(results => {
                 if (results.status === 204) {
                     navigator
                         .geolocation
-                        .getCurrentPosition(this.success, this.error, options);
+                        .getCurrentPosition(this.success, this.error, geoLocationOptions);
                 }
                 else {
-                    const crd = results.data.coordinates;
-                    this.setState({
-                        lat: crd.latitude,
-                        long: crd.longitude
-                    }, () => this.getSpotlight(results.data.coordinates));
+                    this.setCoordinates(results.data.coordinates);
                 }
             });
+    }
+
+    setCoordinates(crd) {
+        this.setState({
+            lat: crd.latitude,
+            long: crd.longitude
+        }, () => this.getSpotlight(crd));
     }
 
     saveProjectPreview(projectPreview) {
