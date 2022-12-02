@@ -213,6 +213,9 @@ export const appendPrimaryPostFields = (formData, defaults) => {
             JSON.stringify(defaults.textData);
         formData.append(TEXT_DATA_FIELD, text);
     }
+    if (defaults.selectedDraft) {
+        formData.append(SELECTED_DRAFT_ID, defaults.selectedDraft);
+    }
 }
 
 export const draftStateSetter = (props) => {

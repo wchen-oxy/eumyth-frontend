@@ -18,7 +18,7 @@ class ProfileController extends React.Component {
             isModalShowing: false,
             hasMore: true,
             feedData: [],
-            selectedPursuitIndex: this.props.selectedPursuitIndex,
+            feedID: this.props.feedID,
             projectPreviewMap: {}
 
         }
@@ -73,9 +73,9 @@ class ProfileController extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.props.selectedPursuitIndex !== this.state.selectedPursuitIndex) {
+        if (this.props.feedID !== this.state.feedID) {
             this.setState({
-                selectedPursuitIndex: this.props.selectedPursuitIndex,
+                feedID: this.props.feedID,
                 feedData: [],
                 hasMore: true,
             })
@@ -165,6 +165,7 @@ class ProfileController extends React.Component {
             onCommentIDInjection: this.handleCommentIDInjection,
             saveProjectPreview: this.saveProjectPreview
         }
+        console.log(this.props.authUser);
         return (
             <>
                 <ProfileModal
@@ -178,9 +179,12 @@ class ProfileController extends React.Component {
                 />
                 <Timeline
                     contentType={POST}
+                    indexUserID = {this.props.authUser.indexProfileID}
                     requestLength={REGULAR_CONTENT_REQUEST_LENGTH}
-                    feedID={this.props.selectedPursuitIndex}
+                    index
+                    feedID={this.props.feedID}
                     allPosts={this.props.feedData}
+                    numOfContent={this.props.numOfContent}
                     hasMore={this.state.hasMore}
 
                     loadedFeed={this.createRenderedPosts()}

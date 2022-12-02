@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { COVER } from 'utils/constants/flags';
+import { COVER, POST, PROJECT } from 'utils/constants/flags';
 import { returnUsernameObject } from 'utils/url';
 import urls from 'utils/constants/urls';
 
@@ -132,8 +132,6 @@ export default class AxiosHelper {
         return axios.get(urls.TINY_DISPLAY_PHOTO_URL, returnUsernameObject(username))
     }
 
-
-
     static setProfilePrivacy(username, isPrivate) {
         return axios.put(urls.USER_PRIVACY_URL, {
             username: username,
@@ -261,6 +259,17 @@ export default class AxiosHelper {
             params: {
                 postIDList: postIDList,
                 includePostText: includePostText
+            }
+        })
+    }
+
+    static returnOverflowContent(contentIDList, contentType, indexUserID, requestQuantity) {
+        return axios.get(urls.SEARCH_UNCACHED_URL, {
+            params: {
+                contentIDList,
+                contentType,
+                indexUserID,
+                requestQuantity
             }
         })
     }

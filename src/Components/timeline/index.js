@@ -19,17 +19,18 @@ class Timeline extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            nextOpenPostIndex: 0,
             feedID: this.props.feedID,
+            nextOpenPostIndex: 0,
+            numOfFeedItems: 0,
+
 
         }
         this.decideInfiniteScroller = this.decideInfiniteScroller.bind(this);
         this.debounceFetch = _.debounce(() => this.fetchNextPosts(), 10)
         this.fetchNextPosts = this.fetchNextPosts.bind(this);
-        this.callAPI = this.callAPI.bind(this);
         this.decideAPICall = this.decideAPICall.bind(this);
         this.handleReturnedContent = this.handleReturnedContent.bind(this);
-        this.updateMetaInfo = this.updateMetaInfo.bind(this);
+        this.loadFeedMetaInfo = this.loadFeedMetaInfo.bind(this);
     }
 
     componentDidUpdate() {
@@ -57,19 +58,15 @@ class Timeline extends React.Component {
         }
     }
 
-    updateMetaInfo() {
+    loadFeedMetaInfo() {
         const slicedObjectIDs = this.props.allPosts.slice(
             this.state.nextOpenPostIndex,
             this.state.nextOpenPostIndex + this.props.requestLength);
-        const feedLimitReached = slicedObjectIDs.length !== this.props.requestLength
-        const nextOpenPostIndex = feedLimitReached ?
-            this.state.nextOpenPostIndex + slicedObjectIDs.length
-            : this.state.nextOpenPostIndex + this.props.requestLength;
-
-        if (nextOpenPostIndex >= this.props.allPosts.length || feedLimitReached) {
-            this.props.shouldPull(false);
-        }
-        return { slicedObjectIDs, nextOpenPostIndex };
+            console.log(this.state.numOfFeedItems, this.props.allPosts.length);
+        const hasCachedContentOverflowed = this.state.numOfFeedItems > this.props.allPosts.length;
+        const endOfContent = this.state.numOfFeedItems + this.props.requestLength >= this.props.numOfContent;
+        const nextOpenPostIndex = this.state.nextOpenPostIndex + slicedObjectIDs.length;
+        return { slicedObjectIDs, nextOpenPostIndex, hasCachedContentOverflowed, endOfContent };
     }
 
     fetchNextPosts() {
@@ -87,59 +84,74 @@ class Timeline extends React.Component {
                     this.setState({ nextOpenPostIndex }, this.handleReturnedContent(results.data));
                 })
         }
-        else if (this.props.contentType === PROJECT || this.props.contentType === POST || this.props.contentType === PROJECT_EVENT) {
-            const metaInfo = this.updateMetaInfo();
+        else if (
+            this.props.contentType === PROJECT ||
+            this.props.contentType === POST ||
+            this.props.contentType === PROJECT_EVENT) {
+            const metaInfo = this.loadFeedMetaInfo();
+            if (metaInfo.endOfContent) this.props.shouldPull(false);
             this.setState({ nextOpenPostIndex: metaInfo.nextOpenPostIndex },
-                () => this.callAPI(metaInfo.slicedObjectIDs))
+                () => {
+                    this.decideAPICall(
+                        metaInfo.slicedObjectIDs,
+                        metaInfo.hasCachedContentOverflowed,
+                        this.props.indexUserID,
+                        this.props.requestLength)
+                        .then((results) =>
+                            this.handleReturnedContent(results.data, metaInfo.slicedObjectIDs)
+                        )
+                        .catch((error) => console.log(error));
+                })
         }
     }
 
-    callAPI(slicedObjectIDs) {
-        return this.decideAPICall(slicedObjectIDs)
-            .then((results) => this.handleReturnedContent(results.data, slicedObjectIDs)
+    decideAPICall(contentIDs, hasCacheOverflowed, indexUserID, requestLength) {
+        if (hasCacheOverflowed) {
+            return AxiosHelper.returnOverflowContent(
+                contentIDs,
+                this.props.contentType,
+                indexUserID,
+                requestLength
             )
-            .catch((error) => console.log(error));
+        }
+        else {
+            switch (this.props.contentType) {
+                case (PROJECT):
+                    return AxiosHelper.returnMultipleProjects(contentIDs);
+                case (POST):
+                    return AxiosHelper.returnMultiplePosts(contentIDs, true);
+                case (PROJECT_EVENT):
+                    return AxiosHelper.returnMultiplePosts(contentIDs, true);
+                default:
+                    throw new Error();
+            }
+        }
     }
 
     handleReturnedContent(result, slicedObjectIDs) {
+        let data = null;
+        const objectIDs = this.props.contentType === DYNAMIC ? null : slicedObjectIDs;
         switch (this.props.contentType) {
             case (PROJECT):
-                return this.props.createTimelineRow(
-                    result.projects,
-                    this.props.contentType,
-                    slicedObjectIDs);
+                data = result.projects;
+                break;
             case (POST):
-                return this.props.createTimelineRow(
-                    result.posts,
-                    this.props.contentType,
-                    slicedObjectIDs);
+                data = result.posts;
+                break;
             case (PROJECT_EVENT):
-                return this.props.createTimelineRow(
-                    result.posts,
-                    this.props.contentType,
-                    slicedObjectIDs);
+                data = result.posts;
+                break;
             case (DYNAMIC):
-                return this.props.createTimelineRow(
-                    result,
-                    this.props.contentType);
+                data = result;
+                break;
             default:
                 throw new Error();
         }
+        return this.setState({ numOfFeedItems: data.length },
+            this.props.createTimelineRow(data, this.props.contentType, objectIDs)
+        )
     }
 
-    decideAPICall(slicedObjectIDs) {
-        switch (this.props.contentType) {
-            case (PROJECT):
-                return AxiosHelper.returnMultipleProjects(slicedObjectIDs);
-            case (POST):
-                return AxiosHelper.returnMultiplePosts(slicedObjectIDs, true);
-            case (PROJECT_EVENT):
-                return AxiosHelper.returnMultiplePosts(slicedObjectIDs, true);
-            default:
-                throw new Error();
-        }
-
-    }
 
     decideInfiniteScroller() {
         if (this.props.contentType === POST

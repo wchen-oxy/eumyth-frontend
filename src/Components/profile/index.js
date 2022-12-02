@@ -245,6 +245,7 @@ class ProfilePageAuthenticated extends React.Component {
 
     handleMediaTypeSwitch(contentType) {
         let feedIDList = null;
+        let numOfContent = null;
         if (this.state.selectedPursuitIndex === 0) {
             switch (contentType) {
                 case (POST):
@@ -262,9 +263,11 @@ class ProfilePageAuthenticated extends React.Component {
             switch (contentType) {
                 case (POST):
                     feedIDList = feed.posts;
+                    numOfContent = feed.num_posts;
                     break;
                 case (PROJECT):
                     feedIDList = feed.projects;
+                    numOfContent = feed.num_posts;
                     break;
                 default:
                     throw new Error('Nothing matched for feed type');
@@ -273,7 +276,8 @@ class ProfilePageAuthenticated extends React.Component {
 
         this.setState({
             contentType: contentType,
-            feedIDList: feedIDList
+            feedIDList: feedIDList,
+            numOfContent: numOfContent,
         },
             () => {
                 if (contentType === PROJECT) {
@@ -350,7 +354,6 @@ class ProfilePageAuthenticated extends React.Component {
                 this.handleFollowerStatusChange(action);
         }
     }
-
 
     render() {
         if (this.state.loading) return null;
@@ -495,7 +498,8 @@ class ProfilePageAuthenticated extends React.Component {
                                 openMasterModal={this.props.openMasterModal}
                                 closeMasterModal={this.props.closeMasterModal}
                                 pursuitNames={this.state.pursuitNames}
-                                selectedPursuitIndex={this.state.selectedPursuitIndex}
+                                feedID={this.state.selectedPursuitIndex}
+                                numOfContent={this.state.numOfContent}
                             />
                         }
                     </div>
