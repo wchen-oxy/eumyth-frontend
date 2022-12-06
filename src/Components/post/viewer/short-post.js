@@ -528,6 +528,7 @@ class ShortPostViewer extends React.Component {
             }
         }
         else if (this.props.window === 2) {//2
+            console.log(this.props.tempText);
             return (
                 <div className='shortpostviewer-window small-post-window' >
                     <h4>Edit your Post!</h4>
@@ -545,7 +546,7 @@ class ShortPostViewer extends React.Component {
                     <ShortReEditor
                         imageIndex={this.props.imageIndex}
                         eventData={this.props.eventData}
-                        textData={this.props.tempText}
+                        tempText={this.props.tempText}
                         isPaginated={this.props.isPaginated}
                         onArrowPress={this.handleArrowPress}
                         onTextChange={this.props.onTextChange}

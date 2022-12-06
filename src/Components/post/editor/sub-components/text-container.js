@@ -3,8 +3,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import CaptionButtons from './caption-buttons';
 
 const TextContainer = (props) => {
-    console.log(props)
- return (
+  return (
     <div id='textcontainer'>
         <h4>{props.username}</h4>
 

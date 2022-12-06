@@ -164,12 +164,18 @@ class PostController extends React.Component {
   }
 
   setPostStage(value) {
+    const window = parseInt(value);
+    const isReEdit = window === 2 && this.props.isViewer;
+    const tempText = isReEdit ? this.props.viewerObject.textData : '';
     if (this.props.isViewer
       && !this.props.viewerObject.eventData?.cover_photo_key
       && value === 2) {
       this.retrieveThumbnail();
     }
-    this.setState({ window: parseInt(value) });
+    this.setState({
+      window,
+      tempText
+    });
 
   }
 
