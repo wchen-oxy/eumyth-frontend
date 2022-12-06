@@ -38,17 +38,13 @@ class ShortPostViewer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            imageIndex: 0,
-
             annotations: null,
             activeAnnotations: [],
             fullCommentData: [],
             areAnnotationsHidden: true,
             selectedAnnotationIndex: null,
             showPromptOverlay: false,
-
-            //shortpost meta
-            tempTextForEdit: this.props.textData,
+            //shortpost meta 
 
             //review stage
             projectPreview: null,
@@ -69,17 +65,17 @@ class ShortPostViewer extends React.Component {
         this.handleMouseOut = this.handleMouseOut.bind(this);
         this.handleMouseClick = this.handleMouseClick.bind(this);
         this.handleAnnotationSubmit = this.handleAnnotationSubmit.bind(this);
-        this.handlePaginatedChange = this.handlePaginatedChange.bind(this);
+        // this.handlePaginatedChange = this.handlePaginatedChange.bind(this);
         this.setUseImageForThumbnail = this.setUseImageForThumbnail.bind(this);
         this.setUseCoverPhoto = this.setUseCoverPhoto.bind(this);
-        this.handleIndexChange = this.handleIndexChange.bind(this);
-        this.handleTextChange = this.handleTextChange.bind(this);
+        // this.handleTextChange = this.handleTextChange.bind(this);
         this.handleModalLaunch = this.handleModalLaunch.bind(this);
         this.handleCommentDataInjection = this.handleCommentDataInjection.bind(this);
         this.deletePostCallback = this.deletePostCallback.bind(this);
         this.handleDeletePost = this.handleDeletePost.bind(this);
         this.loadProjectPreview = this.loadProjectPreview.bind(this);
         this.jumpToComment = this.jumpToComment.bind(this);
+        this.findAnnotation = this.findAnnotation.bind(this);
     }
 
     componentDidMount() {
@@ -211,7 +207,7 @@ class ShortPostViewer extends React.Component {
     returnValidAnnotations() {
         if (!this.state.annotations) return [];
         else {
-            const currentPageAnnotations = this.state.annotations[this.state.imageIndex];
+            const currentPageAnnotations = this.state.annotations[this.props.imageIndex];
             return (this.state.selectedAnnotationIndex !== null ? (
                 [currentPageAnnotations[this.state.selectedAnnotationIndex]]) :
                 (currentPageAnnotations));
@@ -271,7 +267,7 @@ class ShortPostViewer extends React.Component {
                     hideAnnotations={this.state.areAnnotationsHidden}
                     imageArray={imageArray}
                     activeAnnotations={this.state.activeAnnotations}
-                    imageIndex={this.state.imageIndex}
+                    imageIndex={this.props.imageIndex}
                     showPromptOverlay={this.state.showPromptOverlay}
                     annotateButtonPressed={this.state.annotateButtonPressed}
                     areAnnotationsHidden={this.state.areAnnotationsHidden}
@@ -285,26 +281,25 @@ class ShortPostViewer extends React.Component {
     }
 
     handleArrowPress(value) {
-        const currentIndex = this.state.imageIndex + value;
-        if (currentIndex === this.state.annotations.length) {
+        const currentIndex = this.props.imageIndex + value;
+        const numOfImages = this.props.eventData.image_data.length;
+        if (currentIndex === numOfImages) {
             return (
                 this.setState({
-                    imageIndex: 0,
                     selectedAnnotationIndex: null
-                }));
+                }), () => this.props.onIndexChange(0));
         }
         else if (currentIndex === -1) {
             return (
                 this.setState({
-                    imageIndex: this.state.annotations.length - 1,
                     selectedAnnotationIndex: null
-                }));
+                }), () => this.props.onIndexChange(numOfImages - 1));
         }
         else {
             return (
                 this.setState(({
-                    imageIndex: currentIndex, selectedAnnotationIndex: null
-                })));
+                    selectedAnnotationIndex: null
+                }), () => this.props.onIndexChange(currentIndex)));
         }
     }
 
@@ -350,6 +345,14 @@ class ShortPostViewer extends React.Component {
         })
     }
 
+    findAnnotation(imageIndex) {
+
+        this.props.onIndexChange(imageIndex)
+        this.heroRef.current.scrollIntoView({
+            block: 'center'
+        });
+    }
+
     handleMouseClick(id) {
         let imageIndex = 0;
         for (let array of this.state.annotations) {
@@ -358,13 +361,9 @@ class ShortPostViewer extends React.Component {
                 for (let annotation of array) {
                     if (annotation.data.id === id) {
                         return this.setState({
-                            imageIndex: imageIndex,
                             selectedAnnotationIndex: annotationIndex,
                             areAnnotationsHidden: false,
-                        },
-                            this.heroRef.current.scrollIntoView({
-                                block: 'center'
-                            }))
+                        }, this.findAnnotation(imageIndex))
                     }
                     annotationIndex++;
                 }
@@ -380,7 +379,7 @@ class ShortPostViewer extends React.Component {
             .postAnnotation(
                 this.props.userPreviewID,
                 this.props.eventData._id,
-                this.state.imageIndex,
+                this.props.imageIndex,
                 JSON.stringify(data),
                 JSON.stringify(geometry)
             )
@@ -389,7 +388,7 @@ class ShortPostViewer extends React.Component {
                 let newRootCommentData = result.data.newRootComment;
                 const currentAnnotationArray =
                     this.state
-                        .annotations[this.state.imageIndex]
+                        .annotations[this.props.imageIndex]
                         .concat({
                             geometry,
                             data: {
@@ -400,7 +399,7 @@ class ShortPostViewer extends React.Component {
                 let fullAnnotationArray = this.state.annotations;
                 let fullCommentData = this.state.fullCommentData;
                 fullCommentData.push(newRootCommentData);
-                fullAnnotationArray[this.state.imageIndex] =
+                fullAnnotationArray[this.props.imageIndex] =
                     currentAnnotationArray;
                 return this.setState({
                     annotations: fullAnnotationArray,
@@ -416,50 +415,47 @@ class ShortPostViewer extends React.Component {
             })
     }
 
-    handleIndexChange(value) {
-        this.setState({ imageIndex: value });
-    }
 
-    handleTextChange(text, isTitle) {
-        if (isTitle) {
-            //Add Preview Title Stuff
-            this.props.setPreviewTitle(text);
-        }
-        else {
-            let prevText = this.state.tempTextForEdit;
-            if (this.props.isPaginated) {
-                prevText[this.state.imageIndex] = text;
-            }
-            else {
-                prevText = text;
-            }
-            this.setState({ tempTextForEdit: prevText });
-        }
-    }
+    // handleTextChange(text, isTitle) {
+    //     if (isTitle) {
+    //         //Add Preview Title Stuff
+    //         this.props.setPreviewTitle(text);
+    //     }
+    //     else {
+    //         let prevText = this.state.tempTextForEdit;
+    //         if (this.props.isPaginated) {
+    //             prevText[this.state.imageIndex] = text;
+    //         }
+    //         else {
+    //             prevText = text;
+    //         }
+    //         this.setState({ tempTextForEdit: prevText });
+    //     }
+    // }
 
-    handlePaginatedChange() {
-        if (this.props.isPaginated === false) {
-            const imageCount = this.props.eventData.image_data.length;
-            let postArray = [];
-            for (let i = 0; i < imageCount; i++) {
-                if (i === this.state.imageIndex) {
-                    postArray.push(this.state.tempTextForEdit);
-                }
-                else {
-                    postArray.push([]);
-                }
-            }
-            this.setState({ tempTextForEdit: postArray }, () => this.props.setIsPaginated(true));
-        }
-        else {
-            if (window.confirm(`Switching back will remove all your captions except 
-                                for the current one. Keep going?`
-            )) {
-                const textData = this.state.tempTextForEdit[this.state.imageIndex];
-                this.setState({ tempTextForEdit: textData }, () => this.props.setIsPaginated(false));
-            }
-        }
-    }
+    // handlePaginatedChange() {
+    //     if (this.props.isPaginated === false) {
+    //         const imageCount = this.props.eventData.image_data.length;
+    //         let postArray = [];
+    //         for (let i = 0; i < imageCount; i++) {
+    //             if (i === this.state.imageIndex) { //for the editing of an image on a non first page
+    //                 postArray.push(this.state.tempTextForEdit);
+    //             }
+    //             else {
+    //                 postArray.push([]);
+    //             }
+    //         }
+    //         this.setState({ tempTextForEdit: postArray }, () => this.props.setIsPaginated(true));
+    //     }
+    //     else {
+    //         if (window.confirm(`Switching back will remove all your captions except 
+    //                             for the current one. Keep going?`
+    //         )) {
+    //             const textData = this.state.tempTextForEdit[this.state.imageIndex];
+    //             this.setState({ tempTextForEdit: textData }, () => this.props.setIsPaginated(false));
+    //         }
+    //     }
+    // }
 
     handleModalLaunch() {
         if (!this.props.isPostOnlyView) {
@@ -473,7 +469,7 @@ class ShortPostViewer extends React.Component {
     render() {
         const isOwnProfile = this.props.username === this.props.eventData.username;
         if (this.props.window === 1) { //1
-            const hasImages = this.props.eventData.image_data?.length  > 0 ? true : false;
+            const hasImages = this.props.eventData.image_data?.length > 0 ? true : false;
             const header = {
                 isOwnProfile,
                 editProjectState: this.props.editProjectState,
@@ -488,7 +484,7 @@ class ShortPostViewer extends React.Component {
                 title: this.props.eventData.title,
                 textData: this.props.textData,
                 isPaginated: this.props.isPaginated,
-                imageIndex: this.state.imageIndex,
+                imageIndex: this.props.imageIndex,
             }
 
             const meta = {
@@ -506,7 +502,7 @@ class ShortPostViewer extends React.Component {
                 renderImageSlider: this.renderImageSlider,
                 renderComments: this.renderComments,
             };
- 
+
             if (this.props.largeViewMode) {
                 const activityFunctions = {
                     jumpToComment: this.jumpToComment,
@@ -518,7 +514,7 @@ class ShortPostViewer extends React.Component {
                         heroRef={this.heroRef}
                         activityFunctions={activityFunctions}
                         {...sharedProps}
-                     />
+                    />
                 );
             }
             else {
@@ -532,7 +528,7 @@ class ShortPostViewer extends React.Component {
             }
         }
         else if (this.props.window === 2) {//2
-             return (
+            return (
                 <div className='shortpostviewer-window small-post-window' >
                     <h4>Edit your Post!</h4>
                     <div className='shortpostviewer-nav'>
@@ -547,13 +543,13 @@ class ShortPostViewer extends React.Component {
 
                     </div>
                     <ShortReEditor
-                        imageIndex={this.state.imageIndex}
+                        imageIndex={this.props.imageIndex}
                         eventData={this.props.eventData}
-                        textData={this.state.tempTextForEdit}
+                        textData={this.props.tempText}
                         isPaginated={this.props.isPaginated}
                         onArrowPress={this.handleArrowPress}
-                        onTextChange={this.handleTextChange}
-                        onPaginatedChange={this.handlePaginatedChange}
+                        onTextChange={this.props.onTextChange}
+                        onPaginatedChange={this.props.onPaginatedChange}
                     />
                 </div>
             )
@@ -576,7 +572,7 @@ class ShortPostViewer extends React.Component {
                     {...optional}
                     {...this.props.metaObject}
                     {...this.props.metaFunctions}
-                 />
+                />
             );
         }
         else if (this.props.window === 4) {
@@ -595,7 +591,7 @@ class ShortPostViewer extends React.Component {
                         {...this.props.threadObject}
                         {...this.props.threadFunction}
                         previousState={3}
-                        textData={this.state.tempTextForEdit}
+                        textData={this.props.tempText}
                         closeModal={this.props.closeModal}
                         setPostStage={this.props.setPostStage}
                         setDraft={this.props.setDraft}

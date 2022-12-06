@@ -3,6 +3,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import CaptionButtons from './caption-buttons';
 
 const TextContainer = (props) => {
+    console.log(props)
  return (
     <div id='textcontainer'>
         <h4>{props.username}</h4>
@@ -21,8 +22,8 @@ const TextContainer = (props) => {
             minRows={10}
             value={
                 props.isPaginated ?
-                    props.textData[props.imageIndex] :
-                    props.textData
+                    props.tempText[props.imageIndex] :
+                    props.tempText
             }
         />
         <p>{props.validFilesLength > 1 ? props.imageIndex + 1 : null}</p>

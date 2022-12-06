@@ -30,12 +30,12 @@ class ShortPost extends React.Component {
     this.setValidFiles = this.setValidFiles.bind(this);
     this.setUnsupportedFiles = this.setUnsupportedFiles.bind(this);
     this.setImageArray = this.setImageArray.bind(this);
-    this.handleTextChange = this.handleTextChange.bind(this);
+    // this.handleTextChange = this.handleTextChange.bind(this);
     this.handleUnsupportedFileChange = this.handleUnsupportedFileChange.bind(this);
     this.handleSelectedFileChange = this.handleSelectedFileChange.bind(this);
     this.handleDisablePost = this.handleDisablePost.bind(this);
     this.generateValidFiles = this.generateValidFiles.bind(this);
-    this.handlePaginatedChange = this.handlePaginatedChange.bind(this);
+    // this.handlePaginatedChange = this.handlePaginatedChange.bind(this);
     this.handleSortEnd = this.handleSortEnd.bind(this);
     this.loadImage = this.loadImage.bind(this);
     this.transformImageProp = this.transformImageProp.bind(this);
@@ -109,26 +109,27 @@ class ShortPost extends React.Component {
   handleIndexChange(value) {
     this.setState({ imageIndex: value });
   }
+ 
 
-  handlePaginatedChange() {
-    if (this.props.isPaginated === false) {
-      let postArray = [];
-      const imageCount = this.state.validFiles.length;
-      postArray.push(this.state.textData);
-      for (let i = 1; i < imageCount; i++) {
-        postArray.push([]);
-      }
-      this.setState({ textData: postArray }, () => this.props.setIsPaginated(true));
-    }
-    else {
-      if (window.confirm(`Switching back will remove all your captions except 
-                          for the first one. Keep going?`
-      )) {
-        const textData = this.state.textData[0];
-        this.setState({ textData: textData }, () => this.props.setIsPaginated(false));
-      }
-    }
-  }
+  // handlePaginatedChange() {
+  //   if (this.props.isPaginated === false) {
+  //     const imageCount = this.state.validFiles.length;
+  //     let postArray = [];
+  //     postArray.push(this.state.temptText);
+  //     for (let i = 1; i < imageCount; i++) {
+  //       postArray.push([]);
+  //     }
+  //     this.setState({ tempText: postArray }, () => this.props.setIsPaginated(true));
+  //   }
+  //   else {
+  //     if (window.confirm(`Switching back will remove all your captions except 
+  //                         for the first one. Keep going?`
+  //     )) {
+  //       const tempText = this.state.tempText[0];
+  //       this.setState({ tempText }, () => this.props.setIsPaginated(false));
+  //     }
+  //   }
+  // }
 
   setImageArray(imageArray) {
     this.setState({ imageArray: imageArray });
@@ -171,30 +172,6 @@ class ShortPost extends React.Component {
     }
   }
 
-  handleTextChange(text, isTitle) {
-    if (isTitle) {
-      this.props.setPreviewTitle(text);
-    }
-    else {
-      let newState;
-      const areFilesValid = this.state.validFiles.length === 0
-        || this.state.unsupportedFiles.length > 0;
-      if (this.props.isPaginated) {
-        let updatedArray = this.state.textData;
-        updatedArray[this.state.imageIndex] = text;
-        newState = updatedArray;
-      }
-      else {
-        newState = text;
-      }
-      this.setState(({
-        textData: newState,
-        postDisabled: (text.length === 0) && areFilesValid
-      }));
-    }
-
-  }
-
   handleUnsupportedFileChange(file) {
     this.setState((state) => ({
       unsupportedFiles: state.unsupportedFiles.concat(file)
@@ -232,6 +209,9 @@ class ShortPost extends React.Component {
   }
 
   render() {
+    const areFilesValid = this.state.validFiles.length === 0
+      || this.state.unsupportedFiles.length > 0;
+
     if (this.props.window === 1) {
       const navFunctions = {
         onModalClose: this.warnModalClose,
@@ -240,7 +220,7 @@ class ShortPost extends React.Component {
 
       const navStates = {
         previewTitle: this.props.previewTitle,
-        isPostDisabled: this.state.postDisabled,
+        isPostDisabled: (this.props.tempText.length === 0) && areFilesValid,
         isCompressing: this.state.isCompressing,
         window: this.props.window,
       }
@@ -250,14 +230,13 @@ class ShortPost extends React.Component {
         validFiles: this.state.validFiles,
         imageArray: this.state.imageArray,
         unsupportedFiles: this.state.unsupportedFiles,
-        text: this.state.textData,
-        imageIndex: this.state.imageIndex,
+        tempText: this.props.tempText,
+        imageIndex: this.props.imageIndex,
       };
 
       const imageEditorFunctions = {
         onSortEnd: this.handleSortEnd,
         setImageArray: this.setImageArray,
-        onPaginatedChange: this.handlePaginatedChange,
         handleArrowPress: this.handleArrowPress,
         onSelectedFileChange: this.handleSelectedFileChange,
         onUnsupportedFileChange: this.handleUnsupportedFileChange,
@@ -265,9 +244,10 @@ class ShortPost extends React.Component {
         setValidFiles: this.setValidFiles,
         setSelectedFiles: this.setSelectedFiles,
         setUnsupportedFiles: this.setUnsupportedFiles,
-        onTextChange: this.handleTextChange,
+        onPaginatedChange: this.props.onPaginatedChange,
+        onTextChange: this.props.onTextChange,
       };
-
+console.log(this.props.tempText)
       return (
         <ShortPostInitial
           {...navStates}
@@ -289,8 +269,7 @@ class ShortPost extends React.Component {
       const optional = {
         closeModal: this.props.closeModal
       }
-      console.log(this.props.metaObject);
-      return (
+       return (
         <MetaStage
           {...required}
           {...optional}
@@ -311,7 +290,6 @@ class ShortPost extends React.Component {
             {...this.props.threadObject}
             {...this.props.threadFunction}
             previousState={2}
-            textData={this.state.textData}
             closeModal={this.props.closeModal}
             setPostStage={this.props.setPostStage}
             setDraft={this.props.setDraft}

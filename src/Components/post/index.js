@@ -16,6 +16,7 @@ class PostController extends React.Component {
     console.log(this.props.viewerObject);
     this.state = {
       window: 1,
+      imageIndex: 0,
       date: data?.date ?
         new Date(data.date)
           .toISOString()
@@ -36,6 +37,7 @@ class PostController extends React.Component {
         data.post_privacy_type : this.props.authUser.preferredPostType,
 
       //editors
+      tempText: '',
       //initial
       //shortpost meta
       labels: data ?
@@ -75,6 +77,9 @@ class PostController extends React.Component {
     this.handleFormAppend = this.handleFormAppend.bind(this);
     this.retrieveThumbnail = this.retrieveThumbnail.bind(this);
 
+    this.handleTextChange = this.handleTextChange.bind(this);
+    this.handlePaginatedChange = this.handlePaginatedChange.bind(this);
+
   }
 
   componentDidMount() {
@@ -83,6 +88,49 @@ class PostController extends React.Component {
 
   componentWillUnmount() {
     this._isMounted = false;
+  }
+
+  handleTextChange(text, isTitle) {
+    if (isTitle) {
+      this.setPreviewTitle(text);
+    }
+    else {
+      let tempText = this.state.tempText;;
+      if (this.state.isPaginated) {
+        tempText[this.state.imageIndex] = text; //fixme imageIndex
+      }
+      else {
+        tempText = text;
+      }
+      this.setState(({ tempText }));
+    }
+
+  }
+
+  handlePaginatedChange() {
+    if (this.props.isPaginated === false) {
+      const imageCount = this.props.isViewer ?
+        this.props.eventData.image_data.length :
+        this.state.validFiles.length;
+      let postArray = [];
+      for (let i = 0; i < imageCount; i++) {
+        if (i === this.state.imageIndex) { //for the editing of an image on a non first page
+          postArray.push(this.state.tempText);
+        }
+        else {
+          postArray.push([]);
+        }
+      }
+      this.setState({ tempText: postArray }, () => this.setIsPaginated(true));
+    }
+    else {
+      if (window.confirm(`Switching back will remove all your captions except 
+                          for the first one. Keep going?`
+      )) {
+        const tempText = this.state.tempText[0];
+        this.setState({ tempText }, () => this.setIsPaginated(false));
+      }
+    }
   }
 
   handleIndexChange(imageIndex) {
@@ -175,7 +223,7 @@ class PostController extends React.Component {
     this.setState({ isPaginated });
   }
 
-  handleFormAppend(formData, required, images, functions) {
+  handleFormAppend(formData, images, functions) {
     //required
     //selectedDraft
     //textData
@@ -195,7 +243,8 @@ class PostController extends React.Component {
     // projectPreviewMap: {}
 
     const defaults = {
-      ...required,
+      tempText: this.state.tempText,
+      selectedDraft: this.state.selectedDraft,
       postPrivacyType: this.state.postPrivacyType,
       difficulty: this.state.difficulty,
       labels: this.state.labels,
@@ -228,7 +277,8 @@ class PostController extends React.Component {
       formData,
       {
         ...completeOptionals,
-        ...required
+        selectedDraft: this.state.selectedDraft,
+        textData: this.state.tempText
       },
       functions,
       this.props.viewerObject?.isPostOnlyView ?? false,
@@ -247,7 +297,7 @@ class PostController extends React.Component {
 
       return handleNewSubmit(
         formData,
-        {...defaults, ...completeOptionals, ...images},
+        { ...defaults, ...completeOptionals, ...images },
         functions,
         this.props.viewerObject?.isPostOnlyView ?? false,
         this.state.isNewSeriesToggled
@@ -268,12 +318,16 @@ class PostController extends React.Component {
 
     const shared = {
       window: this.state.window,
+      imageIndex: this.state.imageIndex,
       isPaginated: this.state.isPaginated,
+      tempText: this.state.tempText,
 
       setDraft: this.setDraft,
       setPostStage: this.setPostStage,
       setIsPaginated: this.setIsPaginated,
       setPreviewTitle: this.setPreviewTitle,
+      onIndexChange: this.handleIndexChange,
+      onTextChange: this.handleTextChange
     }
 
     const initialSharedObject = {
@@ -333,7 +387,7 @@ class PostController extends React.Component {
       handleFormAppend: this.handleFormAppend,
       setThreadToggleState: this.setThreadToggleState,
     }
- 
+
     if (this.props.isViewer) {
       return (
         <ShortPostViewer

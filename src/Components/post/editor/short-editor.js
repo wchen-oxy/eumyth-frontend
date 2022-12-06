@@ -156,13 +156,13 @@ class ShortEditor extends React.Component {
     }
 
     renderTextContainer() {
-        return (
+         return (
             <TextContainer
                 validFilesLength={this.props.validFiles.length}
                 isPaginated={this.props.isPaginated}
                 onPaginatedChange={this.props.onPaginatedChange}
                 onTextChange={this.props.onTextChange}
-                text={this.props.text}
+                tempText={this.props.tempText}
                 imageIndex={this.props.imageIndex}
             />
         )

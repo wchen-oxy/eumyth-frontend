@@ -192,7 +192,6 @@ export const appendPrimaryPostFields = (formData, defaults) => {
     formData.append(USER_ID_FIELD, defaults.profileID);
     formData.append(IS_PAGINATED_FIELD, defaults.isPaginated);
     formData.append(DIFFICULTY_FIELD, defaults.difficulty);
-    formData.append(PURSUIT_FIELD, defaults.selectedPursuit);
     formData.append(USER_PREVIEW_ID_FIELD, defaults.userPreviewID);
     formData.append(INDEX_USER_ID_FIELD, defaults.indexProfileID);
     defaults.date && formData.append(DATE_FIELD, defaults.date);
@@ -213,8 +212,13 @@ export const appendPrimaryPostFields = (formData, defaults) => {
             JSON.stringify(defaults.textData);
         formData.append(TEXT_DATA_FIELD, text);
     }
+
     if (defaults.selectedDraft) {
-        formData.append(SELECTED_DRAFT_ID, defaults.selectedDraft);
+        formData.append(SELECTED_DRAFT_ID, defaults.selectedDraft.content_id);
+        formData.append(PURSUIT_FIELD, defaults.selectedDraft.pursuit)
+    }
+    else{
+        formData.append(PURSUIT_FIELD, defaults.selectedPursuit);
     }
 }
 

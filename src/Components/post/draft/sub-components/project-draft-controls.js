@@ -10,10 +10,10 @@ const ProjectDraftControls = (props) => {
         (item) => {
             if (props.isUpdateToPost && item.content_id === props.selectedDraft) {
                 console.log(defaultValue);
-                defaultValue = item.content_id;
+                defaultValue = item;
             }
             return (
-                <option key={item.title} value={item.content_id}>
+                <option key={item.title} value={item}>
                     {item.title}
                 </option>)
         }) :

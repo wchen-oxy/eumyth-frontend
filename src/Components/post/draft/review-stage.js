@@ -10,10 +10,7 @@ const ReviewStage = (props) => {
     const handleFormAppend = () => {
         setIsSubmitting(true);
         let formData = new FormData();
-        const required = {
-            selectedDraft: props.selectedDraft,
-            textData: props.textData,
-        }
+
         const images = {
             useImageForThumbnail: props.useImageForThumbnail, //viewer only //keep
             coverPhoto: props.coverPhoto,  //draft only  //keep
@@ -28,12 +25,13 @@ const ReviewStage = (props) => {
         }
 
         //NEW
-        props.handleFormAppend(formData, required, images, functions);
+        props.handleFormAppend(formData, images, functions);
     }
 
     const handleReturnClick = (stageValue) => {
         props.setPostStage(stageValue);
     }
+
     const disableCond1 = !props.selectedDraft;
     const disableCond2 = props.threadTitle.length === 0 || !props.selectedPursuit;
 
