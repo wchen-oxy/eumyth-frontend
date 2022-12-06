@@ -171,11 +171,14 @@ class PostController extends React.Component {
       && !this.props.viewerObject.eventData?.cover_photo_key
       && value === 2) {
       this.retrieveThumbnail();
+      this.setState({
+        window,
+        tempText
+      });
     }
-    this.setState({
-      window,
-      tempText
-    });
+    else{
+      this.setState({window})
+    }
 
   }
 

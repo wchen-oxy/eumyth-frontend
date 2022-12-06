@@ -528,7 +528,7 @@ class ShortPostViewer extends React.Component {
             }
         }
         else if (this.props.window === 2) {//2
-            console.log(this.props.tempText);
+            console.log(this.props.tempText); 
             return (
                 <div className='shortpostviewer-window small-post-window' >
                     <h4>Edit your Post!</h4>
