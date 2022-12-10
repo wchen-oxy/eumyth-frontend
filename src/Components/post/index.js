@@ -3,9 +3,25 @@ import imageCompression from 'browser-image-compression';
 import { default as ShortPostDraft } from './draft/short-post';
 import { withFirebase } from 'store/firebase';
 import ShortPostViewer from './viewer/short-post';
-import { appendPrimaryPostFields, appendImageFields, handleNewSubmit, handleUpdateSubmit } from './draft/helpers';
+import { appendPrimaryPostFields, appendImageFields, handleNewSubmit, handleUpdateSubmit, appendSecondarySeriesFields, handleProjectCreation, appendOptionalImageFields, appendTertiaryUpdateFields, decideNewOrUpdate, handlePostOwnerUpdate, handleCreatedProjectAppend } from './draft/helpers';
 import AxiosHelper from 'utils/axios';
 import fileDisplayContainer from './editor/sub-components/file-display-container';
+import { PROJECT_PREVIEW_ID_FIELD } from 'utils/constants/form-data';
+
+//fixme  Cast to String failed for value "[ 'Full Test', 'New Series For Test' ]" at path "title"
+//fixme new project postIDList is missing 
+//fixme new post, selectedDraftID is missing
+
+const _selectExistingDraft = (drafts, eventData) => {
+  if (drafts && eventData) {
+    return drafts
+      .find(item => item.project_preview_id === eventData.project_preview_id);
+  }
+  else {
+    return null
+  }
+
+}
 
 const labelFormatter = (value) => { return { label: value, value: value } };
 class PostController extends React.Component {
@@ -13,7 +29,6 @@ class PostController extends React.Component {
   constructor(props) {
     super(props);
     const data = this.props.viewerObject?.eventData ?? null;
-    console.log(this.props.viewerObject);
     this.state = {
       window: 1,
       imageIndex: 0,
@@ -38,6 +53,8 @@ class PostController extends React.Component {
 
       //editors
       tempText: '',
+      compressedPhotos: [],
+      coverPhoto: null,
       //initial
       //shortpost meta
       labels: data ?
@@ -51,7 +68,7 @@ class PostController extends React.Component {
       titlePrivacy: false,
       threadTitle: '',
       isCompleteProject: false,
-      selectedDraft: null
+      selectedDraft: _selectExistingDraft(this.props.authUser.drafts, data)
 
     };
 
@@ -69,12 +86,14 @@ class PostController extends React.Component {
     this.setTitlePrivacy = this.setTitlePrivacy.bind(this);
     this.setIsCompleteProject = this.setIsCompleteProject.bind(this);
     this.setPreviewTitle = this.setPreviewTitle.bind(this);
+    this.setPhotoData = this.setPhotoData.bind(this);
 
     this.setDifficulty = this.setDifficulty.bind(this);
     this.setPostStage = this.setPostStage.bind(this);
     this.handleIndexChange = this.handleIndexChange.bind(this);
     this.setIsPaginated = this.setIsPaginated.bind(this);
-    this.handleFormAppend = this.handleFormAppend.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.decideNewOrUpdate = this.decideNewOrUpdate.bind(this);
     this.retrieveThumbnail = this.retrieveThumbnail.bind(this);
 
     this.handleTextChange = this.handleTextChange.bind(this);
@@ -88,6 +107,13 @@ class PostController extends React.Component {
 
   componentWillUnmount() {
     this._isMounted = false;
+  }
+
+  setPhotoData(coverPhoto, compressedPhotos) {
+    this.setState({
+      coverPhoto,
+      compressedPhotos
+    })
   }
 
   handleTextChange(text, isTitle) {
@@ -176,8 +202,8 @@ class PostController extends React.Component {
         tempText
       });
     }
-    else{
-      this.setState({window})
+    else {
+      this.setState({ window })
     }
 
   }
@@ -232,36 +258,24 @@ class PostController extends React.Component {
     this.setState({ isPaginated });
   }
 
-  handleFormAppend(formData, images, functions) {
-    //required
-    //selectedDraft
-    //textData
-
-    //optional
-    //useImageForThumbnail
-    //coverPhoto
-    //compressedPhotos
-
-    //viewerObject
-    // key: this.state.selectedContent._id,
-    // largeViewMode: true,
-    // textData: formattedTextData,
-    // isPostOnlyView: this.state.isContentOnlyView,
-    // pursuitNames: this.state.pursuitNames,
-    // eventData: this.state.selectedContent,
-    // projectPreviewMap: {}
-
-    const defaults = {
-      tempText: this.state.tempText,
-      selectedDraft: this.state.selectedDraft,
+  handleSubmit(functions) {
+    const isUpdate = this.props.isViewer;
+    let promiseChain = Promise.resolve();
+    let formData = new FormData();
+    const postText = {
+      textData: this.state.tempText,
+      previewTitle: this.state.previewTitle,
+    }
+    const postMeta = {
       postPrivacyType: this.state.postPrivacyType,
       difficulty: this.state.difficulty,
       labels: this.state.labels,
       date: this.state.date,
       minDuration: this.state.minDuration,
       isPaginated: this.state.isPaginated,
-      previewTitle: this.state.previewTitle,
-      selectedPursuit: this.state.selectedPursuit,
+    }
+
+    const userMeta = {
       username: this.props.authUser.username,
       userPreviewID: this.props.authUser.userPreviewID,
       indexProfileID: this.props.authUser.indexProfileID,
@@ -269,52 +283,77 @@ class PostController extends React.Component {
       smallCroppedDisplayPhotoKey: this.props.authUser.smallCroppedDisplayPhotoKey,
     }
 
-    const completeOptionals = {
-      ...(this.props.isViewer && {
-        isUpdateToPost: true,
-        coverPhotoKey: this.props.viewerObject.eventData?.cover_photo_key ?? null,
-        projectPreviewID: this.props.viewerObject.eventData.project_preview_id,
-        postID: this.props.viewerObject.eventData._id,
-      }),
-      isCompleteProject: this.state.isCompleteProject,
-      titlePrivacy: this.state.titlePrivacy,
-      threadTitle: this.state.threadTitle,
+    const existingSeriesMeta = { //can be appended immediately 
+      selectedDraft: this.state.selectedDraft, //old
+      isCompleteProject: this.state.isCompleteProject, //old
     }
-    appendPrimaryPostFields(formData, { ...defaults, ...completeOptionals });
-    appendImageFields(formData, images, functions);
-    const params = [
-      formData,
-      {
-        ...completeOptionals,
-        selectedDraft: this.state.selectedDraft,
-        textData: this.state.tempText
-      },
-      functions,
-      this.props.viewerObject?.isPostOnlyView ?? false,
-      this.state.isNewSeriesToggled
-    ]
-    if (this.props.isViewer) {
-      if (!images.useImageForThumbnail && images.coverPhotoKey) {
-        return AxiosHelper
-          .deletePhotoByKey(images.coverPhotoKey)
-          .then(() =>
-            handleUpdateSubmit(...params));
-      }
-      return handleUpdateSubmit(...params);
-    }
-    else {
 
-      return handleNewSubmit(
-        formData,
-        { ...defaults, ...completeOptionals, ...images },
-        functions,
-        this.props.viewerObject?.isPostOnlyView ?? false,
-        this.state.isNewSeriesToggled
-      );
+    const newSeriesMeta = { //useful only for project creation component
+      threadTitle: this.state.threadTitle, //new only
+      selectedPursuit: this.state.selectedPursuit, //new one
+      titlePrivacy: this.state.titlePrivacy, //new
     }
+
+    const defaults = {
+      ...postText,
+      ...postMeta,
+      ...userMeta
+    }
+    //check if all of update works, otherwise is compelte 
+    appendPrimaryPostFields(formData, defaults);
+    appendSecondarySeriesFields(formData, existingSeriesMeta, isUpdate); //what  is this for?
+    appendTertiaryUpdateFields(formData, this.props.viewerObject?.eventData ?? null, isUpdate);
+
+    if (this.state.compressedPhotos.length > 0) {
+      const images = {
+        coverPhoto: this.state.coverPhoto,
+        imageArray: this.state.compressedPhotos
+      }
+      appendOptionalImageFields(formData, images);
+    }
+
+    if (this.state.isNewSeriesToggled) {
+      promiseChain = promiseChain
+        .then(() => handleProjectCreation(userMeta, newSeriesMeta))
+        .then((results) => {
+          return handleCreatedProjectAppend(results, formData);
+        });
+    }
+
+    if (this.props.viewerObject?.eventData.project_preview_id !== this.state.selectedDraft.project_preview_id
+      && isUpdate) {
+      console.log(this.props.viewerObject?.eventData.project_preview_id)
+      promiseChain = promiseChain
+        .then((createdProjectMeta) => {
+          const replacementProjectMeta = this.state.isNewSeriesToggled ?
+            createdProjectMeta : this.state.selectedDraft;
+            console.log(replacementProjectMeta);
+          return handlePostOwnerUpdate(
+            formData,
+            this.props.viewerObject.eventData._id,
+            {
+              newProjectID: replacementProjectMeta.content_id,
+              newProjectPreviewID: replacementProjectMeta.project_preview_id,
+              oldProjectPreviewID: this.props.viewerObject?.eventData.project_preview_id
+            }
+          )
+        });
+    }
+
+    promiseChain = promiseChain
+      .then(
+        () => decideNewOrUpdate(
+          formData,
+          functions,
+          this.props.viewerObject?.isPostOnlyView ?? false,
+          this.props.isViewer
+        ))
+    return promiseChain;
   }
 
   render() {
+
+    console.log(this.state.selectedDraft);
     const miniAuthObject = {
       pastLabels: this.props.authUser.labels,
       userPreviewID: this.props.authUser.userPreviewID,
@@ -393,7 +432,7 @@ class PostController extends React.Component {
       setTitlePrivacy: this.setTitlePrivacy,
       setSelectedPursuit: this.setSelectedPursuit,
       setIsCompleteProject: this.setIsCompleteProject,
-      handleFormAppend: this.handleFormAppend,
+      handleSubmit: this.handleSubmit,
       setThreadToggleState: this.setThreadToggleState,
     }
 
@@ -418,12 +457,14 @@ class PostController extends React.Component {
         <ShortPostDraft
           {...miniAuthObject}
           {...shared}
+
           initialDraftObject={initialDraftObject}
           metaObject={metaObject}
           metaFunctions={metaFunctions}
           threadObject={threadObject}
           threadFunction={threadFunction}
           closeModal={this.props.closeModal}
+          setPhotoData={this.setPhotoData}
         />
       );
   }

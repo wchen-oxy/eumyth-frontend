@@ -50,10 +50,12 @@ const LAST_NAME_FIELD = 'lastName';
 
 const NEW = 'new';
 const EXISTING = 'existing';
+const DRAFT = "DRAFT";
 
-const SHOULD_UPDATE_PREVIEW = 'shouldUpdatePreview';
+const SHOULD_UPDATE_PREVIEW_FIELD = 'shouldUpdatePreview';
 
 module.exports = {
+    DRAFT,
     COVER_PHOTO_FIELD,
     MINI_COVER_PHOTO_FIELD,
     PROJECT_ID_FIELD,
@@ -105,6 +107,6 @@ module.exports = {
     NEW,
     EXISTING,
 
-    SHOULD_UPDATE_PREVIEW
+    SHOULD_UPDATE_PREVIEW_FIELD
 
 }

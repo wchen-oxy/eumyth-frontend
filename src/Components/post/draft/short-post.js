@@ -18,7 +18,7 @@ class ShortPost extends React.Component {
       validFiles: [],
       unsupportedFiles: [],
       imageArray: [],
-      tinyPhotos: null,
+
 
       textData: '',
       postDisabled: true,
@@ -30,12 +30,10 @@ class ShortPost extends React.Component {
     this.setValidFiles = this.setValidFiles.bind(this);
     this.setUnsupportedFiles = this.setUnsupportedFiles.bind(this);
     this.setImageArray = this.setImageArray.bind(this);
-    // this.handleTextChange = this.handleTextChange.bind(this);
     this.handleUnsupportedFileChange = this.handleUnsupportedFileChange.bind(this);
     this.handleSelectedFileChange = this.handleSelectedFileChange.bind(this);
     this.handleDisablePost = this.handleDisablePost.bind(this);
     this.generateValidFiles = this.generateValidFiles.bind(this);
-    // this.handlePaginatedChange = this.handlePaginatedChange.bind(this);
     this.handleSortEnd = this.handleSortEnd.bind(this);
     this.loadImage = this.loadImage.bind(this);
     this.transformImageProp = this.transformImageProp.bind(this);
@@ -85,11 +83,12 @@ class ShortPost extends React.Component {
           files.push(new File([results[i]], 'file'))
         }
 
-        this.setState({
-          tinyPhotos: files,
-          coverPhoto: thumbnail,
-          isCompressing: false
-        });
+        this.setState({ isCompressing: false },
+          () =>
+            this.setPhotoData(
+              thumbnail,
+              files
+            ));
       })
   }
 
@@ -109,27 +108,6 @@ class ShortPost extends React.Component {
   handleIndexChange(value) {
     this.setState({ imageIndex: value });
   }
- 
-
-  // handlePaginatedChange() {
-  //   if (this.props.isPaginated === false) {
-  //     const imageCount = this.state.validFiles.length;
-  //     let postArray = [];
-  //     postArray.push(this.state.temptText);
-  //     for (let i = 1; i < imageCount; i++) {
-  //       postArray.push([]);
-  //     }
-  //     this.setState({ tempText: postArray }, () => this.props.setIsPaginated(true));
-  //   }
-  //   else {
-  //     if (window.confirm(`Switching back will remove all your captions except 
-  //                         for the first one. Keep going?`
-  //     )) {
-  //       const tempText = this.state.tempText[0];
-  //       this.setState({ tempText }, () => this.props.setIsPaginated(false));
-  //     }
-  //   }
-  // }
 
   setImageArray(imageArray) {
     this.setState({ imageArray: imageArray });
@@ -247,7 +225,6 @@ class ShortPost extends React.Component {
         onPaginatedChange: this.props.onPaginatedChange,
         onTextChange: this.props.onTextChange,
       };
-console.log(this.props.tempText)
       return (
         <ShortPostInitial
           {...navStates}
@@ -269,7 +246,7 @@ console.log(this.props.tempText)
       const optional = {
         closeModal: this.props.closeModal
       }
-       return (
+      return (
         <MetaStage
           {...required}
           {...optional}
@@ -279,14 +256,11 @@ console.log(this.props.tempText)
       );
     }
     else if (this.props.window === 3) {
-      const optional = {
-        coverPhoto: this.state.coverPhoto,
-        compressedPhotos: this.state.tinyPhotos,
-      }
+
       return (
         <div className='small-post-window'>
           <ReviewStage
-            {...optional}
+
             {...this.props.threadObject}
             {...this.props.threadFunction}
             previousState={2}

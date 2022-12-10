@@ -44,11 +44,7 @@ class ShortPostViewer extends React.Component {
             areAnnotationsHidden: true,
             selectedAnnotationIndex: null,
             showPromptOverlay: false,
-            //shortpost meta 
-
-            //review stage
             projectPreview: null,
-            useImageForThumbnail: this.props.coverPhotoKey,
 
         };
 
@@ -65,10 +61,6 @@ class ShortPostViewer extends React.Component {
         this.handleMouseOut = this.handleMouseOut.bind(this);
         this.handleMouseClick = this.handleMouseClick.bind(this);
         this.handleAnnotationSubmit = this.handleAnnotationSubmit.bind(this);
-        // this.handlePaginatedChange = this.handlePaginatedChange.bind(this);
-        this.setUseImageForThumbnail = this.setUseImageForThumbnail.bind(this);
-        this.setUseCoverPhoto = this.setUseCoverPhoto.bind(this);
-        // this.handleTextChange = this.handleTextChange.bind(this);
         this.handleModalLaunch = this.handleModalLaunch.bind(this);
         this.handleCommentDataInjection = this.handleCommentDataInjection.bind(this);
         this.deletePostCallback = this.deletePostCallback.bind(this);
@@ -86,21 +78,12 @@ class ShortPostViewer extends React.Component {
         this.setState({ annotations: annotationArray }, this.loadProjectPreview);
     }
 
-    setUseImageForThumbnail(useImageForThumbnail) {
-        this.setState({ useImageForThumbnail })
-    }
-
-    setUseCoverPhoto(useCoverPhoto) {
-        this.setState({ useCoverPhoto })
-    }
-
-
     jumpToComment() {
         this.commentRef.current.scrollIntoView({ block: 'center' });
         this.commentRef.current.focus();
     }
 
-    loadProjectPreview() {
+    loadProjectPreview() { //this is overwriting the project preview from before
         const projectPreviewID = this.props.eventData.project_preview_id;
         if (projectPreviewID && !this.props.projectPreviewMap[projectPreviewID]) {
             return AxiosHelper.getSingleProjectPreview(projectPreviewID)
@@ -111,8 +94,8 @@ class ShortPostViewer extends React.Component {
                         if (this.props.saveProjectPreview) {
                             this.props.saveProjectPreview(result.data);
                         }
-                        const draftData = findMatchedDraft(this.props.drafts, result.data);
-                        this.props.setDraft(draftData)
+                        // const draftData = findMatchedDraft(this.props.drafts, result.data);
+                        // this.props.setDraft(draftData)
                     })
                 });
         }
@@ -122,8 +105,8 @@ class ShortPostViewer extends React.Component {
                 projectPreview,
                 selectedDraft: findMatchedDraft(this.props.drafts, projectPreview)
             }, () => {
-                const draftData = findMatchedDraft(this.props.drafts, projectPreview);
-                this.props.setDraft(draftData)
+                // const draftData = findMatchedDraft(this.props.drafts, projectPreview);
+                // this.props.setDraft(draftData)
             });
         }
     }
@@ -415,48 +398,6 @@ class ShortPostViewer extends React.Component {
             })
     }
 
-
-    // handleTextChange(text, isTitle) {
-    //     if (isTitle) {
-    //         //Add Preview Title Stuff
-    //         this.props.setPreviewTitle(text);
-    //     }
-    //     else {
-    //         let prevText = this.state.tempTextForEdit;
-    //         if (this.props.isPaginated) {
-    //             prevText[this.state.imageIndex] = text;
-    //         }
-    //         else {
-    //             prevText = text;
-    //         }
-    //         this.setState({ tempTextForEdit: prevText });
-    //     }
-    // }
-
-    // handlePaginatedChange() {
-    //     if (this.props.isPaginated === false) {
-    //         const imageCount = this.props.eventData.image_data.length;
-    //         let postArray = [];
-    //         for (let i = 0; i < imageCount; i++) {
-    //             if (i === this.state.imageIndex) { //for the editing of an image on a non first page
-    //                 postArray.push(this.state.tempTextForEdit);
-    //             }
-    //             else {
-    //                 postArray.push([]);
-    //             }
-    //         }
-    //         this.setState({ tempTextForEdit: postArray }, () => this.props.setIsPaginated(true));
-    //     }
-    //     else {
-    //         if (window.confirm(`Switching back will remove all your captions except 
-    //                             for the current one. Keep going?`
-    //         )) {
-    //             const textData = this.state.tempTextForEdit[this.state.imageIndex];
-    //             this.setState({ tempTextForEdit: textData }, () => this.props.setIsPaginated(false));
-    //         }
-    //     }
-    // }
-
     handleModalLaunch() {
         if (!this.props.isPostOnlyView) {
             return (this.props.passDataToModal(
@@ -528,7 +469,7 @@ class ShortPostViewer extends React.Component {
             }
         }
         else if (this.props.window === 2) {//2
-            console.log(this.props.tempText); 
+            console.log(this.props.tempText);
             return (
                 <div className='shortpostviewer-window small-post-window' >
                     <h4>Edit your Post!</h4>
@@ -562,15 +503,9 @@ class ShortPostViewer extends React.Component {
                 handleTitleChange: this.handleTextChange
             }
 
-            const optional = {
-                setUseCoverPhoto: this.setUseCoverPhoto,
-                setUseImageForThumbnail: this.setUseImageForThumbnail
-            }
-
             return (
                 <MetaStage
                     {...required}
-                    {...optional}
                     {...this.props.metaObject}
                     {...this.props.metaFunctions}
                 />
@@ -579,7 +514,6 @@ class ShortPostViewer extends React.Component {
         else if (this.props.window === 4) {
 
             const optional = {
-                coverPhoto: this.state.coverPhoto,
                 useImageForThumbnail: this.state.useImageForThumbnail,
             }
 

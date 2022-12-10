@@ -6,26 +6,16 @@ const ReviewStage = (props) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const handleFormAppend = () => {
+    const handleSubmit = () => {  
         setIsSubmitting(true);
-        let formData = new FormData();
-
-        const images = {
-            useImageForThumbnail: props.useImageForThumbnail, //viewer only //keep
-            coverPhoto: props.coverPhoto,  //draft only  //keep
-            imageArray: props.compressedPhotos,
-        }
-
         const functions = {
             setIsSubmitting,
             setLoading,
             setError,
             closeModal: props.closeModal
         }
-
         //NEW
-        props.handleFormAppend(formData, images, functions);
+        props.handleSubmit(functions);
     }
 
     const handleReturnClick = (stageValue) => {
@@ -51,7 +41,7 @@ const ReviewStage = (props) => {
                     </button>
                     <Steps current={3} />
                     <button
-                        onClick={(e) => handleFormAppend()}
+                        onClick={(e) => handleSubmit()}
                         disabled={isSubmitting || props.threadToggleState ? disableCond2 : disableCond1}>
                         {props.isUpdateToPost ?
                             isSubmitting ? 'Updating!' : 'Update!' :

@@ -21,14 +21,15 @@ const Menu = (props) => {
 const CustomMultiSelect = (props) => {
   const isValidNewOption = (inputValue, selectValue) =>
     inputValue.length > 0 && selectValue.length < 5;
-
-  const defaults = checkInputNotNull(props.selectedLabels, formatReactSelectOptions);
   const options = checkInputNotNull(props.options, formatReactSelectOptions);
+
+  console.log(props.selectedLabels);
+  console.log(options);
   return (
     <CreatableSelect
       isMulti
       onChange={props.onSelect}
-      defaultValue={defaults}
+      defaultValue={props.selectedLabels}
       options={options}
       components={{ Menu }}
       isValidNewOption={isValidNewOption}

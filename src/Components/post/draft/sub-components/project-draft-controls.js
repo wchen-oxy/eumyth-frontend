@@ -1,29 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import PursuitCategoryInput from './pursuit-category-input';
 
 const ProjectDraftControls = (props) => {
     const [priorThread, setPriorThread] = useState(props.selectedDraft);
-    const doDraftsExist = props.drafts.length > 0;
-    let defaultValue = null;
-    let draftOptions = doDraftsExist ? props.drafts.map(
-        (item) => {
-            if (props.isUpdateToPost && item.content_id === props.selectedDraft) {
-                console.log(defaultValue);
-                defaultValue = item;
-            }
-            return (
-                <option key={item.title} value={item}>
-                    {item.title}
-                </option>)
-        }) :
-        [<option value={null} disabled>No Drafts Available</option>];
+    const [selectedDraftIndex, setSelectedDraftIndex] = useState(0);
+    const [options, setOptions] = useState([]);
+    useEffect(() => {
+        const doDraftsExist = props.drafts.length > 0;
+        let draftOptions = doDraftsExist ? props.drafts.map(
+            (item, index) => {
+                if (props.isUpdateToPost && item.content_id === props.selectedDraft.content_id) {
+                    setSelectedDraftIndex(index);
+                }
+                return (
+                    <option key={index} value={index}>
+                        {item.title}
+                    </option>)
+            }) :
+            [<option value={null} disabled>No Drafts Available</option>];
 
-    if (doDraftsExist && !props.isUpdateToPost) {
-        draftOptions.unshift(
-            <option key="null" value={null}></option>);
+        if (doDraftsExist && !props.isUpdateToPost) {
+            draftOptions.unshift(
+                <option key="null" value={null}></option>);
+        }
+        setOptions(draftOptions);
+    }, [])
+
+
+    const handleDraftChange = (e) => {
+        const index = e.target.value;
+        setSelectedDraftIndex(index);
+        props.setDraft(props.drafts[index]);
+        console.log(props.drafts[index]);
+
     }
-
     return (
         <div id='projectdraftcontrols'>
             <div className='projectdraftcontrols-header'>
@@ -72,10 +83,10 @@ const ProjectDraftControls = (props) => {
                         <select
                             name='select'
                             id='projectdraftcontrols-content'
-                            defaultValue={defaultValue}
-                            value={props.selectedDraft}
-                            onChange={e => props.setDraft(e.target.value)}>
-                            {draftOptions}
+                            // defaultValue={defaultValueIndex}
+                            value={selectedDraftIndex}
+                            onChange={handleDraftChange}>
+                            {options}
                         </select>
                         <div className='projectdraftcontrols-inner'>
                             <label>Complete Series</label>

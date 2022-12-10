@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Steps from './sub-components/steps';
 import CustomMultiSelect from '../../custom-clickables/createable-single';
-// import CoverPhotoControls from './sub-components/cover-photo-controls';
 import DateInput from './sub-components/data-input';
 import DifficultyInput from './sub-components/difficulty-input';
 import MinutesInput from './sub-components/minutes-input';
