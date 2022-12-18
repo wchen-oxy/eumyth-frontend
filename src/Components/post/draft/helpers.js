@@ -171,11 +171,9 @@ export const appendPrimaryPostFields = (formData, fields) => {
     }
 }
 
-export const appendSecondarySeriesFields = (formData, fields, isUpdate) => {
-    if (isUpdate) {
+export const appendSecondarySeriesFields = (formData, fields) => {
         formData.append(THREAD_TITLE_PRIVACY_FIELD, fields.titlePrivacy);
         formData.append(SELECTED_DRAFT_ID, fields.selectedDraft.content_id);
-    }
     // formData.append(THREAD_TITLE_FIELD, fields.threadTitle);
     // formData.append(PURSUIT_FIELD, fields.selectedDraft.pursuit)
 }

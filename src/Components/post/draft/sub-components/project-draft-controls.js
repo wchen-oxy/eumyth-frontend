@@ -22,7 +22,8 @@ const ProjectDraftControls = (props) => {
 
         if (doDraftsExist && !props.isUpdateToPost) {
             draftOptions.unshift(
-                <option key="null" value={null}></option>);
+                <option key="null" value={-1}></option>);
+            setSelectedDraftIndex(-1);
         }
         setOptions(draftOptions);
     }, [])

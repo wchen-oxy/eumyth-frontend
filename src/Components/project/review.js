@@ -12,7 +12,6 @@ import {
     IS_FORKED_FIELD,
     LABELS_FIELD,
     MIN_DURATION_FIELD,
-    SHOULD_UPDATE_PREVIEW,
     OVERVIEW_FIELD,
     PROJECT_ID_FIELD,
     PROJECT_PREVIEW_ID_FIELD,
@@ -25,7 +24,8 @@ import {
     USERNAME_FIELD,
     USER_ID_FIELD,
     USER_PREVIEW_ID_FIELD,
-    REMOVE_COVER_PHOTO
+    REMOVE_COVER_PHOTO,
+    SHOULD_UPDATE_PREVIEW_FIELD
 } from 'utils/constants/form-data';
 import { EDIT, TITLE, OVERVIEW } from 'utils/constants/flags';
 import { setFile } from 'utils';
@@ -123,10 +123,15 @@ const ProjectReview = (props) => {
     }
 
     const updateProject = (formData, status) => {
+        const draftUpdateMeta = {
+            indexUserID: props.authUser.indexProfileID,
+            projectID: props.projectMetaData._id,
+            title: props.projectMetaData.title
+        }
         const needsPreviewUpdates = hasLabelsBeenModified
             || props.tite !== props.projectMetaData.title
             || pursuit !== props.projectMetaData?.pursuit;
-        formData.append(SHOULD_UPDATE_PREVIEW, needsPreviewUpdates);
+        formData.append(SHOULD_UPDATE_PREVIEW_FIELD, needsPreviewUpdates);
         formData.append(PROJECT_ID_FIELD, props.projectMetaData._id);
         formData.append(STATUS_FIELD, status);
         if (needsPreviewUpdates) {
@@ -141,18 +146,17 @@ const ProjectReview = (props) => {
             if (!cover && !miniCover)
                 throw new Error("Need cover Photo");
             return AxiosHelper.deleteManyPhotosByKey([cover, miniCover])
-                .then((result) => AxiosHelper.updateProject(formData))
-                .then((result => {
-                    alert("success!");
-                    window.location.reload();
-                }));
+                .then(() => updateProject(formData, draftUpdateMeta))
+
+            // .then((result) => AxiosHelper.updateProject(formData))
+            // .then((result => {
+            //     alert("success!");
+            //     window.location.reload();
+            // }));
         }
-        return AxiosHelper.updateProject(formData)
-            .then((result => {
-                console.log(result);
-                alert("success!");
-                window.location.reload();
-            }))
+
+        return updateProject(formData, draftUpdateMeta)
+            .catch(error => { console.log(error) })
     }
     const isCompressing = coverPhotoBoolean && !coverPhoto;
     let existingCoverPhotoKey = null;

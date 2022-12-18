@@ -2,9 +2,14 @@ import _, { slice } from 'lodash';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import AxiosHelper from 'utils/axios';
-import { DYNAMIC, POST, PROJECT, PROJECT_EVENT } from 'utils/constants/flags';
+import { CACHED, DYNAMIC, POST, PROJECT, PROJECT_EVENT, UNCACHED } from 'utils/constants/flags';
+import { EMBEDDED_FEED_LIMIT } from 'utils/constants/settings';
 import { validateFeedIDs } from 'utils/validator';
-
+const isStatic = (contentType) => {
+    return (contentType === POST
+        || contentType === PROJECT
+        || contentType === PROJECT_EVENT);
+}
 const endMessage = (
     <div>
         <br />
@@ -28,8 +33,11 @@ class Timeline extends React.Component {
         this.decideInfiniteScroller = this.decideInfiniteScroller.bind(this);
         this.debounceFetch = _.debounce(() => this.fetchNextPosts(), 10)
         this.fetchNextPosts = this.fetchNextPosts.bind(this);
+        this.callCachedPosts = this.callCachedPosts.bind(this);
         this.decideAPICall = this.decideAPICall.bind(this);
-        this.handleReturnedContent = this.handleReturnedContent.bind(this);
+        this.callUncachedPosts = this.callUncachedPosts.bind(this);
+        this.handleCachedResults = this.handleCachedResults.bind(this);
+        this.handleUncachedPosts = this.handleUncachedPosts.bind(this);
         this.loadFeedMetaInfo = this.loadFeedMetaInfo.bind(this);
     }
 
@@ -58,19 +66,27 @@ class Timeline extends React.Component {
         }
     }
 
-    loadFeedMetaInfo() {
-        const slicedObjectIDs = this.props.allPosts.slice(
+    loadFeedMetaInfo(allPosts, requestLength, numOfContent) {
+        const slicedObjectIDs = allPosts.slice(
             this.state.nextOpenPostIndex,
-            this.state.nextOpenPostIndex + this.props.requestLength);
-            console.log(this.state.numOfFeedItems, this.props.allPosts.length);
-        const hasCachedContentOverflowed = this.state.numOfFeedItems > this.props.allPosts.length;
-        const endOfContent = this.state.numOfFeedItems + this.props.requestLength >= this.props.numOfContent;
+            this.state.nextOpenPostIndex + requestLength);
+        const hasCachedContentOverflowed =
+            this.state.numOfFeedItems >= EMBEDDED_FEED_LIMIT
+            && this.state.numOfFeedItems < numOfContent;
+        const endOfContent = this.state.numOfFeedItems + requestLength >= numOfContent;
         const nextOpenPostIndex = this.state.nextOpenPostIndex + slicedObjectIDs.length;
-        return { slicedObjectIDs, nextOpenPostIndex, hasCachedContentOverflowed, endOfContent };
+        if (endOfContent) this.props.shouldPull(false);
+        return {
+            slicedObjectIDs,
+            nextOpenPostIndex,
+            hasCachedContentOverflowed,
+            endOfContent
+        };
     }
 
     fetchNextPosts() {
         this.debounceFetch.cancel();
+        console.log("asdf", this.state.numOfFeedItems, this.props.numOfContent);
         if (this.props.contentType === DYNAMIC) {
             AxiosHelper.searchProject(
                 this.props.pursuitObject,
@@ -81,40 +97,43 @@ class Timeline extends React.Component {
                 .then((results) => {
                     const nextOpenPostIndex =
                         this.state.nextOpenPostIndex + results.length
-                    this.setState({ nextOpenPostIndex }, this.handleReturnedContent(results.data));
+                    this.setState({ nextOpenPostIndex }, this.handleCachedResults(results.data));
                 })
         }
-        else if (
-            this.props.contentType === PROJECT ||
-            this.props.contentType === POST ||
-            this.props.contentType === PROJECT_EVENT) {
-            const metaInfo = this.loadFeedMetaInfo();
-            if (metaInfo.endOfContent) this.props.shouldPull(false);
-            this.setState({ nextOpenPostIndex: metaInfo.nextOpenPostIndex },
-                () => {
-                    this.decideAPICall(
-                        metaInfo.slicedObjectIDs,
-                        metaInfo.hasCachedContentOverflowed,
-                        this.props.indexUserID,
-                        this.props.requestLength)
-                        .then((results) =>
-                            this.handleReturnedContent(results.data, metaInfo.slicedObjectIDs)
-                        )
-                        .catch((error) => console.log(error));
-                })
+        else if (isStatic(this.props.contentType)) {
+            const metaInfo = this.loadFeedMetaInfo(
+                this.props.allPosts,
+                this.props.requestLength,
+                this.props.numOfContent
+            );
+            const shouldSearchUncached = this.props.contentType === POST && metaInfo.hasCachedContentOverflowed;
+            if (shouldSearchUncached) {
+                return this.callUncachedPosts(
+                    this.props.allPosts,
+                    this.props.contentType,
+                    this.props.indexUserID,
+                    this.props.requestLength
+                )
+                    .then((results) => this.handleUncachedPosts(results))
+                    .catch(error => console.log(error))
+            }
+            else {
+                this.setState({ nextOpenPostIndex: metaInfo.nextOpenPostIndex }, //openpostindex notaccurate
+                    () => this.callCachedPosts(metaInfo.slicedObjectIDs));
+            }
         }
     }
 
-    decideAPICall(contentIDs, hasCacheOverflowed, indexUserID, requestLength) {
-        if (hasCacheOverflowed) {
-            return AxiosHelper.returnOverflowContent(
-                contentIDs,
-                this.props.contentType,
-                indexUserID,
-                requestLength
-            )
-        }
+    callCachedPosts(objectIDs) {
+        return this.decideAPICall(objectIDs)
+            .then(results => this.handleCachedResults(results.data, objectIDs))
+            .catch(error => console.log(error));
+    }
+
+    decideAPICall(contentIDs) {
+        if (contentIDs.length === 0) return Promise.resolve({ data: [] });
         else {
+            console.log(this.props.numOfContent);
             switch (this.props.contentType) {
                 case (PROJECT):
                     return AxiosHelper.returnMultipleProjects(contentIDs);
@@ -128,30 +147,54 @@ class Timeline extends React.Component {
         }
     }
 
-    handleReturnedContent(result, slicedObjectIDs) {
-        let data = null;
-        const objectIDs = this.props.contentType === DYNAMIC ? null : slicedObjectIDs;
-        switch (this.props.contentType) {
-            case (PROJECT):
-                data = result.projects;
-                break;
-            case (POST):
-                data = result.posts;
-                break;
-            case (PROJECT_EVENT):
-                data = result.posts;
-                break;
-            case (DYNAMIC):
-                data = result;
-                break;
-            default:
-                throw new Error();
-        }
-        return this.setState({ numOfFeedItems: data.length },
-            this.props.createTimelineRow(data, this.props.contentType, objectIDs)
+    callUncachedPosts(posts, contentType, indexUserID, requestLength) {
+        return AxiosHelper.returnOverflowContent(
+            posts,
+            contentType,
+            indexUserID,
+            requestLength
         )
     }
 
+
+    handleCachedResults(result, slicedObjectIDs) {
+        let data = null;
+        const objectIDs = this.props.contentType === DYNAMIC ? null : slicedObjectIDs;
+        if (result.length === 0) data = result;
+        else {
+            switch (this.props.contentType) {
+                case (PROJECT):
+                    data = result.projects;
+                    break;
+                case (POST):
+                    data = result.posts;
+                    break;
+                case (PROJECT_EVENT):
+                    data = result.posts;
+                    break;
+                case (DYNAMIC):
+                    data = result;
+                    break;
+                default:
+                    throw new Error();
+            }
+        }
+        return this.setState({ numOfFeedItems: data.length + this.state.numOfFeedItems },
+            this.props.createTimelineRow(data, CACHED, objectIDs)
+        )
+    }
+
+    handleUncachedPosts(results) {
+        const posts = results.data.posts;
+        return this.setState({
+            numOfFeedItems: posts.length + this.state.numOfFeedItems,
+            nextOpenPostIndex: posts.length + this.state.nextOpenPostIndex
+        },
+            this.props.createTimelineRow(posts, UNCACHED)
+        );
+
+        //slice selection of post and then put them up
+    }
 
     decideInfiniteScroller() {
         if (this.props.contentType === POST
@@ -159,9 +202,10 @@ class Timeline extends React.Component {
             this.props.contentType === PROJECT
             || this.props.contentType === PROJECT_EVENT
         ) {
+            // console.log(this.props.hasMore, this.state.numOfFeedItems);
             return (
                 <InfiniteScroll
-                    dataLength={this.state.nextOpenPostIndex}
+                    dataLength={this.state.numOfFeedItems}
                     next={this.debounceFetch}
                     hasMore={this.props.hasMore}
                     loader={<h4>Loading...</h4>}
@@ -182,7 +226,7 @@ class Timeline extends React.Component {
         else if (this.props.contentType === DYNAMIC) {
             return (
                 <InfiniteScroll
-                    dataLength={this.state.nextOpenPostIndex}
+                    dataLength={this.state.numOfFeedItems}
                     next={this.debounceFetch}
                     hasMore={this.props.hasMore}
                     loader={<h4>Loading...</h4>}

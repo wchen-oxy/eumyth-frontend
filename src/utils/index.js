@@ -1,4 +1,5 @@
 import imageCompression from 'browser-image-compression';
+import { CACHED, POST, PROJECT, UNCACHED } from './constants/flags';
 
 export const toTitleCase = (str) => {
     return str.replace(
@@ -7,6 +8,25 @@ export const toTitleCase = (str) => {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         }
     );
+}
+
+export const sortTimelineContent = (exisitingArray, inputArray, contentType, objectIDs) => {
+    let feedData = [];
+    if (contentType === UNCACHED) {
+        feedData = exisitingArray
+            .concat(
+                inputArray);
+    }
+    else if (contentType === CACHED) {
+        feedData = exisitingArray
+            .concat(
+                inputArray
+                    .sort((a, b) =>
+                        objectIDs.indexOf(a._id) - objectIDs.indexOf(b._id))
+            );
+    }
+    console.log(feedData);
+    return feedData;
 }
 
 export const formatPostText = (eventData) => {

@@ -61,6 +61,7 @@ const MainDisplay = (props) => {
                     onSelectAll={props.onSelectAll}
                 />
             }
+            {props.editProjectState ? props.numOfContent : props.allPosts.length}
             {props.editProjectState &&
                 <ProjectSelectHeader stage={props.projectSelectSubState} />}
             <Timeline
@@ -72,6 +73,8 @@ const MainDisplay = (props) => {
                 onProjectEventSelect={props.onProjectEventSelect}
                 onProjectClick={props.onProjectClick}
                 allPosts={props.allPosts}
+                numOfContent={props.editProjectState ? props.numOfContent : props.allPosts.length}
+                window={props.window}
                 onEventClick={props.onEventClick}
                 loadedFeed={props.loadedFeed}
                 updateFeedData={props.updateFeedData}

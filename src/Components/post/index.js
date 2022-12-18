@@ -301,7 +301,7 @@ class PostController extends React.Component {
     }
     //check if all of update works, otherwise is compelte 
     appendPrimaryPostFields(formData, defaults);
-    appendSecondarySeriesFields(formData, existingSeriesMeta, isUpdate); //what  is this for?
+    appendSecondarySeriesFields(formData, existingSeriesMeta); //what  is this for?
     appendTertiaryUpdateFields(formData, this.props.viewerObject?.eventData ?? null, isUpdate);
 
     if (this.state.compressedPhotos.length > 0) {
@@ -322,12 +322,11 @@ class PostController extends React.Component {
 
     if (this.props.viewerObject?.eventData.project_preview_id !== this.state.selectedDraft.project_preview_id
       && isUpdate) {
-      console.log(this.props.viewerObject?.eventData.project_preview_id)
       promiseChain = promiseChain
         .then((createdProjectMeta) => {
           const replacementProjectMeta = this.state.isNewSeriesToggled ?
             createdProjectMeta : this.state.selectedDraft;
-            console.log(replacementProjectMeta);
+          console.log(replacementProjectMeta);
           return handlePostOwnerUpdate(
             formData,
             this.props.viewerObject.eventData._id,
@@ -353,8 +352,7 @@ class PostController extends React.Component {
 
   render() {
 
-    console.log(this.state.selectedDraft);
-    const miniAuthObject = {
+     const miniAuthObject = {
       pastLabels: this.props.authUser.labels,
       userPreviewID: this.props.authUser.userPreviewID,
       profileID: this.props.authUser.profileID,
@@ -414,7 +412,6 @@ class PostController extends React.Component {
       setMinDuration: this.setMinDuration,
       setPostPrivacyType: this.setPostPrivacyType,
     }
-
     const threadObject = {
       date: this.state.date,
       drafts: this.props.authUser.drafts,

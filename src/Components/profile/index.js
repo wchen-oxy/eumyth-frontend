@@ -96,6 +96,7 @@ class ProfilePageAuthenticated extends React.Component {
         this.setProfileData = this.setProfileData.bind(this);
         this.loadedContentCallback = this.loadedContentCallback.bind(this);
         this.isOwner = this.isOwner.bind(this);
+        this.updateAllPosts = this.updateAllPosts.bind(this);
     }
 
     componentDidMount() {
@@ -355,6 +356,13 @@ class ProfilePageAuthenticated extends React.Component {
         }
     }
 
+    updateAllPosts(uncached) {
+        let profileData = this.state.profileData;
+        const list = profileData.pursuits[this.state.selectedPursuitIndex].posts.concat(uncached);
+        profileData.pursuits[this.state.selectedPursuitIndex].posts = list;
+        this.setState({ profileData })
+    }
+
     render() {
         if (this.state.loading) return null;
         let index = 0;
@@ -389,6 +397,7 @@ class ProfilePageAuthenticated extends React.Component {
                         isViewer
                         authUser={this.props.authUser}
                         viewerObject={viewerObject}
+
                     />
                 )
             }
@@ -428,13 +437,17 @@ class ProfilePageAuthenticated extends React.Component {
                 const selectedPursuit = this.state.profileData
                     .pursuits[this.state.selectedPursuitIndex];
                 specificContent.feedData = selectedPursuit.posts.map((item) => item.content_id);
+                specificContent.numOfContent = selectedPursuit.num_posts;
+                specificContent.updateAllPosts = this.updateAllPosts;
             }
 
             else if (this.state.contentType === PROJECT) {
                 specificContent.content = this.state.profileData.pursuits[this.state.selectedPursuitIndex];
                 specificContent.selectedPursuitIndex = this.state.selectedPursuitIndex;
                 specificContent.isContentOnlyView = this.state.isContentOnlyView;
+                specificContent.numOfContent = this.props.authUser.pursuits[0].num_posts;
             }
+
 
             return (
                 <div>
@@ -499,7 +512,6 @@ class ProfilePageAuthenticated extends React.Component {
                                 closeMasterModal={this.props.closeMasterModal}
                                 pursuitNames={this.state.pursuitNames}
                                 feedID={this.state.selectedPursuitIndex}
-                                numOfContent={this.state.numOfContent}
                             />
                         }
                     </div>

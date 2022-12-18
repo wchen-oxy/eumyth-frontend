@@ -50,6 +50,8 @@ export const SPOTLIGHT = 'SPOTLIGHT';
 export const SPOTLIGHT_POST = 'SPOTLIGHT_POST';
 export const SPOTLIGHT_PROJECT = 'SPOTLIGHT_PROJECT';
 export const FOLLOWED_FEED = 'FOLLOWED_FEED';
+export const CACHED = 'CACHED';
+export const UNCACHED = 'UNCACHED';
 
 // POST TYPE
 export const DISPLAY = 'DISPLAY';

@@ -19,7 +19,7 @@ import {
     PROJECT_SELECT_VIEW_STATE,
     PROJECT
 } from "../../utils/constants/flags";
-import { formatPostText } from 'utils';
+import { formatPostText, sortTimelineContent } from 'utils';
 
 const MAIN = "MAIN";
 const EDIT = "EDIT";
@@ -92,7 +92,9 @@ class ProjectController extends React.Component {
             isUpdate: false,
             editProjectState: false,
             feedID: 0,
-            selectedPursuitIndex: this.props.selectedPursuitIndex
+            selectedPursuitIndex: this.props.selectedPursuitIndex,
+
+            numOfContent: 0
         }
 
         this.handleBackClick = this.handleBackClick.bind(this);
@@ -101,6 +103,7 @@ class ProjectController extends React.Component {
         this.handleEventClick = this.handleEventClick.bind(this);
         this.handleProjectEventSelect = this.handleProjectEventSelect.bind(this);
         this.handleWindowSwitch = this.handleWindowSwitch.bind(this);
+        this.setSecondaryMainWindow = this.setSecondaryMainWindow.bind(this);
         this.handleSortEnd = this.handleSortEnd.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.setModal = this.setModal.bind(this);
@@ -146,12 +149,14 @@ class ProjectController extends React.Component {
     }
 
     createTimelineRow(inputArray, contentType, objectIDs) {
-        const feedData = this.state.feedData
-            .concat(
-                inputArray
-                    .sort((a, b) =>
-                        objectIDs.indexOf(a._id) - objectIDs.indexOf(b._id))
-            );
+        console.log(inputArray);
+        const feedData = sortTimelineContent(
+            this.state.feedData,
+            inputArray,
+            contentType,
+            objectIDs
+        );
+        console.log(feedData);
         this.setState({ feedData });
     }
 
@@ -241,11 +246,16 @@ class ProjectController extends React.Component {
             feedID: this.state.feedID + 1,
         }
         if (this.props.isContentOnlyView) {
-            return AxiosHelper
-                .allPosts(this.props.authUser.profileID)
-                .then((result => {
+            console.log("asdf");
+            return Promise
+                .all([
+                    AxiosHelper.returnUserPreviewByParam({ id: this.props.authUser.userPreviewID }),
+                    AxiosHelper.allPosts(this.props.authUser.profileID)
+                ])
+                .then((results => {
                     this.setState({
-                        contentViewOnlyAllPosts: { post_ids: result.data.map(item => item.content_id) },
+                        numOfContent: results[0].data.pursuits[0].num_posts,
+                        contentViewOnlyAllPosts: { post_ids: results[1].data.map(item => item.content_id) },
                         ...sharedState,
                         ...this.clearedFeed()
                     })
@@ -373,6 +383,30 @@ class ProjectController extends React.Component {
         }
     }
 
+    setSecondaryMainWindow(newIndex, selectedPosts) {
+        if (!this.state.newProjectState) {
+            this.state.selectedProject
+                .post_ids
+                .forEach(item => newIndex.set(item, true));
+            return this.setState({
+                projectSelectSubState: 2,
+                selectedPosts,
+                feedIndex: newIndex,
+                ...this.clearedFeed()
+            });
+        }
+        else {
+            const semiFinalData = this.state.feedData
+                .filter(item => this.state.feedIndex.get(item._id));
+            return this.setState({
+                semiFinalData,
+                window: EDIT,
+                barType: PROJECT_REARRANGE_STATE,
+                ...this.clearedFeed()
+            });
+        }
+    }
+
     handleWindowSwitch(window) {
         let min = 0
         if (window === 2) {
@@ -380,26 +414,7 @@ class ProjectController extends React.Component {
             let selectedPosts = this.state.selectedPosts;
             selectedPosts
                 .forEach(item => newIndex.set(item.post_id, true));
-            if (!this.state.newProjectState) {
-                this.state.selectedProject
-                    .post_ids
-                    .forEach(item => newIndex.set(item, true));
-                return this.setState({
-                    projectSelectSubState: 2,
-                    selectedPosts,
-                    feedIndex: newIndex,
-                    ...this.clearedFeed()
-                });
-            }
-            else {
-                const semiFinalData = this.state.feedData.filter(item => this.state.feedIndex.get(item._id));
-                return this.setState({
-                    semiFinalData,
-                    window: EDIT,
-                    barType: PROJECT_REARRANGE_STATE,
-                    ...this.clearedFeed()
-                });
-            }
+            return this.setSecondaryMainWindow(newIndex, selectedPosts);
         }
 
         if (window === EDIT) {
@@ -541,8 +556,9 @@ class ProjectController extends React.Component {
             PROJECT_EVENT : PROJECT;
         switch (this.state.window) {
             case (MAIN):
+                console.log(this.state.feedData)
                 const sourceContent = this.props.isContentOnlyView ? this.props.content : this.state.selectedProject;
-                const event = this.state.feedData[this.state.selectedEventIndex];
+                const event = this.state.feedData ? this.state.feedData[this.state.selectedEventIndex] : [];
                 const forkData = {
                     sourceContent,
                     profileID: this.props.authUser.profileID,
@@ -592,6 +608,8 @@ class ProjectController extends React.Component {
                             forkData={forkData}
                             feedID={this.state.feedID}
                             contentType={contentType}
+
+                            numOfContent={this.state.numOfContent}
                             projectMetaData={this.state.selectedProject}
                             projectSelectSubState={this.state.projectSelectSubState}
                             barType={this.state.barType}
@@ -602,6 +620,8 @@ class ProjectController extends React.Component {
                             editProjectState={this.state.editProjectState}
                             title={this.state.title}
                             overview={this.state.overview}
+                            allPosts={this.selectFeedData()}
+                            loadedFeed={this.createRenderedPosts()}
 
                             onPublish={this.handlePublish}
                             createTimelineRow={this.createTimelineRow}
@@ -615,11 +635,8 @@ class ProjectController extends React.Component {
                             onNewProjectSelect={this.handleNewProjectSelect}
                             shouldPull={this.shouldPull}
                             onSelectAll={this.onSelectAll}
-                            allPosts={this.selectFeedData()}
-                            loadedFeed={this.createRenderedPosts()}
 
                             returnModalStructure={this.props.returnModalStructure}
-
                             modalState={this.props.modalState}
                             openMasterModal={this.props.openMasterModal}
                             closeMasterModal={this.props.closeMasterModal}

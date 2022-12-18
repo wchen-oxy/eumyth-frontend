@@ -3,10 +3,24 @@ import Timeline from '../timeline/index';
 import ProfileModal from '../profile/profile-modal';
 import EventController from '../timeline/timeline-event-controller';
 import { returnUsernameURL, returnPostURL } from 'utils/url';
-import { POST, POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
+import { POST, POST_VIEWER_MODAL_STATE, UNCACHED } from 'utils/constants/flags';
 import withRouter from 'utils/withRouter';
 import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
-import { formatPostText } from 'utils';
+import { formatPostText, sortTimelineContent } from 'utils';
+
+const _createObjectIDs = (inputArray) => {
+    console.log(inputArray)
+    return inputArray.map(
+        item => {
+            return {
+                content_id: item._id,
+                labels: item.labels,
+                date: item.date,
+                createdAt: item.createdAt,
+                updatedAt: item.updatedAt
+            }
+        });
+}
 
 class ProfileController extends React.Component {
     _isMounted = false;
@@ -83,14 +97,20 @@ class ProfileController extends React.Component {
     }
 
     createTimelineRow(inputArray, contentType, objectIDs) {
-        const feedData = this.state.feedData
-            .concat(
-                inputArray
-                    .sort((a, b) =>
-                        objectIDs.indexOf(a._id) - objectIDs.indexOf(b._id))
-            );
-        this.setState({
-            feedData
+        const feedData =
+            sortTimelineContent(
+                this.state.feedData,
+                inputArray,
+                contentType,
+                objectIDs
+            )
+
+        this.setState({ feedData }, () => {
+            if (contentType === UNCACHED) {
+                const objectIDs = _createObjectIDs(inputArray);
+                console.log(objectIDs);
+                this.props.updateAllPosts(objectIDs);
+            }
         });
     }
 
@@ -165,7 +185,6 @@ class ProfileController extends React.Component {
             onCommentIDInjection: this.handleCommentIDInjection,
             saveProjectPreview: this.saveProjectPreview
         }
-        console.log(this.props.authUser);
         return (
             <>
                 <ProfileModal
@@ -179,7 +198,7 @@ class ProfileController extends React.Component {
                 />
                 <Timeline
                     contentType={POST}
-                    indexUserID = {this.props.authUser.indexProfileID}
+                    indexUserID={this.props.authUser.indexProfileID}
                     requestLength={REGULAR_CONTENT_REQUEST_LENGTH}
                     index
                     feedID={this.props.feedID}
@@ -190,6 +209,7 @@ class ProfileController extends React.Component {
                     loadedFeed={this.createRenderedPosts()}
                     shouldPull={this.shouldPull}
                     createTimelineRow={this.createTimelineRow}
+                    setUncachedEdition={this.props.setUncachedEdition}
                 />
                 <br />
                 <br />

@@ -41,6 +41,14 @@ export default class AxiosHelper {
         return axios.put(urls.PROJECT_BASE_URL, projectInfo);
     }
 
+    static updateCachedDraftTitle(indexUserID, projectID, title) {
+        return axios.put(urls.DRAFT_TITLE_URL, {
+            indexUserID,
+            projectID,
+            title
+        })
+    }
+
     static updatePostOwner(projectPreviewID, projectID, postID) {
         return axios.put(urls.PROJECT_THREAD_URL, {
             projectPreviewID,
@@ -442,6 +450,10 @@ export default class AxiosHelper {
                 submittingIndexUserID
             }
         })
+    }
+
+    static returnUserPreviewByParam(obj) {
+        return axios.get(urls.USER_PREVIEW_BASE_URL,{params: {...obj}});
     }
     // static saveTitle(payload) {
     //     return axios.put(urls.DRAFT_TITLE_URL, payload);
