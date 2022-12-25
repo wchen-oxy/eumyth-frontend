@@ -29,6 +29,7 @@ import {
 } from 'utils/constants/form-data';
 import { EDIT, TITLE, OVERVIEW } from 'utils/constants/flags';
 import { setFile } from 'utils';
+import { draft } from 'utils/constants/states';
 
 const DRAFT = 'DRAFT';
 const PUBLISHED = 'PUBLISHED';
@@ -123,41 +124,62 @@ const ProjectReview = (props) => {
     }
 
     const updateProject = (formData, status) => {
+        let promiseChain = Promise.resolve();
         const draftUpdateMeta = {
             indexUserID: props.authUser.indexProfileID,
             projectID: props.projectMetaData._id,
             title: props.projectMetaData.title
         }
+        const titlesAreDifferent = props.tite !== props.projectMetaData.title;
         const needsPreviewUpdates = hasLabelsBeenModified
-            || props.tite !== props.projectMetaData.title
+            || titlesAreDifferent
             || pursuit !== props.projectMetaData?.pursuit;
+
         formData.append(SHOULD_UPDATE_PREVIEW_FIELD, needsPreviewUpdates);
         formData.append(PROJECT_ID_FIELD, props.projectMetaData._id);
         formData.append(STATUS_FIELD, status);
+
         if (needsPreviewUpdates) {
             const isForked = props.projectMetaData?.children && props.projectMetaData?.children.length > 0;
             formData.append(IS_FORKED_FIELD, isForked);
             formData.append(PROJECT_PREVIEW_ID_FIELD, props.projectMetaData.project_preview_id);
         }
+
         if (removeCoverPhoto) {
             const cover = props.projectMetaData?.coverPhoto ?? null;
             const miniCover = props.projectMetaData?.miniCoverPhoto ?? null;
             formData.append(REMOVE_COVER_PHOTO, true);
             if (!cover && !miniCover)
                 throw new Error("Need cover Photo");
-            return AxiosHelper.deleteManyPhotosByKey([cover, miniCover])
-                .then(() => updateProject(formData, draftUpdateMeta))
+            promiseChain = promiseChain
+                .then(AxiosHelper.deleteManyPhotosByKey([cover, miniCover]))
 
-            // .then((result) => AxiosHelper.updateProject(formData))
-            // .then((result => {
-            //     alert("success!");
-            //     window.location.reload();
-            // }));
         }
 
-        return updateProject(formData, draftUpdateMeta)
-            .catch(error => { console.log(error) })
+        if (titlesAreDifferent) {
+            promiseChain = promiseChain
+                .then(
+                    AxiosHelper.updateCachedDraftTitle(
+                        draftUpdateMeta.indexUserID,
+                        draftUpdateMeta.projectID,
+                        draftUpdateMeta.title
+                    ))
+        }
+
+        promiseChain = promiseChain
+            .then(AxiosHelper.updateProject(formData, draftUpdateMeta));
+
+        return promiseChain
+            .then(result => {
+                alert("Done!");
+                window.location.reload();
+            })
+            .catch(error => { console.log(error) });
+
+
     }
+
+
     const isCompressing = coverPhotoBoolean && !coverPhoto;
     let existingCoverPhotoKey = null;
     if (props.projectMetaData) {
