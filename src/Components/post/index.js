@@ -320,8 +320,11 @@ class PostController extends React.Component {
         });
     }
 
-    if (this.props.viewerObject?.eventData.project_preview_id !== this.state.selectedDraft.project_preview_id
-      && isUpdate) {
+    if (
+      isUpdate
+      && this.props.viewerObject?.eventData.project_preview_id
+      !== this.state.selectedDraft?.project_preview_id
+    ) {
       promiseChain = promiseChain
         .then((createdProjectMeta) => {
           const replacementProjectMeta = this.state.isNewSeriesToggled ?
@@ -352,7 +355,7 @@ class PostController extends React.Component {
 
   render() {
 
-     const miniAuthObject = {
+    const miniAuthObject = {
       pastLabels: this.props.authUser.labels,
       userPreviewID: this.props.authUser.userPreviewID,
       profileID: this.props.authUser.profileID,

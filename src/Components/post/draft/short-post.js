@@ -239,7 +239,7 @@ class ShortPost extends React.Component {
       const required = {
         previousState: 1,
         setPostStage: this.props.setPostStage,
-        handleTitleChange: this.handleTextChange
+        handleTitleChange: this.props.onTextChange
       }
 
 

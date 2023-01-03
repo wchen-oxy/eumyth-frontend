@@ -20,12 +20,12 @@ import {
     SELECTED_POSTS_FIELD,
     START_DATE_FIELD,
     STATUS_FIELD,
-    TITLE_FIELD,
     USERNAME_FIELD,
     USER_ID_FIELD,
     USER_PREVIEW_ID_FIELD,
     REMOVE_COVER_PHOTO,
-    SHOULD_UPDATE_PREVIEW_FIELD
+    SHOULD_UPDATE_PREVIEW_FIELD,
+    THREAD_TITLE_FIELD
 } from 'utils/constants/form-data';
 import { EDIT, TITLE, OVERVIEW } from 'utils/constants/flags';
 import { setFile } from 'utils';
@@ -78,11 +78,11 @@ const ProjectReview = (props) => {
         setMiniCoverPhotoBoolean(false);
     }
 
-    const handlePost = (status) => {
+    const handleSubmit = (status) => {
         if (status === PUBLISHED && !window.confirm(
             'Once You Publish, You Will Not Be Able To Make Changes to Your Project. Are You Sure?')) { return; }
         let formData = new FormData();
-        formData.append(TITLE_FIELD, props.title.trim());
+        formData.append(THREAD_TITLE_FIELD, props.title.trim());
         if (remix && remix.trim().length > 0) formData.append(REMIX, remix.trim());
         if (props.overview) formData.append(OVERVIEW_FIELD, props.overview.trim());
         if (pursuit) formData.append(PURSUIT_FIELD, pursuit);
@@ -128,7 +128,7 @@ const ProjectReview = (props) => {
         const draftUpdateMeta = {
             indexUserID: props.authUser.indexProfileID,
             projectID: props.projectMetaData._id,
-            title: props.title
+            threadTitle: props.title
         }
         const titlesAreDifferent = props.tite !== props.projectMetaData.title;
         const needsPreviewUpdates = hasLabelsBeenModified
@@ -157,6 +157,7 @@ const ProjectReview = (props) => {
         }
 
         if (titlesAreDifferent) {
+            // formData.append(THREAD_TITLE_FIELD, props.title)
             promiseChain = promiseChain
                 .then(
                     AxiosHelper.updateCachedDraftTitle(
@@ -167,7 +168,7 @@ const ProjectReview = (props) => {
         }
 
         promiseChain = promiseChain
-            .then(AxiosHelper.updateProject(formData, draftUpdateMeta));
+            .then(AxiosHelper.updateProject(formData));
 
         return promiseChain
             .then(result => {
@@ -282,13 +283,13 @@ const ProjectReview = (props) => {
                 </div>
                 <button
                     disabled={isCompressing || !pursuit || !props.title}
-                    onClick={() => handlePost(DRAFT)}
+                    onClick={() => handleSubmit(DRAFT)}
                 >
                     Save
                 </button>
                 <button
                     disabled={isCompressing || !pursuit || !props.title}
-                    onClick={() => handlePost(PUBLISHED)}
+                    onClick={() => handleSubmit(PUBLISHED)}
                 >
                     Publish
                 </button>

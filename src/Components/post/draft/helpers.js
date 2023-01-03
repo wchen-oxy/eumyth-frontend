@@ -94,7 +94,7 @@ export const handlePostOwnerUpdate = (formData, postID, meta) => {
 }
 
 export const decideNewOrUpdate = (formData, functions, isPostOnlyView, isUpdate) => {
-   
+
     let submit = isUpdate ? AxiosHelper.updatePost(formData) : AxiosHelper.createPost(formData);
     submit
         .then((result) => {
@@ -172,8 +172,10 @@ export const appendPrimaryPostFields = (formData, fields) => {
 }
 
 export const appendSecondarySeriesFields = (formData, fields) => {
+    if (fields.selectedDraft) {
         formData.append(THREAD_TITLE_PRIVACY_FIELD, fields.titlePrivacy);
         formData.append(SELECTED_DRAFT_ID, fields.selectedDraft.content_id);
+    }
     // formData.append(THREAD_TITLE_FIELD, fields.threadTitle);
     // formData.append(PURSUIT_FIELD, fields.selectedDraft.pursuit)
 }
@@ -184,4 +186,3 @@ export const appendTertiaryUpdateFields = (formData, fields, isUpdate) => {
         formData.append(PROJECT_PREVIEW_ID_FIELD, fields.project_preview_id);
     }
 }
- 

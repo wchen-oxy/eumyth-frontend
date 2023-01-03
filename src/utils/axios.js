@@ -41,11 +41,11 @@ export default class AxiosHelper {
         return axios.put(urls.PROJECT_BASE_URL, projectInfo);
     }
 
-    static updateCachedDraftTitle(indexUserID, projectID, title) {
+    static updateCachedDraftTitle(indexUserID, projectID, threadTitle) {
         return axios.put(urls.DRAFT_TITLE_URL, {
             indexUserID,
             projectID,
-            title
+            threadTitle
         })
     }
 
