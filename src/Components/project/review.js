@@ -128,7 +128,7 @@ const ProjectReview = (props) => {
         const draftUpdateMeta = {
             indexUserID: props.authUser.indexProfileID,
             projectID: props.projectMetaData._id,
-            title: props.projectMetaData.title
+            title: props.title
         }
         const titlesAreDifferent = props.tite !== props.projectMetaData.title;
         const needsPreviewUpdates = hasLabelsBeenModified
