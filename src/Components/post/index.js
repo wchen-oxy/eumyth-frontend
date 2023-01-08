@@ -3,10 +3,17 @@ import imageCompression from 'browser-image-compression';
 import { default as ShortPostDraft } from './draft/short-post';
 import { withFirebase } from 'store/firebase';
 import ShortPostViewer from './viewer/short-post';
-import { appendPrimaryPostFields, appendImageFields, handleNewSubmit, handleUpdateSubmit, appendSecondarySeriesFields, handleProjectCreation, appendOptionalImageFields, appendTertiaryUpdateFields, decideNewOrUpdate, handlePostOwnerUpdate, handleCreatedProjectAppend } from './draft/helpers';
+import {
+  appendPrimaryPostFields,
+  appendSecondarySeriesFields,
+  handleProjectCreation,
+  appendOptionalImageFields,
+  appendTertiaryUpdateFields,
+  decideNewOrUpdate,
+  handlePostOwnerUpdate,
+  handleCreatedProjectAppend
+} from './draft/helpers';
 import AxiosHelper from 'utils/axios';
-import fileDisplayContainer from './editor/sub-components/file-display-container';
-import { PROJECT_PREVIEW_ID_FIELD } from 'utils/constants/form-data';
 
 //fixme  Cast to String failed for value "[ 'Full Test', 'New Series For Test' ]" at path "title"
 //fixme new project postIDList is missing 
@@ -93,7 +100,6 @@ class PostController extends React.Component {
     this.handleIndexChange = this.handleIndexChange.bind(this);
     this.setIsPaginated = this.setIsPaginated.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    // this.decideNewOrUpdate = this.decideNewOrUpdate.bind(this);
     this.retrieveThumbnail = this.retrieveThumbnail.bind(this);
 
     this.handleTextChange = this.handleTextChange.bind(this);
@@ -319,11 +325,10 @@ class PostController extends React.Component {
           return handleCreatedProjectAppend(results, formData);
         });
     }
-
     if (
       isUpdate
       && this.props.viewerObject?.eventData.project_preview_id
-      !== this.state.selectedDraft?.project_preview_id
+      !== this.state.selectedDraft.project_preview_id
     ) {
       promiseChain = promiseChain
         .then((createdProjectMeta) => {

@@ -61,7 +61,6 @@ const MainDisplay = (props) => {
                     onSelectAll={props.onSelectAll}
                 />
             }
-            {props.editProjectState ? props.numOfContent : props.allPosts.length}
             {props.editProjectState &&
                 <ProjectSelectHeader stage={props.projectSelectSubState} />}
             <Timeline

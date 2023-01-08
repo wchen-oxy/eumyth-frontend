@@ -80,7 +80,7 @@ const SPOTLIGHT_URL = SEARCH_BASE_URL + '/spotlight';
 const SIMPLE_PEOPLE_URL = SEARCH_BASE_URL + '/simple_people';
 const ADVANCED_PEOPLE_URL = SEARCH_BASE_URL + '/advanced_people';
 const SEARCH_PROJECT_URL = SEARCH_BASE_URL + '/projects';
-
+const SEARCH_BRANCHES_URL = SEARCH_BASE_URL + '/branches';
 
 //index
 const INDEX_BASE_URL = ROOT_URL + '/index-user';
@@ -146,6 +146,7 @@ module.exports = {
     POST_DISPLAY_PHOTO_URL,
     SEARCH_PROJECT_URL,
     SEARCH_UNCACHED_URL,
+    SEARCH_BRANCHES_URL,
     SINGLE_POST_TEXT_DATA_URL,
     INDEX_BASE_URL,
     CHECK_USERNAME_URL,

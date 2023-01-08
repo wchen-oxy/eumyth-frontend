@@ -198,11 +198,12 @@ class InitialCustomizationPage extends React.Component {
                 )
                 .then(
                     (results) => {
+                        const upperCasePursuits = this.state.pursuits.map(item => item.toUpperCase());
                         let formData = new FormData();
                         formData.append(USERNAME_FIELD, this.state.username);
                         formData.append(FIRST_NAME_FIELD, this.state.firstName);
                         formData.append(LAST_NAME_FIELD, this.state.lastName);
-                        formData.append(PURSUIT_ARRAY_FIELD, JSON.stringify(this.state.pursuits));
+                        formData.append(PURSUIT_ARRAY_FIELD, JSON.stringify(upperCasePursuits));
                         formData.append(CROPPED_IMAGE_FIELD, results[0]);
                         formData.append(SMALL_CROPPED_IMAGE_FIELD, results[1]);
                         formData.append(TINY_CROPPED_IMAGE_FIELD, results[2]);

@@ -18,10 +18,16 @@ class ExtraFeed extends React.Component {
             usedPeople: [this.props.authUser.userPreviewID]
 
         }
+
+        this.initializeFirstPull = this.initializeFirstPull.bind(this);
+        this.success = this.success.bind(this);
+        this.error = this.error.bind(this);
         this.createFeed = this.createFeed.bind(this);
         this.getLocation = this.getLocation.bind(this);
         this.setCoordinates = this.setCoordinates.bind(this);
         this.pullFeedData = this.pullFeedData.bind(this);
+        this.getSpotlight = this.getSpotlight.bind(this);
+
     }
 
     componentDidMount() {
@@ -30,8 +36,20 @@ class ExtraFeed extends React.Component {
 
     }
 
+    getSpotlight(crd) {
+        return AxiosHelper.getSpotlight(
+            5,
+            crd.latitude,
+            crd.longitude,
+            [this.props.authUser.userPreviewID])
+            .then(result => {
+                this.setState({ spotlight: result.data.users });
+            });
+    }
+
+
     createFeed(feed) {
-        feed.map(item => <p>{item.name}</p>)
+        return feed.map(item => <p>{item}</p>)
     }
 
     getLocation() {
@@ -48,6 +66,35 @@ class ExtraFeed extends React.Component {
             });
     }
 
+    initializeFirstPull() {
+        this.pullFeedData()
+        AxiosHelper.setLocation(
+            this.state.lat,
+            this.state.long,
+            this.props.authUser.userPreviewID)
+            .then(result => {
+                alert("Location Set!")
+            });
+    }
+
+    success(pos) {
+        const crd = pos.coords;
+        // console.log('Your current position is:');
+        // console.log(`Latitude : ${crd.latitude}`);
+        // console.log(`Longitude: ${crd.longitude}`);
+        // console.log(`More or less ${crd.accuracy} meters.`);
+
+        this.setState({
+            lat: crd.latitude,
+            long: crd.longitude
+        }, this.initializeFirstPull);
+
+    }
+
+    error(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+    }
+
     setCoordinates(crd) {
         this.setState({
             lat: crd.latitude,
@@ -58,6 +105,15 @@ class ExtraFeed extends React.Component {
 
     pullFeedData() {
         const distance = distanceSwitch(this.state.distance);
+        const promisedSimilarPeople = AxiosHelper.getSimilarPeopleAdvanced(
+            distance,
+            this.props.pursuitObjects.names,
+            this.state.usedPeople,
+            this.state.lat,
+            this.state.long);
+
+        const promisedBranched = AxiosHelper.searchBranches()
+        Promise.all([promisedSimilarPeople, promisedBranched])
         AxiosHelper.getSimilarPeopleAdvanced(
             distance,
             this.props.pursuitObjects.names,
@@ -65,19 +121,28 @@ class ExtraFeed extends React.Component {
             this.state.lat,
             this.state.long)
             .then(results => {
-                console.log(results);
-                this.setState((state) => ({
-                    usedPeople: state.usedPeople.concat(results.data.users),
-                    loading: false,
-                })
-                )
+                const beginner = results.data.beginner;
+                const familiar = results.data.familiar;
+                const experienced = results.data.experienced;
+                const expert = results.data.expert;
+
             })
+    }
+
+    handlePulledFeedData(pursuits) {
+
+
+        this.setState((state) => ({
+            usedPeople: state.usedPeople.concat(pursuits),
+            loading: false,
+        })
+        )
     }
     render() {
         if (this.state.loading) {
             return <p>Loading</p>
         }
-
+        console.log(this.state.usedPeople);
         return (
             <InfiniteScroll
                 dataLength={this.state.nextOpenPostIndex}
@@ -90,7 +155,7 @@ class ExtraFeed extends React.Component {
                     </p>}>
                 {/* FIXME ADD THE CONTENT HERE */}
 
-                {/* {this.createFeed(this.state.usedPeople)} */}
+                {this.createFeed(this.state.usedPeople)}
             </InfiniteScroll>
         );
     }

@@ -36,13 +36,18 @@ const ProjectDraftControls = (props) => {
         console.log(props.drafts[index]);
 
     }
+    console.log(props.toggleState);
     return (
         <div id='projectdraftcontrols'>
             <div className='projectdraftcontrols-header'>
                 <span>
                     <label>{props.isUpdateToPost ? "Change The Series the Post Belongs To:" : "Add to Existing Series:"}</label>
                     {<label className="switch">
-                        <input type="checkbox" onChange={() => props.setToggleState(!props.toggleState)} />
+                        <input
+                            type="checkbox"
+                            checked={props.toggleState}
+                            onChange={() => props.setToggleState(!props.toggleState)}
+                        />
                         <span className="slider round"></span>
                     </label>}
                     <label>Create New Series</label>

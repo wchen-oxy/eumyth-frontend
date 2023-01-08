@@ -455,6 +455,10 @@ export default class AxiosHelper {
     static returnUserPreviewByParam(obj) {
         return axios.get(urls.USER_PREVIEW_BASE_URL,{params: {...obj}});
     }
+
+    static searchBranches(){
+        
+    }
     // static saveTitle(payload) {
     //     return axios.put(urls.DRAFT_TITLE_URL, payload);
     // }

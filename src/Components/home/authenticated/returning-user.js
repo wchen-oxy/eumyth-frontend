@@ -9,7 +9,6 @@ import withRouter from "utils/withRouter";
 import { returnUsernameURL, returnUserImageURL } from 'utils/url';
 import { TEMP_PROFILE_PHOTO_URL } from 'utils/constants/urls';
 import { RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE, FOLLOWED_FEED } from 'utils/constants/flags';
-import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 import FriendFeed from './friend-feed';
 import ExtraFeed from './extra-feed';
 
@@ -137,37 +136,6 @@ class ReturningUserPage extends React.Component {
             this.setState({ feedData: friendPosts })
         }
     }
-
-    // createFeed(inputArray) {
-    //     if (!inputArray || inputArray.length === 0) return [];
-    //     let nextOpenPostIndex = this.state.nextOpenPostIndex;
-
-    //     return inputArray.map((feedItem, index) => {
-    //         const formattedTextData = formatPostText(feedItem);
-    //         const viewerObject = {
-    //             key: nextOpenPostIndex++,
-    //             largeViewMode: false,
-    //             textData: formattedTextData,
-    //             isPostOnlyView: false,
-    //             pursuitNames: this.state.pursuitObjects.names,
-    //             projectPreviewMap: this.state.projectPreviewMap,
-    //             eventData: feedItem,
-
-    //             onCommentIDInjection: this.handleCommentIDInjection,
-    //             saveProjectPreview: this.saveProjectPreview,
-    //             passDataToModal: this.passDataToModal,
-    //         }
-    //         return (
-    //             <PostController
-    //                 isViewer
-    //                 viewerObject={viewerObject}
-    //                 authUser={this.props.authUser}
-    //                 closeModal={this.clearModal}
-    //             />
-
-    //         );
-    //     });
-    // }
 
     handleDeletePost() {
         return AxiosHelper.deletePost(
