@@ -114,6 +114,14 @@ export default class AxiosHelper {
         });
     }
 
+    static getCachedFeed(cachedFeedsID){
+        return axios.get(urls.CACHED_FEED_URL, {
+            params: {
+                cachedFeedsID
+            }
+        })
+    }
+
     static getUserPreviewID(username) {
         return axios.get(urls.USER_PREVIEW_ID_URL, returnUsernameObject(username));
     }
@@ -456,8 +464,13 @@ export default class AxiosHelper {
         return axios.get(urls.USER_PREVIEW_BASE_URL,{params: {...obj}});
     }
 
-    static searchBranches(){
-        
+    static searchBranches(indexUserID, requestQuantity){
+        return axios.get(urls.SEARCH_BRANCHES_URL, {
+            params: {
+                indexUserID,
+                requestQuantity
+            }
+        });
     }
     // static saveTitle(payload) {
     //     return axios.put(urls.DRAFT_TITLE_URL, payload);

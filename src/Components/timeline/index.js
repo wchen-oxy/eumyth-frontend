@@ -86,7 +86,6 @@ class Timeline extends React.Component {
 
     fetchNextPosts() {
         this.debounceFetch.cancel();
-        console.log("asdf", this.state.numOfFeedItems, this.props.numOfContent);
         if (this.props.contentType === DYNAMIC) {
             AxiosHelper.searchProject(
                 this.props.pursuitObject,

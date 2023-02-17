@@ -423,7 +423,6 @@ class ProfilePageAuthenticated extends React.Component {
             }
         }
         else if (!this.state.isContentOnlyView) {
-            console.log(this.state.profileData);
             const targetUsername = this.state.profileData?.username ?? '';
             const targetProfilePhoto = returnUserImageURL(this.state.profileData?.cropped_display_photo_key ?? null);
             const hideFromAll = !this.props.authUser?.username
