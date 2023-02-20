@@ -8,7 +8,7 @@ import { withFirebase } from 'store/firebase';
 import withRouter from "utils/withRouter";
 import { returnUsernameURL, returnUserImageURL } from 'utils/url';
 import { TEMP_PROFILE_PHOTO_URL } from 'utils/constants/urls';
-import { RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE, FOLLOWED_FEED } from 'utils/constants/flags';
+import { RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE, FOLLOWED_FEED, SHORT } from 'utils/constants/flags';
 import FriendFeed from './friend-feed';
 import ExtraFeed from './extra-feed';
 
@@ -53,6 +53,7 @@ class ReturningUserPage extends React.Component {
         this.loadData = this.loadData.bind(this);
         this.saveProjectPreview = this.saveProjectPreview.bind(this);
         this.toggleFeedState = this.toggleFeedState.bind(this);
+        this.setExtraFeedModal = this.setExtraFeedModal.bind(this);
     }
 
     componentDidMount() {
@@ -60,9 +61,17 @@ class ReturningUserPage extends React.Component {
         if (this._isMounted && this.state.username) {
             const pursuitObjects =
                 this.createPursuits(this.props.authUser.pursuits);
-            this.setState({
-                pursuitObjects: pursuitObjects
-            }, this.loadData)
+            AxiosHelper.getCachedFeed(this.props.authUser.cached_feed_id)
+                .then(
+                    results => {
+                        console.log(results);
+                        this.setState({
+                            feeds: results.data,
+                            pursuitObjects: pursuitObjects
+                        }, this.loadData)
+                    }
+                )
+          
         }
     }
 
@@ -80,19 +89,20 @@ class ReturningUserPage extends React.Component {
 
     loadData() {
         const error = (result) => { console.log(result + " contains error"); return []; };
-        const hasRecentPosts = this.props.authUser.recentPosts.length > 0;
-        const hasFollowingPosts = this.props.authUser.followingFeed.length > 0;
+        // const hasRecentPosts = this.props.authUser.recentPosts.length > 0;
+        const hasFollowingPosts = this.state.feeds.following.length > 0;
         const promisedBasicInfo = [this.props.firebase.returnName()];
-        if (hasRecentPosts) {
-            const returnedRecent = AxiosHelper.returnMultiplePosts(this.props.authUser.recentPosts, true)
-                .then(result => { return result.data.posts }).catch(error);
-            promisedBasicInfo.push(returnedRecent);
-        }
-        else {
-            promisedBasicInfo.push(error(RECENT_POSTS));
-        }
+        // if (hasRecentPosts) {
+        //     const returnedRecent = AxiosHelper.returnMultiplePosts(this.props.authUser.recentPosts, true)
+        //         .then(result => { return result.data.posts }).catch(error);
+        //     promisedBasicInfo.push(returnedRecent);
+        // }
+        // else {
+        //     promisedBasicInfo.push(error(RECENT_POSTS));
+        // }
         if (hasFollowingPosts) {
-            const returnedFollow = AxiosHelper.returnMultiplePosts(this.props.authUser.followingFeed, true)
+            console.log(this.state.feeds);
+            const returnedFollow = AxiosHelper.returnMultiplePosts(this.state.feeds.following, true)
                 .then(result => { return result.data.posts }).catch(error);
             promisedBasicInfo.push(returnedFollow);
         }
@@ -104,8 +114,8 @@ class ReturningUserPage extends React.Component {
             .then(results => {
                 this.setState(
                     ({
-                        recentPosts: results[1],
-                        feedData: results[2],
+                        // recentPosts: results[1],
+                        feedData: results[1],
                         firstName: results[0].firstName,
                         lastName: results[0].lastName,
                     }));
@@ -150,16 +160,26 @@ class ReturningUserPage extends React.Component {
     }
 
     passDataToModal(data, type, postIndex) {
+        console.log(data);
         this.setState({
             selectedEvent: data,
             textData: data.text_data,
-            selectedPostFeedType: FRIEND_POSTS,
+            selectedPostFeedType: RECENT_POSTS,
             selectedPostIndex: postIndex,
         }, this.setModal())
     }
 
     setModal() {
         this.props.openMasterModal(POST_VIEWER_MODAL_STATE);
+    }
+
+    setExtraFeedModal(data, type, index) {
+        this.setState({
+            selectedEvent: data,
+            textData: data.text_data,
+            selectedPostFeedType: SHORT,
+            selectedPostIndex: index,
+        }, this.setModal())
     }
 
     clearModal() {
@@ -179,11 +199,11 @@ class ReturningUserPage extends React.Component {
         alert(value);
     }
 
-    handleEventClick(selectedEvent, postIndex) {
+    handleEventClick(selectedEvent, selectedPostIndex, type) {
         if (this._isMounted) {
             this.setState({
-                selectedEvent: selectedEvent,
-                selectedPostIndex: postIndex,
+                selectedEvent,
+                selectedPostIndex,
                 selectedPostFeedType: RECENT_POSTS,
             }, this.setModal());
         }
@@ -341,6 +361,7 @@ class ReturningUserPage extends React.Component {
                         <div id='returninguser-infinite-scroll'>
                             <FriendFeed
                                 authUser={this.props.authUser}
+                                following={this.state.feeds?.following ?? []}
                                 nextOpenPostIndex={this.state.nextOpenPostIndex}
                                 fetchNextPosts={this.fetchNextPosts}
                                 pursuitObjects={this.state.pursuitObjects}
@@ -360,6 +381,8 @@ class ReturningUserPage extends React.Component {
                         <ExtraFeed
                             authUser={this.props.authUser}
                             pursuitObjects={this.state.pursuitObjects}
+                            passDataToModal={this.setExtraFeedModal}
+                            clearModal={this.clearModal}
                         />
                     }
                 </div>

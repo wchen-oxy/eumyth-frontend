@@ -40,13 +40,13 @@ export const getDynamicType = (index) => {
 
 export const getCachedType = (index) => {
     switch (index) {
-        case (0): //following
-            return "following";
-        case (1): //parents
+        // case (0): //following
+        //     return "following";
+        case (0): //parents
             return "parents";
-        case (2): //siblings
+        case (1): //siblings
             return "siblings";
-        case (3): //children
+        case (2): //children
             return "children";
         default:
             throw new Error("Unmatched Cached Type");
@@ -64,7 +64,7 @@ export const initializeContent = (
     postIDList
 ) => {
     let isCachedToggled = true;
-    while (cachedTypeIndex < 4 && dynamicTypeIndex < 4) {
+    while (cachedTypeIndex < 3 && dynamicTypeIndex < 4) {
         if (isCachedToggled) {
             let type = getCachedType(cachedTypeIndex);
             const content = cached[type][cachedItemIndex];
@@ -110,16 +110,22 @@ export const addRemainingContent = (
     postIDList
 ) => {
     let getter = null;
-    if (feedType === DYNAMIC) getter = getDynamicType;
-    if (feedType === CACHED) getter = getCachedType;
-    while (feedCategoryIndex < 4) {
+    let max = null;
+    if (feedType === DYNAMIC) {
+        getter = getDynamicType;
+        max = 4;
+    }
+    if (feedType === CACHED) {
+        getter = getCachedType;
+        max = 3;
+    }
+    
+    while (feedCategoryIndex < max) {
         let type = getter(feedCategoryIndex);
         const contentCategory = feeds[type]; // sections types
-        console.log()
         for (let i = feedItemIndex; i < contentCategory.length; i++) {
             postIDList.push(contentCategory[i]);
         }
         feedCategoryIndex++;
     }
-
 }

@@ -3,9 +3,10 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import _ from 'lodash';
 import AxiosHelper from 'utils/axios';
 import { distanceSwitch } from 'utils/constants/states';
-import { geoLocationOptions } from 'utils/constants/settings';
+import { geoLocationOptions, REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 import { addRemainingContent, getCachedType, getDynamicType, initializeContent, setSimilarPeopleAdvanced } from 'store/services/extra-feed';
-import { CACHED, DYNAMIC } from 'utils/constants/flags';
+import { CACHED, DYNAMIC, EXTRAS_STATE, POST, POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
+import EventController from 'components/timeline/timeline-event-controller';
 
 class ExtraFeed extends React.Component {
     _isMounted = false;
@@ -13,11 +14,14 @@ class ExtraFeed extends React.Component {
         super(props);
         this.state = {
             loading: true,
+            hasMore: true,
             nextOpenPostIndex: 0,
+            numOfContent: 0,
             distance: 50,
             lat: null,
             long: null,
             postIDList: [],
+            feedData: [],
             cached: {
                 following: [],
                 parents: [],
@@ -46,6 +50,11 @@ class ExtraFeed extends React.Component {
         this.getCachedFeed = this.getCachedFeed.bind(this);
         this.getSpotlight = this.getSpotlight.bind(this);
         this.extractContentIDs = this.extractContentIDs.bind(this);
+        this.handleEventClick = this.handleEventClick.bind(this);
+    }
+
+    handleEventClick(index) {
+        this.props.passDataToModal(this.state.feedData[index], EXTRAS_STATE, index);
     }
 
     componentDidMount() {
@@ -140,7 +149,6 @@ class ExtraFeed extends React.Component {
             postIDList,
         );
 
-      console.log(newIndices);
         //finish cached  
         addRemainingContent(
             CACHED,
@@ -164,35 +172,45 @@ class ExtraFeed extends React.Component {
     getContent() {
         const cached = this.getCachedFeed();
         const dynamic = this.getDynamicFeed();
-        Promise.all([cached, dynamic])
+        return Promise.all([cached, dynamic])
             .then((results) => {
-                console.log(results);
                 const cached = results[0].data;
                 const dynamic = results[1];
                 const postIDList = this.extractContentIDs(cached, dynamic);
-
-                this.setState({
+                console.log(postIDList);
+                return this.setState({
                     cached,
                     dynamic,
                     postIDList,
-                    loading: false,
-                })
+                }, this.fetch)
             })
-
-
     }
 
     fetch() {
+        console.log("fetching");
+        this.debounceFetch.cancel();
+
+        const slicedPostIDs = this.state.postIDList.slice(
+            this.state.nextOpenPostIndex,
+            this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH
+        );
+
         return AxiosHelper
-            .returnMultiplePosts(this.state.postIDList, true)
+            .returnMultiplePosts(slicedPostIDs, true)
             .then((results) => {
                 console.log(results.data);
+
+                this.setState({
+                    feedData: results.data.posts,
+                    hasMore: REGULAR_CONTENT_REQUEST_LENGTH === results.data.length,
+                    loading: false,
+                    nextOpenPostIndex: this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH,
+                    numOfContent: this.numOfContent + results.data.posts
+                })
             })
     }
 
     getCachedFeed() {
-        console.log("get cached");
-        console.log(this.props.authUser);
         return AxiosHelper
             .getCachedFeed(this.props.authUser.cached_feed_id)
     }
@@ -205,7 +223,12 @@ class ExtraFeed extends React.Component {
             this.state.dynamic.usedPeople,
             this.state.lat,
             this.state.long)
-            .then((results) => setSimilarPeopleAdvanced(results, this.state.dynamic.usedPeople));
+            .then((results) =>
+                setSimilarPeopleAdvanced(
+                    results,
+                    this.state.dynamic.usedPeople
+                )
+            );
     }
 
     handlePulledFeedData(pursuits) {
@@ -215,6 +238,27 @@ class ExtraFeed extends React.Component {
         // }))
     }
 
+    createFeedRow() {
+        if (!this._isMounted || this.state.feedData.length === 0) {
+            return [];
+        }
+
+        return this.state.feedData.map(
+            (post, k) => {
+                return (
+                    <div key={k}>
+
+                        <EventController
+                            key={k}
+                            contentType={POST}
+                            eventIndex={k}
+                            eventData={post}
+                            onEventClick={this.handleEventClick}
+                        />
+                    </div>)
+            })
+    }
+
 
     render() {
         if (this.state.loading) {
@@ -222,16 +266,17 @@ class ExtraFeed extends React.Component {
         }
         return (
             <InfiniteScroll
-                dataLength={this.state.nextOpenPostIndex}
-                next={this.fetch}
+                dataLength={this.state.numOfContent}
+                next={this.debounceFetch}
                 hasMore={this.state.hasMore}
                 loader={<h4>Loading...</h4>}
                 endMessage={
                     <p style={{ textAlign: 'center' }}>
                         <b>Yay! You have seen it all</b>
                     </p>}>
+                {this.createFeedRow()}
 
-                {this.displayFeed(this.state.postIDList)}
+                {/* {this.displayFeed(this.state.postIDList)} */}
             </InfiniteScroll>
         );
     }

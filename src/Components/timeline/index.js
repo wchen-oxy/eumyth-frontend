@@ -96,7 +96,10 @@ class Timeline extends React.Component {
                 .then((results) => {
                     const nextOpenPostIndex =
                         this.state.nextOpenPostIndex + results.length
-                    this.setState({ nextOpenPostIndex }, this.handleCachedResults(results.data));
+                    this.setState(
+                        { nextOpenPostIndex },
+                        this.handleCachedResults(results.data)
+                    );
                 })
         }
         else if (isStatic(this.props.contentType)) {
@@ -105,7 +108,8 @@ class Timeline extends React.Component {
                 this.props.requestLength,
                 this.props.numOfContent
             );
-            const shouldSearchUncached = this.props.contentType === POST && metaInfo.hasCachedContentOverflowed;
+            const shouldSearchUncached =
+                this.props.contentType === POST && metaInfo.hasCachedContentOverflowed;
             if (shouldSearchUncached) {
                 return this.callUncachedPosts(
                     this.props.allPosts,

@@ -8,11 +8,11 @@ import { FRIEND_POSTS, RECENT_POSTS } from 'utils/constants/flags';
 
 const FriendFeed = (props) => {
     const [nextOpenPostIndex, setNextOpenPostIndex] = useState(0);
-    const [hasMore, setHasMore] = useState(props.feedData.length < props.authUser.followingFeed.length
+    const [hasMore, setHasMore] = useState(props.feedData.length < props.following.length
         ? true : false);
 
     const fetchNextPosts = (index) => {
-        const posts = props.authUser.followingFeed
+        const posts = props.following;
         const slicedObjectIDs = posts.slice(
             index,
             index + REGULAR_CONTENT_REQUEST_LENGTH);

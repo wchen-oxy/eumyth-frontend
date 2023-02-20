@@ -329,9 +329,12 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     handleFollowerStatusChange(action) {
+        console.log(this.props.authUser);
         AxiosHelper.setFollowerStatus(
             this.props.authUser.userRelationID,
+            this.props.authUser.cached_feed_id,
             this.state.profileData.user_relation_id,
+            this.state.profileData.cached_feed_id,
             action,
             this.state.profileData.private,
         )

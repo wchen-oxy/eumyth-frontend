@@ -157,14 +157,18 @@ export default class AxiosHelper {
 
     static setFollowerStatus(
         visitorUserRelationID,
+        visitorCachedFeedID,
         targetUserRelationID,
+        targetCachedFeedID,
         action,
         isPrivate
     ) {
         return axios.put(urls.RELATION_STATUS_URL,
             {
                 visitorUserRelationID,
+                visitorCachedFeedID,
                 targetUserRelationID,
+                targetCachedFeedID,
                 action,
                 isPrivate
             }
