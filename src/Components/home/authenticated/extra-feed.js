@@ -187,7 +187,6 @@ class ExtraFeed extends React.Component {
     }
 
     fetch() {
-        console.log("fetching");
         this.debounceFetch.cancel();
 
         const slicedPostIDs = this.state.postIDList.slice(

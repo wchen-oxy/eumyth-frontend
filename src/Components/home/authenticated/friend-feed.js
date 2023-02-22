@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import AxiosHelper from 'utils/axios';
-import { formatPostText, toTitleCase } from 'utils';
+import { formatPostText } from 'utils';
 import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 import PostController from "components/post/index";
-import { FRIEND_POSTS, RECENT_POSTS } from 'utils/constants/flags';
 
 const FriendFeed = (props) => {
     const [nextOpenPostIndex, setNextOpenPostIndex] = useState(0);

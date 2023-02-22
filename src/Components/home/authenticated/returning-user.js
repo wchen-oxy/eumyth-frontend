@@ -34,7 +34,6 @@ class ReturningUserPage extends React.Component {
             textData: '',
             recentPosts: null,
             recentPostsKey: 0,
-
             projectPreviewMap: {},
             isExtraFeedToggled: false
         }
@@ -64,21 +63,18 @@ class ReturningUserPage extends React.Component {
             AxiosHelper.getCachedFeed(this.props.authUser.cached_feed_id)
                 .then(
                     results => {
-                        console.log(results);
                         this.setState({
                             feeds: results.data,
                             pursuitObjects: pursuitObjects
                         }, this.loadData)
                     }
                 )
-          
         }
     }
 
     componentWillUnmount() {
         this._isMounted = false;
     }
-
 
     setFeedData(feedData) {
         this.setState({ feedData })
@@ -89,21 +85,13 @@ class ReturningUserPage extends React.Component {
 
     loadData() {
         const error = (result) => { console.log(result + " contains error"); return []; };
-        // const hasRecentPosts = this.props.authUser.recentPosts.length > 0;
         const hasFollowingPosts = this.state.feeds.following.length > 0;
         const promisedBasicInfo = [this.props.firebase.returnName()];
-        // if (hasRecentPosts) {
-        //     const returnedRecent = AxiosHelper.returnMultiplePosts(this.props.authUser.recentPosts, true)
-        //         .then(result => { return result.data.posts }).catch(error);
-        //     promisedBasicInfo.push(returnedRecent);
-        // }
-        // else {
-        //     promisedBasicInfo.push(error(RECENT_POSTS));
-        // }
         if (hasFollowingPosts) {
-            console.log(this.state.feeds);
-            const returnedFollow = AxiosHelper.returnMultiplePosts(this.state.feeds.following, true)
-                .then(result => { return result.data.posts }).catch(error);
+            const returnedFollow = AxiosHelper
+                .returnMultiplePosts(this.state.feeds.following, true)
+                .then(result => { return result.data.posts })
+                .catch(error);
             promisedBasicInfo.push(returnedFollow);
         }
         else {
@@ -114,7 +102,6 @@ class ReturningUserPage extends React.Component {
             .then(results => {
                 this.setState(
                     ({
-                        // recentPosts: results[1],
                         feedData: results[1],
                         firstName: results[0].firstName,
                         lastName: results[0].lastName,
@@ -255,6 +242,7 @@ class ReturningUserPage extends React.Component {
         if (this.props.modalState === POST_VIEWER_MODAL_STATE &&
             this.state.selectedEvent) {
             const formattedTextData = formatPostText(this.state.selectedEvent);
+            
             const viewerObject = {
                 key: this.state.selectedPostIndex,
                 largeViewMode: true,
