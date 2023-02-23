@@ -7,6 +7,7 @@ import { geoLocationOptions, REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/consta
 import { addRemainingContent, getCachedType, getDynamicType, initializeContent, setSimilarPeopleAdvanced } from 'store/services/extra-feed';
 import { CACHED, DYNAMIC, EXTRAS_STATE, POST, POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
 import EventController from 'components/timeline/timeline-event-controller';
+import PostController from "components/post/index";
 
 class ExtraFeed extends React.Component {
     _isMounted = false;
@@ -243,14 +244,29 @@ class ExtraFeed extends React.Component {
         }
 
         return this.state.feedData.map(
-            (post, k) => {
-                return (
-                    <div key={k}>
+            (post, index) => {
+                const viewerObject = {
+                    key: index,
+                    largeViewMode: true,
+                    textData: post.text_data,
+                    isPostOnlyView: false,
+                    pursuitNames: this.props.pursuitObjects.names,
+                    projectPreviewMap: this.props.projectPreviewMap,
+                    eventData: post,
+    
+                    onCommentIDInjection: this.props.onCommentIDInjection, //used to inject comment data
+                    saveProjectPreview: this.props.saveProjectPreview,
+                    passDataToModal: this.props.passDataToModal,
+                }
 
+                return (
+                    <div key={index}>
+                        <PostController   
+                        />
                         <EventController
-                            key={k}
+                            key={index}
                             contentType={POST}
-                            eventIndex={k}
+                            eventIndex={index}
                             eventData={post}
                             onEventClick={this.handleEventClick}
                         />
