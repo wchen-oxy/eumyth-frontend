@@ -40,11 +40,11 @@ const FriendFeed = (props) => {
     const createFeed = (inputArray, openIndex) => {
         if (!inputArray || inputArray.length === 0) return [];
         let nextOpenPostIndex = openIndex;
-
         return inputArray.map((feedItem, index) => {
             const formattedTextData = formatPostText(feedItem);
             const viewerObject = {
                 key: nextOpenPostIndex++,
+                index: index,
                 largeViewMode: false,
                 textData: formattedTextData,
                 isPostOnlyView: false,
@@ -57,23 +57,17 @@ const FriendFeed = (props) => {
                 passDataToModal: props.passDataToModal,
             }
             return (
-                <PostController
-                    isViewer
-                    viewerObject={viewerObject}
-                    authUser={props.authUser}
-                    closeModal={props.clearModal}
-                />
-
+                <div key={index} className='returninguser-feed-object'>
+                    <PostController
+                        isViewer
+                        viewerObject={viewerObject}
+                        authUser={props.authUser}
+                        closeModal={props.clearModal}
+                    />
+                </div>
             );
         });
     }
-    const feed =
-        createFeed(props.feedData, nextOpenPostIndex)
-            .map((feedItem, index) =>
-                <div key={index} className='returninguser-feed-object'>
-                    {feedItem}
-                </div>
-            );
     return (
         <div id='returninguser-infinite-scroll'>
             <InfiniteScroll
@@ -85,7 +79,7 @@ const FriendFeed = (props) => {
                     <p style={{ textAlign: 'center' }}>
                         <b>Yay! You have seen it all</b>
                     </p>}>
-                {feed}
+                {createFeed(props.feedData, nextOpenPostIndex)}
             </InfiniteScroll>
         </div>
     );

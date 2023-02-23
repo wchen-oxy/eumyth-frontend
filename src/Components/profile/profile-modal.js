@@ -2,15 +2,15 @@ import React from 'react';
 import { POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
  import PostController from "../post/index";
  
-const ProfileModal = (props) => {
+const ProfileModalController = (props) => {
     if (props.viewerObject.eventData &&
         props.modalState === POST_VIEWER_MODAL_STATE) {
         return (
             props.returnModalStructure(
                 <PostController
                     isViewer
-                    viewerObject={props.viewerObject}
                     authUser={props.authUser}
+                    viewerObject={props.viewerObject}
                     closeModal={props.closeModal}
                 />
                 ,
@@ -21,4 +21,4 @@ const ProfileModal = (props) => {
     }
 }
 
-export default ProfileModal;
+export default ProfileModalController;

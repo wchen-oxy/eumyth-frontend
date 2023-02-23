@@ -1,6 +1,13 @@
 import imageCompression from 'browser-image-compression';
 import { CACHED, POST, PROJECT, UNCACHED } from './constants/flags';
 
+
+export const alterRawCommentArray = (itemIndex, newCommentArray, feedData) => {
+    feedData[itemIndex].comments = newCommentArray;
+    feedData[itemIndex].comment_count += 1;
+    return { feedData }
+}
+
 export const toTitleCase = (str) => {
     return str.replace(
         /\w\S*/g,

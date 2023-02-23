@@ -1,15 +1,14 @@
 import React from 'react';
 import Timeline from '../timeline/index';
-import ProfileModal from '../profile/profile-modal';
+import ProfileModalController from '../profile/profile-modal';
 import EventController from '../timeline/timeline-event-controller';
-import { returnUsernameURL, returnPostURL } from 'utils/url';
+import { returnPostURL } from 'utils/url';
 import { POST, POST_VIEWER_MODAL_STATE, UNCACHED } from 'utils/constants/flags';
 import withRouter from 'utils/withRouter';
 import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 import { formatPostText, sortTimelineContent } from 'utils';
 
 const _createObjectIDs = (inputArray) => {
-    console.log(inputArray)
     return inputArray.map(
         item => {
             return {
@@ -24,7 +23,6 @@ const _createObjectIDs = (inputArray) => {
 
 class ProfileController extends React.Component {
     _isMounted = false;
-
     constructor(props) {
         super(props);
         this.state = {
@@ -165,11 +163,9 @@ class ProfileController extends React.Component {
         this.setState({ feedData });
     }
 
-
     shouldPull(value) {
         this.setState({ hasMore: value });
     }
-
 
     render() {
         const event = this.state.feedData[this.state.selectedEventIndex];
@@ -180,15 +176,15 @@ class ProfileController extends React.Component {
             pursuitNames: this.props.pursuitNames,
             eventData: event,
             projectPreviewMap: this.state.projectPreviewMap,
-
-            postIndex: this.state.selectedEventIndex,
+            
             onCommentIDInjection: this.handleCommentIDInjection,
             saveProjectPreview: this.saveProjectPreview
         }
         return (
             <>
-                <ProfileModal
+                <ProfileModalController
                     viewerObject={viewerObject}
+                    postIndex={this.state.selectedEventIndex}
                     authUser={this.props.authUser}
                     modalState={this.props.modalState}
                     saveProjectPreview={this.saveProjectPreview}
@@ -196,17 +192,17 @@ class ProfileController extends React.Component {
                     returnModalStructure={this.props.returnModalStructure}
 
                 />
-                <Timeline
+                <Timeline //feeds allposts (post ids) in, returns raw data, then feeds formatted posts in
                     contentType={POST}
                     indexUserID={this.props.authUser.indexProfileID}
                     requestLength={REGULAR_CONTENT_REQUEST_LENGTH}
                     index
                     feedID={this.props.feedID}
-                    allPosts={this.props.feedData}
+                    allPosts={this.props.feedData} //list of posts
                     numOfContent={this.props.numOfContent}
                     hasMore={this.state.hasMore}
 
-                    loadedFeed={this.createRenderedPosts()}
+                    loadedFeed={this.createRenderedPosts()} //formatted posts
                     shouldPull={this.shouldPull}
                     createTimelineRow={this.createTimelineRow}
                     setUncachedEdition={this.props.setUncachedEdition}

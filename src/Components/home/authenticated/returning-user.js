@@ -7,8 +7,9 @@ import { withAuthorization } from 'store/session';
 import { withFirebase } from 'store/firebase';
 import withRouter from "utils/withRouter";
 import { returnUsernameURL, returnUserImageURL } from 'utils/url';
+import {alterRawCommentArray} from 'utils/index';
 import { TEMP_PROFILE_PHOTO_URL } from 'utils/constants/urls';
-import { RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE, FOLLOWED_FEED, SHORT } from 'utils/constants/flags';
+import { RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE, FOLLOWED_FEED, SHORT, EXTRAS_FEED } from 'utils/constants/flags';
 import FriendFeed from './friend-feed';
 import ExtraFeed from './extra-feed';
 
@@ -116,21 +117,11 @@ class ReturningUserPage extends React.Component {
 
 
     handleCommentIDInjection(postIndex, rootCommentsArray, feedType) {
-        if (feedType === RECENT_POSTS) {
-            let recentPosts = this.state.recentPosts;
-            recentPosts[postIndex].comments = rootCommentsArray;
-            recentPosts[postIndex].comment_count = recentPosts[postIndex].comment_count + 1;
-            this.setState(
-                (state) =>
-                ({
-                    recentPosts: recentPosts,
-                    recentPostsKey: state.recentPostsKey + 1
-                }));
+        if (feedType === FRIEND_POSTS) {
+            this.setState({ feedData: alterRawCommentArray() })
         }
-        else if (feedType === FRIEND_POSTS) {
-            let friendPosts = this.state.feedData;
-            friendPosts[postIndex].comments = rootCommentsArray;
-            this.setState({ feedData: friendPosts })
+        else if (feedType === EXTRAS_FEED) {
+            this.setState({feedData: alterRawCommentArray()})
         }
     }
 
@@ -369,6 +360,10 @@ class ReturningUserPage extends React.Component {
                         <ExtraFeed
                             authUser={this.props.authUser}
                             pursuitObjects={this.state.pursuitObjects}
+                            
+
+                            onCommentIDInjection={this.handleCommentIDInjection}
+                            saveProjectPreview={this.saveProjectPreview}
                             passDataToModal={this.setExtraFeedModal}
                             clearModal={this.clearModal}
                         />
