@@ -1,14 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import AxiosHelper from 'utils/axios';
 import { formatPostText } from 'utils';
 import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 import PostController from "components/post/index";
+import { FOLLOWED_FEED } from 'utils/constants/flags';
 
 const FriendFeed = (props) => {
     const [nextOpenPostIndex, setNextOpenPostIndex] = useState(0);
     const [hasMore, setHasMore] = useState(props.feedData.length < props.following.length
         ? true : false);
+    const [feedData, setFeedData] = [];
+
+    useEffect(() => {
+        const hasFollowingPosts = this.state.feeds.following.length > 0;
+        if (hasFollowingPosts) {
+            const returnedFollow = AxiosHelper
+                .returnMultiplePosts(
+                    this.state.feeds.following
+                        .slice(0, REGULAR_CONTENT_REQUEST_LENGTH), true)
+                .catch((err) => console.log(err))
+            returnedFollow.then(
+                (results) => {
+                    setFeedData(results.data.posts);
+                    setNextOpenPostIndex(REGULAR_CONTENT_REQUEST_LENGTH);
+                }
+            )
+        }
+
+    }, [])
 
     const fetchNextPosts = (index) => {
         const posts = props.following;
@@ -26,7 +46,7 @@ const FriendFeed = (props) => {
                 true)
             .then((result) => {
                 if (result.data) {
-                    props.setFeedData(props.feedData.concat(result.data.posts));
+                    setFeedData(feedData.concat(result.data.posts));
                     setNextOpenPostIndex(nextOpenPostIndex);
                     setHasMore(!hasMore);
                 }
@@ -44,7 +64,6 @@ const FriendFeed = (props) => {
             const formattedTextData = formatPostText(feedItem);
             const viewerObject = {
                 key: nextOpenPostIndex++,
-                index: index,
                 largeViewMode: false,
                 textData: formattedTextData,
                 isPostOnlyView: false,

@@ -7,7 +7,7 @@ import { withAuthorization } from 'store/session';
 import { withFirebase } from 'store/firebase';
 import withRouter from "utils/withRouter";
 import { returnUsernameURL, returnUserImageURL } from 'utils/url';
-import {alterRawCommentArray} from 'utils/index';
+import { alterRawCommentArray } from 'utils/index';
 import { TEMP_PROFILE_PHOTO_URL } from 'utils/constants/urls';
 import { RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE, FOLLOWED_FEED, SHORT, EXTRAS_FEED } from 'utils/constants/flags';
 import FriendFeed from './friend-feed';
@@ -19,8 +19,10 @@ class ReturningUserPage extends React.Component {
         super(props);
         this.state = {
             username: this.props.firebase.returnUsername(),
-            firstName: null,
-            lastName: null,
+            name: {
+                first: null,
+                last: null
+            },
             pursuitObjects: null,
             croppedDisplayPhoto: null,
             smallCroppedDisplayPhoto: null,
@@ -36,7 +38,9 @@ class ReturningUserPage extends React.Component {
             recentPosts: null,
             recentPostsKey: 0,
             projectPreviewMap: {},
-            isExtraFeedToggled: false
+            isExtraFeedToggled: false,
+
+            cached: null
         }
 
         this.handlePursuitClick = this.handlePursuitClick.bind(this);
@@ -50,7 +54,6 @@ class ReturningUserPage extends React.Component {
         this.setFeedData = this.setFeedData.bind(this);
         this.renderModal = this.renderModal.bind(this);
         this.handleCommentIDInjection = this.handleCommentIDInjection.bind(this);
-        this.loadData = this.loadData.bind(this);
         this.saveProjectPreview = this.saveProjectPreview.bind(this);
         this.toggleFeedState = this.toggleFeedState.bind(this);
         this.setExtraFeedModal = this.setExtraFeedModal.bind(this);
@@ -61,15 +64,21 @@ class ReturningUserPage extends React.Component {
         if (this._isMounted && this.state.username) {
             const pursuitObjects =
                 this.createPursuits(this.props.authUser.pursuits);
-            AxiosHelper.getCachedFeed(this.props.authUser.cached_feed_id)
-                .then(
-                    results => {
-                        this.setState({
-                            feeds: results.data,
-                            pursuitObjects: pursuitObjects
-                        }, this.loadData)
-                    }
-                )
+            const promisedCached =
+                AxiosHelper.getCachedFeed(this.props.authUser.cached_feed_id);
+            const promisedFullName = this.props.firebase.returnName();
+            Promise.all([promisedCached, promisedFullName]).then(
+                results => {
+                    this.setState({
+                        cached: results[0].data,
+                        name: {
+                            first: results[1].firstName,
+                            last: results[1].lastName
+                        },
+                        pursuitObjects: pursuitObjects
+                    })
+                }
+            )
         }
     }
 
@@ -84,44 +93,12 @@ class ReturningUserPage extends React.Component {
         this.setState({ isExtraFeedToggled: !isExtraFeedToggled })
     }
 
-    loadData() {
-        const error = (result) => { console.log(result + " contains error"); return []; };
-        const hasFollowingPosts = this.state.feeds.following.length > 0;
-        const promisedBasicInfo = [this.props.firebase.returnName()];
-        if (hasFollowingPosts) {
-            const returnedFollow = AxiosHelper
-                .returnMultiplePosts(this.state.feeds.following, true)
-                .then(result => { return result.data.posts })
-                .catch(error);
-            promisedBasicInfo.push(returnedFollow);
-        }
-        else {
-            promisedBasicInfo.push(error(FOLLOWED_FEED));
-        }
-
-        return Promise.all(promisedBasicInfo)
-            .then(results => {
-                this.setState(
-                    ({
-                        feedData: results[1],
-                        firstName: results[0].firstName,
-                        lastName: results[0].lastName,
-                    }));
-
-            })
-            .catch((err) => {
-                console.log(err);
-                alert('Could Not Load Feed.' + err);
-            });
-    }
-
-
     handleCommentIDInjection(postIndex, rootCommentsArray, feedType) {
         if (feedType === FRIEND_POSTS) {
-            this.setState({ feedData: alterRawCommentArray() })
+            this.setState({ feedData: alterRawCommentArray(postIndex, rootCommentsArray, this.state.feedData) })
         }
         else if (feedType === EXTRAS_FEED) {
-            this.setState({feedData: alterRawCommentArray()})
+            this.setState({ feedData: alterRawCommentArray(postIndex, rootCommentsArray, this.state.feedData) })
         }
     }
 
@@ -233,7 +210,7 @@ class ReturningUserPage extends React.Component {
         if (this.props.modalState === POST_VIEWER_MODAL_STATE &&
             this.state.selectedEvent) {
             const formattedTextData = formatPostText(this.state.selectedEvent);
-            
+
             const viewerObject = {
                 key: this.state.selectedPostIndex,
                 largeViewMode: true,
@@ -271,14 +248,7 @@ class ReturningUserPage extends React.Component {
             returnUserImageURL(this.props.authUser.croppedDisplayPhotoKey))
             : (
                 TEMP_PROFILE_PHOTO_URL);
-
-        // const feed =
-        //     this.createFeed(this.state.feedData)
-        //         .map((feedItem, index) =>
-        //             <div key={index} className='returninguser-feed-object'>
-        //                 {feedItem}
-        //             </div>
-        //         );
+ 
         return (
             <div id='returninguser'>
                 <div id='returninguser-top-title' >
@@ -300,7 +270,7 @@ class ReturningUserPage extends React.Component {
                             </img>
                             <div className='returninguser-profile-text'>
                                 <p id='returninguser-username-text'>{this.props.authUser.username}</p>
-                                <p id='returninguser-name-text'>{this.state.firstName}</p>
+                                <p id='returninguser-name-text'>{this.state.name.first}</p>
                             </div>
                         </Link>
                     </div>
@@ -340,7 +310,7 @@ class ReturningUserPage extends React.Component {
                         <div id='returninguser-infinite-scroll'>
                             <FriendFeed
                                 authUser={this.props.authUser}
-                                following={this.state.feeds?.following ?? []}
+                                following={this.state.cached?.following ?? []}
                                 nextOpenPostIndex={this.state.nextOpenPostIndex}
                                 fetchNextPosts={this.fetchNextPosts}
                                 pursuitObjects={this.state.pursuitObjects}
@@ -360,7 +330,7 @@ class ReturningUserPage extends React.Component {
                         <ExtraFeed
                             authUser={this.props.authUser}
                             pursuitObjects={this.state.pursuitObjects}
-                            
+
 
                             onCommentIDInjection={this.handleCommentIDInjection}
                             saveProjectPreview={this.saveProjectPreview}
