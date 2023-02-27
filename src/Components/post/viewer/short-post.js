@@ -75,6 +75,7 @@ class ShortPostViewer extends React.Component {
         for (let i = 0; i < this.props.eventData.image_data.length; i++) {
             annotationArray.push([]);
         }
+        console.log(this.props.eventData);
         this.setState({ annotations: annotationArray }, this.loadProjectPreview);
     }
 
@@ -217,7 +218,6 @@ class ShortPostViewer extends React.Component {
                         postID={this.props.eventData._id}
                         postIndex={this.props.postIndex}
                         onCommentDataInjection={this.handleCommentDataInjection}
-                        selectedPostFeedType={this.props.selectedPostFeedType}
                         onPromptAnnotation={this.handlePromptAnnotation}
                         passAnnotationData={this.passAnnotationData}
                         onMouseClick={this.handleMouseClick}
@@ -400,7 +400,7 @@ class ShortPostViewer extends React.Component {
 
     handleModalLaunch() {
         if (!this.props.isPostOnlyView) {
-            return (this.props.passDataToModal(
+            return (this.props.setModal(
                 this.props.eventData,
                 SHORT,
                 this.props.postIndex));

@@ -1,4 +1,4 @@
-import { CACHED, DYNAMIC } from "utils/constants/flags";
+import { CACHED, DYNAMIC, POST, USER } from "utils/constants/flags";
 
 export const setSimilarPeopleAdvanced = (results, usedPeople) => {
     const similar = results.data;
@@ -14,15 +14,16 @@ export const setSimilarPeopleAdvanced = (results, usedPeople) => {
 
     return {
         usedPeople,
-        beginner,
-        familiar,
-        experienced,
-        expert
+        dynamic: {
+            beginner,
+            familiar,
+            experienced,
+            expert
+        }
     }
 };
 
 export const getDynamicType = (index) => {
-    console.log(index);
     switch (index) {
         case (0): //beginner
             return "beginner";
@@ -54,6 +55,25 @@ export const getCachedType = (index) => {
     }
 }
 
+export const _formatContent = (feed, category, index, isCached) => {
+    if (isCached) {
+        const type = getCachedType(category);
+        const content = feed[type][index];
+        return {
+            type: POST,
+            content: content
+        }
+    }
+    else {
+        const type = getDynamicType(category);
+        const content = feed[type][index];
+        return {
+            type: USER,
+            content: content
+        }
+    }
+}
+
 export const initializeContent = (
     cachedTypeIndex,
     cachedItemIndex,
@@ -61,32 +81,44 @@ export const initializeContent = (
     dynamicItemIndex,
     cached,
     dynamic,
-    postIDList
+    contentList
 ) => {
     let isCachedToggled = true;
-    while (cachedTypeIndex < 3 && dynamicTypeIndex < 4) {
+    let count = 0;
+    while (cachedTypeIndex < 3 && dynamicTypeIndex < 4 ) {
+        if (count > 100) throw new Error();
         if (isCachedToggled) {
-            let type = getCachedType(cachedTypeIndex);
-            const content = cached[type][cachedItemIndex];
+            const formatted =
+                _formatContent(
+                    cached,
+                    cachedTypeIndex,
+                    cachedItemIndex,
+                    isCachedToggled
+                );
             isCachedToggled = !isCachedToggled;
-            if (content === undefined) {
+            if (formatted.content === undefined) {
                 cachedItemIndex = 0;
                 cachedTypeIndex++;
                 continue;
             }
-            postIDList.push(content);
+            contentList.push(formatted);
             cachedItemIndex++;
         }
         else {
-            let type = getDynamicType(dynamicTypeIndex);
-            const content = dynamic[type][dynamicItemIndex];
+            const formatted =
+                _formatContent(
+                    dynamic,
+                    dynamicTypeIndex,
+                    dynamicItemIndex,
+                    isCachedToggled
+                );
             isCachedToggled = !isCachedToggled;
-            if (content === undefined) {
+            if (formatted.content === undefined) {
                 dynamicItemIndex = 0;
                 dynamicTypeIndex++;
                 continue;
             }
-            postIDList.push(content)
+            contentList.push(formatted)
             dynamicItemIndex++;
         }
     }
@@ -98,7 +130,7 @@ export const initializeContent = (
     }
 }
 
-const renderPost = () => {
+export const renderedContent= () => {
 
 }
 
@@ -107,24 +139,30 @@ export const addRemainingContent = (
     feedCategoryIndex,
     feedItemIndex,
     feeds,
-    postIDList
+    contentList
 ) => {
     let getter = null;
     let max = null;
+    let type = null;
     if (feedType === DYNAMIC) {
         getter = getDynamicType;
         max = 4;
+        type = USER;
     }
     if (feedType === CACHED) {
         getter = getCachedType;
         max = 3;
+        type = POST; //THIS IS APPENDING THE TYPE TO CACHED AND IT SHOULD BE USER? 
     }
-    
+
     while (feedCategoryIndex < max) {
-        let type = getter(feedCategoryIndex);
-        const contentCategory = feeds[type]; // sections types
+        let category = getter(feedCategoryIndex);
+        const contentCategory = feeds[category]; // sections types
         for (let i = feedItemIndex; i < contentCategory.length; i++) {
-            postIDList.push(contentCategory[i]);
+            contentList.push({
+                type: type,
+                content: contentCategory[i]
+            });
         }
         feedCategoryIndex++;
     }

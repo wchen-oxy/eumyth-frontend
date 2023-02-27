@@ -329,7 +329,6 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     handleFollowerStatusChange(action) {
-        console.log(this.props.authUser);
         AxiosHelper.setFollowerStatus(
             this.props.authUser.userRelationID,
             this.props.authUser.cached_feed_id,
@@ -395,12 +394,13 @@ class ProfilePageAuthenticated extends React.Component {
                     eventData: this.state.selectedContent,
                     projectPreviewMap: {}
                 }
+
+
                 return (
                     <PostController
                         isViewer
                         authUser={this.props.authUser}
                         viewerObject={viewerObject}
-
                     />
                 )
             }

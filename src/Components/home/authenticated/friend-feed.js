@@ -1,33 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import AxiosHelper from 'utils/axios';
-import { formatPostText } from 'utils';
+import { alterRawCommentArray, formatPostText, updateProjectPreviewMap } from 'utils';
 import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 import PostController from "components/post/index";
-import { FOLLOWED_FEED } from 'utils/constants/flags';
+import { POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
+import { Modal } from 'react-bootstrap';
 
 const FriendFeed = (props) => {
     const [nextOpenPostIndex, setNextOpenPostIndex] = useState(0);
-    const [hasMore, setHasMore] = useState(props.feedData.length < props.following.length
-        ? true : false);
-    const [feedData, setFeedData] = [];
+    const [hasMore, setHasMore] = useState(props.following.length !== 0);
+    const [feedData, setFeedData] = useState([]);
+    const [numOfContent, setNumOfContent] = useState(0);
+    const [projectPreviewMap, setProjectPreviewMap] = useState({});
+
+    const [selected, setSelected] = useState(null);
+    const [textData, setTextData] = useState(null);
+    const [selectedIndex, setSelectedIndex] = useState(null);
 
     useEffect(() => {
-        const hasFollowingPosts = this.state.feeds.following.length > 0;
-        if (hasFollowingPosts) {
-            const returnedFollow = AxiosHelper
-                .returnMultiplePosts(
-                    this.state.feeds.following
-                        .slice(0, REGULAR_CONTENT_REQUEST_LENGTH), true)
-                .catch((err) => console.log(err))
-            returnedFollow.then(
-                (results) => {
-                    setFeedData(results.data.posts);
-                    setNextOpenPostIndex(REGULAR_CONTENT_REQUEST_LENGTH);
-                }
-            )
+        if (hasMore) {
+            fetchNextPosts(nextOpenPostIndex)
         }
-
     }, [])
 
     const fetchNextPosts = (index) => {
@@ -46,8 +40,10 @@ const FriendFeed = (props) => {
                 true)
             .then((result) => {
                 if (result.data) {
-                    setFeedData(feedData.concat(result.data.posts));
+                    const posts = result.data.posts
+                    setFeedData(feedData.concat(posts));
                     setNextOpenPostIndex(nextOpenPostIndex);
+                    setNumOfContent(numOfContent + posts.length)
                     setHasMore(!hasMore);
                 }
             })
@@ -57,7 +53,34 @@ const FriendFeed = (props) => {
             }));
     }
 
-    const createFeed = (inputArray, openIndex) => {
+    const handleCommentIDInjection = (postIndex, rootCommentsArray) => {
+        setFeedData(alterRawCommentArray(postIndex, rootCommentsArray, feedData))
+    }
+
+    const saveProjectPreview = (projectPreview) => {
+        if (!projectPreviewMap[projectPreview._id]) {
+            let newMap =
+                updateProjectPreviewMap(
+                    projectPreviewMap,
+                    projectPreview
+                );
+            setProjectPreviewMap(newMap)
+        }
+    }
+
+    const setModal = (data, text, index) => {
+        setSelected(data);
+        setTextData(text);
+        setSelectedIndex(index);
+        props.openMasterModal(POST_VIEWER_MODAL_STATE);
+    }
+
+    const closeModal = () => {
+        setSelected(null);
+        props.closeMasterModal();
+    }
+
+    const createFeed = (inputArray, openIndex, viewerObjects, viewerFunctions) => {
         if (!inputArray || inputArray.length === 0) return [];
         let nextOpenPostIndex = openIndex;
         return inputArray.map((feedItem, index) => {
@@ -66,41 +89,69 @@ const FriendFeed = (props) => {
                 key: nextOpenPostIndex++,
                 largeViewMode: false,
                 textData: formattedTextData,
-                isPostOnlyView: false,
-                pursuitNames: props.pursuitObjects.names,
-                projectPreviewMap: props.projectPreviewMap,
                 eventData: feedItem,
+                ...viewerObjects
 
-                onCommentIDInjection: props.onCommentIDInjection,
-                saveProjectPreview: props.saveProjectPreview,
-                passDataToModal: props.passDataToModal,
             }
+
             return (
                 <div key={index} className='returninguser-feed-object'>
                     <PostController
                         isViewer
                         viewerObject={viewerObject}
+                        viewerFunctions={viewerFunctions}
                         authUser={props.authUser}
-                        closeModal={props.clearModal}
+                        closeModal={closeModal}
                     />
                 </div>
             );
         });
     }
+
+    const sharedViewerObjects = {
+        isPostOnlyView: false,
+        pursuitObjects: props.pursuitObjects,
+        projectPreviewMap: projectPreviewMap,
+    }
+    const viewerFunctions = {
+        onCommentIDInjection: handleCommentIDInjection,
+        saveProjectPreview: saveProjectPreview,
+        setModal: setModal,
+        clearModal: closeModal,
+    }
+
     return (
-        <div id='returninguser-infinite-scroll'>
-            <InfiniteScroll
-                dataLength={nextOpenPostIndex}
-                next={() => fetchNextPosts(nextOpenPostIndex)}
-                hasMore={hasMore}
-                loader={<h4>Loading...</h4>}
-                endMessage={
-                    <p style={{ textAlign: 'center' }}>
-                        <b>Yay! You have seen it all</b>
-                    </p>}>
-                {createFeed(props.feedData, nextOpenPostIndex)}
-            </InfiniteScroll>
+        <div>
+            <Modal
+                {...sharedViewerObjects}
+                modalState={props.modalState}
+                selected={selected}
+                selectedIndex={selectedIndex}
+                textData={textData}
+
+                returnModalStructure={props.returnModalStructure}
+                clearModal={closeModal}
+            />
+            <div id='returninguser-infinite-scroll'>
+                <InfiniteScroll
+                    dataLength={numOfContent}
+                    next={() => fetchNextPosts(nextOpenPostIndex)}
+                    hasMore={hasMore}
+                    loader={<h4>Loading...</h4>}
+                    endMessage={
+                        <p style={{ textAlign: 'center' }}>
+                            <b>Yay! You have seen it all</b>
+                        </p>}>
+                    {createFeed(
+                        feedData,
+                        nextOpenPostIndex,
+                        sharedViewerObjects,
+                        viewerFunctions
+                    )}
+                </InfiniteScroll>
+            </div>
         </div>
+
     );
 }
 

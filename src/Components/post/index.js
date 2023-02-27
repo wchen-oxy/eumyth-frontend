@@ -14,6 +14,7 @@ import {
   handleCreatedProjectAppend
 } from './draft/helpers';
 import AxiosHelper from 'utils/axios';
+import { checkPostFunctionsExist } from 'utils/validator';
 
 //fixme  Cast to String failed for value "[ 'Full Test', 'New Series For Test' ]" at path "title"
 //fixme new project postIDList is missing 
@@ -75,7 +76,7 @@ class PostController extends React.Component {
       titlePrivacy: false,
       threadTitle: '',
       isCompleteProject: false,
-      selectedDraft: _selectExistingDraft(this.props.authUser.drafts, data)
+      selectedDraft: this.props.authUser ? _selectExistingDraft(this.props.authUser.drafts, data) : null
 
     };
 
@@ -109,6 +110,10 @@ class PostController extends React.Component {
 
   componentDidMount() {
     this._isMounted = true;
+    checkPostFunctionsExist(
+      this.props.viewerFunctions,
+      this.props.viewerObject?.isPostOnlyView
+    );
   }
 
   componentWillUnmount() {
@@ -446,13 +451,13 @@ class PostController extends React.Component {
         <ShortPostViewer
           {...miniAuthObject}
           {...this.props.viewerObject}
+          {...this.props.viewerFunctions}
           {...shared}
           initialViewerObject={initialViewerObject}
           metaObject={metaObject}
           metaFunctions={metaFunctions}
           threadObject={threadObject}
           threadFunction={threadFunction}
-          closeModal={this.props.closeModal}
 
         />);
     }
@@ -461,6 +466,7 @@ class PostController extends React.Component {
       return (
         <ShortPostDraft
           {...miniAuthObject}
+          {...this.props.viewerFunctions}
           {...shared}
 
           initialDraftObject={initialDraftObject}
@@ -468,7 +474,6 @@ class PostController extends React.Component {
           metaFunctions={metaFunctions}
           threadObject={threadObject}
           threadFunction={threadFunction}
-          closeModal={this.props.closeModal}
           setPhotoData={this.setPhotoData}
         />
       );

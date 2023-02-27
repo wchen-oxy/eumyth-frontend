@@ -1,6 +1,11 @@
 import imageCompression from 'browser-image-compression';
 import { CACHED, POST, PROJECT, UNCACHED } from './constants/flags';
 
+export const updateProjectPreviewMap = (projectPreviewMap, projectPreview) => {
+        let newMap = projectPreviewMap;
+        newMap[projectPreview._id] = projectPreview;
+        return newMap;
+}
 
 export const alterRawCommentArray = (itemIndex, newCommentArray, feedData) => {
     feedData[itemIndex].comments = newCommentArray;
@@ -32,7 +37,6 @@ export const sortTimelineContent = (exisitingArray, inputArray, contentType, obj
                         objectIDs.indexOf(a._id) - objectIDs.indexOf(b._id))
             );
     }
-    console.log(feedData);
     return feedData;
 }
 

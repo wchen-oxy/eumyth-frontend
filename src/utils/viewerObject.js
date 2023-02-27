@@ -7,6 +7,8 @@ export class ViewerObject {
         pursuitNames,
         eventData,
         projectPreviewMap,
+        selectedPostIndex = null
+
     ) {
         this.key = key;
         this.isLargeViewMode = isLargeViewMode ? true : false;
@@ -15,6 +17,7 @@ export class ViewerObject {
         this.pursuitNames = pursuitNames;
         this.eventData = eventData;
         this.projectPreviewMap = projectPreviewMap;
+        this.selectedPostIndex = selectedPostIndex;
     }
 }
 

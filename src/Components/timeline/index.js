@@ -136,7 +136,6 @@ class Timeline extends React.Component {
     decideAPICall(contentIDs) {
         if (contentIDs.length === 0) return Promise.resolve({ data: [] });
         else {
-            console.log(this.props.numOfContent);
             switch (this.props.contentType) {
                 case (PROJECT):
                     return AxiosHelper.returnMultipleProjects(contentIDs);

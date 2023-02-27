@@ -5,9 +5,11 @@ import AxiosHelper from 'utils/axios';
 import { distanceSwitch } from 'utils/constants/states';
 import { geoLocationOptions, REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 import { addRemainingContent, getCachedType, getDynamicType, initializeContent, setSimilarPeopleAdvanced } from 'store/services/extra-feed';
-import { CACHED, DYNAMIC, EXTRAS_STATE, POST, POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
+import { CACHED, DYNAMIC, EXTRAS_STATE, POST, POST_VIEWER_MODAL_STATE, USER } from 'utils/constants/flags';
 import EventController from 'components/timeline/timeline-event-controller';
 import PostController from "components/post/index";
+import { alterRawCommentArray, updateProjectPreviewMap } from 'utils';
+import Modal from './modal';
 
 class ExtraFeed extends React.Component {
     _isMounted = false;
@@ -21,14 +23,9 @@ class ExtraFeed extends React.Component {
             distance: 50,
             lat: null,
             long: null,
-            postIDList: [],
+            contentList: [],
             feedData: [],
-            cached: {
-                following: [],
-                parents: [],
-                siblings: [],
-                children: [],
-            },
+            projectPreviewMap: {},
             dynamic: {
                 usedPeople: [this.props.authUser.userPreviewID],
                 beginner: [],
@@ -36,6 +33,9 @@ class ExtraFeed extends React.Component {
                 experienced: [],
                 expert: []
             },
+            selected: null,
+            textData: null,
+            selectedIndex: null,
 
         }
         this.debounceFetch = _.debounce(() => this.fetch(), 10);
@@ -45,13 +45,18 @@ class ExtraFeed extends React.Component {
         this.onSuccess = this.onSuccess.bind(this);
         this.onError = this.onError.bind(this);
         this.displayFeed = this.displayFeed.bind(this);
-        this.getLocation = this.getLocation.bind(this);
+        this.checkValidLocation = this.checkValidLocation.bind(this);
         this.setCoordinates = this.setCoordinates.bind(this);
         this.getDynamicFeed = this.getDynamicFeed.bind(this);
         this.getCachedFeed = this.getCachedFeed.bind(this);
         this.getSpotlight = this.getSpotlight.bind(this);
         this.extractContentIDs = this.extractContentIDs.bind(this);
         this.handleEventClick = this.handleEventClick.bind(this);
+        this.handleCommentIDInjection = this.handleCommentIDInjection.bind(this);
+        this.saveProjectPreview = this.saveProjectPreview.bind(this);
+        this.setModal = this.setModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+
     }
 
     handleEventClick(index) {
@@ -60,8 +65,10 @@ class ExtraFeed extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
-        this.getLocation()
-            .then(this.getContent);
+        return AxiosHelper
+            .getLocation(this.props.authUser.userPreviewID)
+            .then(this.checkValidLocation)
+
 
     }
 
@@ -76,34 +83,24 @@ class ExtraFeed extends React.Component {
             });
     }
 
-    getLocation() {
-        return AxiosHelper.getLocation(this.props.authUser.userPreviewID)
-            .then(results => {
-                if (results.status === 204) {
-                    navigator
-                        .geolocation
-                        .getCurrentPosition(this.onSuccess, this.onError, geoLocationOptions);
-                }
-                else {
-                    this.setCoordinates(results.data.coordinates);
-                }
-            });
+    checkValidLocation(results) {
+        if (results.status === 204) {
+            //first time
+            navigator
+                .geolocation
+                .getCurrentPosition(this.onSuccess, this.onError, geoLocationOptions);
+        }
+        else {
+            //usual time
+            this.setCoordinates(results.data.coordinates);
+        }
     }
 
-    displayFeed(feed) {
-        return feed.map(item => <p>{item}</p>)
-    }
-
-
-    initializeFirstPull() {
-        this.getDynamicFeed()
-        AxiosHelper.setLocation(
-            this.state.lat,
-            this.state.long,
-            this.props.authUser.userPreviewID)
-            .then(result => {
-                alert("Location Set!")
-            });
+    setCoordinates(crd) {
+        this.setState({
+            lat: crd.latitude,
+            long: crd.longitude
+        }, this.getContent);
     }
 
     onSuccess(pos) {
@@ -124,16 +121,26 @@ class ExtraFeed extends React.Component {
         console.warn(`onError(${err.code}): ${err.message}`);
     }
 
-    setCoordinates(crd) {
-        this.setState({
-            lat: crd.latitude,
-            long: crd.longitude
-        }, this.getDynamicFeed);
+    displayFeed(feed) {
+        return feed.map(item => <p>{item}</p>)
     }
 
-    extractContentIDs(cached, dynamic) { //cached comes with all post data
-        const postIDList = [];
 
+    initializeFirstPull() {
+        AxiosHelper.setLocation(
+            this.state.lat,
+            this.state.long,
+            this.props.authUser.userPreviewID)
+            .then(result => {
+                alert("Location Set!")
+                return this.getContent()
+            });
+    }
+
+
+
+    extractContentIDs(cached, dynamic) { //cached comes with all post data
+        const contentList = [];
         let cachedTypeIndex = 0; //max is 4
         let cachedItemIndex = 0;
         let dynamicTypeIndex = 0; //max is 4
@@ -147,16 +154,16 @@ class ExtraFeed extends React.Component {
             dynamicItemIndex,
             cached,
             dynamic,
-            postIDList,
+            contentList,
         );
-
+        console.log(contentList);
         //finish cached  
         addRemainingContent(
             CACHED,
             newIndices.cachedTypeIndex,
             newIndices.cachedItemIndex,
             cached,
-            postIDList
+            contentList
         );
 
         addRemainingContent(
@@ -164,58 +171,57 @@ class ExtraFeed extends React.Component {
             newIndices.dynamicTypeIndex,
             newIndices.dynamicItemIndex,
             dynamic,
-            postIDList
+            contentList
         );
 
-        return postIDList;
+        return contentList;
     }
 
     getContent() {
-        const cached = this.getCachedFeed();
-        const dynamic = this.getDynamicFeed();
-        return Promise.all([cached, dynamic])
+        return this.getDynamicFeed()
             .then((results) => {
-                const cached = results[0].data;
-                const dynamic = results[1];
-                const postIDList = this.extractContentIDs(cached, dynamic);
-                console.log(postIDList);
+                const dynamic = results.dynamic;
+                const usedPeople = results.usedPeople;
+                const contentList = this.extractContentIDs(this.props.cached, dynamic);
+
                 return this.setState({
-                    cached,
                     dynamic,
-                    postIDList,
+                    usedPeople,
+                    contentList,
                 }, this.fetch)
             })
     }
 
-    fetch() {
+    fetch() { //fetch for the timeline
         this.debounceFetch.cancel();
-
-        const slicedPostIDs = this.state.postIDList.slice(
+        const slicedPostIDs = this.state.contentList.slice(
             this.state.nextOpenPostIndex,
             this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH
         );
-
+        console.log(slicedPostIDs);
         return AxiosHelper
-            .returnMultiplePosts(slicedPostIDs, true)
+            .returnExtraFeedContent(slicedPostIDs)
             .then((results) => {
-                console.log(results.data);
-
+                console.log(results);
+                const content = results.data.contentList;
                 this.setState({
-                    feedData: results.data.posts,
-                    hasMore: REGULAR_CONTENT_REQUEST_LENGTH === results.data.length,
+                    feedData: content,
+                    hasMore: REGULAR_CONTENT_REQUEST_LENGTH === content.length,
                     loading: false,
                     nextOpenPostIndex: this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH,
-                    numOfContent: this.numOfContent + results.data.posts
+                    numOfContent: this.numOfContent + content
                 })
             })
+            .catch(err => console.log(err))
     }
 
-    getCachedFeed() {
+    getCachedFeed() { //initial
         return AxiosHelper
             .getCachedFeed(this.props.authUser.cached_feed_id)
     }
 
     getDynamicFeed() {
+        console.log("DYNAMIC");
         const distance = distanceSwitch(this.state.distance);
         return AxiosHelper.getSimilarPeopleAdvanced(
             distance,
@@ -238,61 +244,169 @@ class ExtraFeed extends React.Component {
         // }))
     }
 
-    createFeedRow() {
+    saveProjectPreview(projectPreview) {
+        if (!this.state.projectPreviewMap[projectPreview._id]) {
+            let projectPreviewMap =
+                updateProjectPreviewMap(
+                    this.state.projectPreviewMap,
+                    projectPreview
+                );
+            this.setState({ projectPreviewMap });
+        }
+    }
+
+    handleCommentIDInjection(postIndex, rootCommentsArray) {
+        const feedData = alterRawCommentArray(
+            postIndex, rootCommentsArray, this.state.feedData)
+        this.setState({ feedData })
+    }
+
+    createFeedRow(viewerObjects, viewerFunctions) {
         if (!this._isMounted || this.state.feedData.length === 0) {
             return [];
         }
-
         return this.state.feedData.map(
-            (post, index) => {
-                const viewerObject = {
-                    key: index,
-                    largeViewMode: true,
-                    textData: post.text_data,
-                    isPostOnlyView: false,
-                    pursuitNames: this.props.pursuitObjects.names,
-                    projectPreviewMap: this.props.projectPreviewMap,
-                    eventData: post,
-    
-                    onCommentIDInjection: this.props.onCommentIDInjection, //used to inject comment data
-                    saveProjectPreview: this.props.saveProjectPreview,
-                    passDataToModal: this.props.passDataToModal,
-                }
+            (item, index) => {
+                switch (item.type) {
+                    case (POST):
 
-                return (
-                    <div key={index}>
-                        <PostController   
-                        />
-                        <EventController
+                        const viewerObject = {
+                            key: index,
+                            largeViewMode: false,
+                            textData: item.data.text_data,
+                            eventData: item.data,
+                            ...viewerObjects
+                        }
+
+                        return (
+                            <div key={index} className='returninguser-feed-object'>
+                                <PostController
+                                    isViewer
+                                    viewerObject={viewerObject}
+                                    viewerFunctions={viewerFunctions}
+                                    authUser={this.props.authUser}
+                                    closeModal={this.closeModal}
+                                />
+                                {/* <EventController
                             key={index}
                             contentType={POST}
                             eventIndex={index}
                             eventData={post}
                             onEventClick={this.handleEventClick}
-                        />
-                    </div>)
+                        /> */}
+                            </div>)
+                    case (USER):
+                        return (
+                            <div key={index} className='returninguser-feed-object'>
+                                <p>{item.content._id}</p>
+                            </div>
+                        )
+                    default:
+                        throw new Error("Malformed content type")
+
+                }
+                // if (content.type === POST) {
+                //     const viewerObject = {
+                //         key: index,
+                //         largeViewMode: true,
+                //         textData: content.text_data,
+                //         isPostOnlyView: false,
+                //         pursuitObjects: this.props.pursuitObjects,
+                //         projectPreviewMap: this.state.projectPreviewMap,
+                //         eventData: content,
+                //     }
+
+                //     return (
+                //         <div key={index}>
+                //             <PostController
+                //                 isViewer
+                //                 viewerObject={viewerObject}
+                //                 viewerFunctions={viewerFunctions}
+                //                 authUser={this.props.authUser}
+                //                 closeModal={this.closeModal}
+                //             />
+                //             {/* <EventController
+                //             key={index}
+                //             contentType={POST}
+                //             eventIndex={index}
+                //             eventData={post}
+                //             onEventClick={this.handleEventClick}
+                //         /> */}
+                //         </div>)
+                // }
+                // else if (content.type === USER) {
+
+
+                // }
+                // else{
+
+                // }
             })
     }
 
 
+    setModal(data, text, index) {
+        console.log(data);
+        this.setState({
+            selected: data,
+            textData: text,
+            selectedIndex: index
+        }, () => this.props.openMasterModal(POST_VIEWER_MODAL_STATE));
+    }
+
+    closeModal() {
+        this.setState({ selected: null },
+            this.props.closeMasterModal());
+    }
+
     render() {
+
+        const sharedViewerObjects = {
+            isPostOnlyView: false,
+            pursuitObjects: this.props.pursuitObjects,
+            projectPreviewMap: this.state.projectPreviewMap,
+        }
+
+        const viewerFunctions = {
+            onCommentIDInjection: this.handleCommentIDInjection, //used to inject comment data
+            saveProjectPreview: this.saveProjectPreview,
+            setModal: this.setModal,
+            clearModal: this.closeModal,
+        }
+
         if (this.state.loading) {
             return <p>Loading</p>
         }
         return (
-            <InfiniteScroll
-                dataLength={this.state.numOfContent}
-                next={this.debounceFetch}
-                hasMore={this.state.hasMore}
-                loader={<h4>Loading...</h4>}
-                endMessage={
-                    <p style={{ textAlign: 'center' }}>
-                        <b>Yay! You have seen it all</b>
-                    </p>}>
-                {this.createFeedRow()}
+            <div>
+                <Modal
+                    {...sharedViewerObjects}
+                    authUser={this.props.authUser}
+                    modalState={this.props.modalState}
+                    viewerFunctions={viewerFunctions}
+                    selectedIndex={this.state.selectedIndex}
+                    selected={this.state.selected}
 
-                {/* {this.displayFeed(this.state.postIDList)} */}
-            </InfiniteScroll>
+                    returnModalStructure={this.props.returnModalStructure}
+                    clearModal={this.closeModal}
+                />
+                <div id='returninguser-infinite-scroll'>
+                    <InfiniteScroll
+                        dataLength={this.state.numOfContent}
+                        next={this.debounceFetch}
+                        hasMore={this.state.hasMore}
+                        loader={<h4>Loading...</h4>}
+                        endMessage={
+                            <p style={{ textAlign: 'center' }}>
+                                <b>Yay! You have seen it all</b>
+                            </p>}>
+                        {this.createFeedRow(sharedViewerObjects, viewerFunctions)}
+
+                        {/* {this.displayFeed(this.state.postIDList)} */}
+                    </InfiniteScroll>
+                </div>
+            </div>
+
         );
     }
 }

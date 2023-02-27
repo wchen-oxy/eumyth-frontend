@@ -1,25 +1,7 @@
-#returninguser {
+a#returninguser {
     margin-top: 100px;
 }
-
-#returninguser-top-title {
-    padding-left: 2vh;
-}
-
-#returninguser-profile {
-    @include flex-display-row;
-}
-
-#returninguser-pursuit-info-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: center;
-
-    td,
-    th {
-        padding: 8px;
-    }
-}
+ 
 
 #returninguser-feed {
     @include flex-display-column;
@@ -29,22 +11,7 @@
     margin-top: 2.5%;
     margin-bottom: 2.5%;
 }
-
-#returninguser-recent-work {
-    border: none;
-    outline: none;
-    background-color: transparent;
-}
-
-#returninguser-recent-work-title {
-    text-decoration: none;
-    color: black;
-}
-
-#returninguser-recent-work-title:hover {
-    text-decoration: underline;
-}
-
+ 
 #returninguser-infinite-scroll {
     margin: auto;
     width: 800px;
@@ -59,19 +26,7 @@
         margin: 100px;
     }
 }
-
-#returninguser-recent-work {
-    @include flex-display-column;
-}
-
-#returninguser-dp {
-    object-fit: cover;
-    border-radius: 50%;
-    display: block;
-    margin: auto;
-    @include medium-profile-photo;
-}
-
+ 
 .returninguser-title {
     @extend %title-texts;
 }
@@ -83,20 +38,6 @@
     a {
         @include link-decoration;
     }
-}
-
-.returninguser-profile-text {
-    text-align: center;
-    p {
-        margin: 5px auto;
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-}
-
-.returninguser-profile-column {
-    @include flex-display-column;
-    margin: auto;
 }
 
 // .returninguser-row {

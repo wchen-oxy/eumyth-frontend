@@ -6,7 +6,7 @@ import { returnPostURL } from 'utils/url';
 import { POST, POST_VIEWER_MODAL_STATE, UNCACHED } from 'utils/constants/flags';
 import withRouter from 'utils/withRouter';
 import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
-import { formatPostText, sortTimelineContent } from 'utils';
+import { alterRawCommentArray, formatPostText, sortTimelineContent } from 'utils';
 
 const _createObjectIDs = (inputArray) => {
     return inputArray.map(
@@ -106,7 +106,6 @@ class ProfileController extends React.Component {
         this.setState({ feedData }, () => {
             if (contentType === UNCACHED) {
                 const objectIDs = _createObjectIDs(inputArray);
-                console.log(objectIDs);
                 this.props.updateAllPosts(objectIDs);
             }
         });
@@ -156,11 +155,15 @@ class ProfileController extends React.Component {
         this.props.closeMasterModal();
     }
 
-    handleCommentIDInjection(selectedEventIndex, rootCommentsArray) {
-        const feedData = this.state.feedData;
-        feedData[selectedEventIndex].comments = rootCommentsArray;
-        feedData[selectedEventIndex].comment_count += 1;
-        this.setState({ feedData });
+    handleCommentIDInjection(postIndex, rootCommentsArray) {
+        const feedData = alterRawCommentArray(
+            postIndex,
+            rootCommentsArray,
+            this.state.feedData
+        );
+        this.setState({
+            feedData: feedData
+        });
     }
 
     shouldPull(value) {
@@ -176,20 +179,25 @@ class ProfileController extends React.Component {
             pursuitNames: this.props.pursuitNames,
             eventData: event,
             projectPreviewMap: this.state.projectPreviewMap,
-            
+
+
+        }
+        const viewerFunctions = {
             onCommentIDInjection: this.handleCommentIDInjection,
-            saveProjectPreview: this.saveProjectPreview
+            saveProjectPreview: this.saveProjectPreview,
+            setModal: this.setModal,
+            closeModal: this.clearModal
         }
         return (
             <>
                 <ProfileModalController
                     viewerObject={viewerObject}
-                    postIndex={this.state.selectedEventIndex}
+                    viewerFunctions={viewerFunctions}
+                    selectedIndex={this.state.selectedEventIndex}
                     authUser={this.props.authUser}
                     modalState={this.props.modalState}
-                    saveProjectPreview={this.saveProjectPreview}
-                    closeModal={this.clearModal}
                     returnModalStructure={this.props.returnModalStructure}
+                    closeModal={this.clearModal}
 
                 />
                 <Timeline //feeds allposts (post ids) in, returns raw data, then feeds formatted posts in

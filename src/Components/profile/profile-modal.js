@@ -11,6 +11,7 @@ const ProfileModalController = (props) => {
                     isViewer
                     authUser={props.authUser}
                     viewerObject={props.viewerObject}
+                    viewerFunctions={props.viewerFunctions}
                     closeModal={props.closeModal}
                 />
                 ,

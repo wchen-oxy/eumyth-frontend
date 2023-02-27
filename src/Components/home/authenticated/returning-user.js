@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PostController from "components/post/index";
 import AxiosHelper from 'utils/axios';
-import { formatPostText, toTitleCase } from 'utils';
+import { formatPostText, toTitleCase, updateProjectPreviewMap } from 'utils';
 import { withAuthorization } from 'store/session';
 import { withFirebase } from 'store/firebase';
 import withRouter from "utils/withRouter";
@@ -12,6 +12,7 @@ import { TEMP_PROFILE_PHOTO_URL } from 'utils/constants/urls';
 import { RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE, FOLLOWED_FEED, SHORT, EXTRAS_FEED } from 'utils/constants/flags';
 import FriendFeed from './friend-feed';
 import ExtraFeed from './extra-feed';
+import Header from './header';
 
 class ReturningUserPage extends React.Component {
     _isMounted = false;
@@ -31,13 +32,11 @@ class ReturningUserPage extends React.Component {
             preferredPostPrivacy: null,
             followedUserPostIDs: [],
             nextOpenPostIndex: 0,
-            feedData: [],
             isModalShowing: false,
             selectedEvent: null,
             textData: '',
             recentPosts: null,
             recentPostsKey: 0,
-            projectPreviewMap: {},
             isExtraFeedToggled: false,
 
             cached: null
@@ -51,10 +50,7 @@ class ReturningUserPage extends React.Component {
         this.passDataToModal = this.passDataToModal.bind(this);
         this.clearModal = this.clearModal.bind(this);
         this.handleDeletePost = this.handleDeletePost.bind(this);
-        this.setFeedData = this.setFeedData.bind(this);
-        this.renderModal = this.renderModal.bind(this);
-        this.handleCommentIDInjection = this.handleCommentIDInjection.bind(this);
-        this.saveProjectPreview = this.saveProjectPreview.bind(this);
+        // this.renderModal = this.renderModal.bind(this);
         this.toggleFeedState = this.toggleFeedState.bind(this);
         this.setExtraFeedModal = this.setExtraFeedModal.bind(this);
     }
@@ -86,20 +82,8 @@ class ReturningUserPage extends React.Component {
         this._isMounted = false;
     }
 
-    setFeedData(feedData) {
-        this.setState({ feedData })
-    }
     toggleFeedState(isExtraFeedToggled) {
         this.setState({ isExtraFeedToggled: !isExtraFeedToggled })
-    }
-
-    handleCommentIDInjection(postIndex, rootCommentsArray, feedType) {
-        if (feedType === FRIEND_POSTS) {
-            this.setState({ feedData: alterRawCommentArray(postIndex, rootCommentsArray, this.state.feedData) })
-        }
-        else if (feedType === EXTRAS_FEED) {
-            this.setState({ feedData: alterRawCommentArray(postIndex, rootCommentsArray, this.state.feedData) })
-        }
     }
 
     handleDeletePost() {
@@ -114,8 +98,7 @@ class ReturningUserPage extends React.Component {
         );
     }
 
-    passDataToModal(data, type, postIndex) {
-        console.log(data);
+    passDataToModal(data, type, postIndex) { //TO DELETE
         this.setState({
             selectedEvent: data,
             textData: data.text_data,
@@ -124,7 +107,7 @@ class ReturningUserPage extends React.Component {
         }, this.setModal())
     }
 
-    setModal() {
+    setModal() { //TO DELETE
         this.props.openMasterModal(POST_VIEWER_MODAL_STATE);
     }
 
@@ -198,103 +181,48 @@ class ReturningUserPage extends React.Component {
         }
     }
 
-    saveProjectPreview(projectPreview) {
-        if (!this.state.projectPreviewMap[projectPreview._id]) {
-            let projectPreviewMap = this.state.projectPreviewMap;
-            projectPreviewMap[projectPreview._id] = projectPreview;
-            this.setState({ projectPreviewMap: projectPreviewMap });
-        }
-    }
+    // renderModal() {
+    //     if (this.props.modalState === POST_VIEWER_MODAL_STATE &&
+    //         this.state.selectedEvent) {
+    //         const formattedTextData = formatPostText(this.state.selectedEvent);
 
-    renderModal() {
-        if (this.props.modalState === POST_VIEWER_MODAL_STATE &&
-            this.state.selectedEvent) {
-            const formattedTextData = formatPostText(this.state.selectedEvent);
-
-            const viewerObject = {
-                key: this.state.selectedPostIndex,
-                largeViewMode: true,
-                textData: formattedTextData,
-                isPostOnlyView: false,
-                pursuitNames: this.state.pursuitObjects.names,
-                projectPreviewMap: this.state.projectPreviewMap,
-                eventData: this.state.selectedEvent,
-                selectedPostFeedType: this.state.selectedPostFeedType,
-                postIndex: this.state.selectedPostIndex,
-
-                onCommentIDInjection: this.handleCommentIDInjection,
-                saveProjectPreview: this.saveProjectPreview,
-            };
-            const content = (
-                <PostController
-                    isViewer
-                    viewerObject={viewerObject}
-                    authUser={this.props.authUser}
-                    closeModal={this.clearModal}
-                />
-            );
-            return this.props.returnModalStructure(
-                content,
-                this.clearModal
-            );
-        }
-        else {
-            return null;
-        }
-    }
+    //         const viewerObject = {
+    //             key: this.state.selectedPostIndex,
+    //             largeViewMode: true,
+    //             textData: formattedTextData,
+    //             isPostOnlyView: false,
+    //             pursuitNames: this.state.pursuitObjects.names,
+    //             eventData: this.state.selectedEvent,
+    //             selectedPostFeedType: this.state.selectedPostFeedType,
+    //             postIndex: this.state.selectedPostIndex,
+    //         };
+    //         const content = (
+    //             <PostController
+    //                 isViewer
+    //                 viewerObject={viewerObject}
+    //                 authUser={this.props.authUser}
+    //                 closeModal={this.clearModal}
+    //             />
+    //         );
+    //         return this.props.returnModalStructure(
+    //             content,
+    //             this.clearModal
+    //         );
+    //     }
+    //     else {
+    //         return null;
+    //     }
+    // }
 
     render() {
-        const imageURL = this.props.authUser.croppedDisplayPhotoKey ? (
-            returnUserImageURL(this.props.authUser.croppedDisplayPhotoKey))
-            : (
-                TEMP_PROFILE_PHOTO_URL);
- 
         return (
             <div id='returninguser'>
-                <div id='returninguser-top-title' >
-                    <h4 className='returninguser-title'>Your Dashboard</h4>
-                </div>
-                <div
-                    id='returninguser-profile'
-                    className='returninguser-main-row'
-                >
-                    <div className='returninguser-profile-column btn-round'
-                    >
-                        <Link
-                            to={returnUsernameURL(this.props.authUser.username)}
-                        >
-                            <img
-                                alt=''
-                                id='returninguser-dp'
-                                src={imageURL}>
-                            </img>
-                            <div className='returninguser-profile-text'>
-                                <p id='returninguser-username-text'>{this.props.authUser.username}</p>
-                                <p id='returninguser-name-text'>{this.state.name.first}</p>
-                            </div>
-                        </Link>
-                    </div>
-                    <div className='returninguser-profile-column'>
-                        <div className='returninguser-profile-text'>
-                            Total Hours Spent:
-                            {Math.floor(this.state.pursuitObjects?.totalMin ?? 0 / 60)}
-                        </div>
-                    </div>
-                    <div className='returninguser-profile-column'>
-                        <table id='returninguser-pursuit-info-table'>
-                            <tbody>
-                                <tr>
-                                    <th></th>
-                                    <th>Level</th>
-                                    <th>Minutes Spent</th>
-                                    <th>Posts</th>
-                                    <th>Milestones</th>
-                                </tr>
-                                {this.state.pursuitObjects?.pursuitInfoArray ?? null}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <Header
+                    displayPhotoKey={this.props.authUser.croppedDisplayPhotoKey}
+                    username={this.props.authUser.username}
+                    name={this.state.name}
+                    pursuitObjects={this.state.pursuitObjects}
+                />
                 <div
                     id='returninguser-feed'
                     className='returninguser-main-row'
@@ -306,22 +234,24 @@ class ReturningUserPage extends React.Component {
                     </label>
 
                     {
-                        !this.state.isExtraFeedToggled &&
+                        !this.state.isExtraFeedToggled
+                        && this.state.cached
+                        &&
                         <div id='returninguser-infinite-scroll'>
                             <FriendFeed
                                 authUser={this.props.authUser}
-                                following={this.state.cached?.following ?? []}
+                                following={this.state.cached.following}
                                 nextOpenPostIndex={this.state.nextOpenPostIndex}
                                 fetchNextPosts={this.fetchNextPosts}
+                                pursuitNames={this.state.pursuitObjects.names}
                                 pursuitObjects={this.state.pursuitObjects}
-                                projectPreviewMap={this.state.projectPreviewMap}
 
-                                setFeedData={this.setFeedData}
-                                onCommentIDInjection={this.handleCommentIDInjection}
-                                saveProjectPreview={this.saveProjectPreview}
-                                passDataToModal={this.passDataToModal}
-                                clearModal={this.clearModal}
-                                feedData={this.state.feedData}
+
+                                modalState={this.props.modalState}
+                                openMasterModal={this.props.openMasterModal}
+                                closeMasterModal={this.props.closeMasterModal}
+                                returnModalStructure={this.props.returnModalStructure}
+
                             />
                         </div>
                     }
@@ -329,17 +259,19 @@ class ReturningUserPage extends React.Component {
                         this.state.isExtraFeedToggled &&
                         <ExtraFeed
                             authUser={this.props.authUser}
+                            cached={this.state.cached}
+                            pursuitNames={this.state.pursuitObjects.names}
                             pursuitObjects={this.state.pursuitObjects}
 
 
-                            onCommentIDInjection={this.handleCommentIDInjection}
-                            saveProjectPreview={this.saveProjectPreview}
-                            passDataToModal={this.setExtraFeedModal}
-                            clearModal={this.clearModal}
+                            modalState={this.props.modalState}
+                            openMasterModal={this.props.openMasterModal}
+                            closeMasterModal={this.props.closeMasterModal}
+                            returnModalStructure={this.props.returnModalStructure}
+
                         />
                     }
                 </div>
-                {this.renderModal()}
             </div>
         )
     }

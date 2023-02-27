@@ -54,6 +54,7 @@ export const SPOTLIGHT_PROJECT = 'SPOTLIGHT_PROJECT';
 export const FOLLOWED_FEED = 'FOLLOWED_FEED';
 export const CACHED = 'CACHED';
 export const UNCACHED = 'UNCACHED';
+export const USER = 'USER';
 
 // POST TYPE
 export const DISPLAY = 'DISPLAY';

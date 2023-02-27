@@ -283,6 +283,14 @@ export default class AxiosHelper {
         })
     }
 
+    static returnExtraFeedContent(contentList) {
+        return axios.get(urls.EXTRA_FEED_URL, {
+            params: {
+                contentList
+            }
+        })
+    }
+
     static returnOverflowContent(contentIDList, contentType, indexUserID, requestQuantity) {
         return axios.get(urls.SEARCH_UNCACHED_URL, {
             params: {

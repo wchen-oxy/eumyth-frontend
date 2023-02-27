@@ -1,0 +1,45 @@
+#header-top-title{
+    @include flex-display-row;
+}
+
+
+#header-pursuit-info-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+
+    td,
+    th {
+        padding: 8px;
+    }
+}
+
+#header-profile {
+    @include flex-display-row;
+}
+
+
+#header-dp {
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    margin: auto;
+    @include medium-profile-photo;
+}
+
+
+.header-profile-column {
+    @include flex-display-column;
+    margin: auto;
+}
+
+
+.header-profile-text {
+    text-align: center;
+    p {
+        margin: 5px auto;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+

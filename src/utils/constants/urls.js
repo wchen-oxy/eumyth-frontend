@@ -52,6 +52,7 @@ const SOCIAL_FEED_POSTS_URL = POST_BASE_URL + '/feed';
 const POST_DISPLAY_PHOTO_URL = POST_BASE_URL + '/display-photo';
 const SINGLE_POST_TEXT_DATA_URL = POST_BASE_URL + '/single'
 const CACHED_FEED_URL = POST_BASE_URL + '/cached-feed';
+const EXTRA_FEED_URL = POST_BASE_URL +'/extra-feed';
 
 //project
 const PROJECT_BASE_URL = ROOT_URL + '/project';
@@ -109,6 +110,7 @@ module.exports = {
     COVER_PHOTO_URL,
     DRAFT_BASE_URL,
     DRAFT_TITLE_URL,
+    EXTRA_FEED_URL,
     TINY_DISPLAY_PHOTO_URL,
     COMPRESS_PHOTO_URL,
     USER_BASE_URL,
