@@ -6,6 +6,7 @@ import MetaInfo from './sub-components/meta-info';
 import ShortHeroText from './sub-components/short-text';
 
 const ShortPostInlineContent = (props) => {
+    console.log(props);
     if (props.hasImages) {
         return (
             <>
@@ -15,6 +16,7 @@ const ShortPostInlineContent = (props) => {
                 >
                     <PostHeader
                         {...props.header}
+                        {...props.user}
                     />
                     <div className='shortpostviewer-inline-side'>
                         {props.caption.title &&
@@ -39,6 +41,7 @@ const ShortPostInlineContent = (props) => {
                     <div className='shortpostviewer-inline-side'>
                         <PostHeader
                             {...props.header}
+                            {...props.user}
                         />
                         <MetaInfo
                             {...props.meta}

@@ -215,6 +215,19 @@ class ReturningUserPage extends React.Component {
     // }
 
     render() {
+        let pursuitProps = null;
+        if (this.state.pursuitObjects) {
+            pursuitProps = {
+                pursuitNames: this.state.pursuitObjects.names,
+                pursuitObjects: this.state.pursuitObjects
+            }
+        }
+        const modalProps = {
+            modalState: this.props.modalState,
+            openMasterModal: this.props.openMasterModal,
+            closeMasterModal: this.props.closeMasterModal,
+            returnModalStructure: this.props.returnModalStructure
+        }
         return (
             <div id='returninguser'>
                 <Header
@@ -243,14 +256,8 @@ class ReturningUserPage extends React.Component {
                                 following={this.state.cached.following}
                                 nextOpenPostIndex={this.state.nextOpenPostIndex}
                                 fetchNextPosts={this.fetchNextPosts}
-                                pursuitNames={this.state.pursuitObjects.names}
-                                pursuitObjects={this.state.pursuitObjects}
-
-
-                                modalState={this.props.modalState}
-                                openMasterModal={this.props.openMasterModal}
-                                closeMasterModal={this.props.closeMasterModal}
-                                returnModalStructure={this.props.returnModalStructure}
+                                {...pursuitProps}
+                                {...modalProps}
 
                             />
                         </div>
@@ -260,15 +267,8 @@ class ReturningUserPage extends React.Component {
                         <ExtraFeed
                             authUser={this.props.authUser}
                             cached={this.state.cached}
-                            pursuitNames={this.state.pursuitObjects.names}
-                            pursuitObjects={this.state.pursuitObjects}
-
-
-                            modalState={this.props.modalState}
-                            openMasterModal={this.props.openMasterModal}
-                            closeMasterModal={this.props.closeMasterModal}
-                            returnModalStructure={this.props.returnModalStructure}
-
+                            {...pursuitProps}
+                            {...modalProps}
                         />
                     }
                 </div>

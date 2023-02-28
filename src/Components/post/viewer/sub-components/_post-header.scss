@@ -32,4 +32,7 @@
 
 .postheader-meta {
     padding-left: 5px;
+    a{
+        z-index: $modal-inner;
+    }
 }

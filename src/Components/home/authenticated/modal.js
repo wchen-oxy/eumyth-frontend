@@ -28,6 +28,8 @@ const Modal = (props) => {
                 closeModal={props.clearModal}
             />
         );
+
+        console.log(content);
         return props.returnModalStructure(
             content,
             props.clearModal

@@ -5,7 +5,7 @@ import { alterRawCommentArray, formatPostText, updateProjectPreviewMap } from 'u
 import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 import PostController from "components/post/index";
 import { POST_VIEWER_MODAL_STATE } from 'utils/constants/flags';
-import { Modal } from 'react-bootstrap';
+import Modal from './modal';
 
 const FriendFeed = (props) => {
     const [nextOpenPostIndex, setNextOpenPostIndex] = useState(0);
@@ -69,6 +69,7 @@ const FriendFeed = (props) => {
     }
 
     const setModal = (data, text, index) => {
+        console.log(data);
         setSelected(data);
         setTextData(text);
         setSelectedIndex(index);
@@ -119,15 +120,15 @@ const FriendFeed = (props) => {
         setModal: setModal,
         clearModal: closeModal,
     }
-
     return (
         <div>
             <Modal
                 {...sharedViewerObjects}
+                authUser={props.authUser}
                 modalState={props.modalState}
+                viewerFunctions={viewerFunctions}
                 selected={selected}
                 selectedIndex={selectedIndex}
-                textData={textData}
 
                 returnModalStructure={props.returnModalStructure}
                 clearModal={closeModal}
