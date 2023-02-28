@@ -1,9 +1,10 @@
 import React from 'react';
 import { COLLAPSED } from 'utils/constants/flags';
 import CaptionText from './sub-components/caption-text';
-import PostHeader from './sub-components/post-header';
+import UserHeader from './sub-components/user-header';
 import MetaInfo from './sub-components/meta-info';
 import ShortHeroText from './sub-components/short-text';
+import Thread from './sub-components/thread';
 
 const ShortPostInlineContent = (props) => {
     console.log(props);
@@ -11,24 +12,29 @@ const ShortPostInlineContent = (props) => {
         return (
             <>
                 <div
-                    id='shortpostviewer-inline-hero'
+                    className='shortpostviewer-inline-hero'
                     onClick={props.onModalLaunch}
                 >
-                    <PostHeader
-                        {...props.header}
-                        {...props.user}
-                    />
                     <div className='shortpostviewer-inline-side'>
+                        <Thread {...props.meta} />
+                    </div>
+
+                    <div className='shortherotext-title-container'>
                         {props.caption.title &&
                             <h2 className="shortpostviewer-title"> {props.caption.title}</h2>}
-                        <MetaInfo
-                            {...props.meta}
-                        />
-
-                        <CaptionText
-                            {...props.caption} />
                     </div>
+                    <UserHeader
+                        {...props.user}
+                    />
+
+                    <MetaInfo
+                        {...props.meta}
+                    />
+                    <CaptionText
+                        {...props.caption} />
+
                     {props.annotations && props.renderImageSlider(COLLAPSED)}
+                    
                 </div>
                 {props.renderComments(COLLAPSED)}
             </>
@@ -39,10 +45,15 @@ const ShortPostInlineContent = (props) => {
             <div onClick={props.onModalLaunch}>
                 <div className='shortpostviewer-inline-hero ' >
                     <div className='shortpostviewer-inline-side'>
-                        <PostHeader
-                            {...props.header}
-                            {...props.user}
-                        />
+                        <Thread {...props.meta} />
+                    </div>
+                    <div className='shortherotext-title-container'>
+                        {props.caption.title && <h2>{props.caption.title}</h2>}
+                    </div>
+                    <UserHeader
+                        {...props.user}
+                    />
+                    <div className='shortpostviewer-inline-side'>
                         <MetaInfo
                             {...props.meta}
                         />

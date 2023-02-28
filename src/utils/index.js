@@ -8,9 +8,10 @@ export const updateProjectPreviewMap = (projectPreviewMap, projectPreview) => {
 }
 
 export const alterRawCommentArray = (itemIndex, newCommentArray, feedData) => {
+    console.log(itemIndex, newCommentArray, feedData);
     feedData[itemIndex].comments = newCommentArray;
     feedData[itemIndex].comment_count += 1;
-    return { feedData }
+    return feedData;
 }
 
 export const toTitleCase = (str) => {

@@ -4,9 +4,10 @@ import ActivityButtons from './sub-components/activity-buttons';
 import CaptionText from './sub-components/caption-text';
 import MetaInfo from './sub-components/meta-info';
 import ShortHeroText from './sub-components/short-text';
+import Thread from './sub-components/thread';
+import UserHeader from './sub-components/user-header';
 
 const ShortPostLargeContent = (props) => {
-    console.log(props.meta);
     if (props.hasImages) {
         return (
             <div className='small-post-window'>
@@ -17,7 +18,10 @@ const ShortPostLargeContent = (props) => {
                         className='shortpostviewer-large-side  short-post-side-container'
                         ref={props.heroRef}
                     >
+                        <Thread {...props.meta} />
+                        <UserHeader {...props.user}/>
                         <MetaInfo
+                            isLargeViewMode
                             {...props.meta}
                         />
                         <CaptionText
@@ -38,12 +42,16 @@ const ShortPostLargeContent = (props) => {
     else {
         return (
             <div className='small-post-window'>
+                <Thread {...props.meta} />
+                <UserHeader {...props.user}/>
                 <MetaInfo
+                    isLargeViewMode
                     {...props.meta}
                 />
                 <CaptionText  {...props.caption} />
                 <div className='shortpostviewer-large-hero-text'>
                     <ShortHeroText
+                        isLargeViewMode
                         {...props.caption} />
                     <ActivityButtons
                         {...props.header}

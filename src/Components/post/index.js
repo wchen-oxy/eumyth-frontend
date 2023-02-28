@@ -110,7 +110,7 @@ class PostController extends React.Component {
 
   componentDidMount() {
     this._isMounted = true;
-    checkPostFunctionsExist(
+    if (this.props.isViewer) checkPostFunctionsExist(
       this.props.viewerFunctions,
       this.props.viewerObject?.isPostOnlyView
     );

@@ -85,7 +85,7 @@ class ShortPost extends React.Component {
 
         this.setState({ isCompressing: false },
           () =>
-            this.setPhotoData(
+            this.props.setPhotoData(
               thumbnail,
               files
             ));

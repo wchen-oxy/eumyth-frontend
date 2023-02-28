@@ -156,6 +156,7 @@ class ProfileController extends React.Component {
     }
 
     handleCommentIDInjection(postIndex, rootCommentsArray) {
+        console.log(this.state.feedData)
         const feedData = alterRawCommentArray(
             postIndex,
             rootCommentsArray,
@@ -179,7 +180,7 @@ class ProfileController extends React.Component {
             pursuitNames: this.props.pursuitNames,
             eventData: event,
             projectPreviewMap: this.state.projectPreviewMap,
-
+            selectedIndex: this.state.selectedEventIndex //needed for adding comment Data to original post
 
         }
         const viewerFunctions = {
@@ -193,7 +194,7 @@ class ProfileController extends React.Component {
                 <ProfileModalController
                     viewerObject={viewerObject}
                     viewerFunctions={viewerFunctions}
-                    selectedIndex={this.state.selectedEventIndex}
+                    
                     authUser={this.props.authUser}
                     modalState={this.props.modalState}
                     returnModalStructure={this.props.returnModalStructure}
