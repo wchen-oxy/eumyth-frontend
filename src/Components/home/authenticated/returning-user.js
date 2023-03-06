@@ -228,6 +228,8 @@ class ReturningUserPage extends React.Component {
             closeMasterModal: this.props.closeMasterModal,
             returnModalStructure: this.props.returnModalStructure
         }
+
+        console.log(this.props.authUser);
         return (
             <div id='returninguser'>
                 <Header

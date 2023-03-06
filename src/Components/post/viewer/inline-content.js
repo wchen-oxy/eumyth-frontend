@@ -7,7 +7,6 @@ import ShortHeroText from './sub-components/short-text';
 import Thread from './sub-components/thread';
 
 const ShortPostInlineContent = (props) => {
-    console.log(props);
     if (props.hasImages) {
         return (
             <>
@@ -34,7 +33,7 @@ const ShortPostInlineContent = (props) => {
                         {...props.caption} />
 
                     {props.annotations && props.renderImageSlider(COLLAPSED)}
-                    
+
                 </div>
                 {props.renderComments(COLLAPSED)}
             </>

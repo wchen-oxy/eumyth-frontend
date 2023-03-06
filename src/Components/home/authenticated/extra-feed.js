@@ -10,6 +10,16 @@ import EventController from 'components/timeline/timeline-event-controller';
 import PostController from "components/post/index";
 import { alterRawCommentArray, updateProjectPreviewMap } from 'utils';
 import Modal from './modal';
+import UserFeedItem from './user-feed-item';
+
+const _formatPursuitsForQuery = (pursuits) => {
+    const formatted = [];
+    for (let i = 1; i < pursuits.length; i++) {
+        const pursuit = pursuits[i];
+        formatted.push({ name: pursuit.name, experience: pursuit.experience_level });
+    }
+    return formatted;
+}
 
 class ExtraFeed extends React.Component {
     _isMounted = false;
@@ -26,6 +36,7 @@ class ExtraFeed extends React.Component {
             contentList: [],
             feedData: [],
             projectPreviewMap: {},
+            formattedPursuits: _formatPursuitsForQuery(this.props.authUser.pursuits),
             dynamic: {
                 usedPeople: [this.props.authUser.userPreviewID],
                 beginner: [],
@@ -36,8 +47,8 @@ class ExtraFeed extends React.Component {
             selected: null,
             textData: null,
             selectedIndex: null,
-
         }
+
         this.debounceFetch = _.debounce(() => this.fetch(), 10);
         this.fetch = this.fetch.bind(this);
         this.getContent = this.getContent.bind(this);
@@ -50,7 +61,7 @@ class ExtraFeed extends React.Component {
         this.getDynamicFeed = this.getDynamicFeed.bind(this);
         this.getCachedFeed = this.getCachedFeed.bind(this);
         this.getSpotlight = this.getSpotlight.bind(this);
-        this.extractContentIDs = this.extractContentIDs.bind(this);
+        this.prepareRenderedFeedInput = this.prepareRenderedFeedInput.bind(this);
         this.handleEventClick = this.handleEventClick.bind(this);
         this.handleCommentIDInjection = this.handleCommentIDInjection.bind(this);
         this.saveProjectPreview = this.saveProjectPreview.bind(this);
@@ -92,14 +103,16 @@ class ExtraFeed extends React.Component {
         }
         else {
             //usual time
+            console.log(results.data);
             this.setCoordinates(results.data.coordinates);
         }
     }
 
     setCoordinates(crd) {
+        console.log(crd);
         this.setState({
-            lat: crd.latitude,
-            long: crd.longitude
+            lat: crd[1],
+            long: crd[0]
         }, this.getContent);
     }
 
@@ -137,10 +150,9 @@ class ExtraFeed extends React.Component {
             });
     }
 
-
-
-    extractContentIDs(cached, dynamic) { //cached comes with all post data
+    prepareRenderedFeedInput(cached, dynamic) { //cached comes with all post data
         const contentList = [];
+        const usedPeople = [];
         let cachedTypeIndex = 0; //max is 4
         let cachedItemIndex = 0;
         let dynamicTypeIndex = 0; //max is 4
@@ -155,8 +167,9 @@ class ExtraFeed extends React.Component {
             cached,
             dynamic,
             contentList,
+            usedPeople
         );
-        console.log(contentList);
+
         //finish cached  
         addRemainingContent(
             CACHED,
@@ -180,12 +193,15 @@ class ExtraFeed extends React.Component {
     getContent() {
         return this.getDynamicFeed()
             .then((results) => {
-                const dynamic = results.dynamic;
-                const usedPeople = results.usedPeople;
-                const contentList = this.extractContentIDs(this.props.cached, dynamic);
+                const extractedData = this.prepareRenderedFeedInput(this.props.cached, results);
+                const contentList = extractedData.dynamic;
+                const usedPeople = [
+                    ...new Set(
+                        this.state.usedPeople.concat(extractedData.usedPeople)
+                    )];
 
                 return this.setState({
-                    dynamic,
+                    dynamic: results,
                     usedPeople,
                     contentList,
                 }, this.fetch)
@@ -198,7 +214,6 @@ class ExtraFeed extends React.Component {
             this.state.nextOpenPostIndex,
             this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH
         );
-        console.log(slicedPostIDs);
         return AxiosHelper
             .returnExtraFeedContent(slicedPostIDs)
             .then((results) => {
@@ -221,19 +236,19 @@ class ExtraFeed extends React.Component {
     }
 
     getDynamicFeed() {
-        console.log("DYNAMIC");
         const distance = distanceSwitch(this.state.distance);
+
         return AxiosHelper.getSimilarPeopleAdvanced(
-            distance,
-            this.props.pursuitObjects.names,
+            10000000,
+            this.state.formattedPursuits,
             this.state.dynamic.usedPeople,
             this.state.lat,
             this.state.long)
-            .then((results) =>
-                setSimilarPeopleAdvanced(
-                    results,
-                    this.state.dynamic.usedPeople
-                )
+            .then((results) => results.data
+                // setSimilarPeopleAdvanced(
+                //     results.data,
+                //     this.state.dynamic.usedPeople
+                // )
             );
     }
 
@@ -269,7 +284,6 @@ class ExtraFeed extends React.Component {
             (item, index) => {
                 switch (item.type) {
                     case (POST):
-
                         const viewerObject = {
                             key: index,
                             largeViewMode: false,
@@ -287,60 +301,17 @@ class ExtraFeed extends React.Component {
                                     authUser={this.props.authUser}
                                     closeModal={this.closeModal}
                                 />
-                                {/* <EventController
-                            key={index}
-                            contentType={POST}
-                            eventIndex={index}
-                            eventData={post}
-                            onEventClick={this.handleEventClick}
-                        /> */}
                             </div>)
                     case (USER):
                         return (
                             <div key={index} className='returninguser-feed-object'>
-                                <p>{item.content._id}</p>
+                                <UserFeedItem {...item.content} />
                             </div>
                         )
                     default:
                         throw new Error("Malformed content type")
 
                 }
-                // if (content.type === POST) {
-                //     const viewerObject = {
-                //         key: index,
-                //         largeViewMode: true,
-                //         textData: content.text_data,
-                //         isPostOnlyView: false,
-                //         pursuitObjects: this.props.pursuitObjects,
-                //         projectPreviewMap: this.state.projectPreviewMap,
-                //         eventData: content,
-                //     }
-
-                //     return (
-                //         <div key={index}>
-                //             <PostController
-                //                 isViewer
-                //                 viewerObject={viewerObject}
-                //                 viewerFunctions={viewerFunctions}
-                //                 authUser={this.props.authUser}
-                //                 closeModal={this.closeModal}
-                //             />
-                //             {/* <EventController
-                //             key={index}
-                //             contentType={POST}
-                //             eventIndex={index}
-                //             eventData={post}
-                //             onEventClick={this.handleEventClick}
-                //         /> */}
-                //         </div>)
-                // }
-                // else if (content.type === USER) {
-
-
-                // }
-                // else{
-
-                // }
             })
     }
 

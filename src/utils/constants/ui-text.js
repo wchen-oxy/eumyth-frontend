@@ -72,5 +72,20 @@ export const returnFormattedDate = (rawDate) => {
 
 export const returnFormattedDistance = (distance) => {
     if (!distance) return null;
-    return distance < 1 ? "Less than 1 mile from you" : Math.floor(distance) + ' miles from you';
+    switch (distance) {
+        case (distance < 1):
+            return "Your Local Neighbor";
+        case (distance < 7):
+            return "Your City Neighbor";
+        case (distance < 39):
+            return "Your County Neighbor";
+        case (distance < 100):
+            return "Your Next City Over Neighbor";
+        case (distance < 500):
+            return "Your State Neighbor";
+        default:
+            return "Your Super Far Away Neighbor Who Lives " +
+                Math.floor(distance) + ' miles from you';
+    }
+    return distance < 1 ? "Your Neighbor" : Math.floor(distance) + ' miles from you';
 }

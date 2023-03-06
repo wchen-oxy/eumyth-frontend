@@ -1,27 +1,28 @@
 import { CACHED, DYNAMIC, POST, USER } from "utils/constants/flags";
 
-export const setSimilarPeopleAdvanced = (results, usedPeople) => {
-    const similar = results.data;
-    const beginner = similar.beginner;
-    const familiar = similar.familiar;
-    const experienced = similar.experienced;
-    const expert = similar.expert;
-    for (const name in similar) {
-        const IDs = similar[name].map(item => item._id);
-        usedPeople = usedPeople.concat(IDs);
-    }
-    usedPeople = [...new Set(usedPeople)];
+// export const setSimilarPeopleAdvanced = (results, usedPeople) => {
+//     console.log(results);
 
-    return {
-        usedPeople,
-        dynamic: {
-            beginner,
-            familiar,
-            experienced,
-            expert
-        }
-    }
-};
+//     const beginner = similar.beginner;
+//     const familiar = similar.familiar;
+//     const experienced = similar.experienced;
+//     const expert = similar.expert;
+//     for (const name in similar) {
+//         const IDs = similar[name].map(item => item._id);
+//         usedPeople = usedPeople.concat(IDs);
+//     }
+//     usedPeople = [...new Set(usedPeople)];
+
+//     return {
+//         usedPeople,
+//         dynamic: {
+//             beginner,
+//             familiar,
+//             experienced,
+//             expert
+//         }
+//     }
+// };
 
 export const getDynamicType = (index) => {
     switch (index) {
@@ -81,11 +82,13 @@ export const initializeContent = (
     dynamicItemIndex,
     cached,
     dynamic,
-    contentList
+    contentList,
+    usedPeople
 ) => {
     let isCachedToggled = true;
     let count = 0;
-    while (cachedTypeIndex < 3 && dynamicTypeIndex < 4 ) {
+    console.log(dynamic);
+    while (cachedTypeIndex < 3 && dynamicTypeIndex < 4) {
         if (count > 100) throw new Error();
         if (isCachedToggled) {
             const formatted =
@@ -118,7 +121,9 @@ export const initializeContent = (
                 dynamicTypeIndex++;
                 continue;
             }
-            contentList.push(formatted)
+            console.log(formatted);
+            contentList.push(formatted);
+            usedPeople.push(formatted.content._id)
             dynamicItemIndex++;
         }
     }
@@ -130,7 +135,7 @@ export const initializeContent = (
     }
 }
 
-export const renderedContent= () => {
+export const renderedContent = () => {
 
 }
 

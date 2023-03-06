@@ -1,0 +1,37 @@
+.userfeeditem-user {
+    @include flex-display-column;
+    h3 {
+        margin: 0;
+    }
+    p {
+        margin: 0;
+    }
+}
+.userfeeditem-photo {
+    @include flex-display-column;
+    width: 75%;
+    margin: auto;
+    text-align: center;
+    img {
+        width: 100%;
+    }
+}
+.userfeeditem-upper-main {
+    @include flex-display-column;
+    height: 200px;
+    .userfeeditem-upper-top {
+    }
+    .userfeeditem-upper-bottom {
+        @include flex-display-row;
+        .userfeeditem-upper-left {
+            width: 30%;
+        }
+        .userfeeditem-upper-right {
+            width: 69%;
+        }
+    }
+}
+
+.userfeeditem-lower-main {
+    width: 64.9;
+}
