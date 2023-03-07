@@ -4,9 +4,8 @@ import _ from 'lodash';
 import AxiosHelper from 'utils/axios';
 import { distanceSwitch } from 'utils/constants/states';
 import { geoLocationOptions, REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
-import { addRemainingCachedContent, addRemainingContent, addRemainingDynamicContent, convertPursuitToQueue, extractContentFromRaw, getCachedType, getDynamicType, initializeContent, setSimilarPeopleAdvanced } from 'store/services/extra-feed';
-import { CACHED, DYNAMIC, EXTRAS_STATE, POST, POST_VIEWER_MODAL_STATE, USER } from 'utils/constants/flags';
-import EventController from 'components/timeline/timeline-event-controller';
+import { addRemainingCachedContent, addRemainingDynamicContent, convertPursuitToQueue, extractContentFromRaw } from 'store/services/extra-feed';
+import { EXTRAS_STATE, POST, POST_VIEWER_MODAL_STATE, USER } from 'utils/constants/flags';
 import PostController from "components/post/index";
 import { alterRawCommentArray, updateProjectPreviewMap } from 'utils';
 import Modal from './modal';
@@ -265,6 +264,7 @@ class ExtraFeed extends React.Component {
             this.state.long)
             .then((results) => {
                 const data = results.data;
+                console.log(data);
                 return data.map(convertPursuitToQueue);
             }
             );
@@ -325,6 +325,8 @@ class ExtraFeed extends React.Component {
                         return (
                             <div key={index} className='returninguser-feed-object'>
                                 <UserFeedItem
+                                    lat={this.state.lat}
+                                    long={this.state.long}
                                     {...item.content}
                                     data={item.data}
                                 />

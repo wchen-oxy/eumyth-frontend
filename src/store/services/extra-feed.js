@@ -52,7 +52,12 @@ export const getCachedType = (index) => {
     }
 }
 
-export const _formatContent = (feed, meta, isCached) => {
+const _grabQueuePost = (content, index) => {
+    const posts = content.pursuits[index].posts;
+
+}
+
+const _formatContent = (feed, meta, isCached) => {
     if (isCached) {
         const type = getCachedType(meta.cachedTypeIndex);
         const content = feed[type][meta.cachedItemIndex];
@@ -69,11 +74,12 @@ export const _formatContent = (feed, meta, isCached) => {
         const posts = content.pursuits[index].posts;
         const post = posts.length > 0 ? posts[0] : null;
 
+
         return {
             type: USER,
             content: content,
             data: null,
-            post,
+            post: _grabQueuePost(content, content.matched_pursuit_index),
         }
     }
 }
@@ -127,7 +133,7 @@ export const initializeContent = (
             cachedItemIndex++;
         }
         else {
-            if (dynamic[pursuitIndex].length === 0) {
+            if (dynamic[pursuitIndex].queue.length === 0) {
                 pursuitIndex++;
                 continue;
             }
@@ -158,6 +164,7 @@ export const extractContentFromRaw = (
     const numOfPursuits = dynamic.length;
 
     while (cachedTypeIndex < 3 && pursuitIndex < numOfPursuits) {
+        //add catches for null items
         if (count > 100) throw new Error();
         if (isCachedToggled) {
             const formatted =
@@ -170,7 +177,7 @@ export const extractContentFromRaw = (
                     isCachedToggled
                 );
             isCachedToggled = !isCachedToggled;
-            if (formatted.content === undefined) {
+            if (formatted.post === undefined) {
                 cachedItemIndex = 0;
                 cachedTypeIndex++;
                 continue;
@@ -179,6 +186,10 @@ export const extractContentFromRaw = (
             cachedItemIndex++;
         }
         else {
+             if (dynamic[pursuitIndex].queue.length === 0) {
+                pursuitIndex++;
+                continue;
+            }
             const formatted =
                 //get item from queue and put into formatter
                 _formatContent(
@@ -190,9 +201,6 @@ export const extractContentFromRaw = (
                     isCachedToggled
                 );
             isCachedToggled = !isCachedToggled;
-            if (dynamic[pursuitIndex].queue.length === 0) {
-                pursuitIndex++;
-            }
             contentList.push(formatted);
             usedPeople.push(formatted.content._id)
         }

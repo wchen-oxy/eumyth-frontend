@@ -1,5 +1,6 @@
 import ShortHeroText from 'components/post/viewer/sub-components/short-text';
 import React from 'react';
+import { getDistance } from 'utils';
 import { returnFormattedDistance } from 'utils/constants/ui-text';
 import { returnUserImageURL } from 'utils/url';
 
@@ -7,6 +8,12 @@ class UserFeedItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            distance: getDistance(
+                this.props.long,
+                this.props.location.coordinates[0],
+                this.props.lat,
+                this.props.location.coordinates[1],
+            )
 
         }
     }
@@ -19,7 +26,7 @@ class UserFeedItem extends React.Component {
             <div className='userfeeditem-user'>
                 <div className='userfeeditem-upper-main'>
                     <div className='userfeeditem-upper-top'>
-                        <h3>{returnFormattedDistance(this.props.distance)}</h3>
+                        <h3>{returnFormattedDistance(this.state.distance)}</h3>
                     </div>
                     <div className='userfeeditem-upper-bottom'>
 
