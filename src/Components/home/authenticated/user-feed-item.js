@@ -12,6 +12,9 @@ class UserFeedItem extends React.Component {
     }
 
     render() {
+        const pursuits = this.props.pursuits
+            .slice(1, this.props.pursuits.length)
+            .map(item => item.name);
         return (
             <div className='userfeeditem-user'>
                 <div className='userfeeditem-upper-main'>
@@ -34,7 +37,7 @@ class UserFeedItem extends React.Component {
                         </div>
                         <div className='userfeeditem-upper-right'>
                             <h3>Pursues</h3>
-                            {this.props.other_pursuits.map(pursuit => <p>{pursuit.name}</p>)}
+                            {pursuits.map((pursuit, index) => <p key={pursuit + index}>{pursuit}</p>)}
                         </div>
                     </div>
 

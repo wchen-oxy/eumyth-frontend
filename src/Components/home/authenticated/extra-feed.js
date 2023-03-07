@@ -4,7 +4,7 @@ import _ from 'lodash';
 import AxiosHelper from 'utils/axios';
 import { distanceSwitch } from 'utils/constants/states';
 import { geoLocationOptions, REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
-import { addRemainingContent, getCachedType, getDynamicType, initializeContent, setSimilarPeopleAdvanced } from 'store/services/extra-feed';
+import { addRemainingCachedContent, addRemainingContent, addRemainingDynamicContent, convertPursuitToQueue, extractContentFromRaw, getCachedType, getDynamicType, initializeContent, setSimilarPeopleAdvanced } from 'store/services/extra-feed';
 import { CACHED, DYNAMIC, EXTRAS_STATE, POST, POST_VIEWER_MODAL_STATE, USER } from 'utils/constants/flags';
 import EventController from 'components/timeline/timeline-event-controller';
 import PostController from "components/post/index";
@@ -30,7 +30,7 @@ class ExtraFeed extends React.Component {
             hasMore: true,
             nextOpenPostIndex: 0,
             numOfContent: 0,
-            distance: 50,
+            distance: 10000000,
             lat: null,
             long: null,
             contentList: [],
@@ -61,10 +61,12 @@ class ExtraFeed extends React.Component {
         this.getDynamicFeed = this.getDynamicFeed.bind(this);
         this.getCachedFeed = this.getCachedFeed.bind(this);
         this.getSpotlight = this.getSpotlight.bind(this);
+        this.mergeData = this.mergeData.bind(this);
         this.prepareRenderedFeedInput = this.prepareRenderedFeedInput.bind(this);
         this.handleEventClick = this.handleEventClick.bind(this);
         this.handleCommentIDInjection = this.handleCommentIDInjection.bind(this);
         this.saveProjectPreview = this.saveProjectPreview.bind(this);
+        this.setFeedState = this.setFeedState.bind(this);
         this.setModal = this.setModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
 
@@ -153,17 +155,9 @@ class ExtraFeed extends React.Component {
     prepareRenderedFeedInput(cached, dynamic) { //cached comes with all post data
         const contentList = [];
         const usedPeople = [];
-        let cachedTypeIndex = 0; //max is 4
-        let cachedItemIndex = 0;
-        let dynamicTypeIndex = 0; //max is 4
-        let dynamicItemIndex = 0;
 
         //return a generated feed 
-        const newIndices = initializeContent(
-            cachedTypeIndex,
-            cachedItemIndex,
-            dynamicTypeIndex,
-            dynamicItemIndex,
+        const newIndices = extractContentFromRaw(
             cached,
             dynamic,
             contentList,
@@ -171,33 +165,34 @@ class ExtraFeed extends React.Component {
         );
 
         //finish cached  
-        addRemainingContent(
-            CACHED,
+        addRemainingCachedContent(
             newIndices.cachedTypeIndex,
             newIndices.cachedItemIndex,
             cached,
-            contentList
+            contentList,
         );
 
-        addRemainingContent(
-            DYNAMIC,
-            newIndices.dynamicTypeIndex,
-            newIndices.dynamicItemIndex,
+        addRemainingDynamicContent(
+            {
+                pursuitIndex: newIndices.pursuitIndex,
+                max: dynamic.length
+            },
             dynamic,
-            contentList
+            contentList,
+            usedPeople
         );
 
-        return contentList;
+        return { contentList, usedPeople };
     }
 
     getContent() {
         return this.getDynamicFeed()
             .then((results) => {
                 const extractedData = this.prepareRenderedFeedInput(this.props.cached, results);
-                const contentList = extractedData.dynamic;
+                const contentList = extractedData.contentList;
                 const usedPeople = [
                     ...new Set(
-                        this.state.usedPeople.concat(extractedData.usedPeople)
+                        this.state.dynamic.usedPeople.concat(extractedData.usedPeople)
                     )];
 
                 return this.setState({
@@ -208,26 +203,50 @@ class ExtraFeed extends React.Component {
             })
     }
 
+    setFeedState(content, hasMore, nextOpenPostIndex, numOfContent) {
+        this.setState({
+            feedData: content,
+            hasMore: hasMore,
+            nextOpenPostIndex,
+            numOfContent,
+            loading: false,
+        })
+    }
+
+    mergeData(old, data) {
+        const dictionary = {};
+        data.forEach(item => { dictionary[item._id] = item });
+        return old.map(item => item.data = dictionary[item.post]);
+    }
+
     fetch() { //fetch for the timeline
         this.debounceFetch.cancel();
         const slicedPostIDs = this.state.contentList.slice(
             this.state.nextOpenPostIndex,
             this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH
         );
-        return AxiosHelper
-            .returnExtraFeedContent(slicedPostIDs)
-            .then((results) => {
-                console.log(results);
-                const content = results.data.contentList;
-                this.setState({
-                    feedData: content,
-                    hasMore: REGULAR_CONTENT_REQUEST_LENGTH === content.length,
-                    loading: false,
-                    nextOpenPostIndex: this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH,
-                    numOfContent: this.numOfContent + content
+        const formatted = slicedPostIDs.filter(object => !!object.post);
+        if (formatted.length > 0)
+            return AxiosHelper
+                .returnMultiplePosts(formatted)
+                .then((results) => {
+                    console.log(results.data.contentList);
+                    const merged = this.mergeData(slicedPostIDs, results.data.contentList);
+                    const content = this.state.feedData.concat(merged);
+                    const hasMore = REGULAR_CONTENT_REQUEST_LENGTH === content.length;
+                    const nextOpenPostIndex = this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH;
+                    const numOfContent = this.state.numOfContent + content.length;
+                    this.setFeedState(content, hasMore, nextOpenPostIndex, numOfContent);
                 })
-            })
-            .catch(err => console.log(err))
+                .catch(err => console.log(err))
+        else {
+            const curLength = this.state.feedData.length + slicedPostIDs.length;
+            const content = this.state.feedData.concat(slicedPostIDs);
+            const hasMore = curLength < this.state.contentList.length;
+            const nextOpenPostIndex = this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH;
+            const numOfContent = this.state.numOfContent + slicedPostIDs.length;
+            this.setFeedState(content, hasMore, nextOpenPostIndex, numOfContent);
+        }
     }
 
     getCachedFeed() { //initial
@@ -239,16 +258,15 @@ class ExtraFeed extends React.Component {
         const distance = distanceSwitch(this.state.distance);
 
         return AxiosHelper.getSimilarPeopleAdvanced(
-            10000000,
+            distance,
             this.state.formattedPursuits,
             this.state.dynamic.usedPeople,
             this.state.lat,
             this.state.long)
-            .then((results) => results.data
-                // setSimilarPeopleAdvanced(
-                //     results.data,
-                //     this.state.dynamic.usedPeople
-                // )
+            .then((results) => {
+                const data = results.data;
+                return data.map(convertPursuitToQueue);
+            }
             );
     }
 
@@ -282,6 +300,7 @@ class ExtraFeed extends React.Component {
         }
         return this.state.feedData.map(
             (item, index) => {
+                console.log(item);
                 switch (item.type) {
                     case (POST):
                         const viewerObject = {
@@ -305,7 +324,10 @@ class ExtraFeed extends React.Component {
                     case (USER):
                         return (
                             <div key={index} className='returninguser-feed-object'>
-                                <UserFeedItem {...item.content} />
+                                <UserFeedItem
+                                    {...item.content}
+                                    data={item.data}
+                                />
                             </div>
                         )
                     default:
