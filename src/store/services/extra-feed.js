@@ -1,28 +1,5 @@
 import { CACHED, DYNAMIC, POST, USER } from "utils/constants/flags";
 
-// export const setSimilarPeopleAdvanced = (results, usedPeople) => {
-//     console.log(results);
-
-//     const beginner = similar.beginner;
-//     const familiar = similar.familiar;
-//     const experienced = similar.experienced;
-//     const expert = similar.expert;
-//     for (const name in similar) {
-//         const IDs = similar[name].map(item => item._id);
-//         usedPeople = usedPeople.concat(IDs);
-//     }
-//     usedPeople = [...new Set(usedPeople)];
-
-//     return {
-//         usedPeople,
-//         dynamic: {
-//             beginner,
-//             familiar,
-//             experienced,
-//             expert
-//         }
-//     }
-// };
 
 export const getDynamicType = (index) => {
     switch (index) {
@@ -52,11 +29,6 @@ export const getCachedType = (index) => {
     }
 }
 
-const _grabQueuePost = (content, index) => {
-    const posts = content.pursuits[index].posts;
-
-}
-
 const _formatContent = (feed, meta, isCached) => {
     if (isCached) {
         const type = getCachedType(meta.cachedTypeIndex);
@@ -79,7 +51,7 @@ const _formatContent = (feed, meta, isCached) => {
             type: USER,
             content: content,
             data: null,
-            post: _grabQueuePost(content, content.matched_pursuit_index),
+            post: post,
         }
     }
 }
@@ -91,70 +63,27 @@ export const convertPursuitToQueue = (pursuit) => {
     while (pursuit.exact[i] && pursuit.different[i]) {
         queue.push(pursuit.exact[i]);
         queue.push(pursuit.different[i]);
+        i++;
     }
-    if (i < pursuit.exact.length) {
-        queue = queue.concat(pursuit.exact.slice(i, pursuit.exact.length));
+    let k = i;
+    let j = i;
+
+    while (j < pursuit.exact.length) {
+        queue.push(pursuit.exact[j++]);
     }
-    if (i < pursuit.different.length) {
-        queue = queue.concat(pursuit.different.slice(i, pursuit.different.length));
+
+    while (k < pursuit.different.length) {
+        queue.push(pursuit.exact[k++]);
     }
-    return { type: pursuit.type, queue };
+    return { type: pursuit.type, queue: queue };
 }
-
-export const initializeContent = (
-    cachedTypeIndex,
-    cachedItemIndex,
-    numOfPursuits,
-    cached,
-    dynamic,
-    contentList,
-    usedPeople
-) => {
-    let isCachedToggled = true;
-    let pursuitIndex = 0;
-    let count = 0;
-    // add a queue
-    while (cachedTypeIndex < 3 && pursuitIndex < numOfPursuits) {
-        if (count > 100) throw new Error();
-        if (isCachedToggled) {
-            const type = getCachedType(cachedTypeIndex);
-            const content = cached[type][cachedItemIndex];
-            const formatted = {
-                type: POST,
-                content: content
-            }
-            isCachedToggled = !isCachedToggled;
-            if (formatted.content === undefined) {
-                cachedItemIndex = 0;
-                cachedTypeIndex++;
-                continue;
-            }
-            contentList.push(formatted);
-            cachedItemIndex++;
-        }
-        else {
-            if (dynamic[pursuitIndex].queue.length === 0) {
-                pursuitIndex++;
-                continue;
-            }
-            const user = dynamic[pursuitIndex].shift();
-            contentList.push({ type: USER, content: user });
-            usedPeople.push(user._id)
-
-        }
-    }
-    return {
-        cachedItemIndex,
-        cachedTypeIndex
-    }
-}
-
 
 export const extractContentFromRaw = (
     cached,
     dynamic,
     contentList,
-    usedPeople
+    usedPeople,
+    dictionary
 ) => {
     let cachedTypeIndex = 0; //max is 4
     let cachedItemIndex = 0;
@@ -166,6 +95,7 @@ export const extractContentFromRaw = (
     while (cachedTypeIndex < 3 && pursuitIndex < numOfPursuits) {
         //add catches for null items
         if (count > 100) throw new Error();
+        count++;
         if (isCachedToggled) {
             const formatted =
                 _formatContent(
@@ -186,7 +116,7 @@ export const extractContentFromRaw = (
             cachedItemIndex++;
         }
         else {
-             if (dynamic[pursuitIndex].queue.length === 0) {
+            if (dynamic[pursuitIndex].queue.length === 0) {
                 pursuitIndex++;
                 continue;
             }
@@ -234,16 +164,21 @@ export const addRemainingCachedContent = (
 
 export const addRemainingDynamicContent = (meta, feed, contentList, usedPeople) => {
     while (meta.pursuitIndex < meta.numOfPursuits) {
-        const type = feed[meta.pursuitIndex].type;
-        const content = feed[meta.pursuitIndex].queue.shift();
-        const index = content.matched_pursuit_index =
-            content.pursuits.findIndex((item) => item.name === type);
-        const formatted = {
-            type: USER,
-            content: content,
-            post: content.pursuits[index].posts[0]
-        };
+        if (feed[meta.pursuitIndex].queue.length === 0) {
+            meta.pursuitIndex++;
+            continue;
+        }
+        const formatted =
+            //get item from queue and put into formatter
+            _formatContent(
+                feed,
+                {
+                    pursuitIndex: meta.pursuitIndex,
+                    numOfPursuits: meta.numOfPursuits
+                },
+                false
+            );
         contentList.push(formatted);
-        usedPeople.push(formatted.content._id);
+        usedPeople.push(formatted.content._id)
     }
 }

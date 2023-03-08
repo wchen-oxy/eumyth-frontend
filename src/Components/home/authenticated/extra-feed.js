@@ -29,7 +29,7 @@ class ExtraFeed extends React.Component {
             hasMore: true,
             nextOpenPostIndex: 0,
             numOfContent: 0,
-            distance: 10000000,
+            distance: 1000000000000000,
             lat: null,
             long: null,
             contentList: [],
@@ -104,13 +104,11 @@ class ExtraFeed extends React.Component {
         }
         else {
             //usual time
-            console.log(results.data);
             this.setCoordinates(results.data.coordinates);
         }
     }
 
     setCoordinates(crd) {
-        console.log(crd);
         this.setState({
             lat: crd[1],
             long: crd[0]
@@ -154,15 +152,15 @@ class ExtraFeed extends React.Component {
     prepareRenderedFeedInput(cached, dynamic) { //cached comes with all post data
         const contentList = [];
         const usedPeople = [];
-
+        const dictionary = {};
         //return a generated feed 
         const newIndices = extractContentFromRaw(
             cached,
             dynamic,
             contentList,
-            usedPeople
+            usedPeople,
+            dictionary
         );
-
         //finish cached  
         addRemainingCachedContent(
             newIndices.cachedTypeIndex,
@@ -174,14 +172,33 @@ class ExtraFeed extends React.Component {
         addRemainingDynamicContent(
             {
                 pursuitIndex: newIndices.pursuitIndex,
-                max: dynamic.length
+                numOfPursuits: dynamic.length
             },
             dynamic,
             contentList,
             usedPeople
         );
-
         return { contentList, usedPeople };
+    }
+
+    getCachedFeed() { //initial
+        return AxiosHelper
+            .getCachedFeed(this.props.authUser.cached_feed_id)
+    }
+
+    getDynamicFeed() {
+        const distance = this.state.distance;
+        return AxiosHelper.getSimilarPeopleAdvanced(
+            distance,
+            this.state.formattedPursuits,
+            this.state.dynamic.usedPeople,
+            this.state.lat,
+            this.state.long)
+            .then((results) => {
+                const data = results.data;
+                return data.map(convertPursuitToQueue);
+            }
+            );
     }
 
     getContent() {
@@ -229,7 +246,6 @@ class ExtraFeed extends React.Component {
             return AxiosHelper
                 .returnMultiplePosts(formatted)
                 .then((results) => {
-                    console.log(results.data.contentList);
                     const merged = this.mergeData(slicedPostIDs, results.data.contentList);
                     const content = this.state.feedData.concat(merged);
                     const hasMore = REGULAR_CONTENT_REQUEST_LENGTH === content.length;
@@ -248,34 +264,6 @@ class ExtraFeed extends React.Component {
         }
     }
 
-    getCachedFeed() { //initial
-        return AxiosHelper
-            .getCachedFeed(this.props.authUser.cached_feed_id)
-    }
-
-    getDynamicFeed() {
-        const distance = distanceSwitch(this.state.distance);
-
-        return AxiosHelper.getSimilarPeopleAdvanced(
-            distance,
-            this.state.formattedPursuits,
-            this.state.dynamic.usedPeople,
-            this.state.lat,
-            this.state.long)
-            .then((results) => {
-                const data = results.data;
-                console.log(data);
-                return data.map(convertPursuitToQueue);
-            }
-            );
-    }
-
-    handlePulledFeedData(pursuits) {
-        // this.setState((state) => ({
-        //     usedPeople: state.usedPeople.concat(pursuits),
-        //     loading: false,
-        // }))
-    }
 
     saveProjectPreview(projectPreview) {
         if (!this.state.projectPreviewMap[projectPreview._id]) {
@@ -300,7 +288,6 @@ class ExtraFeed extends React.Component {
         }
         return this.state.feedData.map(
             (item, index) => {
-                console.log(item);
                 switch (item.type) {
                     case (POST):
                         const viewerObject = {
@@ -341,7 +328,6 @@ class ExtraFeed extends React.Component {
 
 
     setModal(data, text, index) {
-        console.log(data);
         this.setState({
             selected: data,
             textData: text,
