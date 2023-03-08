@@ -36,8 +36,8 @@ class ExtraFeed extends React.Component {
             feedData: [],
             projectPreviewMap: {},
             formattedPursuits: _formatPursuitsForQuery(this.props.authUser.pursuits),
+            usedPeople: [this.props.authUser.userPreviewID],
             dynamic: {
-                usedPeople: [this.props.authUser.userPreviewID],
                 beginner: [],
                 familiar: [],
                 experienced: [],
@@ -151,15 +151,14 @@ class ExtraFeed extends React.Component {
 
     prepareRenderedFeedInput(cached, dynamic) { //cached comes with all post data
         const contentList = [];
-        const usedPeople = [];
-        const dictionary = {};
+        const usedPeople = {};
+
         //return a generated feed 
         const newIndices = extractContentFromRaw(
             cached,
             dynamic,
             contentList,
             usedPeople,
-            dictionary
         );
         //finish cached  
         addRemainingCachedContent(
@@ -178,7 +177,13 @@ class ExtraFeed extends React.Component {
             contentList,
             usedPeople
         );
-        return { contentList, usedPeople };
+
+        const keys = [];
+        for (const key in usedPeople) {
+            keys.push(key)
+        }
+        console.log(keys)
+        return { contentList, keys };
     }
 
     getCachedFeed() { //initial
@@ -191,7 +196,7 @@ class ExtraFeed extends React.Component {
         return AxiosHelper.getSimilarPeopleAdvanced(
             distance,
             this.state.formattedPursuits,
-            this.state.dynamic.usedPeople,
+            this.state.usedPeople,
             this.state.lat,
             this.state.long)
             .then((results) => {
@@ -208,7 +213,7 @@ class ExtraFeed extends React.Component {
                 const contentList = extractedData.contentList;
                 const usedPeople = [
                     ...new Set(
-                        this.state.dynamic.usedPeople.concat(extractedData.usedPeople)
+                        this.state.usedPeople.concat(extractedData.usedPeople)
                     )];
 
                 return this.setState({

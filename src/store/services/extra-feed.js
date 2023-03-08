@@ -41,8 +41,8 @@ const _formatContent = (feed, meta, isCached) => {
     else {
         const pursuit = feed[meta.pursuitIndex].type;
         let content = feed[meta.pursuitIndex].queue.shift();
-        const index = content.matched_pursuit_index =
-            content.pursuits.findIndex((item) => item.name === pursuit);
+        const index = content.matched_pursuit_index
+            = [content.pursuits.findIndex((item) => item.name === pursuit)];
         const posts = content.pursuits[index].posts;
         const post = posts.length > 0 ? posts[0] : null;
 
@@ -73,9 +73,21 @@ export const convertPursuitToQueue = (pursuit) => {
     }
 
     while (k < pursuit.different.length) {
-        queue.push(pursuit.exact[k++]);
+        queue.push(pursuit.different[k++]);
     }
     return { type: pursuit.type, queue: queue };
+}
+
+const _addUsersToContentList = (contentList, usedPeople, formatted) => {
+    if (usedPeople[formatted.content._id] === undefined) {
+        contentList.push(formatted);
+        usedPeople[formatted.content._id] = contentList.length - 1;
+    }
+    else {
+        console.log("skipped", usedPeople[formatted.content._id]);
+        const index = usedPeople[formatted.content._id];
+        contentList[index].content.matched_pursuit_index.push(formatted.content.matched_pursuit_index[0]);
+    }
 }
 
 export const extractContentFromRaw = (
@@ -83,7 +95,6 @@ export const extractContentFromRaw = (
     dynamic,
     contentList,
     usedPeople,
-    dictionary
 ) => {
     let cachedTypeIndex = 0; //max is 4
     let cachedItemIndex = 0;
@@ -131,8 +142,7 @@ export const extractContentFromRaw = (
                     isCachedToggled
                 );
             isCachedToggled = !isCachedToggled;
-            contentList.push(formatted);
-            usedPeople.push(formatted.content._id)
+            _addUsersToContentList(contentList, usedPeople, formatted);
         }
     }
     return {
@@ -141,7 +151,6 @@ export const extractContentFromRaw = (
         pursuitIndex
     }
 }
-
 
 export const addRemainingCachedContent = (
     feedCategoryIndex,
@@ -162,6 +171,8 @@ export const addRemainingCachedContent = (
     }
 }
 
+
+
 export const addRemainingDynamicContent = (meta, feed, contentList, usedPeople) => {
     while (meta.pursuitIndex < meta.numOfPursuits) {
         if (feed[meta.pursuitIndex].queue.length === 0) {
@@ -178,7 +189,6 @@ export const addRemainingDynamicContent = (meta, feed, contentList, usedPeople) 
                 },
                 false
             );
-        contentList.push(formatted);
-        usedPeople.push(formatted.content._id)
+        _addUsersToContentList(contentList, usedPeople, formatted);
     }
 }
