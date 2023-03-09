@@ -4,6 +4,16 @@ import { getDistance } from 'utils';
 import { returnFormattedDistance } from 'utils/constants/ui-text';
 import { returnUserImageURL } from 'utils/url';
 
+const _reorder = (unordered, matched) => {
+    let ordered = [];
+    for (const index of matched) {
+        const item = unordered.splice(index, 1, null)[0];
+        ordered.unshift(item);
+    }
+    ordered = ordered.concat(unordered.filter(item => item !== null));
+    return ordered;
+}
+
 class UserFeedItem extends React.Component {
     constructor(props) {
         super(props);
@@ -20,8 +30,11 @@ class UserFeedItem extends React.Component {
 
     render() {
         const pursuits = this.props.pursuits
-            .slice(1, this.props.pursuits.length)
             .map(item => item.name);
+        pursuits[0] = null;
+
+        const orderedPursuits = _reorder(pursuits, this.props.matched_pursuit_index);
+
         return (
             <div className='userfeeditem-user'>
                 <div className='userfeeditem-upper-main'>
@@ -44,7 +57,7 @@ class UserFeedItem extends React.Component {
                         </div>
                         <div className='userfeeditem-upper-right'>
                             <h3>Pursues</h3>
-                            {pursuits.map((pursuit, index) => <p key={pursuit + index}>{pursuit}</p>)}
+                            {orderedPursuits.map((pursuit, index) => <p key={pursuit + index}>{pursuit}</p>)}
                         </div>
                     </div>
 

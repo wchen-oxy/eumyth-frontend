@@ -182,7 +182,6 @@ class ExtraFeed extends React.Component {
         for (const key in usedPeople) {
             keys.push(key)
         }
-        console.log(keys)
         return { contentList, keys };
     }
 

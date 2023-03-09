@@ -84,7 +84,6 @@ const _addUsersToContentList = (contentList, usedPeople, formatted) => {
         usedPeople[formatted.content._id] = contentList.length - 1;
     }
     else {
-        console.log("skipped", usedPeople[formatted.content._id]);
         const index = usedPeople[formatted.content._id];
         contentList[index].content.matched_pursuit_index.push(formatted.content.matched_pursuit_index[0]);
     }
