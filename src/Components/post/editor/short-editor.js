@@ -131,7 +131,7 @@ class ShortEditor extends React.Component {
     }
 
     updateDisabilityState = (invalidFound) => {
-        invalidFound && this.props.text.length === 0 ?
+        invalidFound && this.props.tempText.length === 0 ?
             (this.props.onDisablePost(true))
             :
             (this.props.onDisablePost(false));

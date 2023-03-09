@@ -50,9 +50,9 @@ class ShortPost extends React.Component {
 
   transformImageProp(validFiles) {
     let imageArray = validFiles;
+
     Promise
-      .all(
-        imageArray.map((file) => this.loadImage(file))
+      .all(imageArray.map((file) => this.loadImage(file))
       )
       .then(
         result => {
@@ -62,7 +62,11 @@ class ShortPost extends React.Component {
             validFiles: validFiles,
             isCompressing: true
           },
-            this.createTinyFiles(validFiles)
+            () => {
+              if (validFiles.length > 0) {
+                this.createTinyFiles(validFiles)
+              }
+            }
           )
         });
   }
