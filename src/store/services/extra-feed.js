@@ -1,3 +1,4 @@
+import { getDistance } from "utils";
 import { CACHED, DYNAMIC, POST, USER } from "utils/constants/flags";
 
 
@@ -43,8 +44,15 @@ const _formatContent = (feed, meta, isCached) => {
         let content = feed[meta.pursuitIndex].queue.shift();
         const index = content.matched_pursuit_index
             = [content.pursuits.findIndex((item) => item.name === pursuit)];
+        content.distance = getDistance(
+            content.location.coordinates[0],
+            meta.coordinates.long,
+            content.location.coordinates[1],
+            meta.coordinates.lat
+        )
         const posts = content.pursuits[index].posts;
         const post = posts.length > 0 ? posts[0] : null;
+
 
 
         return {
@@ -94,6 +102,7 @@ export const extractContentFromRaw = (
     dynamic,
     contentList,
     usedPeople,
+    coordinates
 ) => {
     let cachedTypeIndex = 0; //max is 4
     let cachedItemIndex = 0;
@@ -136,7 +145,8 @@ export const extractContentFromRaw = (
                     dynamic,
                     {
                         pursuitIndex,
-                        numOfPursuits
+                        numOfPursuits,
+                        coordinates
                     },
                     isCachedToggled
                 );
@@ -172,7 +182,7 @@ export const addRemainingCachedContent = (
 
 
 
-export const addRemainingDynamicContent = (meta, feed, contentList, usedPeople) => {
+export const addRemainingDynamicContent = (meta, feed, contentList, usedPeople, coordinates) => {
     while (meta.pursuitIndex < meta.numOfPursuits) {
         if (feed[meta.pursuitIndex].queue.length === 0) {
             meta.pursuitIndex++;
@@ -184,7 +194,8 @@ export const addRemainingDynamicContent = (meta, feed, contentList, usedPeople) 
                 feed,
                 {
                     pursuitIndex: meta.pursuitIndex,
-                    numOfPursuits: meta.numOfPursuits
+                    numOfPursuits: meta.numOfPursuits,
+                    coordinates
                 },
                 false
             );

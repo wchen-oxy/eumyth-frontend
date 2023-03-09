@@ -17,29 +17,19 @@ const _reorder = (unordered, matched) => {
 class UserFeedItem extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            distance: getDistance(
-                this.props.long,
-                this.props.location.coordinates[0],
-                this.props.lat,
-                this.props.location.coordinates[1],
-            )
-
-        }
     }
 
     render() {
         const pursuits = this.props.pursuits
             .map(item => item.name);
         pursuits[0] = null;
-
         const orderedPursuits = _reorder(pursuits, this.props.matched_pursuit_index);
 
         return (
             <div className='userfeeditem-user'>
                 <div className='userfeeditem-upper-main'>
                     <div className='userfeeditem-upper-top'>
-                        <h3>{returnFormattedDistance(this.state.distance)}</h3>
+                        <h3>{returnFormattedDistance(this.props.distance)}</h3>
                     </div>
                     <div className='userfeeditem-upper-bottom'>
 

@@ -152,6 +152,7 @@ class ExtraFeed extends React.Component {
     prepareRenderedFeedInput(cached, dynamic) { //cached comes with all post data
         const contentList = [];
         const usedPeople = {};
+        const coordinates = { long: this.state.long, lat: this.state.lat }
 
         //return a generated feed 
         const newIndices = extractContentFromRaw(
@@ -159,6 +160,7 @@ class ExtraFeed extends React.Component {
             dynamic,
             contentList,
             usedPeople,
+            coordinates,
         );
         //finish cached  
         addRemainingCachedContent(
@@ -175,8 +177,13 @@ class ExtraFeed extends React.Component {
             },
             dynamic,
             contentList,
-            usedPeople
+            usedPeople,
+            coordinates,
+
         );
+
+        contentList.sort((a, b) => a.content.distance - b.content.distance)
+
 
         const keys = [];
         for (const key in usedPeople) {
