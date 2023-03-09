@@ -380,7 +380,9 @@ class PostController extends React.Component {
       imageIndex: this.state.imageIndex,
       isPaginated: this.state.isPaginated,
       tempText: this.state.tempText,
+      modalState: this.props.modalState,
 
+      closeModal: this.props.closeModal,
       setDraft: this.setDraft,
       setPostStage: this.setPostStage,
       setIsPaginated: this.setIsPaginated,
@@ -445,7 +447,7 @@ class PostController extends React.Component {
       handleSubmit: this.handleSubmit,
       setThreadToggleState: this.setThreadToggleState,
     }
-
+    console.log(this.props.closeModal);
     if (this.props.isViewer) {
       return (
         <ShortPostViewer
@@ -475,6 +477,7 @@ class PostController extends React.Component {
           threadObject={threadObject}
           threadFunction={threadFunction}
           setPhotoData={this.setPhotoData}
+          
         />
       );
   }

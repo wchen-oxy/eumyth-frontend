@@ -16,7 +16,7 @@ const ModalController = (props) => {
             return (
                 <RelationModal
                     username={props.authUser.username}
-                    closeModal={props.clearModal} />);
+                    closeModal={props.closeModal} />);
         case (POST_VIEWER_MODAL_STATE):
             return (null);
 
