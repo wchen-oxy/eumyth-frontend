@@ -243,7 +243,14 @@ class ExtraFeed extends React.Component {
     mergeData(old, data) {
         const dictionary = {};
         data.forEach(item => { dictionary[item._id] = item });
-        return old.map(item => item.data = dictionary[item.post]);
+        return old.map(item => {
+            const postID = item.post ? item.post : undefined;
+            if (postID) {
+                item.data = dictionary[item.post];
+            }
+            return item;
+        });
+
     }
 
     fetch() { //fetch for the timeline
@@ -252,12 +259,14 @@ class ExtraFeed extends React.Component {
             this.state.nextOpenPostIndex,
             this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH
         );
-        const formatted = slicedPostIDs.filter(object => !!object.post);
+        const formatted = slicedPostIDs
+            .filter(object => !!object.post)
+            .map(item => item.post);
         if (formatted.length > 0)
             return AxiosHelper
-                .returnMultiplePosts(formatted)
+                .returnMultiplePosts(formatted, true)
                 .then((results) => {
-                    const merged = this.mergeData(slicedPostIDs, results.data.contentList);
+                    const merged = this.mergeData(slicedPostIDs, results.data.posts);
                     const content = this.state.feedData.concat(merged);
                     const hasMore = REGULAR_CONTENT_REQUEST_LENGTH === content.length;
                     const nextOpenPostIndex = this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH;
@@ -299,16 +308,15 @@ class ExtraFeed extends React.Component {
         }
         return this.state.feedData.map(
             (item, index) => {
+                const viewerObject = {
+                    key: index,
+                    largeViewMode: false,
+                    textData: item.data?.text_data ?? null, //catch
+                    eventData: item.data,
+                    ...viewerObjects
+                }
                 switch (item.type) {
                     case (POST):
-                        const viewerObject = {
-                            key: index,
-                            largeViewMode: false,
-                            textData: item.data.text_data,
-                            eventData: item.data,
-                            ...viewerObjects
-                        }
-
                         return (
                             <div key={index} className='returninguser-feed-object'>
                                 <PostController
@@ -316,17 +324,19 @@ class ExtraFeed extends React.Component {
                                     viewerObject={viewerObject}
                                     viewerFunctions={viewerFunctions}
                                     authUser={this.props.authUser}
-                                    closeModal={this.closeModal}
                                 />
                             </div>)
                     case (USER):
                         return (
                             <div key={index} className='returninguser-feed-object'>
                                 <UserFeedItem
+                                    {...item.content}
                                     lat={this.state.lat}
                                     long={this.state.long}
-                                    {...item.content}
-                                    data={item.data}
+                                    viewerObject={viewerObject}
+                                    viewerFunctions={viewerFunctions}
+                                    authUser={this.props.authUser}
+
                                 />
                             </div>
                         )

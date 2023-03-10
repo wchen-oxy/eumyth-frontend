@@ -224,7 +224,6 @@ class PostController extends React.Component {
   }
 
   setLabels(labels) {
-    console.log(labels);
     this.setState({ labels: labels });
   }
 
@@ -382,7 +381,6 @@ class PostController extends React.Component {
       tempText: this.state.tempText,
       modalState: this.props.modalState,
 
-      closeModal: this.props.closeModal,
       setDraft: this.setDraft,
       setPostStage: this.setPostStage,
       setIsPaginated: this.setIsPaginated,
@@ -447,7 +445,6 @@ class PostController extends React.Component {
       handleSubmit: this.handleSubmit,
       setThreadToggleState: this.setThreadToggleState,
     }
-    console.log(this.props.closeModal);
     if (this.props.isViewer) {
       return (
         <ShortPostViewer

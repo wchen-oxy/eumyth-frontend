@@ -75,7 +75,6 @@ class ShortPostViewer extends React.Component {
         for (let i = 0; i < this.props.eventData.image_data.length; i++) {
             annotationArray.push([]);
         }
-        console.log(this.props.eventData);
         this.setState({ annotations: annotationArray }, this.loadProjectPreview);
     }
 
@@ -469,7 +468,6 @@ class ShortPostViewer extends React.Component {
             }
         }
         else if (this.props.window === 2) {//2
-            console.log(this.props.tempText);
             return (
                 <div className='shortpostviewer-window small-post-window' >
                     <h4>Edit your Post!</h4>

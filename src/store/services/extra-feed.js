@@ -51,10 +51,8 @@ const _formatContent = (feed, meta, isCached) => {
             meta.coordinates.lat
         )
         const posts = content.pursuits[index].posts;
-        const post = posts.length > 0 ? posts[0] : null;
-
-
-
+        const post = posts.length > 0 ? posts[0].content_id : null;
+    
         return {
             type: USER,
             content: content,

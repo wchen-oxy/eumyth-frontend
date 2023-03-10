@@ -1,5 +1,6 @@
 import ShortHeroText from 'components/post/viewer/sub-components/short-text';
 import React from 'react';
+import PostController from "components/post/index";
 import { getDistance } from 'utils';
 import { returnFormattedDistance } from 'utils/constants/ui-text';
 import { returnUserImageURL } from 'utils/url';
@@ -17,9 +18,12 @@ const _reorder = (unordered, matched) => {
 class UserFeedItem extends React.Component {
     constructor(props) {
         super(props);
+
     }
 
+
     render() {
+        const data = this.props.viewerObject.eventData;
         const pursuits = this.props.pursuits
             .map(item => item.name);
         pursuits[0] = null;
@@ -53,9 +57,16 @@ class UserFeedItem extends React.Component {
 
                 </div>
                 <div className='userfeeditem-lower-main'>
-                    {/* <ShortHeroText
-
-                    /> */}
+                    {data &&
+                        <PostController
+                            isViewer
+                            key={data._id}
+                            largeViewMode={false}
+                            textData={data.text_data}
+                            viewerObject={this.props.viewerObject}
+                            viewerFunctions={this.props.viewerFunctions}
+                            authUser={this.props.authUser}
+                        />}
 
                 </div>
             </div>

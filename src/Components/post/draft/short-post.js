@@ -260,7 +260,6 @@ class ShortPost extends React.Component {
       );
     }
     else if (this.props.window === 3) {
-      console.log(this.props.closeModal);
       return (
         <div className='small-post-window'>
           <ReviewStage

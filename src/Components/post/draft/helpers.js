@@ -34,7 +34,6 @@ import { SHORT, LONG, } from 'utils/constants/flags';
 import AxiosHelper from 'utils/axios';
 
 const addImages = (formData, fields) => {
-    console.log(fields.imageArray);
     if (fields.imageArray && fields.imageArray.length > 0) {
         for (const image of fields.imageArray) {
             formData.append(IMAGES_FIELD, image);
@@ -98,14 +97,12 @@ export const decideNewOrUpdate = (formData, functions, isPostOnlyView, isUpdate)
     let submit = isUpdate ? AxiosHelper.updatePost(formData) : AxiosHelper.createPost(formData);
     submit
         .then((result) => {
-            console.log(result);
             functions.setIsSubmitting(false);
             result.status === 201 || result.status === 200 ? handleSuccess(isPostOnlyView, functions.closeModal)
                 : handleError(functions.setLoading, functions.setError);
         })
         .catch((result) => {
             functions.setIsSubmitting(false);
-            console.log(result.error);
             alert(result);
         })
 
