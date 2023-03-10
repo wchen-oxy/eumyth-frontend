@@ -69,7 +69,6 @@ const FriendFeed = (props) => {
     }
 
     const setModal = (data, text, index) => {
-        console.log(data);
         setSelected(data);
         setTextData(text);
         setSelectedIndex(index);

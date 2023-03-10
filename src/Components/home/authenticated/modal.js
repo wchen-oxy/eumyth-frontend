@@ -19,7 +19,7 @@ const Modal = (props) => {
             pursuitObjects: props.pursuitObjects,
             projectPreviewMap: props.projectPreviewMap
         };
-         const content = (
+        const content = (
             <PostController
                 isViewer
                 viewerObject={viewerObject}
@@ -29,7 +29,6 @@ const Modal = (props) => {
             />
         );
 
-        console.log(content);
         return props.returnModalStructure(
             content,
             props.clearModal

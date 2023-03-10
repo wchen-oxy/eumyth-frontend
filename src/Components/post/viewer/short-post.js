@@ -215,7 +215,7 @@ class ShortPostViewer extends React.Component {
                         visitorUsername={this.props.username}
                         visitorProfilePreviewID={this.props.userPreviewID}
                         postID={this.props.eventData._id}
-                        postIndex={this.props.selectedIndex}
+                        selectedIndex={this.props.selectedIndex}
                         onCommentDataInjection={this.handleCommentDataInjection}
                         onPromptAnnotation={this.handlePromptAnnotation}
                         passAnnotationData={this.passAnnotationData}
@@ -290,7 +290,7 @@ class ShortPostViewer extends React.Component {
         const newCommentID = fullCommentData[fullCommentData.length - 1]._id;
         newCommentIDArray.push(newCommentID)
         this.setState({ fullCommentData: fullCommentData }, () => {
-            if (this.props.postIndex !== null && !this.props.isPostOnlyView) {
+            if (this.props.selectedIndex !== null && !this.props.isPostOnlyView) {
                 this.props.onCommentIDInjection(
                     postIndex,
                     newCommentIDArray,
@@ -422,7 +422,7 @@ class ShortPostViewer extends React.Component {
 
             const caption = {
                 title: this.props.eventData.title,
-                textData: this.props.textData,
+                textData: this.props.tempText,
                 isPaginated: this.props.isPaginated,
                 imageIndex: this.props.imageIndex,
             }

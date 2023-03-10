@@ -338,7 +338,6 @@ class PostController extends React.Component {
         .then((createdProjectMeta) => {
           const replacementProjectMeta = this.state.isNewSeriesToggled ?
             createdProjectMeta : this.state.selectedDraft;
-          console.log(replacementProjectMeta);
           return handlePostOwnerUpdate(
             formData,
             this.props.viewerObject.eventData._id,

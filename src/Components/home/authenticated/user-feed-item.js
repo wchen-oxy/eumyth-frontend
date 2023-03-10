@@ -23,29 +23,29 @@ class UserFeedItem extends React.Component {
 
 
     render() {
-        const data = this.props.viewerObject.eventData;
-        const pursuits = this.props.pursuits
+         const data = this.props.data;
+        const user = this.props.content;
+        const pursuits = user.pursuits
             .map(item => item.name);
         pursuits[0] = null;
-        const orderedPursuits = _reorder(pursuits, this.props.matched_pursuit_index);
-
+        const orderedPursuits = _reorder(pursuits, user.matched_pursuit_index);
         return (
             <div className='userfeeditem-user'>
                 <div className='userfeeditem-upper-main'>
                     <div className='userfeeditem-upper-top'>
-                        <h3>{returnFormattedDistance(this.props.distance)}</h3>
+                        <h3>{returnFormattedDistance(user.distance)}</h3>
                     </div>
                     <div className='userfeeditem-upper-bottom'>
 
                         <div className='userfeeditem-upper-left'>
                             <div className='userfeeditem-photo'>
-                                <a href={'/u/' + this.props.username}>
-                                    <img src={returnUserImageURL(this.props.displayPhoto)} />
+                                <a href={'/u/' + user.username}>
+                                    <img src={returnUserImageURL(user.displayPhoto)} />
                                 </a>
                             </div>
                             <div className='postheader-meta'>
-                                <a href={'/u/' + this.props.username}><h3>{this.props.username}</h3></a>
-                                <p>{this.props.first_name}</p>
+                                <a href={'/u/' + user.username}><h3>{user.username}</h3></a>
+                                <p>{user.first_name}</p>
                             </div>
 
                         </div>
@@ -61,9 +61,12 @@ class UserFeedItem extends React.Component {
                         <PostController
                             isViewer
                             key={data._id}
-                            largeViewMode={false}
+                            largeViewMode={true}
                             textData={data.text_data}
-                            viewerObject={this.props.viewerObject}
+                            viewerObject={{
+                                ...this.props.viewerObject,
+                                eventData: data
+                            }}
                             viewerFunctions={this.props.viewerFunctions}
                             authUser={this.props.authUser}
                         />}

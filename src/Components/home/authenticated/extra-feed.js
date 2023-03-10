@@ -297,8 +297,14 @@ class ExtraFeed extends React.Component {
     }
 
     handleCommentIDInjection(postIndex, rootCommentsArray) {
-        const feedData = alterRawCommentArray(
-            postIndex, rootCommentsArray, this.state.feedData)
+        const feedData = this.state.feedData;
+        if (feedData[postIndex].type === USER) {
+            feedData[postIndex].data.comment_count += 1;
+        }
+        else if (feedData[postIndex].type === POST) {
+            feedData[postIndex].comment_count += 1;
+
+        }
         this.setState({ feedData })
     }
 
@@ -311,12 +317,14 @@ class ExtraFeed extends React.Component {
                 const viewerObject = {
                     key: index,
                     largeViewMode: false,
-                    textData: item.data?.text_data ?? null, //catch
-                    eventData: item.data,
+                    isPostOnlyView: false,
+                    postIndex: index,
                     ...viewerObjects
                 }
                 switch (item.type) {
                     case (POST):
+                        viewerObject['eventData'] = item.data;
+                        viewerObject['textData'] = item.data.text_data;
                         return (
                             <div key={index} className='returninguser-feed-object'>
                                 <PostController
@@ -330,7 +338,7 @@ class ExtraFeed extends React.Component {
                         return (
                             <div key={index} className='returninguser-feed-object'>
                                 <UserFeedItem
-                                    {...item.content}
+                                    {...item}
                                     lat={this.state.lat}
                                     long={this.state.long}
                                     viewerObject={viewerObject}
@@ -349,7 +357,7 @@ class ExtraFeed extends React.Component {
 
 
     setModal(data, text, index) {
-        this.setState({
+         this.setState({
             selected: data,
             textData: text,
             selectedIndex: index
@@ -362,9 +370,7 @@ class ExtraFeed extends React.Component {
     }
 
     render() {
-
         const sharedViewerObjects = {
-            isPostOnlyView: false,
             pursuitObjects: this.props.pursuitObjects,
             projectPreviewMap: this.state.projectPreviewMap,
         }

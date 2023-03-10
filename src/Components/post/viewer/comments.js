@@ -102,7 +102,7 @@ class Comments extends React.Component {
                         .refreshComments(JSON.stringify(commentArray))
                         .then((result) => {
                             this.props.onCommentDataInjection(
-                                this.props.postIndex,
+                                this.props.selectedIndex,
                                 result.data.rootComments);
                         })
                 })
