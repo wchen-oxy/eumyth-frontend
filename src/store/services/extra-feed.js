@@ -52,7 +52,7 @@ const _formatContent = (feed, meta, isCached) => {
         )
         const posts = content.pursuits[index].posts;
         const post = posts.length > 0 ? posts[0].content_id : null;
-    
+
         return {
             type: USER,
             content: content,
@@ -91,11 +91,63 @@ const _addUsersToContentList = (contentList, usedPeople, formatted) => {
     }
     else {
         const index = usedPeople[formatted.content._id];
-        contentList[index].content.matched_pursuit_index.push(formatted.content.matched_pursuit_index[0]);
+        contentList[index].content.matched_pursuit_index
+            .push(formatted.content.matched_pursuit_index[0]);
     }
 }
 
-export const extractContentFromRaw = (
+const _formatUser = (user, pursuit, coordinates) => {
+    const index = user.matched_pursuit_index
+        = [user.pursuits.findIndex((item) => item.name === pursuit)];
+    const posts = user.pursuits[index].posts;
+    const post = posts.length > 0 ? posts[0].content_id : null;
+    user.distance = getDistance(
+        user.location.coordinates[0],
+        coordinates.long,
+        user.location.coordinates[1],
+        coordinates.lat
+    )
+    return ({
+        type: USER,
+        content: user,
+        data: null,
+        post: post
+    })
+}
+
+export const joinDynamic = (dynamic, coordinates, usedPeople) => {
+    //go to each pursuit
+    //for each pursuit, format each user and add to list
+    //sort whole list
+    let results = [];
+    for (const pursuit of dynamic) {
+        for (const user of pursuit.queue) {
+            if (!usedPeople.has(user._id)) {
+                results.push(_formatUser(user, pursuit.type, coordinates));
+                usedPeople.add(user._id);
+            }
+        }
+    }
+    return results;
+}
+
+export const joinCached = (cached) => {
+    const results = [];
+    addRemainingCachedContent(
+        0, 0, cached, results
+    );
+    return results;
+}
+export const mergeArrays = (dynamic, cached, contentList) => {
+    let min = Math.min(dynamic.length, cached.length);
+
+    for (let i = 0; i < min; i++) {
+        contentList.push(dynamic[i], cached[i]);
+    }
+    contentList.push(...dynamic.slice(min), ...cached.slice(min));
+}
+
+export const extractContentFromRaw = ( //to be deleted
     cached,
     dynamic,
     contentList,
@@ -176,9 +228,8 @@ export const addRemainingCachedContent = (
         }
         feedCategoryIndex++;
     }
+    console.log(contentList);
 }
-
-
 
 export const addRemainingDynamicContent = (meta, feed, contentList, usedPeople, coordinates) => {
     while (meta.pursuitIndex < meta.numOfPursuits) {

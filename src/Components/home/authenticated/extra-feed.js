@@ -4,7 +4,7 @@ import _ from 'lodash';
 import AxiosHelper from 'utils/axios';
 import { distanceSwitch } from 'utils/constants/states';
 import { geoLocationOptions, REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
-import { addRemainingCachedContent, addRemainingDynamicContent, convertPursuitToQueue, extractContentFromRaw } from 'store/services/extra-feed';
+import { addRemainingCachedContent, addRemainingDynamicContent, convertPursuitToQueue, extractContentFromRaw, joinCached, joinDynamic, mergeArrays } from 'store/services/extra-feed';
 import { EXTRAS_STATE, POST, POST_VIEWER_MODAL_STATE, USER } from 'utils/constants/flags';
 import PostController from "components/post/index";
 import { alterRawCommentArray, updateProjectPreviewMap } from 'utils';
@@ -149,47 +149,66 @@ class ExtraFeed extends React.Component {
             });
     }
 
-    prepareRenderedFeedInput(cached, dynamic) { //cached comes with all post data
+    prepareRenderedFeedInput(cached, dynamic, isSeperated) { //cached comes with all post data
+        // const sortedDynamic = dynamic.sort(sortByNearest)
         const contentList = [];
-        const usedPeople = {};
         const coordinates = { long: this.state.long, lat: this.state.lat }
 
-        //return a generated feed 
-        const newIndices = extractContentFromRaw(
-            cached,
-            dynamic,
-            contentList,
-            usedPeople,
-            coordinates,
-        );
-        //finish cached  
-        addRemainingCachedContent(
-            newIndices.cachedTypeIndex,
-            newIndices.cachedItemIndex,
-            cached,
-            contentList,
-        );
+        if (isSeperated) {
+            const usedPeople = {};
 
-        addRemainingDynamicContent(
-            {
-                pursuitIndex: newIndices.pursuitIndex,
-                numOfPursuits: dynamic.length
-            },
-            dynamic,
-            contentList,
-            usedPeople,
-            coordinates,
+            const newIndices = extractContentFromRaw(
+                cached,
+                dynamic,
+                contentList,
+                usedPeople,
+                coordinates,
+            );
+            //finish cached  
+            addRemainingCachedContent(
+                newIndices.cachedTypeIndex,
+                newIndices.cachedItemIndex,
+                cached,
+                contentList,
+            );
 
-        );
+            addRemainingDynamicContent(
+                {
+                    pursuitIndex: newIndices.pursuitIndex,
+                    numOfPursuits: dynamic.length
+                },
+                dynamic,
+                contentList,
+                usedPeople,
+                coordinates,
 
-        contentList.sort((a, b) => a.content.distance - b.content.distance)
+            );
 
-
-        const keys = [];
-        for (const key in usedPeople) {
-            keys.push(key)
+            const keys = [];
+            for (const key in usedPeople) {
+                keys.push(key)
+            }
+            return { contentList, keys };
         }
-        return { contentList, keys };
+        else {
+            const usedPeople = new Set();
+            const _comparison = (a, b) => { return a.content.distance - b.content.distance };
+            const formattedDynamic = joinDynamic(dynamic, coordinates, usedPeople).sort(_comparison);
+            const formattedCached = joinCached(cached);
+            mergeArrays(formattedDynamic, formattedCached, contentList);
+
+            return { contentList, keys: usedPeople.keys() };
+        }
+
+        // contentList.sort((a, b) => {
+        //     console.log(a, b);
+        //     if (a.content && b.content) {
+        //         return a.content.distance - b.content.distance
+        //     };
+        //     if (!a.content || b.content)
+        // })
+
+
     }
 
     getCachedFeed() { //initial
@@ -298,13 +317,7 @@ class ExtraFeed extends React.Component {
 
     handleCommentIDInjection(postIndex, rootCommentsArray) {
         const feedData = this.state.feedData;
-        if (feedData[postIndex].type === USER) {
-            feedData[postIndex].data.comment_count += 1;
-        }
-        else if (feedData[postIndex].type === POST) {
-            feedData[postIndex].comment_count += 1;
-
-        }
+        feedData[postIndex].data.comment_count += 1;
         this.setState({ feedData })
     }
 
@@ -357,7 +370,7 @@ class ExtraFeed extends React.Component {
 
 
     setModal(data, text, index) {
-         this.setState({
+        this.setState({
             selected: data,
             textData: text,
             selectedIndex: index
