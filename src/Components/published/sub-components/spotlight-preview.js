@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AxiosHelper from 'utils/axios';
-import ShortPostViewer from 'components/post/viewer/short-post.js';
 import { returnUserImageURL } from 'utils/url';
-import { POST_VIEWER_MODAL_STATE, SPOTLIGHT_POST } from 'utils/constants/flags';
 import EventLabels from 'components/timeline/sub-components/event-labels';
 import SpotlightMeta from './spotlight-meta';
 import ProjectVote from './project-vote';
@@ -11,7 +9,6 @@ const OVERVIEW_STATE = 'OVERVIEW_STATE';
 const STAT_STATE = "STAT_STATE";
 const SpotlightPreview = (props) => {
     const [loadedPosts, setLoadedPosts] = useState([]);
-    const [selectedContent, setSelectedContent] = useState(null);
     const [metaState, setMetaState] = useState(OVERVIEW_STATE);
 
     useEffect(() => {
@@ -26,53 +23,50 @@ const SpotlightPreview = (props) => {
         }
     }, [props.project]);
 
-    const setModal = () => {
-        props.openMasterModal(POST_VIEWER_MODAL_STATE);
-    }
 
-    const clearModal = () => {
-        setSelectedContent(null);
-        props.closeMasterModal();
-    }
+    // const clearModal = () => {
+    //     setSelectedContent(null);
+    //     props.closeMasterModal();
+    // }
 
 
-    const renderModal = () => {
-        if (props.modalState === POST_VIEWER_MODAL_STATE &&
-            selectedContent) {
-            const formattedTextData = selectedContent?.text_data && selectedContent.is_paginated ?
-                JSON.parse(selectedContent.text_data) : selectedContent.text_data;
+    // const renderModal = () => {
+    //     if (props.modalState === POST_VIEWER_MODAL_STATE &&
+    //         selectedContent) {
+    //         const formattedTextData = selectedContent?.text_data && selectedContent.is_paginated ?
+    //             JSON.parse(selectedContent.text_data) : selectedContent.text_data;
 
-            const content = (
-                <ShortPostViewer
-                    authUser={props.authUser}
-                    key={selectedContent._id}
-                    largeViewMode={true}
-                    isPostOnlyView={false}
-                    postType={SPOTLIGHT_POST}
-                    eventData={selectedContent}
-                    textData={formattedTextData}
-                />
-            )
-            return props.returnModalStructure(
-                content,
-                clearModal
-            )
-        }
-        else {
-            return null;
-        }
-    }
+    //         const content = (
+    //             <ShortPostViewer
+    //                 authUser={props.authUser}
+    //                 key={selectedContent._id}
+    //                 largeViewMode={true}
+    //                 isPostOnlyView={false}
+    //                 postType={SPOTLIGHT_POST}
+    //                 eventData={selectedContent}
+    //                 textData={formattedTextData}
+    //             />
+    //         )
+    //         return props.returnModalStructure(
+    //             content,
+    //             clearModal
+    //         )
+    //     }
+    //     else {
+    //         return null;
+    //     }
+    // }
 
-    const handleEventClick = (selectedContent) => {
-        setSelectedContent(selectedContent);
-        setModal()
-    }
+    // const handleEventClick = (selectedContent) => {
+    //     setSelectedContent(selectedContent);
+    //     setModal()
+    // }
     return (
         <div className='spotlightpreview'>
             <a href={"/c/" + props.project._id}><h3>{props.project.title}</h3></a>
             {props.project.cover_photo_key ?
                 <div className='spotlightpreview-cover-final'>
-                    <img src={returnUserImageURL(props.project.cover_photo_key)} />
+                    <img alt='cover' src={returnUserImageURL(props.project.cover_photo_key)} />
                 </div>
                 :
                 <div className='spotlightpreview-cover-placeholder'>
@@ -107,7 +101,7 @@ const SpotlightPreview = (props) => {
                 />
             }
             <div className='spotlightpreview-dp'>
-                <img src={returnUserImageURL(props.project.display_photo_key)} />
+                <img alt='display' src={returnUserImageURL(props.project.display_photo_key)} />
                 <a z href={'/u/' + props.project.username}>
                     <h4>{props.project.username}</h4>
                 </a>

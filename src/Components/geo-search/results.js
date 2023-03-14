@@ -5,15 +5,23 @@ import { returnUserImageURL } from 'utils/url';
 import { returnFormattedDistance } from 'utils/constants/ui-text';
 import { toTitleCase } from 'utils';
 
+const _pursuitRender = (pursuit, index) => (
+    <div key={index} className='results-stats'>
+        <h4>{toTitleCase(pursuit.name)}</h4>
+        <p> {pursuit.num_milestones} Milestones</p>
+        <p> {pursuit.total_min} Total Minutes</p>
+    </div>
+)
 const Results = (props) => {
     const distanceText = returnFormattedDistance(props.person.distance)
     const profileURL = returnUserImageURL(props.person.small_cropped_display_photo_key);
+    const slicedPursuits = props.person.pursuits.slice(1);
     return (
         <div key={props.person._id} className='results' >
             <div className='results-profile'>
                 <div>
                     <div className='results-image'>
-                        <img src={profileURL} />
+                        <img alt='profile' src={profileURL} />
                     </div>
                     <a className='results-name' href={'/u/' + props.person.username}>
                         <h3>{props.person.first_name + " " + props.person.last_name}</h3>
@@ -23,25 +31,8 @@ const Results = (props) => {
                 <div>
                     <p>{props.person.bio}</p>
                 </div>
-                {props.person.pursuits.map(
-                    (pursuit, index) => {
-                        if (index !== 0) return (
-                            <div key={index} className='results-stats'>
-                                <h4>{toTitleCase(pursuit.name)}</h4>
-                                <p> {pursuit.num_milestones} Milestones</p>
-                                <p> {pursuit.total_min} Total Minutes</p>
-                            </div>)
-                    }
-                )}
+                {slicedPursuits.map(_pursuitRender)}
             </div>
-            {/* <div>
-                <div className='results-title'>
-                    <h4>Latest Project</h4>
-                </div>
-                <div>
-                    
-                </div>
-            </div> */}
             <div className='results-post'>
                 <div className='results-title'>
                     <h4>Recent Posts</h4>

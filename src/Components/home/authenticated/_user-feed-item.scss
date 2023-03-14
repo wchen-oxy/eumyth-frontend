@@ -9,8 +9,7 @@
 }
 .userfeeditem-photo {
     @include flex-display-column;
-    width: 75%;
-    margin: auto;
+    width: 99%;
     text-align: center;
     img {
         width: 100%;
@@ -18,16 +17,37 @@
 }
 .userfeeditem-upper-main {
     @include flex-display-column;
-    height: 200px;
     .userfeeditem-upper-top {
+        @include flex-display-row;
+        h3 {
+            padding-right: 15px;
+        }
+        .userfeeditem-username-name {
+            @include flex-display-row;
+            align-items: center;
+            flex-grow: 1;
+            margin: 20px 0;
+            a {
+                padding-left: 15px;
+            }
+        }
+        .userfeeditem-distance {
+            @include flex-display-row;
+            align-items: center;
+            padding-right: 10px;
+        }
     }
     .userfeeditem-upper-bottom {
         @include flex-display-row;
         .userfeeditem-upper-left {
-            width: 30%;
+            width: 39%;
+            margin-left:15px;
         }
         .userfeeditem-upper-right {
-            width: 69%;
+            width: 59%;
+            h3, p{
+                margin-left: 30px;
+            }
         }
     }
 }

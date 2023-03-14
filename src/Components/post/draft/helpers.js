@@ -11,11 +11,8 @@ import {
     MIN_DURATION_FIELD,
     POST_ID_FIELD,
     POST_PRIVACY_TYPE_FIELD,
-    POST_TYPE_FIELD,
-    PROGRESSION_FIELD,
     PURSUIT_FIELD,
     REMOVE_COVER_PHOTO,
-    SUBTITLE_FIELD,
     TEXT_DATA_FIELD,
     TITLE_FIELD,
     USERNAME_FIELD,
@@ -25,22 +22,13 @@ import {
     USER_ID_FIELD,
     STATUS_FIELD,
     THREAD_TITLE_PRIVACY_FIELD,
-    COMPLETE_PROJECT_FIELD,
     PROJECT_PREVIEW_ID_FIELD,
     THREAD_TITLE_FIELD,
 
 } from 'utils/constants/form-data';
-import { SHORT, LONG, } from 'utils/constants/flags';
 import AxiosHelper from 'utils/axios';
 
-const addImages = (formData, fields) => {
-    if (fields.imageArray && fields.imageArray.length > 0) {
-        for (const image of fields.imageArray) {
-            formData.append(IMAGES_FIELD, image);
-        }
-    }
-}
-
+ 
 const handleSuccess = (isPostOnlyView, closeModal) => {
     alert('Post Successful! You will see your post soon.');
     if (!isPostOnlyView) closeModal();
@@ -173,8 +161,6 @@ export const appendSecondarySeriesFields = (formData, fields) => {
         formData.append(THREAD_TITLE_PRIVACY_FIELD, fields.titlePrivacy);
         formData.append(SELECTED_DRAFT_ID, fields.selectedDraft.content_id);
     }
-    // formData.append(THREAD_TITLE_FIELD, fields.threadTitle);
-    // formData.append(PURSUIT_FIELD, fields.selectedDraft.pursuit)
 }
 
 export const appendTertiaryUpdateFields = (formData, fields, isUpdate) => {

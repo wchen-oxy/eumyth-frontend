@@ -1,15 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import PostController from "components/post/index";
 import AxiosHelper from 'utils/axios';
-import { formatPostText, toTitleCase, updateProjectPreviewMap } from 'utils';
+import {  toTitleCase } from 'utils';
 import { withAuthorization } from 'store/session';
 import { withFirebase } from 'store/firebase';
-import withRouter from "utils/withRouter";
-import { returnUsernameURL, returnUserImageURL } from 'utils/url';
-import { alterRawCommentArray } from 'utils/index';
-import { TEMP_PROFILE_PHOTO_URL } from 'utils/constants/urls';
-import { RECENT_POSTS, FRIEND_POSTS, POST_VIEWER_MODAL_STATE, FOLLOWED_FEED, SHORT, EXTRAS_FEED } from 'utils/constants/flags';
+import withRouter from "utils/withRouter"; 
+import { RECENT_POSTS,  POST_VIEWER_MODAL_STATE, SHORT,   } from 'utils/constants/flags';
 import FriendFeed from './friend-feed';
 import ExtraFeed from './extra-feed';
 import Header from './header';
@@ -50,7 +45,6 @@ class ReturningUserPage extends React.Component {
         this.passDataToModal = this.passDataToModal.bind(this);
         this.clearModal = this.clearModal.bind(this);
         this.handleDeletePost = this.handleDeletePost.bind(this);
-        // this.renderModal = this.renderModal.bind(this);
         this.toggleFeedState = this.toggleFeedState.bind(this);
         this.setExtraFeedModal = this.setExtraFeedModal.bind(this);
     }

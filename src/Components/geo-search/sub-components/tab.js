@@ -152,7 +152,7 @@ class Tab extends React.Component {
             <div key={this.props.user._id}
                 className='tab'>
                 <div className='tab-dp'>
-                    <img src={returnUserImageURL(this.props.user.small_cropped_display_photo_key)}></img>
+                    <img alt='profile' src={returnUserImageURL(this.props.user.small_cropped_display_photo_key)}></img>
                 </div>
                 <a href={'/u/' + this.props.user.username}><h3>{this.props.user.first_name + " " + this.props.user.last_name}</h3></a>
                 <div className='tab-meta'>

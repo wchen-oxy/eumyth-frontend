@@ -1,4 +1,4 @@
-import _, { slice } from 'lodash';
+import _ from 'lodash';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import AxiosHelper from 'utils/axios';

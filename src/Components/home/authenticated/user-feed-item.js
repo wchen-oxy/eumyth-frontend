@@ -1,7 +1,5 @@
-import ShortHeroText from 'components/post/viewer/sub-components/short-text';
 import React from 'react';
 import PostController from "components/post/index";
-import { getDistance } from 'utils';
 import { returnFormattedDistance } from 'utils/constants/ui-text';
 import { returnUserImageURL } from 'utils/url';
 
@@ -16,14 +14,9 @@ const _reorder = (unordered, matched) => {
 }
 
 class UserFeedItem extends React.Component {
-    constructor(props) {
-        super(props);
-
-    }
-
-
+   
     render() {
-         const data = this.props.data;
+        const data = this.props.data;
         const user = this.props.content;
         const pursuits = user.pursuits
             .map(item => item.name);
@@ -33,20 +26,23 @@ class UserFeedItem extends React.Component {
             <div className='userfeeditem-user'>
                 <div className='userfeeditem-upper-main'>
                     <div className='userfeeditem-upper-top'>
-                        <h3>{returnFormattedDistance(user.distance)}</h3>
+                        <div className='userfeeditem-username-name'>
+                            <a href={'/u/' + user.username}><h3>{user.username}</h3></a>
+                            <p>{user.first_name}</p>
+                        </div>
+                        <div className='userfeeditem-distance'>
+                            <h3>{returnFormattedDistance(user.distance)}</h3>
+                        </div>
                     </div>
                     <div className='userfeeditem-upper-bottom'>
 
                         <div className='userfeeditem-upper-left'>
                             <div className='userfeeditem-photo'>
                                 <a href={'/u/' + user.username}>
-                                    <img src={returnUserImageURL(user.displayPhoto)} />
+                                    <img alt='profile' src={returnUserImageURL(user.displayPhoto)} />
                                 </a>
                             </div>
-                            <div className='postheader-meta'>
-                                <a href={'/u/' + user.username}><h3>{user.username}</h3></a>
-                                <p>{user.first_name}</p>
-                            </div>
+
 
                         </div>
                         <div className='userfeeditem-upper-right'>

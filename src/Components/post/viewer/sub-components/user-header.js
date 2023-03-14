@@ -7,7 +7,7 @@ const UserHeader = (props) => {
             <div className='postheader-author'>
                 <div className='postheader-dp'>
                     <a href={'/u/' + props.username}>
-                        <img src={returnUserImageURL(props.displayPhoto)} />
+                        <img alt='profile' src={returnUserImageURL(props.displayPhoto)} />
                     </a>
                 </div>
                 <div className='postheader-meta'>

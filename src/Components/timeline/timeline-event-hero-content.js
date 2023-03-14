@@ -14,7 +14,7 @@ const EventHeroContent = (props) => {
             {image ?
                 <div className='eventherocontent-with-image'>
                     <img
-                        alt='short event cover photo'
+                        alt='short event cover'
                         className='eventherocontent-image'
                         src={image} />
                 </div>

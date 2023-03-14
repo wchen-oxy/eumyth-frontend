@@ -464,7 +464,7 @@ class PostController extends React.Component {
       return (
         <ShortPostDraft
           {...miniAuthObject}
-          {...this.props.viewerFunctions}
+          
           {...shared}
 
           initialDraftObject={initialDraftObject}
@@ -473,6 +473,7 @@ class PostController extends React.Component {
           threadObject={threadObject}
           threadFunction={threadFunction}
           setPhotoData={this.setPhotoData}
+          closeModal={this.props.closeModal}
           
         />
       );

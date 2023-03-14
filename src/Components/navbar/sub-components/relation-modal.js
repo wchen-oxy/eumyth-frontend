@@ -129,7 +129,7 @@ class RelationModal extends React.Component {
                 users.push(
                     <div className='relationmodal-profile-row'>
                         <div className='relationmodal-profile-info-container'>
-                            <img src={returnUserImageURL(user.display_photo)} />
+                            <img alt='profile' src={returnUserImageURL(user.display_photo)} />
                             <a href={returnUsernameURL(user.username)}
                             >
                                 {user.username}
@@ -145,7 +145,7 @@ class RelationModal extends React.Component {
                 users.push(
                     <div className='relationmodal-profile-row'>
                         <div className='relationmodal-profile-info-container'>
-                            <img src={returnUserImageURL(user.display_photo)} />
+                            <img alt='profile' src={returnUserImageURL(user.display_photo)} />
                             <a href={returnUsernameURL(user.username)}
                             >
                                 {user.username}

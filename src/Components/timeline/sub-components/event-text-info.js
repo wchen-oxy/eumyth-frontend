@@ -11,7 +11,7 @@ const EventTextInfo = (props) => (
             (
                 <div className='eventtextinfo-progression'>
                     <h5>{toTitleCase(props.pursuitCategory)}</h5>
-                    <p> {props.progression === 2 && ' ' + 'MileStone'}     </p>
+                    <p> {props.progression === 2 && ' MileStone'}     </p>
                 </div>
             )}
         <div className='eventtextinfo-dynamic' >
