@@ -281,7 +281,8 @@ class ShortPostViewer extends React.Component {
             </div>)
     }
 
-    handleArrowPress(value) {
+    handleArrowPress(e, value) {
+        e.stopPropagation();
         const currentIndex = this.props.imageIndex + value;
         const numOfImages = this.props.eventData.image_data.length;
         if (currentIndex === numOfImages) {

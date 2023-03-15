@@ -11,6 +11,11 @@
     z-index: 25;
 }
 
+.shortpostviewer-inline-header{
+    @include flex-display-row;
+    justify-content: space-between;
+}
+
 .shortpostviewer-large-hero-image {
     height: auto;
 }

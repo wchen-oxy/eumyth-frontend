@@ -12,16 +12,18 @@ const WithImageInline = (props) => {
                     <div className='shortpostviewer-inline-side'>
                         <Thread {...props.meta} />
                     </div>
+                    <div className='shortpostviewer-inline-header'>
+                        <div className="">
+                            {props.date && <h4>{props.date.month}, {props.date.day}, {props.date.year} </h4>}
+                        </div>
+                        <UserHeader
+                            {...props.user}
+                        />
+                    </div>
 
                     <div className='shortherotext-title-container'>
                         {props.caption.title &&
                             <h2 className="shortpostviewer-title"> {props.caption.title}</h2>}
-                    </div>
-                    <UserHeader
-                        {...props.user}
-                    />
-                    <div className="">
-                        {props.date && <h4>{props.date.month}, {props.date.day}, {props.date.year} </h4>}
                     </div>
 
                     {/* <MetaInfo

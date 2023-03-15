@@ -5,15 +5,16 @@ const ImageControls = (props) => {
     return (
         <div>
             {props.imageArray.length > 1 ?
-                (<>
+                (<div className='imagecontrols'>
                     <button
-                        onClick={() => props.onArrowPress(-1)}>
+                        onClick={(e) => props.onArrowPress(e, -1)}>
                         Previous
                     </button>
-                    <button onClick={() => props.onArrowPress(1)}>
+                    <p>{props.imageIndex + 1} of {props.imageArray.length}</p>
+                    <button onClick={(e) => props.onArrowPress(e, 1)}>
                         Next
                     </button>
-                </>
+                </div>
                 )
                 : null
             }
