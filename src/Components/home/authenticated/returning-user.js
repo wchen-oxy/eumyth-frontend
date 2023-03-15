@@ -1,10 +1,10 @@
 import React from 'react';
 import AxiosHelper from 'utils/axios';
-import {  toTitleCase } from 'utils';
+import { toTitleCase } from 'utils';
 import { withAuthorization } from 'store/session';
 import { withFirebase } from 'store/firebase';
-import withRouter from "utils/withRouter"; 
-import { RECENT_POSTS,  POST_VIEWER_MODAL_STATE, SHORT,   } from 'utils/constants/flags';
+import withRouter from "utils/withRouter";
+import { RECENT_POSTS, POST_VIEWER_MODAL_STATE, SHORT, } from 'utils/constants/flags';
 import FriendFeed from './friend-feed';
 import ExtraFeed from './extra-feed';
 import Header from './header';
@@ -33,7 +33,7 @@ class ReturningUserPage extends React.Component {
             recentPosts: null,
             recentPostsKey: 0,
             isExtraFeedToggled: false,
-
+            windowWidth: null,
             cached: null
         }
 
@@ -47,10 +47,13 @@ class ReturningUserPage extends React.Component {
         this.handleDeletePost = this.handleDeletePost.bind(this);
         this.toggleFeedState = this.toggleFeedState.bind(this);
         this.setExtraFeedModal = this.setExtraFeedModal.bind(this);
+        this.setWindowSize = this.setWindowSize.bind(this);
     }
 
     componentDidMount() {
         this._isMounted = true;
+        this.setWindowSize();
+        window.addEventListener("resize", this.setWindowSize);
         if (this._isMounted && this.state.username) {
             const pursuitObjects =
                 this.createPursuits(this.props.authUser.pursuits);
@@ -74,6 +77,12 @@ class ReturningUserPage extends React.Component {
 
     componentWillUnmount() {
         this._isMounted = false;
+        window.removeEventListener("resize", this.setWindowSize)
+    }
+
+    setWindowSize() {
+
+        this.setState({ windowWidth: window.innerWidth });
     }
 
     toggleFeedState(isExtraFeedToggled) {
@@ -250,6 +259,7 @@ class ReturningUserPage extends React.Component {
                                 following={this.state.cached.following}
                                 nextOpenPostIndex={this.state.nextOpenPostIndex}
                                 fetchNextPosts={this.fetchNextPosts}
+                                windowWidth={this.state.windowWidth}
                                 {...pursuitProps}
                                 {...modalProps}
 
@@ -261,6 +271,7 @@ class ReturningUserPage extends React.Component {
                         <ExtraFeed
                             authUser={this.props.authUser}
                             cached={this.state.cached}
+                            windowWidth={this.state.windowWidth}
                             {...pursuitProps}
                             {...modalProps}
                         />

@@ -112,6 +112,7 @@ const FriendFeed = (props) => {
         isPostOnlyView: false,
         pursuitObjects: props.pursuitObjects,
         projectPreviewMap: projectPreviewMap,
+        windowWidth: props.windowWidth
     }
     const viewerFunctions = {
         onCommentIDInjection: handleCommentIDInjection,

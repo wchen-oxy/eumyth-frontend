@@ -40,7 +40,11 @@
 .shortpostviewer-inline-side {
     width: 100%;
 }
-
+.shortpostviewer-secondary-header {
+    @include flex-display-row;
+    justify-content: space-between;
+    align-items: center;
+}
 .shortpostviewer-inline-comments {
     padding: 5px;
 }
@@ -54,7 +58,11 @@
     justify-content: space-between;
 }
 
-.shortpostviewer-bottom-bar{
+.shortpostviewer-bottom-bar {
     @include flex-display-row;
     justify-content: space-between;
+    align-items: center;
+    button{
+        height: fit-content;
+    }
 }

@@ -14,7 +14,7 @@ a#returninguser {
  
 #returninguser-infinite-scroll {
     margin: auto;
-    width: 800px;
+    width: $small-post-container-width;
     @include flex-display-column;
 
     .returninguser-feed-object {
@@ -23,7 +23,7 @@ a#returninguser {
         background-color: white;
         border-color: rgba(0, 0, 0, 0.2);
         border-radius: 3px;
-        margin: 100px;
+        margin: 50px;
     }
 }
  

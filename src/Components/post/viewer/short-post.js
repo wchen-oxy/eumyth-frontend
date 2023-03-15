@@ -252,7 +252,7 @@ class ShortPostViewer extends React.Component {
         }
     }
 
-    renderImageSlider(windowType) {
+    renderImageSlider(windowType, windowWidth) {
         const sliderClassName = this.props.largeViewMode ?
             'shortpostviewer-large-hero-image short-post-hero-image-container' :
             'shortpostviewer-inline-hero';
@@ -479,6 +479,7 @@ class ShortPostViewer extends React.Component {
             else {
                 return (
                     <ShortPostInlineContent
+                        windowWidth={this.props.windowWidth}
                         onModalLaunch={this.handleModalLaunch}
                         {...sharedProps}
                     />)

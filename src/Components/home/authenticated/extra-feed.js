@@ -386,6 +386,7 @@ class ExtraFeed extends React.Component {
         const sharedViewerObjects = {
             pursuitObjects: this.props.pursuitObjects,
             projectPreviewMap: this.state.projectPreviewMap,
+            windowWidth: this.props.windowWidth
         }
 
         const viewerFunctions = {
