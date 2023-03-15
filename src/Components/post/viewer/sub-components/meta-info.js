@@ -1,20 +1,21 @@
 import React from "react";
 import { displayDifficulty } from "utils/constants/ui-text";
 import EventLabels from "components/timeline/sub-components/event-labels";
-import { returnFormattedDate } from 'utils/constants/ui-text';
 
 const MetaInfo = (props) => {
-    const date = props.date ? returnFormattedDate(props.date) : null;
+ 
+    
     const difficulty = displayDifficulty(props.difficulty);
+    if (!props.isMetaToggled) return null;
     return (
         <div>
+         
             <div className="metainfo-stat">
-                {/* {progression && <p>{progression} Progress</p>} */}
-                {!props.isLargeViewMode &&
+                {/* {!props.isLargeViewMode &&
                     <div className="metainfo-stat-inner metainfo-right-border">
                         <p>Date</p>
                         {date && <h4>{date.month}, {date.day}, {date.year} </h4>}
-                    </div>}
+                    </div>} */}
 
                 <div className="metainfo-stat-inner metainfo-right-border">
                     <p>Difficulty</p>

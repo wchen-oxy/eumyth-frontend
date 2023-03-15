@@ -1,17 +1,20 @@
 #shortpostviewer-large-hero {
     @include flex-display-row;
     height: $small-post-height;
-    z-index: 25;
 }
 
 #shortpostviewer-large-inline-header {
     padding-left: 10px;
 }
 
+.shortpostviewer-inline {
+    z-index: 25;
+}
+
 .shortpostviewer-large-hero-image {
     height: auto;
 }
- 
+
 .with-image {
     background-color: black;
 }
@@ -47,6 +50,11 @@
 }
 
 .shortpostviewer-nav {
+    @include flex-display-row;
+    justify-content: space-between;
+}
+
+.shortpostviewer-bottom-bar{
     @include flex-display-row;
     justify-content: space-between;
 }

@@ -15,6 +15,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import ShortPostLargeContent from './large-content';
 import ShortPostInlineContent from './inline-content';
 import MetaStage from '../draft/meta-stage';
+import MetaInfo from './sub-components/meta-info';
 
 
 const iterateDrafts = (drafts, projectID) => {
@@ -45,6 +46,7 @@ class ShortPostViewer extends React.Component {
             selectedAnnotationIndex: null,
             showPromptOverlay: false,
             projectPreview: null,
+            isMetaToggled: false,
 
         };
 
@@ -66,6 +68,7 @@ class ShortPostViewer extends React.Component {
         this.deletePostCallback = this.deletePostCallback.bind(this);
         this.handleDeletePost = this.handleDeletePost.bind(this);
         this.loadProjectPreview = this.loadProjectPreview.bind(this);
+        this.setMetaToggle = this.setMetaToggle.bind(this);
         this.jumpToComment = this.jumpToComment.bind(this);
         this.findAnnotation = this.findAnnotation.bind(this);
     }
@@ -78,6 +81,10 @@ class ShortPostViewer extends React.Component {
         this.setState({ annotations: annotationArray }, this.loadProjectPreview);
     }
 
+    setMetaToggle(e) {
+        e.stopPropagation()
+        this.setState({ isMetaToggled: !this.state.isMetaToggled });
+    }
     jumpToComment() {
         this.commentRef.current.scrollIntoView({ block: 'center' });
         this.commentRef.current.focus();
@@ -227,8 +234,20 @@ class ShortPostViewer extends React.Component {
             );
         }
         else if (windowType === COLLAPSED) {
+            const dialogue = this.state.isMetaToggled ? "Hide Meta Info" : "Show Meta Info";
+            const meta = this.props.initialViewerObject;
+            const doesMetaExist = meta.difficulty !== 0 || meta.minDuration || meta.labels.length > 0;
             return (
-                <p>{this.props.eventData.comment_count} Comments</p>
+                <div className='shortpostviewer-bottom-info'>
+                    <div className='shortpostviewer-bottom-bar'>
+                        <p>{this.props.eventData.comment_count} Comments</p>
+                        <button disabled={!doesMetaExist} onClick={this.setMetaToggle}>{dialogue}</button>
+                    </div>
+                    <div>
+                        <MetaInfo isMetaToggled={this.state.isMetaToggled} {...this.props.initialViewerObject} />
+                    </div>
+                </div>
+
             )
         }
     }
