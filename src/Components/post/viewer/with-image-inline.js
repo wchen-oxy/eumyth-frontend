@@ -29,11 +29,11 @@ const WithImageInline = (props) => {
                     {/* <MetaInfo
                         {...props.meta}
                     /> */}
-                    <CaptionText
-                        {...props.caption} />
+
 
                     {props.annotations && props.renderImageSlider(COLLAPSED, props.windowWidth)}
-
+                    <CaptionText
+                        {...props.caption} />
                 </div>
                 {props.renderComments(COLLAPSED)}
             </div>

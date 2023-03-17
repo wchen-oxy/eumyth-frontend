@@ -9,7 +9,6 @@ import WithImageInline from './with-image-inline';
 
 const ShortPostInlineContent = (props) => {
     const date = props.meta.date ? returnFormattedDate(props.meta.date) : null;
-    console.log(props.windowWidth);
     if (props.hasImages) {
 
         return (

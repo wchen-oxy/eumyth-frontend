@@ -76,8 +76,7 @@ class PostController extends React.Component {
       titlePrivacy: false,
       threadTitle: '',
       isCompleteProject: false,
-      selectedDraft: this.props.authUser ? _selectExistingDraft(this.props.authUser.drafts, data) : null
-
+      selectedDraft: this.props.authUser ? _selectExistingDraft(this.props.authUser.drafts, data) : null,
     };
 
     this.setLabels = this.setLabels.bind(this);
@@ -132,6 +131,7 @@ class PostController extends React.Component {
       this.setPreviewTitle(text);
     }
     else {
+      console.log(text);
       let tempText = this.state.tempText;;
       if (this.state.isPaginated) {
         tempText[this.state.imageIndex] = text; //fixme imageIndex
@@ -145,10 +145,10 @@ class PostController extends React.Component {
   }
 
   handlePaginatedChange() {
-    if (this.props.isPaginated === false) {
+    if (this.state.isPaginated === false) {
       const imageCount = this.props.isViewer ?
-        this.props.eventData.image_data.length :
-        this.state.validFiles.length;
+        this.props.viewerObject.eventData.image_data.length :
+        this.state.compressedPhotos.length;
       let postArray = [];
       for (let i = 0; i < imageCount; i++) {
         if (i === this.state.imageIndex) { //for the editing of an image on a non first page
@@ -269,6 +269,8 @@ class PostController extends React.Component {
   }
 
   handleSubmit(functions) {
+    console.log(this.props.eventData);
+
     const isUpdate = this.props.isViewer;
     let promiseChain = Promise.resolve();
     let formData = new FormData();
@@ -362,7 +364,7 @@ class PostController extends React.Component {
   }
 
   render() {
-
+    console.log(this.props.eventData);
     const miniAuthObject = {
       pastLabels: this.props.authUser.labels,
       userPreviewID: this.props.authUser.userPreviewID,
@@ -379,13 +381,15 @@ class PostController extends React.Component {
       isPaginated: this.state.isPaginated,
       tempText: this.state.tempText,
       modalState: this.props.modalState,
+      compressedPhotos: this.state.compressedPhotos,
 
       setDraft: this.setDraft,
       setPostStage: this.setPostStage,
       setIsPaginated: this.setIsPaginated,
       setPreviewTitle: this.setPreviewTitle,
       onIndexChange: this.handleIndexChange,
-      onTextChange: this.handleTextChange
+      onTextChange: this.handleTextChange,
+      onPaginatedChange: this.handlePaginatedChange,
     }
 
     const initialSharedObject = {
@@ -464,7 +468,7 @@ class PostController extends React.Component {
       return (
         <ShortPostDraft
           {...miniAuthObject}
-          
+
           {...shared}
 
           initialDraftObject={initialDraftObject}
@@ -474,7 +478,7 @@ class PostController extends React.Component {
           threadFunction={threadFunction}
           setPhotoData={this.setPhotoData}
           closeModal={this.props.closeModal}
-          
+
         />
       );
   }

@@ -15,13 +15,12 @@ class ShortPost extends React.Component {
       imageIndex: 0,
 
       selectedFiles: [],
-      validFiles: [],
+      // validFiles: [],
       unsupportedFiles: [],
       imageArray: [],
 
 
-      textData: '',
-      postDisabled: true,
+       postDisabled: true,
 
     };
     this.warnModalClose = this.warnModalClose.bind(this);
@@ -59,7 +58,6 @@ class ShortPost extends React.Component {
           this.setState({
             imageArray: result,
             displayedItemCount: result.length,
-            validFiles: validFiles,
             isCompressing: true
           },
             () => {
@@ -131,7 +129,9 @@ class ShortPost extends React.Component {
     this.setState({ unsupportedFiles: value })
   }
 
-  handleArrowPress(value) {
+  handleArrowPress(e, value) {
+    e.stopPropagation();
+    console.log(value);
     const currentIndex = this.state.imageIndex + value;
     if (currentIndex === this.state.imageArray.length) {
       return (
@@ -184,14 +184,14 @@ class ShortPost extends React.Component {
   }
 
   handleSortEnd({ oldIndex, newIndex }) {
-    const items = Array.from(this.state.validFiles);
+    const items = Array.from(this.props.compressedPhotos);
     const [reorderedItem] = items.splice(oldIndex, 1);
     items.splice(newIndex, 0, reorderedItem);
     this.transformImageProp(items);
   }
 
   render() {
-    const areFilesValid = this.state.validFiles.length === 0
+    const areFilesValid = this.props.compressedPhotos.length === 0
       || this.state.unsupportedFiles.length > 0;
 
     if (this.props.window === 1) {
@@ -209,11 +209,11 @@ class ShortPost extends React.Component {
 
       const editorStates = {
         selectedFiles: this.state.selectedFiles,
-        validFiles: this.state.validFiles,
+        validFiles: this.props.compressedPhotos,
         imageArray: this.state.imageArray,
         unsupportedFiles: this.state.unsupportedFiles,
         tempText: this.props.tempText,
-        imageIndex: this.props.imageIndex,
+        imageIndex: this.state.imageIndex,
       };
 
       const imageEditorFunctions = {
@@ -234,6 +234,7 @@ class ShortPost extends React.Component {
           {...navStates}
           {...navFunctions}
           {...this.props.initialDraftObject}
+          isPaginated={this.props.isPaginated}
           editorStates={editorStates}
           editorFunctions={imageEditorFunctions}
         />

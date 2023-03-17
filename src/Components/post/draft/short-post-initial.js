@@ -30,6 +30,7 @@ const ShortPostInitial = (props) => {
         value={props.previewTitle} />
     </div>
     <ShortEditor
+      isPaginated={props.isPaginated}
       {...props.editorFunctions}
       {...props.editorStates}
     />
