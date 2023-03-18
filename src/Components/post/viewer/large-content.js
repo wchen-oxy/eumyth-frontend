@@ -11,15 +11,14 @@ const ShortPostLargeContent = (props) => {
     if (props.hasImages) {
         return (
             <div className='small-post-window'>
-                <div id='shortpostviewer-large-hero'
-                    className='with-image'>
+                <div id='shortpostviewer-large-hero'>
                     {props.annotations && props.renderImageSlider(EXPANDED)}
                     <div
                         className='shortpostviewer-large-side  short-post-side-container'
                         ref={props.heroRef}
                     >
                         <Thread {...props.meta} />
-                        <UserHeader {...props.user}/>
+                        <UserHeader {...props.user} />
                         <MetaInfo
                             isLargeViewMode
                             {...props.meta}
@@ -43,7 +42,7 @@ const ShortPostLargeContent = (props) => {
         return (
             <div className='small-post-window'>
                 <Thread {...props.meta} />
-                <UserHeader {...props.user}/>
+                <UserHeader {...props.user} />
                 <MetaInfo
                     isLargeViewMode
                     {...props.meta}

@@ -60,14 +60,22 @@ $input-hero-search: 48px;
 $button-action-padding: 12px;
 $button-action-border-radius: 16px;
 
-//post related measurments
-$small-post-container-width: 800px;
+//post image buttons 
+$button-image-nav-height: 50px;
+//post feed dimension measurments (effectively post width)
+$small-post-container-width: 700px;
+//post draft
 $small-post-draft-height: 350px;
-// $small-post-height: calc(100vh - 50px);
-$small-post-image-height: 600px;
-$small-post-height: 600px;
+
+$small-post-height: 650px;
 $small-post-width: 76vw;
+//shared button dimensions
 $small-button-window: 19vh;
+
+// $small-post-height: calc(100vh - 50px);
+$small-post-image-height: calc(#{$small-post-height} - 50px);
+ 
+
 
 //step indicator
 $size-step-indicator: 48px;

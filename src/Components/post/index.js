@@ -31,6 +31,11 @@ const _selectExistingDraft = (drafts, eventData) => {
 
 }
 
+const _parseTextData = (data) => {
+  if (!!data && data.is_paginated) return JSON.parse(data.text_data);
+  else return '';
+}
+
 const labelFormatter = (value) => { return { label: value, value: value } };
 class PostController extends React.Component {
   _isMounted = false;
@@ -60,7 +65,7 @@ class PostController extends React.Component {
         data.post_privacy_type : this.props.authUser.preferredPostType,
 
       //editors
-      tempText: '',
+      tempText: _parseTextData(data),
       compressedPhotos: [],
       coverPhoto: null,
       //initial
@@ -109,10 +114,11 @@ class PostController extends React.Component {
 
   componentDidMount() {
     this._isMounted = true;
-    if (this.props.isViewer) checkPostFunctionsExist(
-      this.props.viewerFunctions,
-      this.props.viewerObject?.isPostOnlyView
-    );
+    if (this._isMounted
+      && this.props.isViewer) checkPostFunctionsExist(
+        this.props.viewerFunctions,
+        this.props.viewerObject?.isPostOnlyView
+      );
   }
 
   componentWillUnmount() {
@@ -131,9 +137,12 @@ class PostController extends React.Component {
       this.setPreviewTitle(text);
     }
     else {
+      let tempText = this.state.tempText;
       console.log(text);
-      let tempText = this.state.tempText;;
+      console.log(tempText);
+      console.log(tempText[this.state.imageIndex]);
       if (this.state.isPaginated) {
+
         tempText[this.state.imageIndex] = text; //fixme imageIndex
       }
       else {
@@ -155,7 +164,7 @@ class PostController extends React.Component {
           postArray.push(this.state.tempText);
         }
         else {
-          postArray.push([]);
+          postArray.push('');
         }
       }
       this.setState({ tempText: postArray }, () => this.setIsPaginated(true));
@@ -171,6 +180,7 @@ class PostController extends React.Component {
   }
 
   handleIndexChange(imageIndex) {
+    console.log(imageIndex);
     this.setState({ imageIndex });
   }
 
@@ -364,7 +374,6 @@ class PostController extends React.Component {
   }
 
   render() {
-    console.log(this.props.eventData);
     const miniAuthObject = {
       pastLabels: this.props.authUser.labels,
       userPreviewID: this.props.authUser.userPreviewID,
@@ -448,6 +457,7 @@ class PostController extends React.Component {
       handleSubmit: this.handleSubmit,
       setThreadToggleState: this.setThreadToggleState,
     }
+
     if (this.props.isViewer) {
       return (
         <ShortPostViewer

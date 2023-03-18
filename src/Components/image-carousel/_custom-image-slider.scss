@@ -3,8 +3,8 @@
     max-height: $small-post-draft-height;
     background-color: black;
     img {
-        min-height: calc(#{$small-post-draft-height} - 24px);
-        max-height: calc(#{$small-post-draft-height} - 24px);
+        min-height: $small-post-draft-height;
+        max-height: $small-post-draft-height;
         object-fit: contain;
     }
 }
@@ -12,11 +12,13 @@
 .customimageslider-hero-container {
     background-color: black;
     img {
-        max-height: calc(#{$small-post-height} - 24px);
+        max-height: $small-post-image-height;
         object-fit: contain;
     }
 }
 
 .customimageslider-expanded img {
-    min-height: calc(#{$small-post-height} - 24px);
+    min-height: $small-post-image-height;
+    background-color: black;
+
 }

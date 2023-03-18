@@ -12,7 +12,6 @@ class ShortPost extends React.Component {
     //   draftStateSetter(this.props);
     this.state = {
       window: 1,
-      imageIndex: 0,
 
       selectedFiles: [],
       // validFiles: [],
@@ -20,11 +19,10 @@ class ShortPost extends React.Component {
       imageArray: [],
 
 
-       postDisabled: true,
+      postDisabled: true,
 
     };
     this.warnModalClose = this.warnModalClose.bind(this);
-    this.handleIndexChange = this.handleIndexChange.bind(this);
     this.setSelectedFiles = this.setSelectedFiles.bind(this);
     this.setValidFiles = this.setValidFiles.bind(this);
     this.setUnsupportedFiles = this.setUnsupportedFiles.bind(this);
@@ -107,9 +105,6 @@ class ShortPost extends React.Component {
     });
   }
 
-  handleIndexChange(value) {
-    this.setState({ imageIndex: value });
-  }
 
   setImageArray(imageArray) {
     this.setState({ imageArray: imageArray });
@@ -132,25 +127,19 @@ class ShortPost extends React.Component {
   handleArrowPress(e, value) {
     e.stopPropagation();
     console.log(value);
-    const currentIndex = this.state.imageIndex + value;
+    const currentIndex = this.props.imageIndex + value;
     if (currentIndex === this.state.imageArray.length) {
       return (
-        this.setState({
-          imageIndex: 0,
-        }));
+        this.props.onIndexChange(0));
     }
     else if (currentIndex === -1) {
       return (
-        this.setState({
-          imageIndex: this.state.imageArray.length - 1,
-
-        }));
+        this.props.onIndexChange(this.props.compressedPhotos.length - 1)
+      );
     }
     else {
       return (
-        this.setState(({
-          imageIndex: currentIndex,
-        })));
+        this.props.onIndexChange(currentIndex));
     }
   }
 
@@ -213,7 +202,7 @@ class ShortPost extends React.Component {
         imageArray: this.state.imageArray,
         unsupportedFiles: this.state.unsupportedFiles,
         tempText: this.props.tempText,
-        imageIndex: this.state.imageIndex,
+        imageIndex: this.props.imageIndex,
       };
 
       const imageEditorFunctions = {

@@ -36,6 +36,7 @@ const findMatchedDraft = (drafts, projectPreviewRaw) => {
     else return null;
 }
 class ShortPostViewer extends React.Component {
+    _isMounted = false;
     constructor(props) {
         super(props);
         this.state = {
@@ -74,11 +75,18 @@ class ShortPostViewer extends React.Component {
     }
 
     componentDidMount() {
-        let annotationArray = [];
-        for (let i = 0; i < this.props.eventData.image_data.length; i++) {
-            annotationArray.push([]);
+        this._isMounted = true;
+        if (this._isMounted) {
+            let annotationArray = [];
+            for (let i = 0; i < this.props.eventData.image_data.length; i++) {
+                annotationArray.push([]);
+            }
+            this.setState({ annotations: annotationArray }, this.loadProjectPreview);
         }
-        this.setState({ annotations: annotationArray }, this.loadProjectPreview);
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     setMetaToggle(e) {
