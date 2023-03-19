@@ -18,7 +18,6 @@ class ShortPost extends React.Component {
       unsupportedFiles: [],
       imageArray: [],
 
-
       postDisabled: true,
 
     };
@@ -126,7 +125,6 @@ class ShortPost extends React.Component {
 
   handleArrowPress(e, value) {
     e.stopPropagation();
-    console.log(value);
     const currentIndex = this.props.imageIndex + value;
     if (currentIndex === this.state.imageArray.length) {
       return (

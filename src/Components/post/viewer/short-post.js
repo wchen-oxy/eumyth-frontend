@@ -249,8 +249,10 @@ class ShortPostViewer extends React.Component {
                 <div className='shortpostviewer-bottom-info'>
                     <div className='shortpostviewer-bottom-bar'>
                         <p>{this.props.eventData.comment_count} Comments</p>
+                        <button onClick={this.handleModalLaunch}>Expand Post</button>
                         <button disabled={!doesMetaExist} onClick={this.setMetaToggle}>{dialogue}</button>
                     </div>
+
                     <div>
                         <MetaInfo isMetaToggled={this.state.isMetaToggled} {...this.props.initialViewerObject} />
                     </div>
@@ -489,7 +491,7 @@ class ShortPostViewer extends React.Component {
                 return (
                     <ShortPostInlineContent
                         windowWidth={this.props.windowWidth}
-                        onModalLaunch={this.handleModalLaunch}
+                       
                         {...sharedProps}
                     />)
 

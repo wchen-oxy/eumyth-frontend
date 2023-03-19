@@ -138,11 +138,7 @@ class PostController extends React.Component {
     }
     else {
       let tempText = this.state.tempText;
-      console.log(text);
-      console.log(tempText);
-      console.log(tempText[this.state.imageIndex]);
       if (this.state.isPaginated) {
-
         tempText[this.state.imageIndex] = text; //fixme imageIndex
       }
       else {
@@ -180,7 +176,6 @@ class PostController extends React.Component {
   }
 
   handleIndexChange(imageIndex) {
-    console.log(imageIndex);
     this.setState({ imageIndex });
   }
 
@@ -279,8 +274,6 @@ class PostController extends React.Component {
   }
 
   handleSubmit(functions) {
-    console.log(this.props.eventData);
-
     const isUpdate = this.props.isViewer;
     let promiseChain = Promise.resolve();
     let formData = new FormData();

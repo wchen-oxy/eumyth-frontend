@@ -4,8 +4,10 @@ import ShortEditor from '../editor/short-editor';
 import Steps from './sub-components/steps';
 
 const ShortPostInitial = (props) => {
-   return (<div id='shortpostinitial'
-    className="small-post-window">
+  return (<div 
+  id='shortpostinitial' 
+  className='draft-window'
+  >
     <h2 id="shortpostinitial-title">Short Post</h2>
     {props.isCompressing && <p>Compressing Photos</p>}
     <div className='shortpostinitial-nav'>

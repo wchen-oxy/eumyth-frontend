@@ -5,6 +5,7 @@ import UserHeader from './sub-components/user-header';
 import Thread from './sub-components/thread';
 
 const WithImageInline = (props) => {
+    console.log(props.caption);
     if (props.windowWidth > 600) {
         return (
             <div className='shortpostviewer-inline' onClick={props.onModalLaunch}>
@@ -32,8 +33,8 @@ const WithImageInline = (props) => {
 
 
                     {props.annotations && props.renderImageSlider(COLLAPSED, props.windowWidth)}
-                    <CaptionText
-                        {...props.caption} />
+                    <p>{props.caption.isPaginated && props.caption.textData ?
+                        props.caption.textData[props.caption.imageIndex] : props.caption.textData}</p>
                 </div>
                 {props.renderComments(COLLAPSED)}
             </div>
