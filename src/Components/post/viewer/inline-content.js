@@ -33,18 +33,20 @@ const ShortPostInlineContent = (props) => {
                     <div className='shortpostviewer-inline-side'>
                         <Thread {...props.meta} />
                     </div>
-                    <div className='shortpostviewer-secondary-header'>
-                        <div className="">
-                            {date && <h4>{date.month}, {date.day}, {date.year} </h4>}
-                        </div>
-                        <UserHeader
-                            {...props.user}
-                        />
-                    </div>
 
                     <div className='shortherotext-title-container'>
                         {props.caption.title && <h2>{props.caption.title}</h2>}
                     </div>
+
+                    <div className='shortpostviewer-secondary-header'>
+                        <UserHeader
+                            {...props.user}
+                        />
+                        <div className="">
+                            {date && <h4>{date.month}, {date.day}, {date.year} </h4>}
+                        </div>
+                    </div>
+
 
                     {/* <div className='shortpostviewer-inline-side'>
                         <MetaInfo

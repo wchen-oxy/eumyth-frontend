@@ -61,13 +61,13 @@ $button-action-padding: 12px;
 $button-action-border-radius: 16px;
 
 //post image buttons 
-$button-image-nav-height: 50px;
+$button-image-nav-height: 48px;
 //post feed dimension measurments (effectively post width)
-$small-post-container-width: 700px;
+$small-post-container-width: 768px;
 //post draft
-$small-post-draft-height: 350px;
+$small-post-draft-height: 384px;
 
-$small-post-height: 650px;
+$small-post-height: 640px;
 $small-post-width: 76vw;
 //shared button dimensions
 $small-button-window: 19vh;
@@ -75,7 +75,8 @@ $small-button-window: 19vh;
 // $small-post-height: calc(100vh - 50px);
 $small-post-image-height: calc(#{$small-post-height} - 50px);
  
-
+//image nav 
+$image-nav-container-height: 24px;
 
 //step indicator
 $size-step-indicator: 48px;

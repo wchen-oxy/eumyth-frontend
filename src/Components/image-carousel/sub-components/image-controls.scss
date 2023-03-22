@@ -1,4 +1,12 @@
 .imagecontrols{
     @include flex-display-row;
     justify-content: space-evenly;
+    height: $image-nav-container-height;
+    align-items: center;
+    button{
+        height: fit-content;
+    }
+    p{
+        margin: 0;
+    }
 }

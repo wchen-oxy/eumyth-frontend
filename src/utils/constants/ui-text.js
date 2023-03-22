@@ -54,6 +54,10 @@ export const displayProgressionType = (value) => {
     }
 }
 
+export const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export const returnFormattedDate = (rawDate) => {
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
@@ -72,12 +76,12 @@ export const returnFormattedDate = (rawDate) => {
 
 export const returnFormattedDistance = (distance) => {
     if (!distance) return null;
-    if (distance < 1) return "Your Local Neighbor";
-    else if (distance < 7) return "Your City Neighbor";
-    else if (distance < 39) return "Your County Neighbor";
-    else if (distance < 100) return "Your Next City Over Neighbor";
-    else if (distance < 500) return "Your State Neighbor";
-    else return "Your Super Far Away Neighbor Who Lives " +
+    if (distance < 1) return " Is Your Local Neighbor";
+    else if (distance < 7) return " Is Your City Neighbor";
+    else if (distance < 39) return " Is Your County Neighbor";
+    else if (distance < 100) return " Is Your Next City Over Neighbor";
+    else if (distance < 500) return " Is Your State Neighbor";
+    else return " Is Your Super Far Away Neighbor Who Lives " +
         Math.floor(distance) + ' miles from you';
 
 }

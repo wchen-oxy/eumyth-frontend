@@ -1,1 +1,28 @@
- 
+.thread {
+    line-height: 32px;
+    h2 {
+        font-size: 16px;
+        color: $black-900;
+        padding: 0px;
+
+    }
+    h4 {
+        color: $black-400;
+        font-size: 16px;
+        padding: 0 4px;
+    }
+    a {
+        font-size: 18px;
+        font-weight: 100;
+        color: $black-700;
+        padding: 0px;
+
+    }
+    h2,
+    h4,
+    a {
+        display: inline-block;
+        vertical-align: baseline;
+        margin: 0px;
+    }
+}

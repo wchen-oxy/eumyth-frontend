@@ -6,52 +6,49 @@
     p {
         margin: 0;
     }
-}
-.userfeeditem-photo {
-    @include flex-display-column;
-    width: 99%;
-    text-align: center;
-    img {
-        width: 100%;
-    }
-}
-.userfeeditem-upper-main {
-    @include flex-display-column;
-    .userfeeditem-upper-top {
+
+    .userfeeditem-upper-main {
         @include flex-display-row;
-        h3 {
-            padding-right: 15px;
-        }
-        .userfeeditem-username-name {
-            @include flex-display-row;
-            align-items: center;
-            flex-grow: 1;
-            margin: 20px 0;
-            a {
-                padding-left: 15px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid $black-500;
+        .userfeeditem-photo {
+            img {
+                width: 100%;
             }
         }
-        .userfeeditem-distance {
-            @include flex-display-row;
-            align-items: center;
-            padding-right: 10px;
-        }
-    }
-    .userfeeditem-upper-bottom {
-        @include flex-display-row;
+
         .userfeeditem-upper-left {
             width: 39%;
-            margin-left:15px;
+            margin-top: 16px;
+            margin-left: 16px;
         }
         .userfeeditem-upper-right {
             width: 59%;
-            h3, p{
-                margin-left: 30px;
+            margin-top: 16px;
+            margin-left: 16px;
+
+            .userfeeditem-upper-right-distance {
+                color: $black-900;
+            }
+            .userfeeditem-upper-right-pursuits {
+                h5 {
+                    font-size: 14px;
+                    color: $black-600;
+                    margin-top: 12px;
+                    margin-bottom: 8px;
+                }
+                p {
+                    font-size: 18px;
+                    color: $black-900;
+                    margin: 4px 0;
+                    font-weight: 200;
+                }
             }
         }
     }
-}
 
-.userfeeditem-lower-main {
-    width: 64.9;
+    .userfeeditem-lower-main {
+        width: 64.9;
+        padding:16px;
+    }
 }

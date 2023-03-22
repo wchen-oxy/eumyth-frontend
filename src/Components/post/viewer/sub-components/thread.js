@@ -5,12 +5,14 @@ import { returnProjectURL } from 'utils/url'
 const Thread = (props) => {
     return (
         <div className="thread">
-            <p>{toTitleCase(props.pursuit)} | <span>
-                {props.projectPreview &&
-                    <a href={returnProjectURL(props.projectPreview.project_id)}>
-                        {props.projectPreview.title}
-                    </a>}
-            </span></p>
+            <h2>{(props.pursuit).toUpperCase()}
+            </h2>
+            <h4>|</h4>
+
+            {props.projectPreview &&
+                <a href={returnProjectURL(props.projectPreview.project_id)}>
+                    {props.projectPreview.title}
+                </a>}
         </div>
     )
 }

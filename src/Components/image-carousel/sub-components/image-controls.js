@@ -8,11 +8,11 @@ const ImageControls = (props) => {
                 (<div className='imagecontrols'>
                     <button
                         onClick={(e) => props.onArrowPress(e, -1)}>
-                        Previous
+                        &lt;
                     </button>
                     <p>{props.imageIndex + 1} of {props.imageArray.length}</p>
                     <button onClick={(e) => props.onArrowPress(e, 1)}>
-                        Next
+                        &gt;
                     </button>
                 </div>
                 )
