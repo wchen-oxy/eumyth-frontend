@@ -95,7 +95,7 @@ const FriendFeed = (props) => {
             }
 
             return (
-                <div key={index} className='returninguser-feed-object'>
+                <div key={index} className='returninguser-feed-object friendfeed-object'>
                     <PostController
                         isViewer
                         viewerObject={viewerObject}

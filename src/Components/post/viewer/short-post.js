@@ -247,10 +247,15 @@ class ShortPostViewer extends React.Component {
             const doesMetaExist = meta.difficulty !== 0 || meta.minDuration || meta.labels.length > 0;
             return (
                 <div className='shortpostviewer-bottom-info'>
-                    <div className='shortpostviewer-bottom-bar'>
+                    <div className='shortpostviewer-bottom-bar '>
                         <p>{this.props.eventData.comment_count} Comments</p>
                         {/* <button onClick={this.handleModalLaunch}>Expand Post</button> */}
-                        <button disabled={!doesMetaExist} onClick={this.setMetaToggle}>{dialogue}</button>
+                        <button
+                            className={!doesMetaExist ? 'shortpostviewer-showmeta-disabled' : 'shortpostviewer-showmeta-enabled'}
+                            disabled={!doesMetaExist}
+                            onClick={this.setMetaToggle}>
+                            {dialogue}
+                        </button>
                     </div>
 
                     <div>

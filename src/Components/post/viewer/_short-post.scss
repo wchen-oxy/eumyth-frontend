@@ -40,10 +40,10 @@
     justify-content: center;
     align-items: center;
     .shortpostviewer-date {
-        h4{
+        h4 {
             padding-left: 24px;
             color: $black-500;
-        }    
+        }
     }
 }
 .shortpostviewer-inline-comments {
@@ -63,7 +63,17 @@
     @include flex-display-row;
     justify-content: space-between;
     align-items: center;
-    button {
-        height: fit-content;
-    }
+}
+
+.shortpostviewer-showmeta-disabled,
+.shortpostviewer-showmeta-enabled {
+    height: fit-content;
+    @extend %button-style;
+}
+
+.shortpostviewer-showmeta-enabled:hover {
+    @extend %button-style;
+    color: $black-400;
+    background-color: $button-hover;
+    cursor: none;
 }

@@ -52,8 +52,9 @@ class UserFeedItem extends React.Component {
                     </div>
 
                 </div>
-                <div className='userfeeditem-lower-main'>
-                    {data &&
+                {data &&
+                    <div className='userfeeditem-lower-main'>
+
                         <PostController
                             isViewer
                             key={data._id}
@@ -65,9 +66,9 @@ class UserFeedItem extends React.Component {
                             }}
                             viewerFunctions={this.props.viewerFunctions}
                             authUser={this.props.authUser}
-                        />}
+                        />
 
-                </div>
+                    </div>}
             </div>
 
         );

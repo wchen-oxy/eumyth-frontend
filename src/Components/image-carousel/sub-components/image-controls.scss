@@ -1,12 +1,19 @@
-.imagecontrols{
+.imagecontrols {
     @include flex-display-row;
     justify-content: space-evenly;
     height: $image-nav-container-height;
     align-items: center;
-    button{
+    margin-top: 4px;
+    margin-bottom: 4px;
+    button {
         height: fit-content;
+        @extend %button-style;
     }
-    p{
+    p {
         margin: 0;
+    }
+    button:hover{
+        @extend %button-style;
+        background-color: $button-hover;
     }
 }

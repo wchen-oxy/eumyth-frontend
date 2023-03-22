@@ -10,7 +10,6 @@
     .userfeeditem-upper-main {
         @include flex-display-row;
         padding-bottom: 16px;
-        border-bottom: 1px solid $black-500;
         .userfeeditem-photo {
             img {
                 width: 100%;
@@ -50,5 +49,6 @@
     .userfeeditem-lower-main {
         width: 64.9;
         padding:16px;
+        border-top: 1px solid $black-500;
     }
 }

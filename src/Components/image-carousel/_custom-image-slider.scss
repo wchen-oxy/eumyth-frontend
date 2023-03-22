@@ -20,9 +20,15 @@
 .customimageslider-expanded img {
     min-height: $small-post-image-height;
     background-color: black;
-
 }
 
-.customimageslider-expand-container{
-    margin: 0 auto;
+.customimageslider-expand-container {
+    margin: 4px auto;
+    button {
+        @extend %button-style;
+    }
+    button:hover{
+        @extend %button-style;
+        background-color: $button-hover;
+    }
 }

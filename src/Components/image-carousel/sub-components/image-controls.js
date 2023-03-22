@@ -19,13 +19,15 @@ const ImageControls = (props) => {
                 : null
             }
             {props.windowType === EXPANDED && !props.editProjectState &&
-                <button
-                    onClick={props.toggleAnnotations}>
-                    {props.areAnnotationsHidden ?
-                        'Show Annotations' :
-                        'Hide Annotations'
-                    }
-                </button>
+                <div className='imagecontrols'>
+                    <button
+                        onClick={props.toggleAnnotations}>
+                        {props.areAnnotationsHidden ?
+                            'Show Annotations' :
+                            'Hide Annotations'
+                        }
+                    </button>
+                </div>
             }
         </div>
     )

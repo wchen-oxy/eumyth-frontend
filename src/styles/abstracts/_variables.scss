@@ -59,8 +59,9 @@ $input-hero-search: 48px;
 //buttons
 $button-action-padding: 12px;
 $button-action-border-radius: 16px;
+$button-hover: $black-400;
 
-//post image buttons 
+//post image buttons
 $button-image-nav-height: 48px;
 //post feed dimension measurments (effectively post width)
 $small-post-container-width: 768px;
@@ -74,9 +75,9 @@ $small-button-window: 19vh;
 
 // $small-post-height: calc(100vh - 50px);
 $small-post-image-height: calc(#{$small-post-height} - 50px);
- 
-//image nav 
-$image-nav-container-height: 24px;
+
+//image nav
+$image-nav-container-height: 48px;
 
 //step indicator
 $size-step-indicator: 48px;
@@ -99,6 +100,15 @@ $modal-inner: 37;
     margin: auto;
     color: white;
     font-family: $default-font;
+}
+
+%button-style {
+    padding: 12px;
+    color: $black-900;
+    background-color: $black-100;
+    cursor: pointer;
+    border-style: none;
+    border-radius: 12px;
 }
 
 %event-container {
