@@ -1,5 +1,7 @@
 #shortpostinitial {
     @include flex-display-column;
+    padding-left: $small-post-draft-padding;
+    padding-right: $small-post-draft-padding;
 }
 
 #shortpostinitial-title {
@@ -8,20 +10,41 @@
 
 .shortpostinitial-nav {
     @include flex-display-row;
-    justify-content: space-between;
-    button {
-        height: fit-content;
-    }
+
     p {
         margin: 0;
     }
 }
 
+.shortpostinitial-nav-button-disabled,
+.shortpostinitial-nav-button-enabled,
+.shortpostinitial-nav-button-enabled:hover {
+    height: fit-content;
+    @extend %button-style;
+}
+
+.shortpostinitial-nav-button-disabled {
+    @include default-button-disabled;
+}
+
+.shortpostinitial-nav-button-enabled:hover {
+    @include default-button-hover;
+}
+
+
 #shortpostinitial-title {
     width: 50%;
-    margin: 0 auto;
+    margin: 16px auto;
 }
 
 #shortpostinitial-input {
     width: 100%;
+}
+
+#shortpostinitial-discard {
+    @include flex-left;
+}
+
+#shortpostinitial-review {
+    @include flex-right;
 }

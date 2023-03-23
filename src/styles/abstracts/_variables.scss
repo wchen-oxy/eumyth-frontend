@@ -59,7 +59,7 @@ $input-hero-search: 48px;
 //buttons
 $button-action-padding: 12px;
 $button-action-border-radius: 16px;
-$button-hover: $black-400;
+$button-hover: $black-700;
 
 //post image buttons
 $button-image-nav-height: 48px;
@@ -67,6 +67,7 @@ $button-image-nav-height: 48px;
 $small-post-container-width: 768px;
 //post draft
 $small-post-draft-height: 384px;
+$small-post-draft-padding: 8px;
 
 $small-post-height: 640px;
 $small-post-width: 76vw;
@@ -104,6 +105,7 @@ $modal-inner: 37;
 }
 
 %button-style {
+    height: fit-content;
     padding: 12px;
     color: $black-900;
     background-color: $black-100;

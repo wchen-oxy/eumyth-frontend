@@ -40,12 +40,18 @@
 }
 
 @mixin no-select {
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Old versions of Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none; /* Non-prefixed version, currently 
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently 
     supported by Chrome, Edge, Opera and Firefox */
 }
 
@@ -62,10 +68,40 @@
 }
 
 @mixin text {
+
     h4,
     p {
         margin: 0;
         padding-top: 10px;
         text-align: center;
     }
+}
+
+@mixin default-button-hover {
+    color: $black-400;
+    background-color: $button-hover;
+}
+
+@mixin default-button-disabled {
+    color: $black-300;
+    background-color: $black-200;
+    cursor: default;
+}
+
+@mixin flex-left {
+    display: flex;
+    flex: 1;
+    justify-content: flex-start;
+}
+
+@mixin flex-center {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
+
+@mixin flex-right {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
 }

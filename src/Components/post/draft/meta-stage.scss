@@ -1,17 +1,37 @@
-#metastage-title{
+#metastage{
+    padding-left:$small-post-draft-padding;
+    padding-right: $small-post-draft-padding;
+}
+#metastage-title {
+    margin: 16px auto;
     text-align: center;
 }
 
-#metastage-desc{
-
+#metastage-desc {
+    margin: 16px auto;
 }
 
-.metastage-nav{
+.metastage-nav {
     @include flex-display-row;
     justify-content: space-between;
     padding-left: 8px;
     padding-right: 8px;
-    button{
+
+    button,
+    button:hover {
         height: fit-content;
+        @extend %button-style;
     }
+
+    button:hover {
+        @include default-button-hover;
+    }
+}
+
+#metastage-prev {
+    @include flex-left;
+}
+
+#metastage-next {
+    @include flex-right;
 }

@@ -6,7 +6,7 @@ const ReviewStage = (props) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const handleSubmit = () => {  
+    const handleSubmit = () => {
         setIsSubmitting(true);
         const functions = {
             setIsSubmitting,
@@ -24,30 +24,40 @@ const ReviewStage = (props) => {
 
     const disableCond1 = !props.selectedDraft;
     const disableCond2 = props.threadTitle.length === 0 || !props.selectedPursuit;
-
+    const isDisabled = isSubmitting || props.threadToggleState ? disableCond2 : disableCond1;
+    const reviewClassName = isDisabled ? 'reviewstage-button-disabled' : ' reviewstage-button-enabled';
     return (
         < div id='reviewstage'>
             <div>
                 <div id='reviewstage-header'>
                     <h2>Add your metadata!</h2>
-                    {disableCond1 && <p>**Please Select or Create a Series**</p>}
-
                 </div>
                 <div id="reviewstage-nav">
-                    <button
-                        value={props.previousState}
-                        onClick={e => handleReturnClick(e.target.value)}
-                    >  Return
-                    </button>
+                    <div id='reviewstage-prev'>
+                        <button
+                            className='reviewstage-button-enabled'
+                            value={props.previousState}
+                            onClick={e => handleReturnClick(e.target.value)}
+                        >  Return
+                        </button>
+                    </div>
                     <Steps current={3} />
-                    <button
-                        onClick={(e) => handleSubmit()}
-                        disabled={isSubmitting || props.threadToggleState ? disableCond2 : disableCond1}>
-                        {props.isUpdateToPost ?
-                            isSubmitting ? 'Updating!' : 'Update!' :
-                            isSubmitting ? 'Posting!' : 'Post!'}
-                    </button>
+
+                    <div id='reviewstage-next'>
+                        <button
+                            className={reviewClassName}
+                            onClick={(e) => handleSubmit()}
+                            disabled={isDisabled}>
+                            {props.isUpdateToPost ?
+                                isSubmitting ? 'Updating!' : 'Update!' :
+                                isSubmitting ? 'Posting!' : 'Post!'}
+                        </button>
+                    </div>
                 </div>
+                <div id='reviewstage-desc'>
+                    {disableCond1 && <p>Please Select or Create a Series</p>}
+                </div>
+
                 <div>
                     <ProjectDraftControls
                         isUpdateToPost={props.isUpdateToPost}

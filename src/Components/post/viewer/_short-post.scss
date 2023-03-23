@@ -35,10 +35,12 @@
 .shortpostviewer-inline-side {
     width: 100%;
 }
+
 .shortpostviewer-secondary-header {
     @include flex-display-row;
     justify-content: center;
     align-items: center;
+
     .shortpostviewer-date {
         h4 {
             padding-left: 24px;
@@ -46,6 +48,7 @@
         }
     }
 }
+
 .shortpostviewer-inline-comments {
     padding: 5px;
 }
@@ -66,14 +69,15 @@
 }
 
 .shortpostviewer-showmeta-disabled,
-.shortpostviewer-showmeta-enabled {
+.shortpostviewer-showmeta-enabled,
+.shortpostviewer-showmeta-enabled:hover
+{
     height: fit-content;
     @extend %button-style;
 }
-
+.shortpostviewer-showmeta-disabled{
+    @include default-button-disabled;
+}
 .shortpostviewer-showmeta-enabled:hover {
-    @extend %button-style;
-    color: $black-400;
-    background-color: $button-hover;
-    cursor: none;
+    @include default-button-hover;
 }

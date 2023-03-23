@@ -1,17 +1,24 @@
 #reviewstage {
     @include flex-display-column;
+    padding-left: $small-post-draft-padding;
+    padding-right:$small-post-draft-padding;
+
     input,
     select {
         width: 50%;
     }
-    
+
     label {
         font-weight: bold;
     }
-    
+
+    h2 {
+        margin: 16px auto;
+    }
 }
 
 #reviewstage-header {
+    margin: 16px auto;
     text-align: center;
 }
 
@@ -19,4 +26,31 @@
     @include flex-display-row;
     justify-content: space-between;
     padding: 0 5px;
+}
+
+#reviewstage-prev {
+    @include flex-left;
+}
+
+#reviewstage-next {
+    @include flex-right;
+}
+
+#reviewstage-desc {
+    text-align: center;
+    color: $black-600;
+}
+
+.reviewstage-button-disabled,
+.reviewstage-button-enabled,
+.reviewstage-button-enabled:hover {
+    @extend %button-style;
+}
+
+.reviewstage-button-disabled {
+    @include default-button-disabled;
+}
+
+.reviewstage-button-enabled:hover {
+    @include default-button-hover;
 }

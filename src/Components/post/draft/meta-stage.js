@@ -11,19 +11,30 @@ import PrePostControls from './sub-components/pre-post-controls';
 
 const MetaStage = (props) => {
     return (
-        <div className="small-post-window">
+        <div
+            id='metastage'
+            className="small-post-window">
             <h2 id="metastage-title">Post Info</h2>
             <div className='metastage-nav'>
-                <button value={props.previousState} onClick={e => props.setPostStage(e.target.value)}>
-                    Return
-                </button>
+                <div id='metastage-prev'>
+                    <button
+                        value={props.previousState}
+                        onClick={e => props.setPostStage(e.target.value)}
+                    >
+                        Return
+                    </button>
+                </div>
+
                 <Steps current={2} />
-                <button
-                    value={props.previousState + 2}
-                    onClick={e => props.setPostStage(e.target.value)}
-                >
-                    Review Series
-                </button>
+                <div id='metastage-next'>
+                    <button
+                        value={props.previousState + 2}
+                        onClick={e => props.setPostStage(e.target.value)}
+                    >
+                        Review Series
+                    </button>
+                </div>
+
             </div>
             <div>
                 <div id='metastage-desc'>
