@@ -339,7 +339,7 @@ class ExtraFeed extends React.Component {
                         viewerObject['eventData'] = item.data;
                         viewerObject['textData'] = item.data.text_data;
                         return (
-                            <div key={index} className='returninguser-feed-object'>
+                            <div key={index} className='returninguser-feed-object extrafeed-object'>
                                 <PostController
                                     isViewer
                                     viewerObject={viewerObject}

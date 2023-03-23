@@ -1,15 +1,18 @@
 .userfeeditem-user {
     @include flex-display-column;
+
     h3 {
         margin: 0;
     }
+
     p {
         margin: 0;
     }
 
     .userfeeditem-upper-main {
         @include flex-display-row;
-        padding-bottom: 16px;
+        padding-bottom: $feed-post-padding-size;
+
         .userfeeditem-photo {
             img {
                 width: 100%;
@@ -18,17 +21,19 @@
 
         .userfeeditem-upper-left {
             width: 39%;
-            margin-top: 16px;
-            margin-left: 16px;
+            margin-top: $feed-post-padding-size;
+            margin-left: $feed-post-padding-size;
         }
+
         .userfeeditem-upper-right {
             width: 59%;
-            margin-top: 16px;
-            margin-left: 16px;
+            margin-top: $feed-post-padding-size;
+            margin-left: $feed-post-padding-size;
 
             .userfeeditem-upper-right-distance {
                 color: $black-900;
             }
+
             .userfeeditem-upper-right-pursuits {
                 h5 {
                     font-size: 14px;
@@ -36,6 +41,7 @@
                     margin-top: 12px;
                     margin-bottom: 8px;
                 }
+
                 p {
                     font-size: 18px;
                     color: $black-900;
@@ -48,7 +54,7 @@
 
     .userfeeditem-lower-main {
         width: 64.9;
-        padding:16px;
+        padding: $feed-post-padding-size;
         border-top: 1px solid $black-500;
     }
 }

@@ -34,11 +34,16 @@ a#returninguser {
     margin-top: 2.5%;
     margin-bottom: 2.5%;
     padding: 2vh;
+
     a {
         @include link-decoration;
     }
 }
 
-.friendfeed-object{
-    padding: 16px;
+.friendfeed-object {
+    padding: $feed-post-padding-size;
+}
+
+.extrafeed-object {
+    padding: $feed-post-padding-size;
 }
