@@ -42,7 +42,7 @@ const ShortPostInlineContent = (props) => {
                         <UserHeader
                             {...props.user}
                         />
-                        <div className="">
+                        <div className="shortpostviewer-date">
                             {date && <h4>{date.month}, {date.day}, {date.year} </h4>}
                         </div>
                     </div>

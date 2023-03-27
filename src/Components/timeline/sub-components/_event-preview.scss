@@ -1,0 +1,20 @@
+.eventpreview-image-container,
+.eventpreview-snippet-container {
+    max-height: 128px;
+    overflow: hidden;
+}
+
+.eventpreview-image-container {
+    img {
+        height: auto;
+        width: 100%;
+    }
+}
+
+.eventpreview-snippet-container {
+    min-height: 124px;
+    p {
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+}
