@@ -22,6 +22,12 @@
 
 #projectcontroller-return {
     padding-top: 20px;
+    button {
+        @extend %button-style;
+    }
+    button:hover {
+        @extend %button-style;
+    }
 }
 
 .projectcontroller-checkbox-span {
@@ -29,4 +35,17 @@
     input {
         width: auto;
     }
+}
+
+.projectcontroller-btn-enabled,
+.projectcontroller-btn-disabled {
+    @extend %button-style;
+}
+.projectcontroller-btn-enabled:hover {
+    @extend %button-style;
+    @include default-button-hover;
+}
+
+.projectcontroller-btn-disabled {
+    @include default-button-disabled;
 }

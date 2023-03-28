@@ -2,12 +2,29 @@
     @include flex-display-row;
     justify-content: center;
     margin: auto 0;
+    button,
+    button:hover {
+        @extend %button-style;
+    }
+    button:hover {
+        @include default-button-hover;
+    }
 }
 
 #hiddenbuttons-options {
     @include flex-display-column;
     margin-left: -40px;
-    margin-top: -41px;
+    margin-top: -81px;
     position: absolute;
     z-index: 50;
+    padding: 4px;
+    background-color: $black-300;
+    border-radius: 16px;
+}
+
+#hiddenbuttons-options-edit {
+    margin-bottom: 4px;
+}
+
+#hiddenbuttons-options-remove {
 }

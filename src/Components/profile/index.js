@@ -394,8 +394,6 @@ class ProfilePageAuthenticated extends React.Component {
                     eventData: this.state.selectedContent,
                     projectPreviewMap: {}
                 }
-
-
                 return (
                     <PostController
                         isViewer
@@ -486,14 +484,14 @@ class ProfilePageAuthenticated extends React.Component {
 
                         <div id='profile-content-switch'>
                             <button
-                                className="btn-switch"
+                                className={this.state.contentType === POST ? 'profile-content-selected' : 'profile-content-unselected'}
                                 disabled={this.state.contentType === POST ?
                                     true : false}
                                 onClick={() => this.handleMediaTypeSwitch(POST)}>
                                 Posts
                             </button>
                             <button
-                                className="btn-switch"
+                                className={this.state.contentType === PROJECT ? 'profile-content-selected' : 'profile-content-unselected'}
                                 disabled={this.state.contentType === PROJECT ?
                                     true : false}
                                 onClick={() => this.handleMediaTypeSwitch(PROJECT)}>

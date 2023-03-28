@@ -64,6 +64,22 @@
     @include flex-display-row;
     justify-content: center;
     width: 100%;
-    margin:  24px auto;
+    margin: 24px auto;
     max-width: 940px;
+}
+
+.profile-content-selected,
+.profile-content-unselected {
+    @extend %button-style;
+    margin-left: 4px;
+    margin-right: 4px;
+    cursor: pointer;
+}
+
+.profile-content-selected {
+    @include default-button-disabled;
+}
+
+.profile-content-unselected:hover {
+    @include default-button-hover;
 }

@@ -7,7 +7,17 @@
 #topbuttonbar-dual-button-bar {
     @include flex-display-row;
     justify-content: space-between;
-    padding-top: 20px;
+    margin-bottom: 20px;
+}
+#topbuttonbar-left-button,
+#topbuttonbar-right-button {
+    @extend %button-style;
+}
+
+#topbuttonbar-left-button:hover,
+#topbuttonbar-right-button:hover{
+    @extend %button-style;
+    @include default-button-hover;
 }
 
 #topbuttonbar-right-button {

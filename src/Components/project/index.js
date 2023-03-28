@@ -26,7 +26,39 @@ const EDIT = "EDIT";
 const REVIEW = "REVIEW";
 const TITLE = "TITLE";
 const OVERVIEW = "OVERVIEW";
-
+const spacer = (
+    <div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+    </div>
+);
 const handleIndexUpdate = (index) => {
     index++;
     if (index === 4) return 0;
@@ -526,7 +558,6 @@ class ProjectController extends React.Component {
             PROJECT_EVENT : PROJECT;
         switch (this.state.window) {
             case (MAIN):
-                console.log(this.state.feedData)
                 const sourceContent = this.props.isContentOnlyView ? this.props.content : this.state.selectedProject;
                 const event = this.state.feedData ? this.state.feedData[this.state.selectedEventIndex] : [];
                 const forkData = {
@@ -632,6 +663,7 @@ class ProjectController extends React.Component {
                                 axis="xy"
                             />
                         </div>
+                        {this.state.semiFinalData.length < 12 && spacer}
                     </div>
                 );
             case (REVIEW):

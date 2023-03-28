@@ -182,6 +182,8 @@ const ProjectReview = (props) => {
 
 
     const isCompressing = coverPhotoBoolean && !coverPhoto;
+    const isDisabled = isCompressing || !pursuit || !props.title; 
+    const buttonClass = isDisabled ? 'projectcontroller-btn-enabled': 'projectcontroller-btn-disabled';
     let existingCoverPhotoKey = null;
     if (props.projectMetaData) {
         existingCoverPhotoKey = props.projectMetaData ? props.projectMetaData.coverPhoto : props.projectMetaData.cover_photo_key;
@@ -282,18 +284,38 @@ const ProjectReview = (props) => {
                     />
                 </div>
                 <button
-                    disabled={isCompressing || !pursuit || !props.title}
+                    className={buttonClass}
+                    disabled={isDisabled}
                     onClick={() => handleSubmit(DRAFT)}
                 >
                     Save
                 </button>
                 <button
-                    disabled={isCompressing || !pursuit || !props.title}
+                    className={buttonClass}
+                    disabled={isDisabled}
                     onClick={() => handleSubmit(PUBLISHED)}
                 >
                     Publish
                 </button>
             </div>
+            <div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+            </div>
+
 
         </div>
     )

@@ -15,4 +15,8 @@
     height: 20px;
     width: 200px;
     padding: 8px;
+    h4{
+        @extend %navbar-text;
+    }
+
 }

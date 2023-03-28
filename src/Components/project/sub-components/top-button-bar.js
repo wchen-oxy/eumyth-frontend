@@ -35,22 +35,16 @@ const TopButtonBar = (props) => {
             )
         case (PROJECT_MACRO_VIEW_STATE):
             return (
-                <div >
-                    <div id='topbuttonbar-left-button'>
-                        <button onClick={props.onNewProjectSelect} >
-                            New
-                        </button>
-                    </div>
-                </div>
+                <button id='topbuttonbar-left-button' onClick={props.onNewProjectSelect} >
+                    New
+                </button>
             );
         case (PROJECT_MICRO_VIEW_STATE):
             return (
                 <div id='topbuttonbar-dual-button-bar'>
-                    <div id='toepbuttonbar-left-button'>
-                        <button onClick={props.onBackClick}>
-                            Back
-                        </button>
-                    </div>
+                    <button id='topbuttonbar-left-button' onClick={props.onBackClick}>
+                        Back
+                    </button>
 
                     <div id='topbuttonbar-right-button'>
 
@@ -61,39 +55,39 @@ const TopButtonBar = (props) => {
         case (PROJECT_SELECT_VIEW_STATE):
             return (
                 <div id='topbuttonbar-dual-button-bar'>
-                    <div id='topbuttonbar-left-button'>
-                        <button onClick={props.onBackClick}>
-                            Back
-                        </button>
-                    </div>
+                    <button id='topbuttonbar-left-button' onClick={props.onBackClick}>
+                        Back
+                    </button>
+                    <button
+                        id='topbuttonbar-right-button'
+                        onClick={() => {
+                            if (props.projectSelectSubState === 1) {
+                                props.handleWindowSwitch(2)
+                            }
+                            else if (props.projectSelectSubState === 2) {
+                                props.handleWindowSwitch('EDIT')
+                            }
+                            else {
+                                throw new Error('Missing selectState')
+                            }
+                        }}
+                    >
+                        Next
+                    </button>
 
-                    <div id='topbuttonbar-right-button'>
-                        <button
-                            id='topbuttonbar-right-button'
-                            onClick={() => {
-                                if (props.projectSelectSubState === 1) {
-                                    props.handleWindowSwitch(2)
-                                }
-                                else if (props.projectSelectSubState === 2) {
-                                    props.handleWindowSwitch('EDIT')
-                                }
-                                else {
-                                    throw new Error('Missing selectState')
-                                }
-                            }}
-                        >
-                            Next
-                        </button>
-                    </div>
                 </div >
             );
         case (PROJECT_REARRANGE_STATE):
             return (
                 <div id='topbuttonbar-dual-button-bar'>
-                    <button onClick={props.onBackClick}>
+                    <button
+                        id='topbuttonbar-left-button'
+                        onClick={props.onBackClick}
+                    >
                         Back
                     </button>
                     <button
+                        id='topbuttonbar-right-button'
                         onClick={() => props.handleWindowSwitch('REVIEW')}
                     >
                         Finalize

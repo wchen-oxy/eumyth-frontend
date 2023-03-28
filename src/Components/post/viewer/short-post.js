@@ -507,7 +507,7 @@ class ShortPostViewer extends React.Component {
         }
         else if (this.props.window === 2) {//2
             return (
-                <div className='shortpostviewer-window small-post-window' >
+                <div className='shortpostviewer-window small-post-window'>
                     <h4>Edit your Post!</h4>
                     <div className='shortpostviewer-nav'>
                         <button

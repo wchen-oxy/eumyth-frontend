@@ -112,6 +112,7 @@ $modal-inner: 37;
     cursor: pointer;
     border-style: none;
     border-radius: 12px;
+    user-select: none;
 }
 
 %event-container {

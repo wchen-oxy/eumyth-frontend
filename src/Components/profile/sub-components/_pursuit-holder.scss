@@ -1,17 +1,26 @@
-.pursuitholder-container {
+.pursuitholder-container,
+.pursuitholder-container-selected {
     justify-content: center;
     margin: 0 5px;
-    background-color: rgba(197, 197, 197, 0.363);
     cursor: pointer;
     padding-left: 5px;
     padding-right: 5px;
-    h4{
+    @extend %button-style;
+    h4 {
         margin-top: 5px;
         margin-bottom: 5px;
     }
-    p{
+    p {
         margin-top: 5px;
         margin-bottom: 5px;
         font-size: 12px;
     }
+}
+
+.pursuitholder-container:hover {
+    @include default-button-hover;
+}
+.pursuitholder-container-selected {
+    @include default-button-disabled;
+    
 }

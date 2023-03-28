@@ -256,7 +256,8 @@ class Comments extends React.Component {
                         commentText={this.state.commentText}
                     />
                     <div>
-                        <button
+                        <button 
+                            id='comments-submit'
                             disabled={this.state.commentText.trim().length === 0}
                             onClick={this.handleCommentPost}
                         >

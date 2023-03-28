@@ -1,11 +1,13 @@
 .timelineprojectevent-draft {
-    background-color: rgba($color: #9be3ff, $alpha: 0.5);
+    background-color: $blue-200;
+    color: $blue-900;
     min-height: $event-min-height;
     @include text;
 }
 
 .timelineprojectevent-completed {
-    background-color: rgba($color: #82ff0dbe, $alpha: 0.5);
+    background-color: $blue-800;
+    color: $blue-100;
     min-height: $event-min-height;
     @include text;
 }

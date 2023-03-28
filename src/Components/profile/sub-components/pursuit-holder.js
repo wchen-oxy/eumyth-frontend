@@ -2,12 +2,12 @@ import React from 'react';
 import withRouter from 'utils/withRouter';
 
 const PursuitHolder = (props) => (
-    <div className='pursuitholder-container'
+    <div className={props.isSelected ?
+        'pursuitholder-container-selected'
+        : 'pursuitholder-container'
+    }
         key={props.name}
         onClick={() => props.onPursuitToggle(props.value)}
-        style={props.isSelected ?
-            { color: 'blue', borderBottom: '4px solid blue' }
-            : null}
     >
         <h4>  {props.name}  </h4>
         {props.numEvents ?
@@ -15,7 +15,7 @@ const PursuitHolder = (props) => (
                 {props.numEvents}
                 {props.numEvents === 1 ? ' Post' : ' Posts'}
             </p>
-            : <br></br>}
+            : <p>0 Posts</p>}
     </div>
 );
 

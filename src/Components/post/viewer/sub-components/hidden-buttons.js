@@ -10,8 +10,16 @@ const HiddenButtons = (props) => {
                 <button onClick={() => setButtonShow(!isButtonShowing)}>...</button>
                 {isButtonShowing && (
                     <div id='hiddenbuttons-options'>
-                        <button onClick={props.onDeletePost}>Remove</button>
-                        <button onClick={() => props.onEditClick(2)}>Edit</button>
+                        <button
+                            id='hiddenbuttons-options-edit'
+                            onClick={() => props.onEditClick(2)}>
+                            Edit
+                        </button>
+                        <button
+                            id='hiddenbuttons-options-remove'
+                            onClick={props.onDeletePost}>
+                            Remove
+                        </button>
                     </div>
                 )}
             </div>

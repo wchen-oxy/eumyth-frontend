@@ -4,5 +4,10 @@
     button{
         margin-left: 5px;
         margin-right: 5px;
+        @extend %button-style;
+    }
+    button:hover{
+        @extend %button-style;
+        @include default-button-hover;
     }
 }

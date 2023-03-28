@@ -18,7 +18,7 @@ const OptionsMenu = (props) => {
                         className='optionsmenu-dropdown-inner'
                         onClick={() => props.closeModal()}
                     >
-                        <Link to={'/account'}>Edit Your Profile</Link>
+                        <Link to={'/account'}><h4>Edit Your Profile</h4></Link>
                     </div>
                 }
 

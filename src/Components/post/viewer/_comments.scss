@@ -2,6 +2,10 @@
     margin-left: 0;
 }
 
+#comments-submit {
+    @extend %button-style;
+}
+
 .comments-extended-thread {
     font-size: 12px;
     margin-top: 10px;
