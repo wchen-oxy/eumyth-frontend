@@ -194,12 +194,10 @@ class ProfileController extends React.Component {
                 <ProfileModalController
                     viewerObject={viewerObject}
                     viewerFunctions={viewerFunctions}
-                    
+
                     authUser={this.props.authUser}
                     modalState={this.props.modalState}
                     returnModalStructure={this.props.returnModalStructure}
-                    closeModal={this.clearModal}
-
                 />
                 <Timeline //feeds allposts (post ids) in, returns raw data, then feeds formatted posts in
                     contentType={POST}

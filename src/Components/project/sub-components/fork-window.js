@@ -14,7 +14,8 @@ const ForkWindow = (props) => {
             props.forkData.shouldCopyPosts,
             props.forkData.displayPhotoKey,
             title,
-            remix
+            remix,
+            props.forkData.cachedFeedID
         )
             .then((res) => {
                 props.closeModal();
@@ -28,7 +29,7 @@ const ForkWindow = (props) => {
 
     return (
         <div className='small-post-window'>
-            <div>
+            <div id="forkwindow-fields">
                 <h3>
                     Create a Branch Of This Series
                 </h3>
@@ -38,10 +39,10 @@ const ForkWindow = (props) => {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
-                <h4>Your Planned Changes</h4>
+                <h4>Your Twist On This Series</h4>
                 <input
                     type="text"
-                    placeholder='optional'
+                    placeholder='How Will Your Project Be Linked To This?'
                     value={remix}
                     onChange={(e) => setRemix(e.target.value)}
                 />

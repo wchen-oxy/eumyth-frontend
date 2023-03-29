@@ -175,7 +175,7 @@ export default class AxiosHelper {
         );
     }
 
-    static createFork(userID, indexUserID, username, projectData, shouldCopyPosts, displayPhotoKey, title, remix) {
+    static createFork(userID, indexUserID, username, projectData, shouldCopyPosts, displayPhotoKey, title, remix, cachedFeedID) {
         return axios.put(urls.PROJECT_FORK_URL, {
             userID,
             indexUserID,
@@ -184,7 +184,8 @@ export default class AxiosHelper {
             shouldCopyPosts,
             displayPhotoKey,
             title,
-            remix
+            remix,
+            cachedFeedID
         })
     }
 

@@ -45,9 +45,7 @@ const TopButtonBar = (props) => {
                     <button id='topbuttonbar-left-button' onClick={props.onBackClick}>
                         Back
                     </button>
-
-                    <div id='topbuttonbar-right-button'>
-
+                    <div>
                         {ManageButtons}
                     </div>
                 </div>

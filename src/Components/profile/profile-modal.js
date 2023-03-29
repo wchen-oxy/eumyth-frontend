@@ -15,7 +15,7 @@ const ProfileModalController = (props) => {
                     closeModal={props.closeModal}
                 />
                 ,
-                props.closeModal));
+                props.viewerFunctions.closeModal));
     }
     else {
         return null;

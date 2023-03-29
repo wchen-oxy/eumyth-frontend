@@ -471,9 +471,7 @@ class PostController extends React.Component {
       return (
         <ShortPostDraft
           {...miniAuthObject}
-
           {...shared}
-
           initialDraftObject={initialDraftObject}
           metaObject={metaObject}
           metaFunctions={metaFunctions}

@@ -5,7 +5,7 @@ import SimilarProjectInfo from './sub-components/similar-project-info';
 
 const ProjectHeader = (props) => {
     const [projectPreviews, setProjectPreviews] = useState([]);
-    const [comparatorStatus, setComparatorStatus] = useState("PARENT");
+    const [comparatorStatus, setComparatorStatus] = useState("NONE");
     const [toggleChildrenStatus, setChildrenStatus] = useState(false);
     const childrenLength = props.projectMetaData.children?.length ?? 0;
     const ancestorLength = props.projectMetaData.ancestors.length;
@@ -27,16 +27,22 @@ const ProjectHeader = (props) => {
         }
 
     }, []);
-
+    const clearAll = () => {
+        setComparatorStatus("NONE");
+    }
     const determineComparatorType = (type) => {
-        if (type === "PARENT") setComparatorStatus("CHILDREN");
-        else if (type === "CHILDREN") setComparatorStatus("PARENT");
+        if (type === comparatorStatus) setComparatorStatus("NONE");
+        else if (type === "PARENT") setComparatorStatus("PARENT");
+        else if (type === "CHILDREN") setComparatorStatus("CHILDREN");
     }
 
     const setComparatorText = (type) => {
         if (type === "PARENT") return "Other Series With The Same Parent";
-        else if (type === "CHILDREN") return "See How This Influenced Others";
+        else if (type === "CHILDREN") return "Series Influenced By This";
     }
+    console.log(props.projectMetaData);
+
+    const shouldShowClose = comparatorStatus === "PARENT" || comparatorStatus === "CHILDREN";
     return (
         <div>
             <div id="projectheader-pursuit">
@@ -45,7 +51,7 @@ const ProjectHeader = (props) => {
             <div id="projectheader-hero">
                 <h1>{props.titleValue}</h1>
                 {props.descriptionValue && <h4>{props.descriptionValue}</h4>}
-                {props.projectMetaData.status && <h6>Ongoing</h6>}
+                {props.projectMetaData.status && <h5>Ongoing</h5>}
             </div>
             <div id="projectheader-fork">
                 {parentProjectID && <a href={'/c/' + parentProjectID.toString()}>See Predecessor Series</a>}
@@ -66,10 +72,28 @@ const ProjectHeader = (props) => {
             </div>
             <div >
                 <div id='projectheader-comparator'>
-                    <button onClick={() => determineComparatorType(comparatorStatus)}>
-                        {setComparatorText(comparatorStatus)}
+                    <button
+                        id={comparatorStatus === "CHILDREN" ? 'projectheader-selected' : ''}
+                        className={props.projectMetaData.children_length === 0 ?
+                            'projectheader-other-button-disabled' : 'projectheader-other-button'}
+                        onClick={() => determineComparatorType("CHILDREN")}
+                        disabled={props.projectMetaData.children_length === 0}
+                    >
+                        Series Influenced By This
                     </button>
+                    <button
+                        id={comparatorStatus === "PARENT" ? 'projectheader-selected' : ''}
+                        className={projectPreviews.length === 0 ?
+                            'projectheader-other-button-disabled' : 'projectheader-other-button'}
+                        onClick={() => determineComparatorType("PARENT")}
+                        disabled={projectPreviews.length === 0}
+                    >
+                        Other Series With The Same Parent
+                    </button>
+
                 </div>
+                {shouldShowClose &&
+                    <button id='projectheader-close' onClick={clearAll}>Close</button>}
                 {
                     comparatorStatus === "PARENT" &&
                     <div id='projectheader-previews'>

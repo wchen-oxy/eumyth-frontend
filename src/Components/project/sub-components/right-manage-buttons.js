@@ -22,9 +22,17 @@ const RightManageButtons = (props) => {
     const hiddenButtons = props.isOwner ?
         (
             <div className='rightmanagebuttons-dropdown'>
-                <button onClick={() => alert("Temporary Report Button")}>Report</button>
-                <button onClick={() => props.onEditExistingProject()}>Edit</button>
-                <button onClick={toggleDelete}>Delete Series</button>
+                {/* <button onClick={() => alert("Temporary Report Button")}>Report</button> */}
+                <button
+                    className='rightmanagebuttons-button'
+                    onClick={() => props.onEditExistingProject()}>
+                    Edit
+                </button>
+                <button
+                    className='rightmanagebuttons-button'
+                    onClick={toggleDelete}>
+                    Delete Series
+                </button>
             </div>
         )
         :

@@ -126,7 +126,9 @@ class ProjectController extends React.Component {
             feedID: 0,
             selectedPursuitIndex: this.props.selectedPursuitIndex,
 
-            numOfContent: 0
+            numOfContent: 0,
+            projectPreviewMap: {}
+
         }
 
         this.handleBackClick = this.handleBackClick.bind(this);
@@ -248,7 +250,6 @@ class ProjectController extends React.Component {
             feedID: this.state.feedID + 1,
         }
         if (this.props.isContentOnlyView) {
-            console.log("asdf");
             return Promise
                 .all([
                     AxiosHelper.returnUserPreviewByParam({ id: this.props.authUser.userPreviewID }),
@@ -567,6 +568,7 @@ class ProjectController extends React.Component {
                     username: this.props.authUser.username,
                     shouldCopyPosts: false,
                     displayPhotoKey: this.props.authUser.croppedDisplayPhotoKey,
+                    cachedFeedID: this.props.authUser.cached_feed_id
 
                 }
 
@@ -586,18 +588,23 @@ class ProjectController extends React.Component {
                     postIndex: this.state.selectedEventIndex,
                     postType: this.state.postType,
                     pursuitNames: this.props.pursuitNames,
-                    projectPreviewMap,
+                    projectPreviewMap
+                }
 
+                const viewerFunctions = {
                     onCommentIDInjection: this.handleCommentIDInjection,
-
+                    saveProjectPreview: this.saveProjectPreview,
+                    setModal: this.setModal,
+                    closeModal: this.clearModal,
                 }
                 return (
                     <>
                         <ProfileModal
                             viewerObject={viewerObject}
+                            viewerFunctions={viewerFunctions}
+
                             authUser={this.props.authUser}
                             modalState={this.props.modalState}
-                            closeModal={this.clearModal}
                             returnModalStructure={this.props.returnModalStructure}
                         />
                         <MainDisplay

@@ -1,17 +1,15 @@
 .similarprojectinfo {
     @include flex-display-column;
     justify-content: center;
-    height: 65px;
-    max-width: 250px;
-    margin: 15px;
+    height: 64px;
+    max-width: 384px;
+    margin: 16px;
     border-radius: 1px;
-    background-color: aliceblue;
-    padding: 0 5px;
-    border-radius: 2px;
-    border-style: solid;
+    background-color: $black-100;
     a,
     h4,
     p {
         margin: 0;
+        color: $black-900;
     }
 }

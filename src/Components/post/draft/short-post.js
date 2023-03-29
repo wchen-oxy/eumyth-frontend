@@ -8,19 +8,14 @@ class ShortPost extends React.Component {
   constructor(props) {
     super(props);
 
-    // const complexDraftStates =
-    //   draftStateSetter(this.props);
     this.state = {
       window: 1,
-
       selectedFiles: [],
-      // validFiles: [],
       unsupportedFiles: [],
       imageArray: [],
-
       postDisabled: true,
-
     };
+
     this.warnModalClose = this.warnModalClose.bind(this);
     this.setSelectedFiles = this.setSelectedFiles.bind(this);
     this.setValidFiles = this.setValidFiles.bind(this);
@@ -251,7 +246,6 @@ class ShortPost extends React.Component {
       return (
         <div className='small-post-window'>
           <ReviewStage
-
             {...this.props.threadObject}
             {...this.props.threadFunction}
             previousState={2}

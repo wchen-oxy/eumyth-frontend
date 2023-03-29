@@ -8,8 +8,15 @@
 
 .rightmanagebuttons-dropdown {
     position: absolute;
+    @include flex-display-column;
 }
 
 .rightmanagebuttons-button {
+    @extend %button-style;
     margin: auto 5px;
+}
+
+.rightmanagebuttons-button:hover {
+    @extend %button-style;
+    @include default-button-hover;
 }

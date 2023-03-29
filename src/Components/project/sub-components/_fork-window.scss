@@ -1,3 +1,32 @@
-#rightmanagebuttons-submit{
-    padding-top: 25px;
+#rightmanagebuttons-submit {
+    @include flex-display-row;
+    justify-content: center;
+    button,
+    button:hover {
+        @extend %button-style;
+        @include default-button-hover;
+        margin: 16px 4px;
+    }
+}
+
+#forkwindow-fields {
+    h3,
+    h4 {
+        text-align: center;
+    }
+
+    h3 {
+        margin: 8px;
+    }
+    h4 {
+        margin: 4px;
+    }
+
+    input {
+        margin-left: 48px;
+        margin-right: 48px;
+    }
+
+    @include flex-display-column;
+    margin: 0;
 }

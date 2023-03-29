@@ -11,6 +11,9 @@
     h1 {
         margin-top: 10px;
     }
+    h5 {
+        margin: 0 auto;
+    }
 }
 
 #projectheader-fork {
@@ -27,11 +30,15 @@
         @include flex-display-row;
         align-items: center;
         justify-content: center;
+        text-decoration: none;
     }
     img {
         @include tiny-profile-photo;
         border-radius: 50%;
         object-fit: cover;
+    }
+    h5 {
+        @extend %username-link;
     }
 }
 
@@ -55,6 +62,37 @@
     margin-top: 25px;
 }
 
+#projectheader-close,
+#projectheader-close:hover {
+    @extend %button-style;
+}
+#projectheader-close:hover {
+    @include default-button-hover;
+}
+
 #projectheader-previews {
     @include flex-display-row;
+}
+
+#projectheader-selected {
+    color: $blue-100;
+    background-color: $blue-500;
+}
+
+.projectheader-other-button-disabled,
+.projectheader-other-button {
+    margin: auto 4px;
+}
+.projectheader-other-button-disabled,
+.projectheader-other-button,
+.projectheader-other-button:hover {
+    @extend %button-style;
+}
+
+.projectheader-other-button:hover {
+    @include default-button-hover;
+}
+
+.projectheader-other-button-disabled {
+    @include default-button-disabled;
 }

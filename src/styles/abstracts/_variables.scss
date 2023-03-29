@@ -92,6 +92,10 @@ $overlay-super: 35;
 $window-upper: 36;
 $modal-inner: 37;
 
+%username-link {
+    color: $black-800;
+}
+
 %title-texts {
     font-size: $primary-large-font-size;
     font-weight: 200;
