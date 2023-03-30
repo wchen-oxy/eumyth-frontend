@@ -94,6 +94,7 @@ class RelationModal extends React.Component {
                 const buttons = relation.type === "REQUESTED" ? (
                     <div className='relationmodal-reaction'>
                         <button
+                            className='relationmodal-button'
                             onClick={() => (
                                 this.handleStatusChange(
                                     ACCEPT_ACTION,
@@ -104,6 +105,7 @@ class RelationModal extends React.Component {
                             {ACCEPT_REQUEST_TEXT}
                         </button>
                         <button
+                            className='relationmodal-button'
                             onClick={() => (
                                 this.handleStatusChange(
                                     DECLINE_ACTION,
@@ -116,6 +118,8 @@ class RelationModal extends React.Component {
                     </div>)
                     :
                     (<button
+                        className='relationmodal-button'
+
                         onClick={() => (
                             this.handleStatusChange(
                                 UNFOLLOW_ACTION,
@@ -154,6 +158,7 @@ class RelationModal extends React.Component {
                         {
                             relation.type === 'FOLLOWING' ?
                                 <button
+                                    className='relationmodal-button'
                                     onClick={() => (
                                         this.handleStatusChange(
                                             UNFOLLOW_ACTION,
@@ -164,6 +169,8 @@ class RelationModal extends React.Component {
                                     {FOLLOWING_BUTTON_TEXT}
                                 </button> :
                                 <button
+                                    className='relationmodal-button'
+
                                     onClick={() => (
                                         this.handleStatusChange(
                                             UNFOLLOW_ACTION,

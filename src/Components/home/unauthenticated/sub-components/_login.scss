@@ -12,3 +12,20 @@
         width: 100%;
     }
 }
+
+.welcomeloginform-button,
+.welcomeloginform-button:hover {
+    @extend %button-style;
+}
+
+.welcomeloginform-button:hover {
+    @include default-button-hover;
+}
+
+.welcomeloginform-onboard {
+    margin: 0 auto;
+    text-align: center;
+    p {
+        padding-bottom: 8px;
+    }
+}

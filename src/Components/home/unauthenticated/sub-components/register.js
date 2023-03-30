@@ -41,20 +41,23 @@ const WelcomeRegisterForm = (props) => {
           <p>{disableSubmit ? "Password must be at least 6 characters" : null}</p>
           <input
             id="welcomeregisterform-register"
-            className='btn-hero'
+            className={disableSubmit ? 'btn-hero-disabled' : 'btn-hero'}
             type="submit"
             value="Sign Up"
             disabled={disableSubmit}
           />
         </form>
       </div>
-      <p>Already Have An Account?</p>
-      <button
-        value={LOGIN_STATE}
-        onClick={props.onToggleLoginRegisterWindow}
-      >
-        Sign In
-      </button>
+      <div className='welcomeregisterform-onboard'>
+        <p>Already Have An Account?</p>
+        <button
+          className='welcomeregisterform-button'
+          value={LOGIN_STATE}
+          onClick={props.onToggleLoginRegisterWindow}
+        >
+          Sign In
+        </button>
+      </div>
     </section>
 
   )

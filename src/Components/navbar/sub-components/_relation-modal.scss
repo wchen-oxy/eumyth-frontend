@@ -6,10 +6,14 @@
     @include flex-display-row;
 }
 
-.relationmodal-reaction {
-    button {
-        margin: 5px;
-    }
+.relationmodal-button,
+.relationmodal-button:hover{
+    @extend %button-style;
+    margin: 5px;
+}
+
+.relationmodal-button:hover{
+    @include default-button-hover;
 }
 
 .relationmodal-column {

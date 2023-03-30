@@ -256,8 +256,12 @@ class Comments extends React.Component {
                         commentText={this.state.commentText}
                     />
                     <div>
-                        <button 
-                            id='comments-submit'
+                        <button
+                            className={
+                                this.state.commentText.trim().length === 0 ?
+                                    'comments-button-disabled'
+                                    :
+                                    'comments-button'}
                             disabled={this.state.commentText.trim().length === 0}
                             onClick={this.handleCommentPost}
                         >
@@ -265,6 +269,7 @@ class Comments extends React.Component {
                         </button>
                         {this.props.isImageOnly &&
                             <button
+                                className='comments-button'
                                 onClick={this.props.onPromptAnnotation}
                             >
                                 Annotate

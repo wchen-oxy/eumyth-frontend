@@ -2,8 +2,18 @@
     margin-left: 0;
 }
 
-#comments-submit {
+.comments-button-disabled,
+.comments-button,
+.comments-button:hover {
     @extend %button-style;
+}
+
+.comments-button:hover {
+    @include default-button-hover;
+}
+
+.comments-button-disabled {
+    @include default-button-disabled;
 }
 
 .comments-extended-thread {

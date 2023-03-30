@@ -32,6 +32,7 @@
     @include flex-display-row;
     img {
         @include tiny-profile-photo;
+        object-fit: cover;
         border-radius: 50%;
     }
     padding-right: 10px;
@@ -48,11 +49,13 @@
 
 .singlecomment-management {
     @include flex-display-row;
+    align-items: center;
     p {
         margin: 0 5px;
     }
-    button {
-        height: fit-content;
+    button,
+    button:hover {
+        @extend %button-style;
     }
 }
 

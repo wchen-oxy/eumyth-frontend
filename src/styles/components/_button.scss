@@ -13,11 +13,25 @@
 }
 
 .btn-hero {
+    background-color: $blue-600;
+    color: $blue-100;
+}
+
+.btn-hero-disabled,
+.btn-hero,
+.btn-hero:hover {
+    @extend %button-style;
     height: 50px;
     width: 100%;
-    background-color: royalblue;
-    font-size: 18px;
-    color: white;
+}
+
+.btn-hero-disabled {
+    cursor: default;
+}
+
+.btn-hero:hover {
+    background-color: $blue-200;
+    color: $blue-600;
 }
 
 .btn-meta {

@@ -186,11 +186,12 @@ export default class WelcomePage extends React.Component {
     return (
       <section className='welcome-description'>
         <div className='welcome-description-inner'>
-          <p>Welcome to interestHub! Login or sign up to get started!</p>
-          <br></br>
-          <p>(to try out this without signing up, use this test account)</p>
-          <br></br>
-          <p>(email: williamshengchen8@gmail.com, password: 123123)</p>
+          <h2>Welcome to interestHub! </h2>
+          <p>Login or sign up to get started!
+            To try out this without signing up, use this test account:      
+          </p>
+          <br/>
+          <p> (email: williamshengchen8@gmail.com, password: 123123)</p>
         </div>
         {this.renderLoginRegister(this.state.window)}
       </section>

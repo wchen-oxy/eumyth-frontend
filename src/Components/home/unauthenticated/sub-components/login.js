@@ -34,19 +34,23 @@ const WelcomeLoginForm = (props) =>
       </form>
       <button
         id="welcomelogin-forgot"
+        className='welcomeloginform-button'
         value={PASSWORD_STATE}
         onClick={props.onToggleLoginRegisterWindow}
       >
         Forget Password?
       </button>
     </div>
-    <p>Don't Have An Account?</p>
-    <button
-      value={REGISTER_STATE}
-      onClick={props.onToggleLoginRegisterWindow}
-    >
-      Create Account
-    </button>
+    <div className='welcomeloginform-onboard'>
+      <p>Don't Have An Account?</p>
+      <button
+        className='welcomeloginform-button'
+        value={REGISTER_STATE}
+        onClick={props.onToggleLoginRegisterWindow}
+      >
+        Create Account
+      </button>
+    </div>
   </section>
 )
 
