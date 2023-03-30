@@ -10,3 +10,12 @@
 #shortreeditor-side {
   background-color: white;
 }
+
+.captionbuttons,
+.captionbuttons:hover {
+  @extend %button-style;
+}
+
+.captionbuttons:hover {
+  @include default-button-hover;
+}

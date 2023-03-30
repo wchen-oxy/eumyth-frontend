@@ -92,7 +92,7 @@ class CustomImageSlider extends React.Component {
             ? this.props.annotations : [];
         return (
             <>
-                <div className={this.props.newPost ?
+                <div className={this.props.newPost || this.props.isReEdit ?
                     'customimageslider-new-post-hero-container'
                     : returnStyleName(this.props.windowType)}>
                     <Annotation
@@ -123,7 +123,7 @@ class CustomImageSlider extends React.Component {
                     areAnnotationsHidden={this.props.areAnnotationsHidden}
                     onArrowPress={this.props.onArrowPress}
                     toggleAnnotations={this.props.toggleAnnotations}
-                 />
+                />
                 <div className='customimageslider-expand-container'>
                     {this.props.windowType === COLLAPSED &&
                         <button onClick={this.props.onModalLaunch}>Expand Post</button>}

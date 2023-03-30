@@ -4,8 +4,10 @@
     button,
     button:hover {
         @extend %button-style;
-        @include default-button-hover;
         margin: 16px 4px;
+    }
+    button:hover {
+        @include default-button-hover;
     }
 }
 
@@ -16,10 +18,10 @@
     }
 
     h3 {
-        margin: 8px;
+        margin: 8px 8px 32px 8px;
     }
     h4 {
-        margin: 4px;
+        margin: 8px;
     }
 
     input {

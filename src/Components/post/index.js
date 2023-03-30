@@ -206,20 +206,23 @@ class PostController extends React.Component {
   }
 
   setPostStage(value) {
-    const window = parseInt(value);
-    const isReEdit = window === 2 && this.props.isViewer;
+    const windowValue = parseInt(value);
+    const isReEdit = windowValue === 2 && this.props.isViewer;
     const tempText = isReEdit ? this.props.viewerObject.textData : '';
     if (this.props.isViewer
       && !this.props.viewerObject.eventData?.cover_photo_key
       && value === 2) {
       this.retrieveThumbnail();
       this.setState({
-        window,
+        window: windowValue,
         tempText
       });
     }
+    else if (this.props.isViewer && value === 1 && window.confirm('Do you want to stop editing your posts?')) {
+      this.setState({ window: windowValue });
+    }
     else {
-      this.setState({ window })
+      this.setState({ window: windowValue })
     }
 
   }

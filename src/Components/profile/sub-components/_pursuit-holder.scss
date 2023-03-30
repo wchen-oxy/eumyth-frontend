@@ -22,5 +22,7 @@
 }
 .pursuitholder-container-selected {
     @include default-button-disabled;
+    color: $blue-200;
+    background-color: $blue-600;
     
 }

@@ -36,6 +36,7 @@ const ShortReEditor = (props) => {
                     className='short-post-hero-image-container'
                 >
                     <CustomImageSlider
+                        isReEdit
                         hideAnnotations
                         onArrowPress={props.onArrowPress}
                         imageIndex={props.imageIndex}

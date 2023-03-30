@@ -16,6 +16,7 @@ import ShortPostLargeContent from './large-content';
 import ShortPostInlineContent from './inline-content';
 import MetaStage from '../draft/meta-stage';
 import MetaInfo from './sub-components/meta-info';
+import Steps from '../draft/sub-components/steps';
 
 
 const iterateDrafts = (drafts, projectID) => {
@@ -507,17 +508,28 @@ class ShortPostViewer extends React.Component {
         }
         else if (this.props.window === 2) {//2
             return (
-                <div className='shortpostviewer-window small-post-window'>
-                    <h4>Edit your Post!</h4>
+                <div
+                    id='shortpostviewer-reedit'
+                    className='shortpostviewer-window small-post-window'>
+                    <h2>Edit your Post!</h2>
                     <div className='shortpostviewer-nav'>
-                        <button
-                            onClick={() => (this.props.setPostStage(1))}>
-                            Return
-                        </button>
-                        <button
-                            onClick={() => this.props.setPostStage(3)}>
-                            Review Post
-                        </button>
+                        <div className='shortpostviewer-prev'>
+                            <button
+                                className='shortpostviewer-buttons'
+                                onClick={() => (this.props.setPostStage(1))}>
+                                Return
+                            </button>
+                        </div>
+
+                        <Steps current={1} />
+                        <div className='shortpostviewer-next'>
+                            <button
+                                className='shortpostviewer-buttons'
+                                onClick={() => this.props.setPostStage(3)}>
+                                Review Post
+                            </button>
+                        </div>
+
 
                     </div>
                     <ShortReEditor

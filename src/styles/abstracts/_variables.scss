@@ -69,14 +69,14 @@ $small-post-container-width: 768px;
 $small-post-draft-height: 384px;
 $small-post-draft-padding: 8px;
 
-$small-post-height: 640px;
+$small-post-height: 768px;
 $small-post-width: 76vw;
 $feed-post-padding-size: 16px;
 //shared button dimensions
 $small-button-window: 19vh;
 
 // $small-post-height: calc(100vh - 50px);
-$small-post-image-height: calc(#{$small-post-height} - 50px);
+$small-post-image-height: calc(#{$small-post-height} - 100px);
 
 //image nav
 $image-nav-container-height: 48px;
