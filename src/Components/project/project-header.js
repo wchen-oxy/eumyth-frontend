@@ -51,11 +51,11 @@ const ProjectHeader = (props) => {
             <div id="projectheader-hero">
                 <h1>{props.titleValue}</h1>
                 {props.descriptionValue && <h4>{props.descriptionValue}</h4>}
+                {props.projectMetaData.remix && <p>{props.projectMetaData.remix}</p>}
                 {props.projectMetaData.status && <h5>Ongoing</h5>}
             </div>
             <div id="projectheader-fork">
                 {parentProjectID && <a href={'/c/' + parentProjectID.toString()}>See Predecessor Series</a>}
-                {props.projectMetaData.remix && <p>{props.projectMetaData.remix}</p>}
             </div>
             {coverPhotoKey &&
                 <div id='projectheader-cover' >

@@ -1,5 +1,5 @@
-#relationmodal{
-    z-index: 36;
+#relationmodal {
+    z-index: $content-window;
 }
 
 #relationmodal-relations {
@@ -7,12 +7,12 @@
 }
 
 .relationmodal-button,
-.relationmodal-button:hover{
+.relationmodal-button:hover {
     @extend %button-style;
     margin: 5px;
 }
 
-.relationmodal-button:hover{
+.relationmodal-button:hover {
     @include default-button-hover;
 }
 

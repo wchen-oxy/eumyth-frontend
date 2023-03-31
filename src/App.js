@@ -29,7 +29,7 @@ const App = () => {
 
       const returnModalStructure = (content, closeModalFunction) => {
             return (
-                  <div>
+                  <div style={{height: '100vh'}}>
                         <div
                               className='overlay'
                               onClick={() => closeModalFunction()}>

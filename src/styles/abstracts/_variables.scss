@@ -48,6 +48,7 @@ $button-hover-color: rgba(
 );
 
 $event-min-height: 150px;
+$nav-height: 50px;
 
 //input
 $brief-text-input: 30%;
@@ -64,19 +65,23 @@ $button-hover: $black-700;
 //post image buttons
 $button-image-nav-height: 48px;
 //post feed dimension measurments (effectively post width)
+
+
 $small-post-container-width: 768px;
+
+
 //post draft
-$small-post-draft-height: 384px;
+$small-post-draft-height: calc(100vh - (#{$nav-height}));
 $small-post-draft-padding: 8px;
 
-$small-post-height: 768px;
-$small-post-width: 76vw;
+$small-post-height: calc(100vh - ((#{$nav-height}) * 2 ));
+$small-post-width: 95vw;
 $feed-post-padding-size: 16px;
 //shared button dimensions
 $small-button-window: 19vh;
 
 // $small-post-height: calc(100vh - 50px);
-$small-post-image-height: calc(#{$small-post-height} - 100px);
+$small-post-image-height: calc((#{$small-post-height}) - (#{$nav-height}));
 
 //image nav
 $image-nav-container-height: 48px;
@@ -84,13 +89,16 @@ $image-nav-container-height: 48px;
 //step indicator
 $size-step-indicator: 48px;
 
+
 //z-indexes
-$navbar: 25;
-$general-window: 24;
-$overlay: 10;
+$navbar: 10;
+$overlay: 20;
+// $modal-inner: 30;
+$content-window: 25;
+
 $overlay-super: 35;
-$window-upper: 36;
-$modal-inner: 37;
+$window-upper: 23;
+
 
 %username-link {
     color: $black-800;

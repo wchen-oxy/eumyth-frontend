@@ -10,7 +10,7 @@ import UserHeader from './sub-components/user-header';
 const ShortPostLargeContent = (props) => {
     if (props.hasImages) {
         return (
-            <div className='small-post-window'>
+            <div className='shortpostviewer'>
                 <div id='shortpostviewer-large-hero'>
                     {props.annotations && props.renderImageSlider(EXPANDED)}
                     <div
@@ -40,7 +40,7 @@ const ShortPostLargeContent = (props) => {
     }
     else {
         return (
-            <div className='small-post-window'>
+            <div className='shortpostviewer'>
                 <Thread {...props.meta} />
                 <UserHeader {...props.user} />
                 <MetaInfo

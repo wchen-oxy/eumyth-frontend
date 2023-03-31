@@ -33,7 +33,7 @@
 .postheader-meta {
     padding-left: 5px;
     a {
-        z-index: $modal-inner;
+        // z-index: $modal-inner;
     }
     h4 {
         @extend %username-link;

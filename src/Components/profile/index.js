@@ -453,29 +453,37 @@ class ProfilePageAuthenticated extends React.Component {
             return (
                 <div>
                     <div id='profile-main'>
-                        <div id='profile-cover'>
+                        {/* <div id='profile-cover'>
                             <CoverPhoto coverPhotoKey={this.state.profileData.cover_photo_key} />
-                        </div>
+                        </div> */}
                         <div id='profile-intro'>
-                            <div id='profile-dp'>
-                                <img
-                                    alt='user profile'
-                                    src={targetProfilePhoto}
-                                />
-                                <div id='profile-name'>
-                                    <h4>{targetUsername}</h4>
-                                </div>
-                                <div id='profile-actions'>
-                                    <FollowButton
-                                        isOwner={this.isOwner()}
-                                        followerStatus={this.state.followerStatus}
-                                        onFollowClick={this.handleFollowClick}
-                                        onOptionsClick={this.handleOptionsClick}
+                            <div id='profile-upper'>
+                                <div id='profile-dp'>
+                                    <img
+                                        alt='user profile'
+                                        src={targetProfilePhoto}
                                     />
+
                                 </div>
-                            </div>
-                            <div id='profile-biography'>
-                                {this.state.profileData.bio && <p>{this.state.profileData.bio}</p>}
+                                <div id='profile-upper-right'>
+                                    <div id='profile-upper-user-info'>
+                                        <div id='profile-name'>
+                                            <h3>{targetUsername}</h3>
+                                        </div>
+                                        <div id='profile-actions'>
+                                            <FollowButton
+                                                isOwner={this.isOwner()}
+                                                followerStatus={this.state.followerStatus}
+                                                onFollowClick={this.handleFollowClick}
+                                                onOptionsClick={this.handleOptionsClick}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div id='profile-biography'>
+                                        {this.state.profileData.bio && <p>{this.state.profileData.bio}</p>}
+                                    </div>
+                                </div>
+
                             </div>
                             <div id='profile-pursuits'>
                                 {pursuitHolderArray}

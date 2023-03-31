@@ -510,7 +510,7 @@ class ShortPostViewer extends React.Component {
             return (
                 <div
                     id='shortpostviewer-reedit'
-                    className='shortpostviewer-window small-post-window'>
+                    className='shortpostviewer-window'>
                     <h2>Edit your Post!</h2>
                     <div className='shortpostviewer-nav'>
                         <div className='shortpostviewer-prev'>
@@ -566,7 +566,7 @@ class ShortPostViewer extends React.Component {
             }
 
             return (
-                <div className='shortpostviewer-window small-post-window'>
+                <div className='shortpostviewer-window'>
                     <ReviewStage
                         isUpdateToPost
                         isPostOnlyView={this.props.isPostOnlyView}
