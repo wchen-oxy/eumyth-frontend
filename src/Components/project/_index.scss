@@ -6,8 +6,24 @@
     display: inline-block;
 }
 
+.projectcontroller-field {
+    margin: 4px;
+    @include flex-display-column;
+}
+
+.projectcontroller-submit-buttons {
+    margin-top: 4px;
+    button {
+        margin: 8px;
+    }
+}
+
 #projectcontroller-submit {
     @include flex-display-column;
+    span {
+        color: $black-500;
+        font-size: 14px;
+    }
 }
 
 #projectcontroller-sortable-list {

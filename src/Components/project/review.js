@@ -183,7 +183,7 @@ const ProjectReview = (props) => {
 
     const isCompressing = coverPhotoBoolean && !coverPhoto;
     const isDisabled = isCompressing || !pursuit || !props.title;
-    const buttonClass = isDisabled ? 'projectcontroller-btn-enabled' : 'projectcontroller-btn-disabled';
+    const buttonClass = isDisabled ? 'projectcontroller-btn-disabled' : 'projectcontroller-btn-enabled';
     let existingCoverPhotoKey = null;
     if (props.projectMetaData) {
         existingCoverPhotoKey = props.projectMetaData ? props.projectMetaData.coverPhoto : props.projectMetaData.cover_photo_key;
@@ -202,80 +202,94 @@ const ProjectReview = (props) => {
             </div>
             <div id="projectcontroller-submit">
                 {isCompressing && <label>One Moment, We Are Compressing Your Photo</label>}
-                <label>Title</label>
-                <TextareaAutosize
-                    value={props.title}
-                    onChange={(e) => props.handleInputChange(TITLE, e.target.value)}
-                />
-                <label>Overview</label>
-                <TextareaAutosize
-                    value={props.overview}
-                    onChange={(e) => props.handleInputChange(OVERVIEW, e.target.value)}
-                />
-                {
-                    props.projectMetaData?.parent_project_id && <label>Remix</label>
-                }
-                {
-                    props.projectMetaData?.parent_project_id &&
-
+                <div className='projectcontroller-field'>
+                    <label>Title  <span>Required</span></label>
                     <TextareaAutosize
-                        value={remix}
-                        onChange={(e) => setRemix(e.target.value)}
+                        value={props.title}
+                        onChange={(e) => props.handleInputChange(TITLE, e.target.value)}
                     />
+                </div>
+                <div className='projectcontroller-field'>
+                    <label>Overview</label>
+                    <TextareaAutosize
+                        value={props.overview}
+                        onChange={(e) => props.handleInputChange(OVERVIEW, e.target.value)}
+                    />
+                </div>
+                {props.projectMetaData?.parent_project_id &&
+                    <div className='projectcontroller-field'>
+                        <label>Remix</label>
+                        <TextareaAutosize
+                            value={remix}
+                            onChange={(e) => setRemix(e.target.value)}
+                        />
+                    </div>
                 }
-                <label>Pursuit</label>
-                <select
-                    name="pursuit-category"
-                    value={pursuit}
-                    onChange={(e) => setPursuit(e.target.value)}
-                >
-                    {props.pursuitSelects}
-                </select>
-                <label>Start Date</label>
-                <input
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                />
-                <label>End Date</label>
-                <input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                />
-                <label>Total Minutes</label>
-                <input
-                    type="number"
-                    value={duration}
-                    onChange={(e) => setDuration(e.target.value)}
-                />
-                <span className='projectcontroller-checkbox-span'>
+                <div className='projectcontroller-field'>
+                    <label>Pursuit <span>Required</span></label>
+                    <select
+                        name="pursuit-category"
+                        value={pursuit}
+                        onChange={(e) => setPursuit(e.target.value)}
+                    >
+                        {props.pursuitSelects}
+                    </select>
+                </div>
+                <div className='projectcontroller-field'> <label>Start Date</label>
                     <input
-                        type="checkbox"
-                        onClick={() => setIsComplete(!isComplete)}
-                    /> <label>Is Complete</label>
-                </span>
-                {existingCoverPhotoKey &&
+                        type="date"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                    />
+                </div>
+                <div className='projectcontroller-field'> <label>End Date</label>
+                    <input
+                        type="date"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                    />
+                </div>
+                <div className='projectcontroller-field'>
+                    <label>Total Minutes</label>
+                    <input
+                        type="number"
+                        value={duration}
+                        onChange={(e) => setDuration(e.target.value)}
+                    />
+                </div>
+                <div className='projectcontroller-field'>
                     <span className='projectcontroller-checkbox-span'>
                         <input
                             type="checkbox"
-                            onClick={() => setRemoveCoverPhoto(!removeCoverPhoto)}
-                        />
-                        <label>Remove Cover Photo</label>
+                            onClick={() => setIsComplete(!isComplete)}
+                        /> <label>Is Complete</label>
                     </span>
+                </div>
+
+                {existingCoverPhotoKey &&
+                    <div className='projectcontroller-field'>
+                        <span className='projectcontroller-checkbox-span'>
+                            <input
+                                type="checkbox"
+                                onClick={() => setRemoveCoverPhoto(!removeCoverPhoto)}
+                            />
+                            <label>Remove Cover Photo</label>
+                        </span>
+                    </div>
                 }
+
                 {shouldShowCoverUpload &&
-                    <div>
+                    <div className='projectcontroller-field'>
                         <label>{existingCoverPhotoKey ? "Replace Your Cover Photo" : "Cover Photo"}</label>
                         <input
                             type="file"
                             onChange={(e) => uploadPhotos(e.target.files)}
                         />
+                        {coverPhotoBoolean || miniCoverPhotoBoolean && <button onClick={clearPhotos}>Clear Photos</button>}
                     </div>
                 }
 
-                {coverPhotoBoolean || miniCoverPhotoBoolean && <button onClick={clearPhotos}>Clear Photos</button>}
-                <div>
+                <div className='projectcontroller-field'>
                     <label>Tags</label>
                     <CustomMultiSelect
                         options={props.labels}
@@ -284,20 +298,24 @@ const ProjectReview = (props) => {
                         onSelect={handleLabelChange}
                     />
                 </div>
-                <button
-                    className={buttonClass}
-                    disabled={isDisabled}
-                    onClick={() => handleSubmit(DRAFT)}
-                >
-                    Save
-                </button>
-                <button
-                    className={buttonClass}
-                    disabled={isDisabled}
-                    onClick={() => handleSubmit(PUBLISHED)}
-                >
-                    Publish
-                </button>
+
+                <div className='projectcontroller-submit-buttons'>
+                    <button
+                        className={buttonClass}
+                        disabled={isDisabled}
+                        onClick={() => handleSubmit(DRAFT)}
+                    >
+                        Save
+                    </button>
+                    <button
+                        className={buttonClass}
+                        disabled={isDisabled}
+                        onClick={() => handleSubmit(PUBLISHED)}
+                    >
+                        Publish
+                    </button>
+                </div>
+
             </div>
             <div>
                 <br />
