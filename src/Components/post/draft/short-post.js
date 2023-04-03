@@ -41,19 +41,23 @@ class ShortPost extends React.Component {
 
   transformImageProp(validFiles) {
     let imageArray = validFiles;
+    const needsCompression = validFiles.length > 0;
+    let isDeletion = false;
 
     Promise
       .all(imageArray.map((file) => this.loadImage(file))
       )
       .then(
         result => {
+          if (result.length < this.state.displayedItemCount) isDeletion = true;
           this.setState({
             imageArray: result,
             displayedItemCount: result.length,
-            isCompressing: true
+            isCompressing: needsCompression
           },
             () => {
-              if (validFiles.length > 0) {
+              console.log(validFiles.length)
+              if (needsCompression) {
                 this.createTinyFiles(validFiles)
               }
             }
@@ -62,11 +66,12 @@ class ShortPost extends React.Component {
   }
 
   createTinyFiles(files) {
+    console.log(files);
     let promisedCompression = [];
     for (const file of files) {
-      promisedCompression.push(imageCompression(file, { maxSizeMB: 1 }));
+      promisedCompression.push(imageCompression(file, { maxSizeMB: 1 })); //all
     }
-    promisedCompression.push(
+    promisedCompression.push( //cover photo
       imageCompression(files[0], { maxSizeMB: 0.5, maxWidthOrHeight: 250 })
     );
     Promise.all(promisedCompression)
@@ -74,7 +79,7 @@ class ShortPost extends React.Component {
         const thumbnail = new File([results[results.length - 1]], 'Thumbnail');
         let files = [];
         for (let i = 0; i < results.length - 1; i++) {
-          files.push(new File([results[i]], 'file'))
+          files.push(new File([results[i]], results[1].name))
         }
 
         this.setState({ isCompressing: false },

@@ -5,6 +5,7 @@ const FileDisplayContainer = (props) => {
     const SortableItem =
         SortableElement(({ data, fileType, fileSize, errorMessage, removeFile }) => {
             const isDataInvalidError = data.invalid ? ('sortableitem-error') : ('');
+            console.log(data);
             return (
                 <div className='sortableitem'>
                     <div>
