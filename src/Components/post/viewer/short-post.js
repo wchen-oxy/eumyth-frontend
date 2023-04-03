@@ -448,6 +448,7 @@ class ShortPostViewer extends React.Component {
     }
 
     render() {
+        const pageStyle = this.props.isPostOnlyView ? 'shortpostviewer-post-view' : 'shortpostviewer-modal-view';
         const isOwnProfile = this.props.username === this.props.eventData.username;
         if (this.props.window === 1) { //1
             const hasImages = this.props.eventData.image_data?.length > 0 ? true : false;
@@ -484,35 +485,32 @@ class ShortPostViewer extends React.Component {
                 renderComments: this.renderComments,
             };
 
-            if (this.props.largeViewMode) {
-                const activityFunctions = {
-                    jumpToComment: this.jumpToComment,
-                    onEditClick: this.props.setPostStage,
-                    onDeletePost: this.handleDeletePost
-                }
-                return (
+            const content = this.props.largeViewMode
+                ? (
                     <ShortPostLargeContent
                         heroRef={this.heroRef}
-                        activityFunctions={activityFunctions}
+                        activityFunctions={{
+                            jumpToComment: this.jumpToComment,
+                            onEditClick: this.props.setPostStage,
+                            onDeletePost: this.handleDeletePost
+                        }}
                         {...sharedProps}
                     />
-                );
-            }
-            else {
-                return (
+                ) : (
                     <ShortPostInlineContent
                         windowWidth={this.props.windowWidth}
-
                         {...sharedProps}
-                    />)
+                    />);
+            return (
+                <div id={pageStyle}>
+                    {content}
+                </ div>)
 
-
-            }
         }
         else if (this.props.window === 2) {//2
             return (
                 <div
-                    id='shortpostviewer-reedit'
+                    id={pageStyle}
                     className='shortpostviewer-window'>
                     <h2>Edit your Post!</h2>
                     <div className='shortpostviewer-nav'>
@@ -555,21 +553,23 @@ class ShortPostViewer extends React.Component {
             }
 
             return (
-                <MetaStage
-                    {...required}
-                    {...this.props.metaObject}
-                    {...this.props.metaFunctions}
-                />
+                <div id={pageStyle}>
+                    <MetaStage
+                        {...required}
+                        {...this.props.metaObject}
+                        {...this.props.metaFunctions}
+                    />
+                </div>
+
             );
         }
         else if (this.props.window === 4) {
-
             const optional = {
                 useImageForThumbnail: this.state.useImageForThumbnail,
             }
 
             return (
-                <div className='shortpostviewer-window'>
+                <div id={pageStyle}>
                     <ReviewStage
                         isUpdateToPost
                         isPostOnlyView={this.props.isPostOnlyView}

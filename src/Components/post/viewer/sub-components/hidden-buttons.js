@@ -6,22 +6,26 @@ const HiddenButtons = (props) => {
     if (!props.editProjectState &&
         props.isOwnProfile)
         return (
-            <div id='hiddenbuttons'>
-                <button onClick={() => setButtonShow(!isButtonShowing)}>...</button>
-                {isButtonShowing && (
-                    <div id='hiddenbuttons-options'>
-                        <button
-                            id='hiddenbuttons-options-edit'
-                            onClick={() => props.onEditClick(2)}>
-                            Edit
-                        </button>
-                        <button
-                            id='hiddenbuttons-options-remove'
-                            onClick={props.onDeletePost}>
-                            Remove
-                        </button>
-                    </div>
-                )}
+            <div>
+                <div id='hiddenbuttons-overlay' onClick={() => setButtonShow(!isButtonShowing)}></div>
+                <div id='hiddenbuttons'>
+                    <button onClick={() => setButtonShow(!isButtonShowing)}>...</button>
+                    {isButtonShowing && (
+                        <div id='hiddenbuttons-options'>
+                            <button
+                                id='hiddenbuttons-options-edit'
+                                onClick={() => props.onEditClick(2)}>
+                                Edit
+                            </button>
+                            <button
+                                id='hiddenbuttons-options-remove'
+                                onClick={props.onDeletePost}>
+                                Remove
+                            </button>
+                        </div>
+                    )}
+                </div>
+
             </div>
         );
     else {

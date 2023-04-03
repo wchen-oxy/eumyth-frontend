@@ -1,10 +1,10 @@
 .customimageslider-new-post-hero-container {
-    height: $small-post-draft-height;
-    max-height: $small-post-draft-height;
+    height: $small-post-draft-image-height;
+    max-height: $small-post-draft-image-height;
     background-color: black;
     img {
-        min-height: $small-post-draft-height;
-        max-height: $small-post-draft-height;
+        min-height: $small-post-draft-image-height;
+        max-height: $small-post-draft-image-height;
         object-fit: contain;
     }
 }

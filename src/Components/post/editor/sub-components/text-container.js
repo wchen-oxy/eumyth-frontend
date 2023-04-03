@@ -6,8 +6,6 @@ const TextContainer = (props) => {
     console.log(props.isPaginated)
   return (
     <div id='textcontainer'>
-        <h4>{props.username}</h4>
-
         {props.validFilesLength > 1 &&
             <CaptionButtons
                 validFilesLength={props.validFilesLength}

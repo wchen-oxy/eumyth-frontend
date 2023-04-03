@@ -1,16 +1,18 @@
 #shortpostviewer-large-hero {
     @include flex-display-row;
-    height: $small-post-height;
+    height: $small-post-viewer-height;
 }
 
 #shortpostviewer-large-inline-header {
     padding-left: 10px;
 }
-
-#shortpostviewer-reedit {
+#shortpostviewer-post-view {
+    margin-left: 12px;
+    margin-right: 12px;
+}
+#shortpostviewer-modal-view {
     padding-left: 8px;
     padding-right: 8px;
-    text-align: center;
 }
 
 .shortpostviewer {

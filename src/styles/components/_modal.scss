@@ -62,7 +62,7 @@
 .draft-window {
     background-color: white;
     z-index: $content-window;
-    height: $small-post-draft-height;
+    height: $small-post-draft-modal-height;
     width: $small-post-width;
     overflow: scroll;
     position: fixed;
@@ -72,7 +72,7 @@
     background-color: white;
     position: fixed;
     z-index: $content-window;
-    height: $small-post-height;
+    height: $small-post-viewer-height;
     width: $small-post-width;
     overflow: scroll;
 }

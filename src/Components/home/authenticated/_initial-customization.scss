@@ -33,4 +33,8 @@
 .initialcustomization-content {
     @include flex-display-column;
     padding: 2vh;
+
+    button{
+        @extend %button-style;
+    }
 }

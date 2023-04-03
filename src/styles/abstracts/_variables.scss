@@ -66,29 +66,26 @@ $button-hover: $black-700;
 $button-image-nav-height: 48px;
 //post feed dimension measurments (effectively post width)
 
-
 $small-post-container-width: 768px;
-
 
 //post draft
 $small-post-draft-height: calc(100vh - (#{$nav-height}));
 $small-post-draft-padding: 8px;
 
-$small-post-height: calc(100vh - ((#{$nav-height}) * 2 ));
+$small-post-viewer-height: calc(100vh - ((#{$nav-height}) * 2));
 $small-post-width: 95vw;
 $feed-post-padding-size: 16px;
 //shared button dimensions
 $small-button-window: 19vh;
-
-// $small-post-height: calc(100vh - 50px);
-$small-post-image-height: calc((#{$small-post-height}) - (#{$nav-height}));
+$small-post-draft-modal-height: calc((#{$small-post-viewer-height}) - (#{$nav-height}));
+$small-post-draft-image-height: calc((#{$small-post-draft-modal-height}) - 300px);
+$small-post-image-height: calc((#{$small-post-viewer-height}) - (#{$nav-height}));
 
 //image nav
 $image-nav-container-height: 48px;
 
 //step indicator
 $size-step-indicator: 48px;
-
 
 //z-indexes
 $navbar: 10;
@@ -98,7 +95,6 @@ $content-window: 25;
 
 $overlay-super: 35;
 $window-upper: 23;
-
 
 %username-link {
     color: $black-800;

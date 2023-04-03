@@ -156,7 +156,6 @@ class ShortEditor extends React.Component {
     }
 
     renderTextContainer() {
-        console.log(this.props.tempText);
          return (
             <TextContainer
                 validFilesLength={this.props.validFiles.length}
@@ -199,8 +198,7 @@ class ShortEditor extends React.Component {
             return (
                 <>
                     <div id='shorteditor-main'>
-                        <div id='shorteditor-hero'
-                            className='short-post-hero-image-container' >
+                        <div id='shorteditor-hero' >
                             {this.props.unsupportedFiles.length ?
                                 <p>Please remove all unsupported files.</p> : ''}
                             <div id='shorteditor-images'>
@@ -215,7 +213,7 @@ class ShortEditor extends React.Component {
                                 />
                             </div>
                         </div>
-                        <div className='short-post-side-container'>
+                        <div id='shorteditor-side-container'>
                             {this.renderTextContainer()}
                         </div>
                     </div>

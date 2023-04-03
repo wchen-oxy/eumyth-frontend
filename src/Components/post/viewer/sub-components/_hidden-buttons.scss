@@ -2,6 +2,7 @@
     @include flex-display-row;
     justify-content: center;
     margin: auto 0;
+    z-index: $content-window;
     button,
     button:hover {
         @extend %button-style;
@@ -9,6 +10,13 @@
     button:hover {
         @include default-button-hover;
     }
+}
+
+#hiddenbuttons-overlay {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: $overlay;
 }
 
 #hiddenbuttons-options {

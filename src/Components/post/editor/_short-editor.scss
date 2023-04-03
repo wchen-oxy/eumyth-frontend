@@ -10,11 +10,18 @@
 }
 
 #shorteditor-hero {
+    width: 65%;
+    justify-content: center;
+    text-align: center;
     #shorteditor-images {
         // background-color: black;
     }
 }
-
+#shorteditor-side-container {
+    width: 35%;
+    padding-left: 8px;
+    padding-right: 8px;
+}
 #shorteditor-files {
     @include flex-display-column;
     h4 {
