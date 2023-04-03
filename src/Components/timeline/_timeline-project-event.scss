@@ -1,20 +1,39 @@
+#timelineprojectevent {
+    h4,
+    h6,
+    p {
+        margin: 0;
+    }
+    h4 {
+        padding: 0px 8px 8px 8px;
+    }
+    h6 {
+        padding: 0 8px 4px 8px;
+        font-size: 14px;
+        font-weight: 100;
+    }
+}
+
+#timelineproject-meta {
+    @include flex-display-row;
+    justify-content: space-between;
+    padding: 8px 8px 4px 8px;
+}
+
 .timelineprojectevent-draft {
-    background-color: $blue-200;
-    color: $blue-900;
+    background-color: $black-100;
+    // color: $blue-900;
     min-height: $event-min-height;
-    @include text;
 }
 
 .timelineprojectevent-completed {
-    background-color: $blue-800;
-    color: $blue-100;
+    background-color: $black-100;
+    // color: $blue-100;
     min-height: $event-min-height;
-    @include text;
 }
 
 .timelineprojectevent-published {
     min-height: $event-min-height;
-    @include text;
 }
 
 .timelineprojectevent-cover {

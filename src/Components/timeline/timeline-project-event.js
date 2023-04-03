@@ -1,8 +1,11 @@
 import React from 'react';
+import { toTitleCase } from 'utils';
 import { returnContentImageURL } from 'utils/url';
 
 const ProjectEvent = (props) => {
     const post = props.post;
+    // const date = props;
+    console.log(props);
     let isDraft = props.post.status === 'DRAFT';
     let displayedType = null;
     let classType = null;
@@ -26,16 +29,20 @@ const ProjectEvent = (props) => {
             throw new Error("Type mismatched")
     }
     return (
-        <div className={classType}>
-            {post.mini_cover_photo_key &&
+        <div id='timelineprojectevent' className={classType}>
+            {/* {post.mini_cover_photo_key &&
                 <img className='timelineprojectevent-cover' src={returnContentImageURL(post.mini_cover_photo_key)}
                 />
-            }
+            } */}
+            <div id='timelineproject-meta'>
+             {   <p>{toTitleCase(post.pursuit)}</p>}
+                <p> {displayedType}</p>
+            </div>
             <h4>
-                {post.title ? post.title : post.pursuit_category}
+                {post.title}
             </h4>
+
             {post.overview && <h6 className='event-overview'>{post.overview}</h6>}
-            <p> {displayedType}</p>
         </div>
     );
 }

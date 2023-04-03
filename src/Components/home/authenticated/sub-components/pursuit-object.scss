@@ -1,8 +1,55 @@
-.pursuitobject-pursuit {
-    color: $black-900;
+#pursuitobject-num-posts {
+    margin-right: 16px;
 }
 
-.pursuitobject-num-posts {
+.pursuitobject-unselected,
+.pursuitobject-selected {
+    margin-right: 16px;
+    cursor: pointer;
+}
+
+.pursuitobject-unselected {
+    @include flex-display-row;
+    align-items: center
+}
+.pursuitobject-selected {
+    @include flex-display-column;
+    background-color: $black-200;
+    padding: 8px;
+}
+
+.pursuitobject-pursuit {
+    @include flex-display-row;
+    h4 {
+        color: $black-900;
+        font-size: 18px;
+        margin: 4px 0;
+        font-weight: 200;
+    }
+    p {
+        color: $black-600;
+    }
+}
+
+.pursuitobject-num-posts-unselected {
     padding-left: 8px;
+}
+
+.pursuitobject-num-posts-selected,
+.pursuitobject-thread-title {
+    font-size: 14px;
     color: $black-600;
+}
+
+.pursuitobject-meta-selected {
+    @include flex-display-row;
+}
+
+.pursuitobject-thread-container {
+    @include flex-display-column;
+    align-items: flex-start;
+}
+
+.pursuitobject.thread {
+    margin: 0;
 }

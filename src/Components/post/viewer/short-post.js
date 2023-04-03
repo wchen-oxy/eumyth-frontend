@@ -107,8 +107,11 @@ class ShortPostViewer extends React.Component {
                     this.setState({
                         projectPreview: result.data,
                     }, () => {
+                        if (this.props.intermSaveProjectPreview) {
+                            return (this.props.intermSaveProjectPreview(result.data));
+                        }
                         if (this.props.saveProjectPreview) {
-                            this.props.saveProjectPreview(result.data);
+                            return this.props.saveProjectPreview(result.data);
                         }
                         // const draftData = findMatchedDraft(this.props.drafts, result.data);
                         // this.props.setDraft(draftData)

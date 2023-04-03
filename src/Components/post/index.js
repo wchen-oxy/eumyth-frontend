@@ -466,6 +466,7 @@ class PostController extends React.Component {
           metaFunctions={metaFunctions}
           threadObject={threadObject}
           threadFunction={threadFunction}
+          intermSaveProjectPreview={this.props.intermSaveProjectPreview}
 
         />);
     }

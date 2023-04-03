@@ -15,6 +15,24 @@ const _reorder = (unordered, matched) => {
 }
 
 class UserFeedItem extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            thread: null,
+            selected: 0,
+        }
+        this.intermSaveProjectPreview = this.intermSaveProjectPreview.bind(this);
+        this.handlePursuitClick = this.handlePursuitClick.bind(this);
+    }
+
+    intermSaveProjectPreview(data) {
+        this.setState({ thread: data.title })
+        this.props.viewerFunctions.saveProjectPreview(data);
+    }
+
+    handlePursuitClick(selected) {
+        this.setState({ selected })
+    }
 
     render() {
         const data = this.props.data;
@@ -45,8 +63,11 @@ class UserFeedItem extends React.Component {
                             {orderedPursuits
                                 .map((pursuit, index) =>
                                     <PursuitObject
+                                        thread={this.state.thread}
                                         pursuit={pursuit}
                                         index={index}
+                                        isSelected={index === this.state.selected}
+                                        onSelect={this.handlePursuitClick}
                                     />)}
                         </div>
                     </div>
@@ -65,6 +86,7 @@ class UserFeedItem extends React.Component {
                                 eventData: data
                             }}
                             viewerFunctions={this.props.viewerFunctions}
+                            intermSaveProjectPreview={this.intermSaveProjectPreview}
                             authUser={this.props.authUser}
                         />
 

@@ -233,12 +233,12 @@ class ReturningUserPage extends React.Component {
         }
         return (
             <div id='returninguser'>
-                <Header
+                {/* <Header
                     displayPhotoKey={this.props.authUser.croppedDisplayPhotoKey}
                     username={this.props.authUser.username}
                     name={this.state.name}
                     pursuitObjects={this.state.pursuitObjects}
-                />
+                /> */}
                 <div
                     id='returninguser-feed'
                     className='returninguser-main-row'

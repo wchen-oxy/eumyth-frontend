@@ -29,7 +29,7 @@ const EventController = (props) => {
                     :
                     () => props.onProjectClick(post)}
                 className={selectClassStyle(props.columnIndex)}>
-                <ProjectEvent post={post} />
+                <ProjectEvent shouldShowPursuit={props.shouldShowPursuit} post={post} />
             </div>
         );
     }

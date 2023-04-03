@@ -17,7 +17,8 @@ import {
     PROJECT_MICRO_VIEW_STATE,
     PROJECT_REARRANGE_STATE,
     PROJECT_SELECT_VIEW_STATE,
-    PROJECT
+    PROJECT,
+    ALL
 } from "../../utils/constants/flags";
 import { formatPostText, sortTimelineContent } from 'utils';
 
@@ -213,6 +214,7 @@ class ProjectController extends React.Component {
                             ? PROJECT :
                             PROJECT_EVENT}
                         shouldMarkAsNew={shouldMarkNewPosts ? k < usedPostsLength : false}
+                        shouldShowPursuit={this.state.selectedPursuitIndex !== ALL}
                         isSelected={this.state.feedIndex.get(event._id)}
                         editProjectState={this.state.editProjectState}
                         key={k}

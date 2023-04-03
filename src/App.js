@@ -6,6 +6,7 @@ import ProfilePage from './components/profile';
 import GeoSearch from 'components/geo-search';
 import Published from 'components/published';
 import Test from './components/test';
+import close from 'images/close2.png';
 import { withAuthentication } from './store/session';
 import {
       BrowserRouter,
@@ -29,16 +30,19 @@ const App = () => {
 
       const returnModalStructure = (content, closeModalFunction) => {
             return (
-                  <div style={{height: '100vh'}}>
+                  <div id='overlay'>
                         <div
-                              className='overlay'
+                              id='background'
                               onClick={() => closeModalFunction()}>
                         </div>
-                        <span
-                              className='close'
+                        <div id='contentholder'>
+                              {content}
+                        </div>
+                        <div
+                              id='close'
                               onClick={() => closeModalFunction()}>
-                              X    </span>
-                        {content}
+                              <img alt='from Pixel perfect' src={close} />
+                        </div>
                   </div>
             );
       };
