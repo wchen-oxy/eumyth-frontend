@@ -20,6 +20,7 @@
 
 .pursuitobject-pursuit {
     @include flex-display-row;
+    align-items: center;
     h4 {
         color: $black-900;
         font-size: 18px;

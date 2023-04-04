@@ -34,7 +34,8 @@
     @include flex-display-column;
     padding: 2vh;
 
-    button{
+    button {
         @extend %button-style;
+        margin-top: 24px;
     }
 }

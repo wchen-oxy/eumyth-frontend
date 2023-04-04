@@ -307,13 +307,13 @@ const ProjectReview = (props) => {
                     >
                         Save
                     </button>
-                    <button
+                    {/* <button
                         className={buttonClass}
                         disabled={isDisabled}
                         onClick={() => handleSubmit(PUBLISHED)}
                     >
                         Publish
-                    </button>
+                    </button> */}
                 </div>
 
             </div>
@@ -334,8 +334,6 @@ const ProjectReview = (props) => {
                 <br />
                 <br />
             </div>
-
-
         </div>
     )
 }

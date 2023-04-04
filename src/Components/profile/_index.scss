@@ -7,7 +7,7 @@
 
 #profile-cover {
     height: 345px;
-    background-color: rgba(197, 197, 197, 0.171);
+    background-color: #ffffff;
     overflow: hidden;
 
     img {
@@ -23,17 +23,17 @@
     margin-left: 48px;
 }
 
-#profile-upper-user-info{
+#profile-upper-user-info {
     @include flex-display-row;
 }
 
 #profile-intro {
     display: block;
-    background-color: rgba(197, 197, 197, 0.363);
+    background-color:  #ffffff;
 }
 
 #profile-dp {
-    background-color: rgb(197, 197, 197);
+    background-color: $black-200;
     margin-left: 32px;
     margin-top: 32px;
     padding-left: 5px;
@@ -53,7 +53,7 @@
 #profile-name {
     padding-top: 32px;
 
-    h3{
+    h3 {
         margin: 0;
     }
 }
