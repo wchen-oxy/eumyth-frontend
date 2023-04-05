@@ -487,24 +487,23 @@ class ShortPostViewer extends React.Component {
 
             const content = this.props.largeViewMode
                 ? (
-                    <ShortPostLargeContent
-                        heroRef={this.heroRef}
-                        activityFunctions={{
-                            jumpToComment: this.jumpToComment,
-                            onEditClick: this.props.setPostStage,
-                            onDeletePost: this.handleDeletePost
-                        }}
-                        {...sharedProps}
-                    />
+                    <div id={pageStyle}>
+                        <ShortPostLargeContent
+                            heroRef={this.heroRef}
+                            activityFunctions={{
+                                jumpToComment: this.jumpToComment,
+                                onEditClick: this.props.setPostStage,
+                                onDeletePost: this.handleDeletePost
+                            }}
+                            {...sharedProps}
+                        />
+                    </ div>
                 ) : (
                     <ShortPostInlineContent
                         windowWidth={this.props.windowWidth}
                         {...sharedProps}
                     />);
-            return (
-                <div id={pageStyle}>
-                    {content}
-                </ div>)
+            return content;
 
         }
         else if (this.props.window === 2) {//2

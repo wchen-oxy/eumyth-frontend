@@ -13,6 +13,12 @@
 #shortpostviewer-modal-view {
     padding-left: 8px;
     padding-right: 8px;
+    background-color: white;
+    position: fixed;
+    z-index: $content-window;
+    height: $small-post-viewer-height;
+    width: $small-post-width;
+    overflow: scroll;
 }
 
 .shortpostviewer {
