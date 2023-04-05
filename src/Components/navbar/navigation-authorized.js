@@ -116,7 +116,7 @@ class NavigationAuthorized extends React.Component {
                                 linkType={NEW_ENTRY_MODAL_STATE}
                                 setModal={this.setModal}
                             />)}
-                        {this.displayOptionalsDecider(
+                        {/* {this.displayOptionalsDecider(
                             <OptionalLinks
                                 username={this.props.authUser.username}
                                 linkType={PEOPLE_SEARCH_STATE}
@@ -126,7 +126,7 @@ class NavigationAuthorized extends React.Component {
                             <OptionalLinks
                                 linkType={WORKS_STATE}
                                 setModal={this.setModal}
-                            />)}
+                            />)} */}
                     </div>
                     <div id='navbar-right'>
                         {this.displayOptionalsDecider(

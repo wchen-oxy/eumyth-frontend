@@ -52,10 +52,10 @@ const ProjectDraftControls = (props) => {
                     </label>}
                     <label>Create New Series</label>
                 </span>
-                <h6>A Series is a collection of posts that have a common theme or idea.
+                <h5>A Series is a collection of posts that have a common theme or idea.
                     When you add more posts to a Series, you can see how your pursuit develops over time.
                     As a Series grows, you may be surprised who may interested in your hard work!
-                </h6>
+                </h5>
             </div>
 
             {

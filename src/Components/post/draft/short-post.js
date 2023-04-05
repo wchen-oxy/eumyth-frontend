@@ -249,7 +249,7 @@ class ShortPost extends React.Component {
     }
     else if (this.props.window === 3) {
       return (
-        <div className='small-post-window'>
+        <div className='draft-window'>
           <ReviewStage
             {...this.props.threadObject}
             {...this.props.threadFunction}

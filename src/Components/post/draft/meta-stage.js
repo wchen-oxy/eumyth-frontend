@@ -13,7 +13,7 @@ const MetaStage = (props) => {
     return (
         <div
             id='metastage'
-            className="small-post-window">
+            className="draft-window">
             <h2 id="metastage-title">Post Info</h2>
             <div className='metastage-nav'>
                 <div id='metastage-prev'>

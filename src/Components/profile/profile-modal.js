@@ -7,15 +7,13 @@ const ProfileModalController = (props) => {
         props.modalState === POST_VIEWER_MODAL_STATE) {
         return (
             props.returnModalStructure(
-                <div className='small-post-window'>
-                    <PostController
-                        isViewer
-                        authUser={props.authUser}
-                        viewerObject={props.viewerObject}
-                        viewerFunctions={props.viewerFunctions}
-                        closeModal={props.closeModal}
-                    />
-                </div>
+                <PostController
+                    isViewer
+                    authUser={props.authUser}
+                    viewerObject={props.viewerObject}
+                    viewerFunctions={props.viewerFunctions}
+                    closeModal={props.closeModal}
+                />
                 ,
                 props.viewerFunctions.closeModal));
     }
