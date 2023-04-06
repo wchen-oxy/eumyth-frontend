@@ -59,6 +59,7 @@ class ExtraFeed extends React.Component {
         this.setCoordinates = this.setCoordinates.bind(this);
         this.getDynamicFeed = this.getDynamicFeed.bind(this);
         this.getCachedFeed = this.getCachedFeed.bind(this);
+        this.formatFeed = this.formatFeed.bind(this);
         this.getSpotlight = this.getSpotlight.bind(this);
         this.mergeData = this.mergeData.bind(this);
         this.prepareRenderedFeedInput = this.prepareRenderedFeedInput.bind(this);
@@ -164,6 +165,7 @@ class ExtraFeed extends React.Component {
                 usedPeople,
                 coordinates,
             );
+            console.log(contentList);
             //finish cached  
             addRemainingCachedContent(
                 newIndices.cachedTypeIndex,
@@ -218,33 +220,33 @@ class ExtraFeed extends React.Component {
 
     getDynamicFeed() {
         const distance = this.state.distance;
-        return AxiosHelper.getSimilarPeopleAdvanced(
-            distance,
-            this.state.formattedPursuits,
-            this.state.usedPeople,
-            this.state.lat,
-            this.state.long)
-            .then((results) => {
-                const data = results.data;
-                return data.map(convertPursuitToQueue);
-            }
-            );
+        return AxiosHelper
+            .getSimilarPeopleAdvanced(
+                distance,
+                this.state.formattedPursuits,
+                this.state.usedPeople,
+                this.state.lat,
+                this.state.long);
+    }
+    
+    formatFeed(results) {
+        const queuedData = results.data.map(convertPursuitToQueue);
+        const extractedData = this.prepareRenderedFeedInput(this.props.cached, queuedData);
+        const contentList = extractedData.contentList;
+        const usedPeople = [
+            ...new Set(
+                this.state.usedPeople.concat(extractedData.usedPeople)
+            )];
+        return { dynamic: results, usedPeople, contentList };
     }
 
     getContent() {
-        return this.getDynamicFeed()
+        return this
+            .getDynamicFeed()
+            .then(this.formatFeed)
             .then((results) => {
-                const extractedData = this.prepareRenderedFeedInput(this.props.cached, results);
-                const contentList = extractedData.contentList;
-                const usedPeople = [
-                    ...new Set(
-                        this.state.usedPeople.concat(extractedData.usedPeople)
-                    )];
-
                 return this.setState({
-                    dynamic: results,
-                    usedPeople,
-                    contentList,
+                    ...results
                 }, this.fetch)
             })
     }
@@ -325,7 +327,7 @@ class ExtraFeed extends React.Component {
         if (!this._isMounted || this.state.feedData.length === 0) {
             return [];
         }
-        return this.state.feedData.map(
+         return this.state.feedData.map(
             (item, index) => {
                 const viewerObject = {
                     key: index,
@@ -334,6 +336,7 @@ class ExtraFeed extends React.Component {
                     postIndex: index,
                     ...viewerObjects
                 }
+                console.log(item);
                 switch (item.type) {
                     case (POST):
                         viewerObject['eventData'] = item.data;

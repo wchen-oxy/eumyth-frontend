@@ -370,7 +370,7 @@ class PostController extends React.Component {
   }
 
   render() {
-    const miniAuthObject = {
+     const miniAuthObject = {
       pastLabels: this.props.authUser.labels,
       userPreviewID: this.props.authUser.userPreviewID,
       profileID: this.props.authUser.profileID,

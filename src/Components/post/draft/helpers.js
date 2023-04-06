@@ -28,7 +28,7 @@ import {
 } from 'utils/constants/form-data';
 import AxiosHelper from 'utils/axios';
 
- 
+
 const handleSuccess = (isPostOnlyView, closeModal) => {
     alert('Post Successful! You will see your post soon.');
     if (!isPostOnlyView) closeModal();
@@ -45,6 +45,7 @@ const appendSeriesUserMeta = (formData, fields) => {
     formData.append(USER_ID_FIELD, fields.profileID);
     formData.append(INDEX_USER_ID_FIELD, fields.indexProfileID);
     formData.append(USER_PREVIEW_ID_FIELD, fields.userPreviewID);
+    fields.smallCroppedDisplayPhotoKey && formData.append(DISPLAY_PHOTO_FIELD, fields.smallCroppedDisplayPhotoKey);
 }
 const appendSeriesMeta = (formData, fields) => {
     formData.append(STATUS_FIELD, DRAFT);
@@ -54,7 +55,6 @@ const appendSeriesMeta = (formData, fields) => {
 }
 
 export const handleProjectCreation = (userMeta, seriesMeta) => {
-    console.log(seriesMeta);
     let formData = new FormData();
     appendSeriesUserMeta(formData, userMeta);
     appendSeriesMeta(formData, seriesMeta);

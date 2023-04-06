@@ -556,6 +556,7 @@ class ProjectController extends React.Component {
     }
 
     render() {
+        console.log(this.props.authUser);
         const contentType = this.state.editProjectState || this.props.isContentOnlyView || this.state.selectedProject
             ?
             PROJECT_EVENT : PROJECT;
@@ -569,7 +570,7 @@ class ProjectController extends React.Component {
                     indexProfileID: this.props.authUser.indexProfileID,
                     username: this.props.authUser.username,
                     shouldCopyPosts: false,
-                    displayPhotoKey: this.props.authUser.croppedDisplayPhotoKey,
+                    displayPhotoKey: this.props.authUser.smallCroppedDisplayPhotoKey,
                     cachedFeedID: this.props.authUser.cached_feed_id
 
                 }

@@ -40,7 +40,6 @@ const ProjectHeader = (props) => {
         if (type === "PARENT") return "Other Series With The Same Parent";
         else if (type === "CHILDREN") return "Series Influenced By This";
     }
-    console.log(props.projectMetaData);
 
     const shouldShowClose = comparatorStatus === "PARENT" || comparatorStatus === "CHILDREN";
     return (

@@ -3,6 +3,7 @@ import PostController from "components/post/index";
 import { returnFormattedDistance } from 'utils/constants/ui-text';
 import { returnUserImageURL } from 'utils/url';
 import PursuitObject from './sub-components/pursuit-object';
+import AxiosHelper from 'utils/axios';
 
 const _reorder = (unordered, matched) => {
     let ordered = [];
@@ -10,16 +11,19 @@ const _reorder = (unordered, matched) => {
         const item = unordered.splice(index, 1, null)[0];
         ordered.unshift(item);
     }
-    ordered = ordered.concat(unordered.filter(item => item !== null));
+    // ordered = ordered.concat(unordered.filter(item => item !== null));
     return ordered;
 }
 
 class UserFeedItem extends React.Component {
     constructor(props) {
         super(props);
+        const user = this.props.content;
         this.state = {
             thread: null,
             selected: 0,
+            pursuits: _reorder(user.pursuits, user.matched_pursuit_index),
+            altData: null
         }
         this.intermSaveProjectPreview = this.intermSaveProjectPreview.bind(this);
         this.handlePursuitClick = this.handlePursuitClick.bind(this);
@@ -31,21 +35,19 @@ class UserFeedItem extends React.Component {
     }
 
     handlePursuitClick(selected) {
-        this.setState({ selected })
+
+        return AxiosHelper.retrievePost(this.state.pursuits[selected][0])
+            .then(result => {
+                this.setState({
+                    selected,
+                    altData: result.data
+                })
+            })
     }
 
     render() {
-        const data = this.props.data;
+        const data = this.state.selected === 0 ? this.props.data : this.state.altData;
         const user = this.props.content;
-        const pursuits = user.pursuits
-            .map(item => {
-                return {
-                    name: item.name,
-                    num_posts: item.num_posts
-                }
-            });
-        pursuits[0] = null;
-        const orderedPursuits = _reorder(pursuits, user.matched_pursuit_index);
         return (
             <div className='userfeeditem-user'>
                 <div className='userfeeditem-upper-main'>
@@ -60,11 +62,14 @@ class UserFeedItem extends React.Component {
                         <h3 className='userfeeditem-upper-right-distance'>{user.username} {returnFormattedDistance(user.distance)}</h3>
                         <div className='userfeeditem-upper-right-pursuits'>
                             <h5>Pursuing</h5>
-                            {orderedPursuits
-                                .map((pursuit, index) =>
+                            {this.state.pursuits
+                                .map((item, index) =>
                                     <PursuitObject
                                         thread={this.state.thread}
-                                        pursuit={pursuit}
+                                        pursuit={{
+                                            name: item.name,
+                                            num_posts: item.num_posts
+                                        }}
                                         index={index}
                                         isSelected={index === this.state.selected}
                                         onSelect={this.handlePursuitClick}
@@ -75,7 +80,6 @@ class UserFeedItem extends React.Component {
                 </div>
                 {data &&
                     <div className='userfeeditem-lower-main'>
-
                         <PostController
                             isViewer
                             key={data._id}
