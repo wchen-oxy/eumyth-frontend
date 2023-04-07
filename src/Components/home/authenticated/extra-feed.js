@@ -58,7 +58,7 @@ class ExtraFeed extends React.Component {
         this.checkValidLocation = this.checkValidLocation.bind(this);
         this.setCoordinates = this.setCoordinates.bind(this);
         this.getDynamicFeed = this.getDynamicFeed.bind(this);
-        this.getCachedFeed = this.getCachedFeed.bind(this);
+        // this.getCachedFeed = this.getCachedFeed.bind(this);
         this.formatFeed = this.formatFeed.bind(this);
         this.getSpotlight = this.getSpotlight.bind(this);
         this.mergeData = this.mergeData.bind(this);
@@ -154,43 +154,42 @@ class ExtraFeed extends React.Component {
         // const sortedDynamic = dynamic.sort(sortByNearest)
         const contentList = [];
         const coordinates = { long: this.state.long, lat: this.state.lat }
-
         if (isSeperated) {
-            const usedPeople = {};
+            // const usedPeople = {};
 
-            const newIndices = extractContentFromRaw(
-                cached,
-                dynamic,
-                contentList,
-                usedPeople,
-                coordinates,
-            );
-            console.log(contentList);
-            //finish cached  
-            addRemainingCachedContent(
-                newIndices.cachedTypeIndex,
-                newIndices.cachedItemIndex,
-                cached,
-                contentList,
-            );
+            // const newIndices = extractContentFromRaw(
+            //     cached,
+            //     dynamic,
+            //     contentList,
+            //     usedPeople,
+            //     coordinates,
+            // );
+            // console.log(contentList);
+            // //finish cached  
+            // addRemainingCachedContent(
+            //     newIndices.cachedTypeIndex,
+            //     newIndices.cachedItemIndex,
+            //     cached,
+            //     contentList,
+            // );
 
-            addRemainingDynamicContent(
-                {
-                    pursuitIndex: newIndices.pursuitIndex,
-                    numOfPursuits: dynamic.length
-                },
-                dynamic,
-                contentList,
-                usedPeople,
-                coordinates,
+            // addRemainingDynamicContent(
+            //     {
+            //         pursuitIndex: newIndices.pursuitIndex,
+            //         numOfPursuits: dynamic.length
+            //     },
+            //     dynamic,
+            //     contentList,
+            //     usedPeople,
+            //     coordinates,
 
-            );
+            // );
 
-            const keys = [];
-            for (const key in usedPeople) {
-                keys.push(key)
-            }
-            return { contentList, keys };
+            // const keys = [];
+            // for (const key in usedPeople) {
+            //     keys.push(key)
+            // }
+            // return { contentList, keys };
         }
         else {
             const usedPeople = new Set();
@@ -213,10 +212,31 @@ class ExtraFeed extends React.Component {
 
     }
 
-    getCachedFeed() { //initial
-        return AxiosHelper
-            .getCachedFeed(this.props.authUser.cached_feed_id)
+    // getCachedFeed() { //initial
+    //     return AxiosHelper
+    //         .getCachedFeed(this.props.authUser.cached_feed_id)
+    // }
+
+
+    formatFeed(results) { //problem area is here
+        // console.log(results.data);
+        const queuedData = results.data.map((item) => { return convertPursuitToQueue(item) }); //converts pursuit categories by exact and different to queues
+        const extractedData = this.prepareRenderedFeedInput(this.props.cached, queuedData);
+        const contentList = extractedData.contentList;
+        const usedPeople = [
+            ...new Set(
+                this.state.usedPeople.concat(extractedData.usedPeople)
+            )];
+        return { dynamic: results, usedPeople, contentList };
     }
+
+    getContent() {
+        const baseFeedData = this
+            .getDynamicFeed()
+            .then(this.formatFeed);
+        return baseFeedData.then((results) => this.fetch(results));
+    }
+
 
     getDynamicFeed() {
         const distance = this.state.distance;
@@ -228,31 +248,10 @@ class ExtraFeed extends React.Component {
                 this.state.lat,
                 this.state.long);
     }
-    
-    formatFeed(results) {
-        const queuedData = results.data.map(convertPursuitToQueue);
-        const extractedData = this.prepareRenderedFeedInput(this.props.cached, queuedData);
-        const contentList = extractedData.contentList;
-        const usedPeople = [
-            ...new Set(
-                this.state.usedPeople.concat(extractedData.usedPeople)
-            )];
-        return { dynamic: results, usedPeople, contentList };
-    }
 
-    getContent() {
-        return this
-            .getDynamicFeed()
-            .then(this.formatFeed)
-            .then((results) => {
-                return this.setState({
-                    ...results
-                }, this.fetch)
-            })
-    }
-
-    setFeedState(content, hasMore, nextOpenPostIndex, numOfContent) {
-        this.setState({
+    setFeedState(content, hasMore, nextOpenPostIndex, numOfContent, prevResults) {
+        return this.setState({
+            ...prevResults,
             feedData: content,
             hasMore: hasMore,
             nextOpenPostIndex,
@@ -261,10 +260,10 @@ class ExtraFeed extends React.Component {
         })
     }
 
-    mergeData(old, data) {
+    mergeData(parentData, posts) {
         const dictionary = {};
-        data.forEach(item => { dictionary[item._id] = item });
-        return old.map(item => {
+        posts.forEach(item => { dictionary[item._id] = item });
+        return parentData.map(item => {
             const postID = item.post ? item.post : undefined;
             if (postID) {
                 item.data = dictionary[item.post];
@@ -274,9 +273,10 @@ class ExtraFeed extends React.Component {
 
     }
 
-    fetch() { //fetch for the timeline
+    fetch(prevResults) { //fetch for the timeline
         this.debounceFetch.cancel();
-        const slicedPostIDs = this.state.contentList.slice(
+        const content = prevResults ? prevResults.contentList : this.state.contentList;
+        const slicedPostIDs = content.slice(
             this.state.nextOpenPostIndex,
             this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH
         );
@@ -292,7 +292,7 @@ class ExtraFeed extends React.Component {
                     const hasMore = REGULAR_CONTENT_REQUEST_LENGTH === content.length;
                     const nextOpenPostIndex = this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH;
                     const numOfContent = this.state.numOfContent + content.length;
-                    this.setFeedState(content, hasMore, nextOpenPostIndex, numOfContent);
+                    return this.setFeedState(content, hasMore, nextOpenPostIndex, numOfContent, prevResults);
                 })
                 .catch(err => console.log(err))
         else {
@@ -301,7 +301,7 @@ class ExtraFeed extends React.Component {
             const hasMore = curLength < this.state.contentList.length;
             const nextOpenPostIndex = this.state.nextOpenPostIndex + REGULAR_CONTENT_REQUEST_LENGTH;
             const numOfContent = this.state.numOfContent + slicedPostIDs.length;
-            this.setFeedState(content, hasMore, nextOpenPostIndex, numOfContent);
+            return this.setFeedState(content, hasMore, nextOpenPostIndex, numOfContent, prevResults);
         }
     }
 
@@ -327,7 +327,7 @@ class ExtraFeed extends React.Component {
         if (!this._isMounted || this.state.feedData.length === 0) {
             return [];
         }
-         return this.state.feedData.map(
+        return this.state.feedData.map(
             (item, index) => {
                 const viewerObject = {
                     key: index,
@@ -336,7 +336,6 @@ class ExtraFeed extends React.Component {
                     postIndex: index,
                     ...viewerObjects
                 }
-                console.log(item);
                 switch (item.type) {
                     case (POST):
                         viewerObject['eventData'] = item.data;
@@ -360,6 +359,7 @@ class ExtraFeed extends React.Component {
                                     viewerObject={viewerObject}
                                     viewerFunctions={viewerFunctions}
                                     authUser={this.props.authUser}
+                                    projectPreviewMap={this.state.projectPreviewMap}
 
                                 />
                             </div>

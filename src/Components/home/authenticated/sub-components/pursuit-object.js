@@ -5,7 +5,7 @@ const PursuitObject = (props) => {
     return (
         <div
             className={props.isSelected ? 'pursuitobject-selected' : 'pursuitobject-unselected'}
-            onClick={() => props.onSelect(props.index)}>
+            onClick={() => props.onSelect(props.index, props.pursuit.num_posts)}>
             <div className='pursuitobject-pursuit'>
                 <h4 key={props.index}>
                     {capitalizeFirstLetter(props.pursuit.name.toLowerCase())}

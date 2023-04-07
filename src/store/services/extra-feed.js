@@ -41,7 +41,6 @@ const _formatContent = (feed, meta, isCached) => {
     }
     else {
         const pursuit = feed[meta.pursuitIndex].type;
-        console.log(meta.pursuitIndex);
         let content = feed[meta.pursuitIndex].queue.shift();
         const index = content.matched_pursuit_index
             = [content.pursuits.findIndex((item) => item.name === pursuit)];
@@ -161,7 +160,6 @@ export const extractContentFromRaw = ( //to be deleted
 
     while (cachedTypeIndex < 3 && pursuitIndex < numOfPursuits) {
         //add catches for null items
-        console.log('again', isCachedToggled)
         if (count > 100) throw new Error();
         count++;
         if (isCachedToggled) {
@@ -184,12 +182,10 @@ export const extractContentFromRaw = ( //to be deleted
             cachedItemIndex++;
         }
         else {
-            console.log("hity");
             if (dynamic[pursuitIndex].queue.length === 0) {
                 pursuitIndex++;
                 continue;
             }
-            console.log(dynamic);
             const formatted =
                 //get item from queue and put into formatter
                 _formatContent(
@@ -233,7 +229,6 @@ export const addRemainingCachedContent = (
 }
 
 export const addRemainingDynamicContent = (meta, feed, contentList, usedPeople, coordinates) => {
-    console.log(feed[meta.pursuitIndex].queue);
     while (meta.pursuitIndex < meta.numOfPursuits) {
         if (feed[meta.pursuitIndex].queue.length === 0) {
             meta.pursuitIndex++;

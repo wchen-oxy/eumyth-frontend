@@ -5,49 +5,78 @@ import { returnUserImageURL } from 'utils/url';
 import PursuitObject from './sub-components/pursuit-object';
 import AxiosHelper from 'utils/axios';
 
-const _reorder = (unordered, matched) => {
-    let ordered = [];
-    for (const index of matched) {
-        const item = unordered.splice(index, 1, null)[0];
-        ordered.unshift(item);
-    }
-    // ordered = ordered.concat(unordered.filter(item => item !== null));
-    return ordered;
-}
+
 
 class UserFeedItem extends React.Component {
     constructor(props) {
         super(props);
-        const user = this.props.content;
+        // const user = this.props.content;
+        // let pursuits = user.pursuits;
+        console.log(this.props.content);
         this.state = {
             thread: null,
-            selected: 0,
-            pursuits: _reorder(user.pursuits, user.matched_pursuit_index),
-            altData: null
+            matchedIndex: this.props.content.matched_pursuit_index[0],
+            selected: this.props.content.matched_pursuit_index[0],
+
+            // pursuits: user.pursuits,
+            altData: null,
+            // altThread: null,
+
         }
         this.intermSaveProjectPreview = this.intermSaveProjectPreview.bind(this);
         this.handlePursuitClick = this.handlePursuitClick.bind(this);
+        this.getTitle = this.getTitle.bind(this);
     }
 
     intermSaveProjectPreview(data) {
+        // if (this.state.selected === this.state.matchedIndex) {
+        //     this.setState({ thread: data.title })
+
+        // }
+        // else {
+        //     this.setState({ altThread: data.title })
+        // }
         this.setState({ thread: data.title })
+
         this.props.viewerFunctions.saveProjectPreview(data);
     }
 
-    handlePursuitClick(selected) {
-
-        return AxiosHelper.retrievePost(this.state.pursuits[selected][0])
-            .then(result => {
-                this.setState({
-                    selected,
-                    altData: result.data
+    handlePursuitClick(selected, numPosts) {
+        if (numPosts === 0) {
+            this.setState({ selected });
+        }
+        else {
+            // if (this.state.selected === this.state.matchedIndex) {
+            //     this.setState({
+            //         selected
+            //     })
+            // }
+            // else {
+            return AxiosHelper.retrievePost(this.props.content.pursuits[selected].posts[0])
+                .then(result => {
+                    this.setState({
+                        selected,
+                        altData: result.data
+                    })
                 })
-            })
+        }
+
+        // }
+    }
+
+    getTitle(map, id) {
+        console.log();
+        if (id) {
+            return map[id]?.title;
+        }
+        return null;
     }
 
     render() {
-        const data = this.state.selected === 0 ? this.props.data : this.state.altData;
         const user = this.props.content;
+        const data = this.state.selected === this.state.matchedIndex ?
+            this.props.data : this.state.altData;
+        const thread = this.getTitle(this.props.projectPreviewMap, data?.project_preview_id ?? null)
         return (
             <div className='userfeeditem-user'>
                 <div className='userfeeditem-upper-main'>
@@ -62,22 +91,27 @@ class UserFeedItem extends React.Component {
                         <h3 className='userfeeditem-upper-right-distance'>{user.username} {returnFormattedDistance(user.distance)}</h3>
                         <div className='userfeeditem-upper-right-pursuits'>
                             <h5>Pursuing</h5>
-                            {this.state.pursuits
-                                .map((item, index) =>
-                                    <PursuitObject
-                                        thread={this.state.thread}
-                                        pursuit={{
-                                            name: item.name,
-                                            num_posts: item.num_posts
-                                        }}
-                                        index={index}
-                                        isSelected={index === this.state.selected}
-                                        onSelect={this.handlePursuitClick}
-                                    />)}
+                            {user.pursuits
+                                .map((item, index) => {
+                                    if (index !== 0)
+                                        return (
+                                            <PursuitObject
+                                                thread={thread}
+                                                pursuit={{
+                                                    name: item.name,
+                                                    num_posts: item.num_posts
+                                                }}
+                                                index={index}
+                                                isSelected={index === this.state.selected}
+                                                onSelect={this.handlePursuitClick}
+                                            />)
+                                }
+                                )
+                            }
                         </div>
                     </div>
-
                 </div>
+                {!data && <p>No Posts Available to Show</p>}
                 {data &&
                     <div className='userfeeditem-lower-main'>
                         <PostController
