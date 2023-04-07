@@ -29,20 +29,30 @@ const ProjectEvent = (props) => {
             throw new Error("Type mismatched")
     }
     return (
-        <div id='timelineprojectevent' className={classType}>
-            {/* {post.mini_cover_photo_key &&
+        <div>
+
+
+            <div id='timelineprojectevent' className={classType}>
+                {/* {post.mini_cover_photo_key &&
                 <img className='timelineprojectevent-cover' src={returnContentImageURL(post.mini_cover_photo_key)}
                 />
             } */}
-            <div id='timelineproject-meta'>
-             {   <p>{toTitleCase(post.pursuit)}</p>}
-                <p> {displayedType}</p>
-            </div>
-            <h4>
-                {post.title}
-            </h4>
 
-            {post.overview && <h6 className='event-overview'>{post.overview}</h6>}
+                <h4>
+                    {post.title}
+                </h4>
+
+                {post.overview && <h6 className='event-overview'>{post.overview}</h6>}
+
+            </div>
+            <div id='timelineproject-meta'>
+                <div className='timelineproject-meta-pursuit'>
+                    <p>{toTitleCase(post.pursuit)}</p>
+                </div>
+                <div className='timelineproject-meta-status'>
+                <p> {displayedType}</p>
+                </div>
+            </div>
         </div>
     );
 }

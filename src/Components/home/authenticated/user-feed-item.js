@@ -111,7 +111,11 @@ class UserFeedItem extends React.Component {
                         </div>
                     </div>
                 </div>
-                {!data && <p>No Posts Available to Show</p>}
+                {!data && 
+                 <div className='userfeeditem-lower-main'>
+                    <p>No Posts Available to Show</p>
+                </div>    
+                }
                 {data &&
                     <div className='userfeeditem-lower-main'>
                         <PostController

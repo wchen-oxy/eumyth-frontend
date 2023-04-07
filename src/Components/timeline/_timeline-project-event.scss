@@ -5,10 +5,10 @@
         margin: 0;
     }
     h4 {
-        padding: 0px 8px 8px 8px;
+        padding: 16px 8px 8px 8px;
     }
     h6 {
-        padding: 0 8px 4px 8px;
+        padding: 4px 8px 4px 8px;
         font-size: 14px;
         font-weight: 100;
     }
@@ -17,23 +17,45 @@
 #timelineproject-meta {
     @include flex-display-row;
     justify-content: space-between;
-    padding: 8px 8px 4px 8px;
+    padding: 4px;
+    p {
+        margin: 0;
+    }
+}
+
+.timelineproject-meta-pursuit {
+    padding: 4px;
+    background-color: $blue-400;
+    border-radius: 10%;
+    p {
+        color: white;
+    }
+}
+
+.timelineproject-meta-status{
+    padding: 4px;
+    background-color: $red-400;
+    border-radius: 10%;
+    p {
+        color: white;
+    }
 }
 
 .timelineprojectevent-draft {
     background-color: $black-100;
     // color: $blue-900;
-    min-height: $event-min-height;
+    min-height: $project-event-height;
 }
 
 .timelineprojectevent-completed {
     background-color: $black-100;
     // color: $blue-100;
-    min-height: $event-min-height;
+    min-height: $project-event-height;
+    max-height: $project-event-height;
 }
 
 .timelineprojectevent-published {
-    min-height: $event-min-height;
+    min-height: $project-event-height;
 }
 
 .timelineprojectevent-cover {
