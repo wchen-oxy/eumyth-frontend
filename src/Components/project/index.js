@@ -666,6 +666,7 @@ class ProjectController extends React.Component {
                         />
                         <h3>Rearrange Your Posts</h3>
                         <div id="projectcontroller-sortable-list">
+                            {this.state.semiFinalData.length === 0 && <p>No Posts Have Been Selected</p>}
                             <SortableList
                                 contentType={POST}
                                 items={this.state.semiFinalData}
