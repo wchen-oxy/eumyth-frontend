@@ -243,7 +243,7 @@ class ReturningUserPage extends React.Component {
                     id='returninguser-feed'
                     className='returninguser-main-row'
                 >
-                    <h4 className='returninguser-title'>Your Feed</h4>
+                    <h4 className='returninguser-title'>{this.state.isExtraFeedToggled ?  'People Like You': 'Following'}</h4>
                     <label className="switch">
                         <input type="checkbox" onChange={() => this.toggleFeedState(this.state.isExtraFeedToggled)} />
                         <span className="slider round"></span>

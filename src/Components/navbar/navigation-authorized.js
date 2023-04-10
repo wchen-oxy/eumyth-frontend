@@ -62,6 +62,10 @@ class NavigationAuthorized extends React.Component {
         })
     }
     setModal(postType) {
+        console.log(postType);
+        if (NEW_ENTRY_MODAL_STATE) {
+            this.setState({ isPostModalShowing: true })
+        }
         if (this.props.modalState
             && postType === this.props.modalState) {
             this.clearModal();
@@ -73,6 +77,7 @@ class NavigationAuthorized extends React.Component {
     }
 
     clearModal() {
+        if (this.state.isPostModalShowing) this.setState({ isPostModalShowing: false })
         this.props.closeMasterModal();
     }
 
@@ -159,7 +164,12 @@ class NavigationAuthorized extends React.Component {
                             modalState={this.props.modalState}
                             closeModal={this.clearModal}
                         />,
-                        this.clearModal)
+                        (() => {
+                            if (this.state.isPostModalShowing && !window.confirm("Are you sure you want to discard your draft?")) {
+                                return;
+                            }
+                            this.clearModal();
+                        }))
                 }
             </>
         );

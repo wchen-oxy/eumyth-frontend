@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "@testing-library/react": "^9.5.0",
     "node-sass": "4.14.1",
     "sass": "^1.55.0",
     "typescript": "^3.9.10"
@@ -11,7 +12,6 @@
     "@emotion/core": "10.0.28",
     "@emotion/styled": "10.0.27",
     "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
     "bootstrap": "^4.6.2",
