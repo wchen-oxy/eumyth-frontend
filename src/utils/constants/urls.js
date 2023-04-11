@@ -9,6 +9,7 @@ const TEMP_PROFILE_PHOTO_URL = 'https://qph.fs.quoracdn.net/main-qimg-2b21b9dd05
 // const apiUrl = process.env.NODE_ENV === 'production'
 //     ? process.env.REACT_APP_PROD_API_URL : process.env.REACT_APP_DEV_API_URL;
 // const ROOT_URL = '//localhost:5000:' + apiUrl;
+
 const ROOT_URL = '/api';
 
 const DRAFT_BASE_URL = ROOT_URL + '/draft';

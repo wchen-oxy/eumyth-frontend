@@ -186,7 +186,11 @@ export default class WelcomePage extends React.Component {
     return (
       <section className='welcome-description'>
         <div className='welcome-description-inner'>
-          <h2>Welcome to interestHub! </h2>
+          <h2>Welcome to Third Space! </h2>
+          <h4>We're trying to make a place where you can pursue an interest of yours and feel like you're 
+            not alone in pursuing something you love. Come document your progress, maybe bump into someone
+            cool every one in awhile and make something meaningful!
+          </h4>
           <p>Login or sign up to get started!
             To try out this without signing up, use this test account:      
           </p>

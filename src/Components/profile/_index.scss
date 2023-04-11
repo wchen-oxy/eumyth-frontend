@@ -25,11 +25,12 @@
 
 #profile-upper-user-info {
     @include flex-display-row;
+    margin-top: 32px;
 }
 
 #profile-intro {
     display: block;
-    background-color:  #ffffff;
+    background-color: #ffffff;
 }
 
 #profile-dp {
@@ -51,8 +52,7 @@
 }
 
 #profile-name {
-    padding-top: 32px;
-
+    margin: auto 0;
     h3 {
         margin: 0;
     }
@@ -60,6 +60,12 @@
 
 #profile-actions {
     @include flex-display-row;
+    margin: auto 0;
+
+    padding-left: 8px;
+    button {
+        @extend %button-style;
+    }
 }
 
 #profile-biography {

@@ -112,7 +112,7 @@ class NavigationAuthorized extends React.Component {
                             onClick={() => this.linkDecider()}
                         >
                             <div id='navbar-logo'>
-                                <h3>Everfire</h3>
+                                <h3>Third Space</h3>
                             </div>
                         </Link>
                         {this.displayOptionalsDecider(
