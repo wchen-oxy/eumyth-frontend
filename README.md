@@ -1,24 +1,19 @@
 ## Third Space Frontend
 
-#### Summary
-<br>
+### Summary
 Third Space is trying to make the world less lonely by making personal
 development more of a shared and relatable experience with others. To 
-make experiences more relatable, Third Space supports long-lasting, 
-continuous content creation with features that emphasize altruistic engagement
- with other users.
+make experiences more relatable, Third Space is a hobby documentation network that 
+emphasizes long-term content creation.
 
-#### Problem
-<br>
+### Problem
 There is a documented increase in loneliness affecting people of all ages and
 socioeconomic backgrounds. This epidemic of loneliness is caused in part by a 
 lack of public places where social equals can interact to have a good time, 
 exchange ideas and build meaningful relationships. Those seeking these places 
 can find the process difficult, if not awkward as well.
 
-
-#### Solution
-<br>
+### Solution
 Interesthub aims to ease loneliness by creating a safe space for people to mingle, 
 and by providing a reason to interact with one another. By using long term personal 
 development as the medium for users to interact with one another, users have a basis
