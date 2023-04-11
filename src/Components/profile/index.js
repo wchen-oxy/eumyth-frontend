@@ -168,6 +168,7 @@ class ProfilePageAuthenticated extends React.Component {
         return AxiosHelper
             .returnUser(username)
             .then((result) => {
+                console.log(result.data);
                 userData = result.data;
                 return AxiosHelper
                     .returnFollowerStatus(
@@ -210,6 +211,7 @@ class ProfilePageAuthenticated extends React.Component {
     setProfileData(userData, rawFollowerState, contentType) {
         const pursuitData = createPursuitArray(userData.pursuits);
         const followerStatus = this.handleFollowerStatusResponse(rawFollowerState);
+        console.log(userData);
         this.setState({
             profileData: userData,
             pursuitNames: pursuitData.names,
@@ -375,7 +377,7 @@ class ProfilePageAuthenticated extends React.Component {
                     <PursuitHolder
                         isSelected={pursuit.name === this.state.selectedPursuit}
                         name={pursuit.name}
-                        numEvents={pursuit.posts.length}
+                        numEvents={pursuit.num_posts}
                         key={pursuit.name}
                         value={index++}
                         onPursuitToggle={this.handlePursuitToggle} />
