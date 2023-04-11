@@ -52,7 +52,7 @@ class UserFeedItem extends React.Component {
             //     })
             // }
             // else {
-            return AxiosHelper.retrievePost(this.props.content.pursuits[selected].posts[0])
+            return AxiosHelper.retrievePost(this.props.content.pursuits[selected].posts[0], false)
                 .then(result => {
                     this.setState({
                         selected,
@@ -93,6 +93,7 @@ class UserFeedItem extends React.Component {
                             <h5>Pursuing</h5>
                             {user.pursuits
                                 .map((item, index) => {
+                                    console.log(item);
                                     if (index !== 0)
                                         return (
                                             <PursuitObject
