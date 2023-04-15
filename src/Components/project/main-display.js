@@ -10,7 +10,6 @@ import { REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
 
 const MainDisplay = (props) => {
     const isOwner = props.projectMetaData?.index_user_id === props.userInfo.indexUserID;
-
     return (
         <div>
             <TopButtonBar

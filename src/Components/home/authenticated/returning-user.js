@@ -239,6 +239,7 @@ class ReturningUserPage extends React.Component {
                     name={this.state.name}
                     pursuitObjects={this.state.pursuitObjects}
                 /> */}
+                
                 <div
                     id='returninguser-feed'
                     className='returninguser-main-row'

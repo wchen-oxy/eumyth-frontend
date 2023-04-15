@@ -10,18 +10,11 @@ import AxiosHelper from 'utils/axios';
 class UserFeedItem extends React.Component {
     constructor(props) {
         super(props);
-        // const user = this.props.content;
-        // let pursuits = user.pursuits;
-        console.log(this.props.content);
         this.state = {
             thread: null,
             matchedIndex: this.props.content.matched_pursuit_index[0],
             selected: this.props.content.matched_pursuit_index[0],
-
-            // pursuits: user.pursuits,
             altData: null,
-            // altThread: null,
-
         }
         this.intermSaveProjectPreview = this.intermSaveProjectPreview.bind(this);
         this.handlePursuitClick = this.handlePursuitClick.bind(this);
@@ -29,29 +22,16 @@ class UserFeedItem extends React.Component {
     }
 
     intermSaveProjectPreview(data) {
-        // if (this.state.selected === this.state.matchedIndex) {
-        //     this.setState({ thread: data.title })
-
-        // }
-        // else {
-        //     this.setState({ altThread: data.title })
-        // }
         this.setState({ thread: data.title })
-
         this.props.viewerFunctions.saveProjectPreview(data);
     }
 
     handlePursuitClick(selected, numPosts) {
-        if (numPosts === 0) {
+        if (numPosts === 0
+            || this.state.selected === this.state.matchedIndex + 1) { //add 1 to skip over ALL
             this.setState({ selected });
         }
         else {
-            // if (this.state.selected === this.state.matchedIndex) {
-            //     this.setState({
-            //         selected
-            //     })
-            // }
-            // else {
             return AxiosHelper.retrievePost(this.props.content.pursuits[selected].posts[0], false)
                 .then(result => {
                     this.setState({
@@ -60,12 +40,9 @@ class UserFeedItem extends React.Component {
                     })
                 })
         }
-
-        // }
     }
 
     getTitle(map, id) {
-        console.log();
         if (id) {
             return map[id]?.title;
         }
@@ -93,10 +70,10 @@ class UserFeedItem extends React.Component {
                             <h5>Pursuing</h5>
                             {user.pursuits
                                 .map((item, index) => {
-                                    console.log(item);
                                     if (index !== 0)
                                         return (
                                             <PursuitObject
+                                                key={index}
                                                 thread={thread}
                                                 pursuit={{
                                                     name: item.name,
@@ -106,16 +83,17 @@ class UserFeedItem extends React.Component {
                                                 isSelected={index === this.state.selected}
                                                 onSelect={this.handlePursuitClick}
                                             />)
+                                    return null;
                                 }
                                 )
                             }
                         </div>
                     </div>
                 </div>
-                {!data && 
-                 <div className='userfeeditem-lower-main'>
-                    <p>No Posts Available to Show</p>
-                </div>    
+                {!data &&
+                    <div className='userfeeditem-lower-main'>
+                        <p>No Posts Available to Show</p>
+                    </div>
                 }
                 {data &&
                     <div className='userfeeditem-lower-main'>
@@ -132,7 +110,6 @@ class UserFeedItem extends React.Component {
                             intermSaveProjectPreview={this.intermSaveProjectPreview}
                             authUser={this.props.authUser}
                         />
-
                     </div>}
             </div>
 

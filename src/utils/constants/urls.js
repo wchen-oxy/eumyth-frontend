@@ -53,7 +53,7 @@ const SOCIAL_FEED_POSTS_URL = POST_BASE_URL + '/feed';
 const POST_DISPLAY_PHOTO_URL = POST_BASE_URL + '/display-photo';
 const SINGLE_POST_TEXT_DATA_URL = POST_BASE_URL + '/single'
 const CACHED_FEED_URL = POST_BASE_URL + '/cached-feed';
-const EXTRA_FEED_URL = POST_BASE_URL +'/extra-feed';
+const EXTRA_FEED_URL = POST_BASE_URL + '/extra-feed';
 
 //project
 const PROJECT_BASE_URL = ROOT_URL + '/project';
@@ -72,6 +72,7 @@ const PROJECT_PREVIEW_BASE_URL = ROOT_URL + '/project-preview';
 const PROJECT_PREVIEW_SINGLE_URL = PROJECT_PREVIEW_BASE_URL + '/single';
 const PROJECT_PREVIEW_SHARED_URL = PROJECT_PREVIEW_BASE_URL + '/shared-parent';
 
+
 //pursuits
 const PURSUITS_BASE_URL = ROOT_URL + '/pursuit';
 const ALL_POSTS = PURSUITS_BASE_URL + '/all-posts';
@@ -84,6 +85,8 @@ const SIMPLE_PEOPLE_URL = SEARCH_BASE_URL + '/simple_people';
 const ADVANCED_PEOPLE_URL = SEARCH_BASE_URL + '/advanced_people';
 const SEARCH_PROJECT_URL = SEARCH_BASE_URL + '/projects';
 const SEARCH_BRANCHES_URL = SEARCH_BASE_URL + '/branches';
+const SEARCH_RELATED_PREVIEW_URL = SEARCH_BASE_URL + '/related-projects';
+
 
 //index
 const INDEX_BASE_URL = ROOT_URL + '/index-user';
@@ -97,7 +100,7 @@ const REPLY_COMMENT_URL = COMMENT_BASE_URL + '/reply';
 const REFRESH_COMMENTS_URL = COMMENT_BASE_URL + '/refresh';
 const VOTE_ON_COMMENT_URL = COMMENT_BASE_URL + '/vote';
 
- 
+
 module.exports = {
     BUCKET_NAME,
     REGION,
@@ -139,6 +142,7 @@ module.exports = {
     PROJECT_PREVIEW_BASE_URL,
     PROJECT_PREVIEW_SINGLE_URL,
     PROJECT_PREVIEW_SHARED_URL,
+    SEARCH_RELATED_PREVIEW_URL,
     PROJECT_VOTE_URL,
     SINGLE_PROJECT_URL,
     MULTIPLE_PROJECTS_URL,

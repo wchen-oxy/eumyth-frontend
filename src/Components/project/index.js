@@ -556,7 +556,6 @@ class ProjectController extends React.Component {
     }
 
     render() {
-        console.log(this.props.authUser);
         const contentType = this.state.editProjectState || this.props.isContentOnlyView || this.state.selectedProject
             ?
             PROJECT_EVENT : PROJECT;

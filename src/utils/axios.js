@@ -256,12 +256,20 @@ export default class AxiosHelper {
         })
     }
 
-    static getSharedParentProjectPreview(parentProjectPreviewID, status, blocklist) {
+    static getRelatedProjectPreview(excluded, keywords, pursuit){
+        return axios.get(urls.SEARCH_RELATED_PREVIEW_URL, {
+            params: {
+                excluded, keywords, pursuit
+            }
+        })
+    }
+
+    static getSharedParentProjectPreview(parentProjectPreviewID, status, excluded) {
         return axios.get(urls.PROJECT_PREVIEW_SHARED_URL, {
             params: {
                 parentProjectPreviewID,
                 status,
-                blocklist
+                excluded
             }
         })
     }

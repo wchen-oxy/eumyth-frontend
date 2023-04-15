@@ -4,6 +4,7 @@ import { returnUserImageURL, returnContentImageURL } from 'utils/url';
 import SimilarProjectInfo from './sub-components/similar-project-info';
 
 const ProjectHeader = (props) => {
+    const [relatedProjects, setRelatedProjects] = useState([]);
     const [projectPreviews, setProjectPreviews] = useState([]);
     const [comparatorStatus, setComparatorStatus] = useState("NONE");
     const [toggleChildrenStatus, setChildrenStatus] = useState(false);
@@ -20,20 +21,28 @@ const ProjectHeader = (props) => {
                 const blocklist = projectPreviews.map(preview => preview.project_id);
                 blocklist.push(props.projectMetaData._id);
                 AxiosHelper.getSharedParentProjectPreview(parentID, status, blocklist)
-                    .then(result => {
-                        setProjectPreviews(result.data)
-                    })
+                    .then((results) => setProjectPreviews(results.data));
             }
         }
+        AxiosHelper.getRelatedProjectPreview(
+            props.projectMetaData.project_preview_id,
+            props.projectMetaData.labels,
+             props.projectMetaData.pursuit)
+            .then(results => {
+                setRelatedProjects(results.data);
+            })
 
     }, []);
+
     const clearAll = () => {
         setComparatorStatus("NONE");
     }
+
     const determineComparatorType = (type) => {
         if (type === comparatorStatus) setComparatorStatus("NONE");
         else if (type === "PARENT") setComparatorStatus("PARENT");
         else if (type === "CHILDREN") setComparatorStatus("CHILDREN");
+        else if (type === "RELATED") setComparatorStatus("RELATED");
     }
 
     const setComparatorText = (type) => {
@@ -41,7 +50,7 @@ const ProjectHeader = (props) => {
         else if (type === "CHILDREN") return "Series Influenced By This";
     }
 
-    const shouldShowClose = comparatorStatus === "PARENT" || comparatorStatus === "CHILDREN";
+    const shouldShowClose = comparatorStatus !== "NONE";
     return (
         <div>
             <div id="projectheader-pursuit">
@@ -72,6 +81,13 @@ const ProjectHeader = (props) => {
             <div >
                 <div id='projectheader-comparator'>
                     <button
+                        id={comparatorStatus === "RELATED" ? 'projectheader-selected' : ''}
+                        className={'projectheader-other-button'}
+                        onClick={() => determineComparatorType("RELATED")}
+                    >
+                        Related
+                    </button>
+                    <button
                         id={comparatorStatus === "CHILDREN" ? 'projectheader-selected' : ''}
                         className={props.projectMetaData.children_length === 0 ?
                             'projectheader-other-button-disabled' : 'projectheader-other-button'}
@@ -93,6 +109,16 @@ const ProjectHeader = (props) => {
                 </div>
                 {shouldShowClose &&
                     <button id='projectheader-close' onClick={clearAll}>Close</button>}
+                {
+                    comparatorStatus === "RELATED" &&
+                    <div id='projectheader-previews'>
+                        {relatedProjects.map((preview, index) =>
+                            <SimilarProjectInfo
+                                key={index}
+                                preview={preview}
+                            />)}
+                    </div>
+                }
                 {
                     comparatorStatus === "PARENT" &&
                     <div id='projectheader-previews'>
