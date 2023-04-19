@@ -1,0 +1,19 @@
+#relatedheader {
+    margin: 96px 0 0 24px;
+
+    h2,
+    h3,
+    p {
+        margin: 0;
+    }
+}
+
+#relatedheader-self {
+    height: 64px;
+    margin: 12px 0;
+}
+
+.relatedheader-other {
+    @include flex-display-row;
+    align-items: center;
+}

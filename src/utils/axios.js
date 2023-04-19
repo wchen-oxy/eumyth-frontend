@@ -114,7 +114,7 @@ export default class AxiosHelper {
         });
     }
 
-    static getCachedFeed(cachedFeedsID){
+    static getCachedFeed(cachedFeedsID) {
         return axios.get(urls.CACHED_FEED_URL, {
             params: {
                 cachedFeedsID
@@ -256,7 +256,7 @@ export default class AxiosHelper {
         })
     }
 
-    static getRelatedProjectPreview(excluded, keywords, pursuit){
+    static getRelatedProjectPreview(excluded, keywords, pursuit) {
         return axios.get(urls.SEARCH_RELATED_PREVIEW_URL, {
             params: {
                 excluded, keywords, pursuit
@@ -282,7 +282,11 @@ export default class AxiosHelper {
             }
         })
     }
-
+    static returnProjectPreviewFromPostID(postID) {
+        return axios.get(urls.PROJECT_PREVIEW_FROM_POST, {
+            params: { postID }
+        })
+    }
     static returnMultiplePosts(postIDList, includePostText) {
         return axios.get(urls.MULTIPLE_POSTS_URL, {
             params: {
@@ -482,10 +486,10 @@ export default class AxiosHelper {
     }
 
     static returnUserPreviewByParam(obj) {
-        return axios.get(urls.USER_PREVIEW_BASE_URL,{params: {...obj}});
+        return axios.get(urls.USER_PREVIEW_BASE_URL, { params: { ...obj } });
     }
 
-    static searchBranches(indexUserID, requestQuantity){
+    static searchBranches(indexUserID, requestQuantity) {
         return axios.get(urls.SEARCH_BRANCHES_URL, {
             params: {
                 indexUserID,

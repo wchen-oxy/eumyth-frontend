@@ -8,6 +8,7 @@ import { RECENT_POSTS, POST_VIEWER_MODAL_STATE, SHORT, } from 'utils/constants/f
 import FriendFeed from './friend-feed';
 import ExtraFeed from './extra-feed';
 import Header from './header';
+import RelatedProjectHeader from './sub-components/related-header';
 
 class ReturningUserPage extends React.Component {
     _isMounted = false;
@@ -239,12 +240,14 @@ class ReturningUserPage extends React.Component {
                     name={this.state.name}
                     pursuitObjects={this.state.pursuitObjects}
                 /> */}
-                
+                <RelatedProjectHeader
+                    recent={this.props.authUser.recentPosts[0]}
+                />
                 <div
                     id='returninguser-feed'
                     className='returninguser-main-row'
                 >
-                    <h4 className='returninguser-title'>{this.state.isExtraFeedToggled ?  'People Like You': 'Following'}</h4>
+                    <h4 className='returninguser-title'>{this.state.isExtraFeedToggled ? 'People Like You' : 'Following'}</h4>
                     <label className="switch">
                         <input type="checkbox" onChange={() => this.toggleFeedState(this.state.isExtraFeedToggled)} />
                         <span className="slider round"></span>

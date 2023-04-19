@@ -1,0 +1,16 @@
+.headerobject {
+    @include flex-display-row;
+    margin: 0 12px;
+}
+
+.headerobject-cover {
+    height: 192px;
+    width: 256px;
+}
+
+.headerobject-text {
+    @include flex-display-column;
+    height: 192px;
+    width: 256px;
+    justify-content: center;
+}
