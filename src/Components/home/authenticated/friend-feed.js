@@ -34,6 +34,7 @@ const FriendFeed = (props) => {
             index + slicedObjectIDs.length
             : index + REGULAR_CONTENT_REQUEST_LENGTH;
         const hasMore = index >= posts.length || feedLimitReached;
+        
         return (AxiosHelper
             .returnMultiplePosts(
                 slicedObjectIDs,
@@ -44,7 +45,7 @@ const FriendFeed = (props) => {
                     setFeedData(feedData.concat(posts));
                     setNextOpenPostIndex(nextOpenPostIndex);
                     setNumOfContent(numOfContent + posts.length)
-                    setHasMore(!hasMore);
+                    setHasMore(hasMore);
                 }
             })
             .catch((error) => {

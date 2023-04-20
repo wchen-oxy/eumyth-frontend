@@ -72,6 +72,7 @@
 
 #projectheader-previews {
     @include flex-display-row;
+    flex-wrap: wrap;
 }
 
 #projectheader-selected {

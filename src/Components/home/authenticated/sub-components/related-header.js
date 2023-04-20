@@ -67,18 +67,20 @@ const RelatedProjectHeader = (props) => {
                     <h2>Theirs</h2>
                     <div className='relatedheader-other-preview'>
                         <button
+                            className='relatedheader-other-preview-button'
                             disabled={similarProjects === null || index - 1 < 0}
                             onClick={() => onClick(-1)}>
-                            Prev
+                            &lt;
                         </button>
                         {similarProjects ?
                             <HeaderObject {...similarProjects[index]} />
                             :
                             <p>None Found</p>}
                         <button
+                            className='relatedheader-other-preview-button'
                             disabled={similarProjects === null || index + 1 > similarProjects.length - 1}
                             onClick={() => onClick(1)}>
-                            Next
+                            &gt;
                         </button>
                     </div>
                     {similarProjects && <p id='relatedheader-index' >{index + 1} of {similarProjects.length} </p>}

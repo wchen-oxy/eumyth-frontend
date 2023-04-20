@@ -1,3 +1,4 @@
+import HeaderObject from 'components/home/authenticated/sub-components/header-object';
 import React, { useEffect, useState } from 'react';
 import AxiosHelper from 'utils/axios';
 import { returnUserImageURL, returnContentImageURL } from 'utils/url';
@@ -27,7 +28,7 @@ const ProjectHeader = (props) => {
         AxiosHelper.getRelatedProjectPreview(
             props.projectMetaData.project_preview_id,
             props.projectMetaData.labels,
-             props.projectMetaData.pursuit)
+            props.projectMetaData.pursuit)
             .then(results => {
                 setRelatedProjects(results.data);
             })
@@ -115,8 +116,9 @@ const ProjectHeader = (props) => {
                         {relatedProjects.map((preview, index) =>
                             <SimilarProjectInfo
                                 key={index}
-                                preview={preview}
-                            />)}
+                                {...preview}
+                            />
+                        )}
                     </div>
                 }
                 {
@@ -125,18 +127,19 @@ const ProjectHeader = (props) => {
                         {projectPreviews.map((preview, index) =>
                             <SimilarProjectInfo
                                 key={index}
-                                preview={preview}
+                                {...preview}
                             />)}
                     </div>
                 }
                 {
                     comparatorStatus === "CHILDREN" &&
                     <div id='projectheader-previews'>
-                        {childrenLength > 0 && props.projectMetaData.children.map((preview, index) =>
-                            <SimilarProjectInfo
-                                key={index}
-                                preview={preview}
-                            />)
+                        {childrenLength > 0 &&
+                            props.projectMetaData.children.map((preview, index) =>
+                                <SimilarProjectInfo
+                                    key={index}
+                                    {...preview}
+                                />)
                         }
                     </div>
                 }

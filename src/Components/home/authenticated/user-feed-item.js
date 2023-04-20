@@ -32,7 +32,7 @@ class UserFeedItem extends React.Component {
             this.setState({ selected });
         }
         else {
-            return AxiosHelper.retrievePost(this.props.content.pursuits[selected].posts[0], false)
+            return AxiosHelper.retrievePost(this.props.content.pursuits[selected].posts[0].content_id, false)
                 .then(result => {
                     this.setState({
                         selected,

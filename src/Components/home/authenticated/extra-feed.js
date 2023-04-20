@@ -2,12 +2,11 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import _ from 'lodash';
 import AxiosHelper from 'utils/axios';
-import { distanceSwitch } from 'utils/constants/states';
 import { geoLocationOptions, REGULAR_CONTENT_REQUEST_LENGTH } from 'utils/constants/settings';
-import { addRemainingCachedContent, addRemainingDynamicContent, convertPursuitToQueue, extractContentFromRaw, joinCached, joinDynamic, mergeArrays } from 'store/services/extra-feed';
+import { convertPursuitToQueue, joinCached, joinDynamic, mergeArrays } from 'store/services/extra-feed';
 import { EXTRAS_STATE, POST, POST_VIEWER_MODAL_STATE, USER } from 'utils/constants/flags';
 import PostController from "components/post/index";
-import { alterRawCommentArray, updateProjectPreviewMap } from 'utils';
+import { updateProjectPreviewMap } from 'utils';
 import Modal from './modal';
 import UserFeedItem from './user-feed-item';
 
@@ -219,7 +218,6 @@ class ExtraFeed extends React.Component {
 
 
     formatFeed(results) { //problem area is here
-        // console.log(results.data);
         const queuedData = results.data.map((item) => { return convertPursuitToQueue(item) }); //converts pursuit categories by exact and different to queues
         const extractedData = this.prepareRenderedFeedInput(this.props.cached, queuedData);
         const contentList = extractedData.contentList;

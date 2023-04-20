@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import withRouter from 'utils/withRouter';
-
 import ModalController from './sub-components/modal-controller';
 import OptionalLinks from './sub-components/optional-links';
 import OptionsMenu from './sub-components/options-menu';
@@ -62,8 +61,8 @@ class NavigationAuthorized extends React.Component {
         })
     }
     setModal(postType) {
-        console.log(postType);
-        if (NEW_ENTRY_MODAL_STATE) {
+        if (postType === NEW_ENTRY_MODAL_STATE) {
+            console.log("hit");
             this.setState({ isPostModalShowing: true })
         }
         if (this.props.modalState
@@ -165,8 +164,9 @@ class NavigationAuthorized extends React.Component {
                             closeModal={this.clearModal}
                         />,
                         (() => {
-                            if (this.state.isPostModalShowing && !window.confirm("Are you sure you want to discard your draft?")) {
-                                return;
+                            if (this.state.isPostModalShowing) {
+                                if (!window.confirm("Are you sure you want to discard your draft?"))
+                                    return;
                             }
                             this.clearModal();
                         }))

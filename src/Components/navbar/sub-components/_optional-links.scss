@@ -6,7 +6,7 @@
         @include tiny-profile-photo;
         border-radius: 50%;
         object-fit: cover;
-        padding-right: 8px;
+        margin-right: 8px;
     }
     p {
         @extend %navbar-text;

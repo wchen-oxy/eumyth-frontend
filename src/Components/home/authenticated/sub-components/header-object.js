@@ -21,7 +21,13 @@ const HeaderObject = (props) => {
                 <p>Last Updated at {date.month} {date.day}, {date.year}</p>
                 {props.overview ? <p>{props.overview}</p> : null}
                 <div className='headerobject-label'>
-                    {props.labels ? props.labels.map(label => <p className='headerobject-label-text'>{label}</p>) : null}
+                    {props.labels ? props.labels.map(
+                        (label, index) =>
+                            <p key={index}
+                                className='headerobject-label-text'>{label}
+                            </p>
+                    )
+                        : null}
                 </div>
             </div>
         </div>

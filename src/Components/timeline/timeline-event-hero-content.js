@@ -15,7 +15,7 @@ const EventHeroContent = (props) => {
 
     if (image) {
         return (
-            <div>
+            <div className='eventhero'>
                 <EventPreview isImage image={image} />
 
                 <div className='eventhero-text'>
@@ -35,7 +35,7 @@ const EventHeroContent = (props) => {
     }
     else {
         return (
-            <div>
+            <div className='eventhero'>
                 {post.title ?
                     <h4 className='eventhero-no-image-title'>
                         {post.title}

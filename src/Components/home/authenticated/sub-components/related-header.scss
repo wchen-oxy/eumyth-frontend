@@ -49,6 +49,19 @@
     height: 232px; //because of padding it is less thatn 256
 }
 
+.relatedheader-other-preview-button,
+.relatedheader-other-preview-button:hover {
+    @extend %button-style;
+}
+
+.relatedheader-other-preview-button:hover {
+    cursor: pointer;
+}
+
+.relatedheader-other-preview-button:disabled {
+    color: $black-200;
+    cursor: default;
+}
 .relatedheader-subtext {
     color: $black-500;
 }

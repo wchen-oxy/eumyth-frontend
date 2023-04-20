@@ -15,8 +15,11 @@
     height: 20px;
     width: 200px;
     padding: 8px;
-    h4{
+    h4 {
         @extend %navbar-text;
     }
+}
 
+.optionsmenu-dropdown-inner:hover {
+    cursor: pointer;
 }
