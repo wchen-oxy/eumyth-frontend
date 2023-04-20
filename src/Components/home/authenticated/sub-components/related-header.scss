@@ -1,4 +1,4 @@
-#relatedheader {
+.relatedheader {
     margin: 96px 0 0 24px;
 
     h2,
@@ -8,12 +8,47 @@
     }
 }
 
-#relatedheader-self {
-    height: 64px;
-    margin: 12px 0;
+#relatedheader-self-other {
+    @include flex-display-row;
+    margin-top: 32px;
 }
 
-.relatedheader-other {
+#relatedheader-self {
+    @include flex-display-column;
+    width: 256px;
+    min-width: 192px;
+    margin-right: 32px;
+}
+
+#relatedheader-other {
+    @include flex-display-column;
+}
+
+#relatedheader-self-preview {
+    @include flex-display-row;
+    height: 232px;
+    align-items: center;
+    h2 {
+        margin: 8px 8px 12px 8px;
+    }
+    p {
+        margin: 4px 8px 4px 8px;
+    }
+}
+#relatedheader-self-preview-object {
+    height: 192px;
+    background-color: $black-100;
+}
+
+#relatedheader-index {
+    text-align: center;
+}
+.relatedheader-other-preview {
     @include flex-display-row;
     align-items: center;
+    height: 232px; //because of padding it is less thatn 256
+}
+
+.relatedheader-subtext {
+    color: $black-500;
 }

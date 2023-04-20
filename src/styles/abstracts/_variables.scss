@@ -134,3 +134,11 @@ $window-upper: 23;
     border-radius: 5px;
     cursor: pointer;
 }
+
+%label {
+    border-radius: 10%;
+    padding: 4px;
+    p {
+        color: white;
+    }
+}

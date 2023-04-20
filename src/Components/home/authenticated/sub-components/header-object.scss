@@ -1,16 +1,33 @@
 .headerobject {
     @include flex-display-row;
+    background-color: $black-100;
     margin: 0 12px;
+}
+
+.headerobject:hover {
+    cursor: pointer;
 }
 
 .headerobject-cover {
     height: 192px;
     width: 256px;
+    background-color: $black-400;
 }
 
 .headerobject-text {
     @include flex-display-column;
+    margin-left: 12px;
     height: 192px;
     width: 256px;
     justify-content: center;
+}
+
+.headerobject-label {
+    @include flex-display-row;
+    .headerobject-label-text {
+        @extend %label;
+        width: fit-content;
+        background-color: $red-400;
+        margin: 4px 4px 4px 0;
+    }
 }

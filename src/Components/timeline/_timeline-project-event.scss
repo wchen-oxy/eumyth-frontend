@@ -24,21 +24,13 @@
 }
 
 .timelineproject-meta-pursuit {
-    padding: 4px;
     background-color: $blue-400;
-    border-radius: 10%;
-    p {
-        color: white;
-    }
+    @extend %label;
 }
 
-.timelineproject-meta-status{
-    padding: 4px;
+.timelineproject-meta-status {
     background-color: $red-400;
-    border-radius: 10%;
-    p {
-        color: white;
-    }
+    @extend %label;
 }
 
 .timelineprojectevent-draft {

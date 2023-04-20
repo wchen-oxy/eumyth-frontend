@@ -47,21 +47,42 @@ const RelatedProjectHeader = (props) => {
             </div>)
     }
     return (
-        <div id='relatedheader'>
-            <h3>Similar Spotlight </h3>
-            {similarProjects ? <p>Showing Work Similar To</p> : <p>Loading</p>}
-            <div id='relatedheader-self'>
-                <h2> {projectPreview && projectPreview.title}</h2>
-                {projectPreview && projectPreview.overview}
-            </div>
-            <div className='relatedheader-other'>
-                <button onClick={() => onClick(-1)} > Prev</button>
-                {similarProjects ?
-                    <HeaderObject {...similarProjects[index]} />
-                    :
-                    <p>None Found</p>}
-
-                <button onClick={() => onClick(1)} > Next</button>
+        <div className='relatedheader'>
+            <h3>Journey Spotlight </h3>
+            {similarProjects ?
+                <p className='relatedheader-subtext'>Showing Work From Someone Who's Pursuing
+                    Something Similar To Your Most Recent Work</p>
+                : <p className='relatedheader-subtext'>Loading</p>}
+            <div id='relatedheader-self-other'>
+                <div id='relatedheader-self'>
+                    <h2>Yours</h2>
+                    <div id='relatedheader-self-preview'>
+                        <div id='relatedheader-self-preview-object'>
+                            {projectPreview && <h2>{projectPreview.title}</h2>}
+                            {projectPreview && <p>{projectPreview.overview}</p>}
+                        </div>
+                    </div>
+                </div>
+                <div id='relatedheader-other'>
+                    <h2>Theirs</h2>
+                    <div className='relatedheader-other-preview'>
+                        <button
+                            disabled={similarProjects === null || index - 1 < 0}
+                            onClick={() => onClick(-1)}>
+                            Prev
+                        </button>
+                        {similarProjects ?
+                            <HeaderObject {...similarProjects[index]} />
+                            :
+                            <p>None Found</p>}
+                        <button
+                            disabled={similarProjects === null || index + 1 > similarProjects.length - 1}
+                            onClick={() => onClick(1)}>
+                            Next
+                        </button>
+                    </div>
+                    {similarProjects && <p id='relatedheader-index' >{index + 1} of {similarProjects.length} </p>}
+                </div>
             </div>
 
         </div>
