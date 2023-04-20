@@ -4,8 +4,16 @@ import { returnContentImageURL } from 'utils/url';
 
 const ProjectEvent = (props) => {
     const post = props.post;
-    // const date = props;
-    console.log(props);
+    const hasCoverPhoto = !!post.mini_cover_photo_key;
+
+    const image = hasCoverPhoto ?
+        <img
+            alt='cover'
+            className='timelineprojectevent-cover'
+            src={returnContentImageURL(post.mini_cover_photo_key)}
+        />
+        : null;
+    const IDType = hasCoverPhoto ? 'timelineprojectevent-with-image' : 'timelineprojectevent-no-image';
     let isDraft = props.post.status === 'DRAFT';
     let displayedType = null;
     let classType = null;
@@ -28,33 +36,27 @@ const ProjectEvent = (props) => {
         default:
             throw new Error("Type mismatched")
     }
+
     return (
-        <div>
-
-
-            <div id='timelineprojectevent' className={classType}>
-                {/* {post.mini_cover_photo_key &&
-                <img className='timelineprojectevent-cover' src={returnContentImageURL(post.mini_cover_photo_key)}
-                />
-            } */}
-
-                <h4>
+        <div id={IDType}>
+            {image}
+            <div className={classType}>
+                <h2>
                     {post.title}
-                </h4>
-
+                </h2>
                 {post.overview && <h6 className='event-overview'>{post.overview}</h6>}
-
-            </div>
-            <div id='timelineproject-meta'>
-                <div className='timelineproject-meta-pursuit'>
-                    <p>{toTitleCase(post.pursuit)}</p>
-                </div>
-                <div className='timelineproject-meta-status'>
-                <p> {displayedType}</p>
+                <div id='timelineproject-meta'>
+                    <div className='timelineproject-meta-pursuit'>
+                        <p>{toTitleCase(post.pursuit)}</p>
+                    </div>
+                    <div className='timelineproject-meta-status'>
+                        <p> {displayedType}</p>
+                    </div>
                 </div>
             </div>
         </div>
     );
 }
+
 
 export default ProjectEvent;

@@ -204,7 +204,9 @@ class Timeline extends React.Component {
             this.props.contentType === PROJECT
             || this.props.contentType === PROJECT_EVENT
         ) {
-            // console.log(this.props.hasMore, this.state.numOfFeedItems);
+            const classType = this.props.contentType === PROJECT ?
+                'timeline-infinite-scroll-single' :
+                'timeline-infinite-scroll-row';
             return (
                 <InfiniteScroll
                     dataLength={this.state.numOfFeedItems}
@@ -214,7 +216,7 @@ class Timeline extends React.Component {
                     endMessage={endMessage}>
                     {this.props.loadedFeed.map((row, index) => (
                         <div
-                            className='timeline-infinite-scroll-row'
+                            className={classType}
                             key={index}
                         >
                             {row}

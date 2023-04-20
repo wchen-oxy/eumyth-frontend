@@ -1,5 +1,6 @@
-#timelineprojectevent {
-    h4,
+#timelineprojectevent-with-image,
+#timelineprojectevent-no-image {
+    h2,
     h6,
     p {
         margin: 0;
@@ -14,9 +15,11 @@
     }
 }
 
+#timelineprojectevent-with-image {
+ }
+
 #timelineproject-meta {
     @include flex-display-row;
-    justify-content: space-between;
     padding: 4px;
     p {
         margin: 0;
@@ -24,19 +27,21 @@
 }
 
 .timelineproject-meta-pursuit {
-    background-color: $blue-400;
     @extend %label;
+    background-color: $blue-400;
+    margin: 4px;
 }
 
 .timelineproject-meta-status {
     background-color: $red-400;
     @extend %label;
+    margin: 4px;
 }
 
 .timelineprojectevent-draft {
     background-color: $black-100;
     // color: $blue-900;
-    min-height: $project-event-height;
+    // min-height: $project-event-height;
 }
 
 .timelineprojectevent-completed {
@@ -51,6 +56,8 @@
 }
 
 .timelineprojectevent-cover {
-    height: auto;
+    height: 384px;
+    max-height: 384px;
     width: 100%;
+    object-fit: cover;
 }

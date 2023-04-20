@@ -1,5 +1,15 @@
-.timeline-infinite-scroll-row{
+.timeline-infinite-scroll-single,
+.timeline-infinite-scroll-row {
     @include flex-display-row;
+
     margin-top: 2.5%;
     margin-bottom: 2.5%;
+}
+
+.timeline-infinite-scroll-row {
+    justify-content: space-between;
+}
+
+.timeline-infinite-scroll-single {
+    justify-content: center;
 }

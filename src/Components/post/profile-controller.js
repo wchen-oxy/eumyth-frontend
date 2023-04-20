@@ -114,11 +114,12 @@ class ProfileController extends React.Component {
     createRenderedPosts(inputArray, contentType) {
         let masterArray = [];
         let index = masterArray.length - 1; //index position of array in masterArray
+        const modulo = 3;
         if (!this._isMounted || this.state.feedData.length === 0) {
             return masterArray;
         }
         this.state.feedData.forEach((event, k) => {
-            if (k % 4 === 0) {
+            if (k % modulo === 0) {
                 masterArray.push([]);
                 index++;
             }
@@ -126,9 +127,10 @@ class ProfileController extends React.Component {
                 <div key={event._id}>
                     <EventController
                         key={index}
+                        modulo={modulo}
                         contentType={POST}
                         eventIndex={k}
-                        columnIndex={k % 4}
+                        columnIndex={k % modulo}
                         eventData={event}
                         onEventClick={this.handleEventClick}
                     />

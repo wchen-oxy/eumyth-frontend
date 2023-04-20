@@ -27,7 +27,7 @@
 .eventdatepursuit {
     @include flex-display-row;
     justify-content: space-between;
-    padding: 4px;
+    padding: 4px 8px 0 8px;
 }
 
 .eventdatepursuit-date {

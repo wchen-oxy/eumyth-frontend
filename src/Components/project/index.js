@@ -60,6 +60,20 @@ const spacer = (
         <br />
     </div>
 );
+
+const switchModulo = (barType) => {
+    switch (barType) {
+        case (PROJECT_MACRO_VIEW_STATE):
+            return 1;
+        case (PROJECT_MICRO_VIEW_STATE):
+            return 3;
+        case (PROJECT_CONTENT_ONLY_VIEW_STATE):
+            return 3;
+        default:
+            return 4;
+    }
+
+}
 const handleIndexUpdate = (index) => {
     index++;
     if (index === 4) return 0;
@@ -197,19 +211,21 @@ class ProjectController extends React.Component {
 
     createRenderedPosts() {
         const shouldMarkNewPosts = this.state.isUpdate && this.state.projectSelectSubState === 2;
+        const moduloBasedOffContent = switchModulo(this.state.barType);
         let masterArray = [];
         let index = masterArray.length - 1; //index position of array in masterArray
         let usedPostsLength = this.state.selectedPosts.length;
 
         this.state.feedData.forEach((event, k) => {
-            if (k % 4 === 0) {
+            if (k % moduloBasedOffContent === 0) {
                 masterArray.push([]);
                 index++;
             }
             masterArray[index].push(
                 <div key={event._id}>
                     <EventController
-                        columnIndex={k % 4}
+                        modulo={moduloBasedOffContent}
+                        columnIndex={k % moduloBasedOffContent}
                         contentType={this.state.barType === PROJECT_MACRO_VIEW_STATE
                             ? PROJECT :
                             PROJECT_EVENT}
@@ -556,6 +572,7 @@ class ProjectController extends React.Component {
     }
 
     render() {
+        console.log(this.state.barType);
         const contentType = this.state.editProjectState || this.props.isContentOnlyView || this.state.selectedProject
             ?
             PROJECT_EVENT : PROJECT;

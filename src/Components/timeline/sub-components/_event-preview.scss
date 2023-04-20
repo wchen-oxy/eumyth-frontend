@@ -2,6 +2,7 @@
 .eventpreview-snippet-container {
     max-height: 128px;
     overflow: hidden;
+   
 }
 
 .eventpreview-image-container {
@@ -13,8 +14,6 @@
 
 .eventpreview-snippet-container {
     min-height: 124px;
-    p {
-        padding-left: 4px;
-        padding-right: 4px;
-    }
+    padding-left: 8px;
+    padding-right: 8px;
 }

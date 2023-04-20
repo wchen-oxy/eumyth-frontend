@@ -124,15 +124,42 @@ $window-upper: 23;
     user-select: none;
 }
 
+$event-width: 220px;
 %event-container {
     @include no-select;
     text-align: initial;
-    width: 220px;
-    max-width: 220px;
+    width: $event-width;
+    max-width: $event-width;
     background-color: $black-100;
     word-wrap: break-word;
     border-radius: 5px;
     cursor: pointer;
+}
+
+$post-width: 300px;
+%post-container {
+    @include no-select;
+    text-align: initial;
+    width: $post-width;
+    max-width: $post-width;
+    background-color: $black-100;
+    word-wrap: break-word;
+    border-radius: 5px;
+    cursor: pointer;
+}
+$project-width: 640px;
+%project-container {
+    @include no-select;
+    text-align: initial;
+    width: $project-width;
+    max-width: $project-width;
+    background-color: $black-100;
+    word-wrap: break-word;
+    border-radius: 5px;
+    cursor: pointer;
+    h2 {
+        text-align: center;
+    }
 }
 
 %label {
