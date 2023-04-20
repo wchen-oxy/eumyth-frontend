@@ -599,6 +599,7 @@ class ProjectController extends React.Component {
                 }
 
                 const viewerObject = {
+                    disableCommenting: this.state.editProjectState,
                     largeViewMode: true,
                     textData: event ? formatPostText(event) : null,
                     eventData: event,
