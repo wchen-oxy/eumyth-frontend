@@ -304,12 +304,14 @@ export default class AxiosHelper {
         })
     }
 
-    static returnOverflowContent(contentIDList, contentType, indexUserID, requestQuantity) {
+    static returnOverflowContent(pursuit, contentIDList, contentType, userID, requestQuantity) {
+        console.log(pursuit);
         return axios.get(urls.SEARCH_UNCACHED_URL, {
             params: {
+                pursuit,
                 contentIDList,
                 contentType,
-                indexUserID,
+                userID,
                 requestQuantity
             }
         })

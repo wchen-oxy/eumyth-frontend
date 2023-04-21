@@ -31,7 +31,8 @@ class ProfileController extends React.Component {
             hasMore: true,
             feedData: [],
             feedID: this.props.feedID,
-            projectPreviewMap: {}
+            projectPreviewMap: {},
+            initialPulled: false,
 
         }
         this.handleEventClick = this.handleEventClick.bind(this);
@@ -42,6 +43,7 @@ class ProfileController extends React.Component {
         this.createTimelineRow = this.createTimelineRow.bind(this);
         this.createRenderedPosts = this.createRenderedPosts.bind(this);
         this.saveProjectPreview = this.saveProjectPreview.bind(this);
+        this.setInitialPulled = this.setInitialPulled.bind(this);
 
 
     }
@@ -66,6 +68,10 @@ class ProfileController extends React.Component {
         window.addEventListener('popstate', navPress);
 
 
+    }
+
+    setInitialPulled(initialPulled) {
+        this.setState({ initialPulled })
     }
 
     saveProjectPreview(projectPreview) {
@@ -191,6 +197,7 @@ class ProfileController extends React.Component {
             setModal: this.setModal,
             closeModal: this.clearModal
         }
+
         return (
             <>
                 <ProfileModalController
@@ -203,9 +210,10 @@ class ProfileController extends React.Component {
                 />
                 <Timeline //feeds allposts (post ids) in, returns raw data, then feeds formatted posts in
                     contentType={POST}
-                    indexUserID={this.props.authUser.indexProfileID}
+                    pursuit={this.props.pursuit}
+                    profileID={this.props.authUser.profileID}
                     requestLength={REGULAR_CONTENT_REQUEST_LENGTH}
-                    index
+                    initialPulled={this.state.initialPulled}
                     feedID={this.props.feedID}
                     allPosts={this.props.feedData} //list of posts
                     numOfContent={this.props.numOfContent}
@@ -214,7 +222,7 @@ class ProfileController extends React.Component {
                     loadedFeed={this.createRenderedPosts()} //formatted posts
                     shouldPull={this.shouldPull}
                     createTimelineRow={this.createTimelineRow}
-                    setUncachedEdition={this.props.setUncachedEdition}
+                    setInitialPulled={this.setInitialPulled}
                 />
                 <br />
                 <br />

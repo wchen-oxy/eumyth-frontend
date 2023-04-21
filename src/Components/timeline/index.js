@@ -3,7 +3,6 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import AxiosHelper from 'utils/axios';
 import { CACHED, DYNAMIC, POST, PROJECT, PROJECT_EVENT, UNCACHED } from 'utils/constants/flags';
-import { EMBEDDED_FEED_LIMIT } from 'utils/constants/settings';
 import { validateFeedIDs } from 'utils/validator';
 const isStatic = (contentType) => {
     return (contentType === POST
@@ -46,6 +45,7 @@ class Timeline extends React.Component {
         if (this.props.feedID !== this.state.feedID) {
             this.setState({ feedID: this.props.feedID, nextOpenPostIndex: 0 },
                 () => {
+                    if (this.props.contentType === POST) { this.props.setInitialPulled(false) };
                     if (this.state.nextOpenPostIndex < this.props.allPosts.length && this.props.allPosts.length > 0) {
                         this.debounceFetch();
                     }
@@ -71,8 +71,7 @@ class Timeline extends React.Component {
             this.state.nextOpenPostIndex,
             this.state.nextOpenPostIndex + requestLength);
         const hasCachedContentOverflowed =
-            this.state.numOfFeedItems >= EMBEDDED_FEED_LIMIT
-            && this.state.numOfFeedItems < numOfContent;
+            this.state.numOfFeedItems + requestLength >= allPosts.length;
         const endOfContent = this.state.numOfFeedItems + requestLength >= numOfContent;
         const nextOpenPostIndex = this.state.nextOpenPostIndex + slicedObjectIDs.length;
         if (endOfContent) this.props.shouldPull(false);
@@ -110,19 +109,27 @@ class Timeline extends React.Component {
             );
             const shouldSearchUncached =
                 this.props.contentType === POST && metaInfo.hasCachedContentOverflowed;
-            if (shouldSearchUncached) {
+            // console.log(metaInfo.hasCachedContentOverflowed,
+            //     shouldSearchUncached && this.props.initialPulled);
+            if (shouldSearchUncached && this.props.initialPulled) {
                 return this.callUncachedPosts(
+                    this.props.pursuit,
                     this.props.allPosts,
                     this.props.contentType,
-                    this.props.indexUserID,
+                    this.props.profileID,
                     this.props.requestLength
                 )
                     .then((results) => this.handleUncachedPosts(results))
                     .catch(error => console.log(error))
             }
             else {
-                this.setState({ nextOpenPostIndex: metaInfo.nextOpenPostIndex }, //openpostindex notaccurate
-                    () => this.callCachedPosts(metaInfo.slicedObjectIDs));
+                this.setState({
+                    nextOpenPostIndex: metaInfo.nextOpenPostIndex,
+                }, //openpostindex notaccurate
+                    () => {
+                        if (this.props.contentType === POST) this.props.setInitialPulled(true);
+                        this.callCachedPosts(metaInfo.slicedObjectIDs);
+                    });
             }
         }
     }
@@ -149,11 +156,12 @@ class Timeline extends React.Component {
         }
     }
 
-    callUncachedPosts(posts, contentType, indexUserID, requestLength) {
+    callUncachedPosts(pursuit, posts, contentType, userID, requestLength) {
         return AxiosHelper.returnOverflowContent(
+            pursuit,
             posts,
             contentType,
-            indexUserID,
+            userID,
             requestLength
         )
     }
@@ -188,6 +196,7 @@ class Timeline extends React.Component {
 
     handleUncachedPosts(results) {
         const posts = results.data.posts;
+        console.log(posts.length);
         return this.setState({
             numOfFeedItems: posts.length + this.state.numOfFeedItems,
             nextOpenPostIndex: posts.length + this.state.nextOpenPostIndex

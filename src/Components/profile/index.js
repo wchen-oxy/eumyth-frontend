@@ -168,7 +168,6 @@ class ProfilePageAuthenticated extends React.Component {
         return AxiosHelper
             .returnUser(username)
             .then((result) => {
-                console.log(result.data);
                 userData = result.data;
                 return AxiosHelper
                     .returnFollowerStatus(
@@ -211,7 +210,6 @@ class ProfilePageAuthenticated extends React.Component {
     setProfileData(userData, rawFollowerState, contentType) {
         const pursuitData = createPursuitArray(userData.pursuits);
         const followerStatus = this.handleFollowerStatusResponse(rawFollowerState);
-        console.log(userData);
         this.setState({
             profileData: userData,
             pursuitNames: pursuitData.names,
@@ -439,9 +437,12 @@ class ProfilePageAuthenticated extends React.Component {
             if (this.state.contentType === POST) {
                 const selectedPursuit = this.state.profileData
                     .pursuits[this.state.selectedPursuitIndex];
+                specificContent.pursuit = selectedPursuit.name;
                 specificContent.feedData = selectedPursuit.posts.map((item) => item.content_id);
                 specificContent.numOfContent = selectedPursuit.num_posts;
                 specificContent.updateAllPosts = this.updateAllPosts;
+                console.log(selectedPursuit)
+
             }
 
             else if (this.state.contentType === PROJECT) {
@@ -450,8 +451,6 @@ class ProfilePageAuthenticated extends React.Component {
                 specificContent.isContentOnlyView = this.state.isContentOnlyView;
                 specificContent.numOfContent = this.props.authUser.pursuits[0].num_posts;
             }
-
-
             return (
                 <div>
                     <div id='profile-main'>

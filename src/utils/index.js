@@ -24,6 +24,9 @@ export const toTitleCase = (str) => {
 
 export const sortTimelineContent = (exisitingArray, inputArray, contentType, objectIDs) => {
     let feedData = [];
+    // console.log(exisitingArray, inputArray)
+    console.log(contentType);
+
     if (contentType === UNCACHED) {
         feedData = exisitingArray
             .concat(

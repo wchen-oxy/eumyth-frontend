@@ -7,7 +7,10 @@ const HiddenButtons = (props) => {
         props.isOwnProfile)
         return (
             <div>
-                <div id='hiddenbuttons-overlay' onClick={() => setButtonShow(!isButtonShowing)}></div>
+                {
+                isButtonShowing &&
+                    <div id='hiddenbuttons-overlay' onClick={() => setButtonShow(!isButtonShowing)} />
+                }
                 <div id='hiddenbuttons'>
                     <button onClick={() => setButtonShow(!isButtonShowing)}>...</button>
                     {isButtonShowing && (
