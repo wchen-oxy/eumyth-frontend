@@ -8,8 +8,8 @@ body {
       "Droid Sans", "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    pre {
-        // font-family: $default-font;
+    pre, textarea {
+        font-family: $default-font;
     }
 }
 

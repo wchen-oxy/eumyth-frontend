@@ -461,7 +461,6 @@ class ShortPostViewer extends React.Component {
                 displayPhoto: this.props.eventData.display_photo_key,
                 username: this.props.eventData.username
             };
-
             const caption = {
                 title: this.props.eventData.title,
                 textData: this.props.tempText,

@@ -8,6 +8,15 @@
     }
 }
 
+#relatedheader-self-preview-blank {
+    width: 256px;
+    height: 192px;
+}
+
+#relatedheader-other-blank {
+    background-color: $black-200;
+}
+
 #relatedheader-self-other {
     @include flex-display-row;
     margin-top: 32px;
@@ -43,6 +52,18 @@
 #relatedheader-index {
     text-align: center;
 }
+
+#relatedheader-index-blank {
+    text-align: center;
+    color: $black-200;
+}
+
+#relatedheader-blanks-theirs {
+    @include flex-display-row;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
 .relatedheader-other-preview {
     @include flex-display-row;
     align-items: center;
@@ -64,4 +85,10 @@
 }
 .relatedheader-subtext {
     color: $black-500;
+}
+
+.relatedheader-blanks {
+    background-color: $black-100;
+    height: 192px;
+    width: 256px;
 }

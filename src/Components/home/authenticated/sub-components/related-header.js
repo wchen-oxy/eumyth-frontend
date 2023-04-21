@@ -22,10 +22,10 @@ const RelatedProjectHeader = (props) => {
                             projectPreview.pursuit
                         )
                         .then(results => {
-                            console.log(results);
                             setSimilarProjects(results.data);
                         })
                 })
+                .catch(err => console.log(err));
         }
 
     }, []);
@@ -39,12 +39,44 @@ const RelatedProjectHeader = (props) => {
     }
     if (!hasRecent) {
         return (
-            <div id='relatedheader'>
+            <div className='relatedheader'>
                 <h3>Similar Spotlight </h3>
                 <p>Create Your First Post To Start Seeing Suggestions!</p>
-                <div>
+                <div id='relatedheader-self-other'>
+                    <div id='relatedheader-self'>
+                        <h2>Yours</h2>
+                        <div id='relatedheader-self-preview'>
+                            <div className='relatedheader-blanks'>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id='relatedheader-other'>
+                        <h2>Theirs</h2>
+                        <div className='relatedheader-other-preview'>
+                            <button
+                                className='relatedheader-other-preview-button'
+                                disabled={true}
+                            >
+                                &lt;
+                            </button>
+                            <div id='relatedheader-blanks-theirs'>
+                                <div className='relatedheader-blanks' id='relatedheader-other-blank'>
+                                </div>
+                                <div className='relatedheader-blanks'>
+                                </div>
+                            </div>
+                            <button
+                                className='relatedheader-other-preview-button'
+                                disabled={true}
+                            >
+                                &gt;
+                            </button>
+                        </div>
+                        <p id='relatedheader-index-blank'>0 of 0</p>
+                    </div>
                 </div>
-            </div>)
+            </div >)
     }
     return (
         <div className='relatedheader'>

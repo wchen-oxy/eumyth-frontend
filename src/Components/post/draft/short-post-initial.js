@@ -11,44 +11,48 @@ const ShortPostInitial = (props) => {
       id='shortpostinitial'
       className='draft-window'
     >
-      <h2 id="shortpostinitial-title">Short Post</h2>
-      {props.isCompressing && <p>Compressing Photos</p>}
-      <div
-        className='shortpostinitial-nav'>
-        <div id='shortpostinitial-discard'>
-          <button
-            className='shortpostinitial-nav-button-enabled'
-            onClick={props.onModalClose}
-          >
-            Discard
-          </button>
-        </div>
+      <div id='shortpostinitial-contents'>
 
-        <Steps current={props.window} />
-        <div id='shortpostinitial-review'>
-          <button
-            className={reviewClassName}
-            value={2}
-            disabled={props.isPostDisabled}
-            onClick={e => props.setPostStage(e.target.value)}
-          >
-            Review Meta
-          </button>
+        <h2 id="shortpostinitial-title">Short Post</h2>
+        {props.isCompressing && <p>Compressing Photos</p>}
+        <div
+          className='shortpostinitial-nav'>
+          <div id='shortpostinitial-discard'>
+            <button
+              className='shortpostinitial-nav-button-enabled'
+              onClick={props.onModalClose}
+            >
+              Discard
+            </button>
+          </div>
+
+          <Steps current={props.window} />
+          <div id='shortpostinitial-review'>
+            <button
+              className={reviewClassName}
+              value={2}
+              disabled={props.isPostDisabled}
+              onClick={e => props.setPostStage(e.target.value)}
+            >
+              Review Meta
+            </button>
+          </div>
         </div>
+        <div id='shortpostinitial-title'>
+          <TextareaAutosize
+            id='shortpostinitial-input'
+            placeholder='Title'
+            onChange={(e) => props.editorFunctions.onTextChange(e.target.value, true)}
+            minRows={2}
+            value={props.previewTitle} />
+        </div>
+        <ShortEditor
+          isPaginated={props.isPaginated}
+          {...props.editorFunctions}
+          {...props.editorStates}
+        />
+
       </div>
-      <div id='shortpostinitial-title'>
-        <TextareaAutosize
-          id='shortpostinitial-input'
-          placeholder='Title'
-          onChange={(e) => props.editorFunctions.onTextChange(e.target.value, true)}
-          minRows={2}
-          value={props.previewTitle} />
-      </div>
-      <ShortEditor
-        isPaginated={props.isPaginated}
-        {...props.editorFunctions}
-        {...props.editorStates}
-      />
     </div>
   );
 }

@@ -1,10 +1,14 @@
-#metastage{
-    padding-left:$small-post-draft-padding;
-    padding-right: $small-post-draft-padding;
+#metastage {
 }
+
 #metastage-title {
     margin: 16px auto;
     text-align: center;
+}
+
+#metastage-lower {
+    margin-left: $small-post-draft-padding;
+    margin-right: $small-post-draft-padding;
 }
 
 #metastage-desc {

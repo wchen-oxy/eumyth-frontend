@@ -164,7 +164,6 @@ class ProfileController extends React.Component {
     }
 
     handleCommentIDInjection(postIndex, rootCommentsArray) {
-        console.log(this.state.feedData)
         const feedData = alterRawCommentArray(
             postIndex,
             rootCommentsArray,

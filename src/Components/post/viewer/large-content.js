@@ -40,7 +40,7 @@ const ShortPostLargeContent = (props) => {
     }
     else {
         return (
-            <div className='shortpostviewer'>
+            <div id={'shortpostviewer-margin'} className='shortpostviewer'>
                 <Thread {...props.meta} />
                 <UserHeader {...props.user} />
                 <MetaInfo

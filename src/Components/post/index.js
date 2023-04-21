@@ -33,7 +33,8 @@ const _selectExistingDraft = (drafts, eventData) => {
 
 const _parseTextData = (data) => {
   if (!!data && data.is_paginated) return JSON.parse(data.text_data);
-  else return '';
+  else if (data === null) return '';
+  else return data.text_data;
 }
 
 const labelFormatter = (value) => { return { label: value, value: value } };

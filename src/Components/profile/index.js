@@ -395,11 +395,14 @@ class ProfilePageAuthenticated extends React.Component {
                     projectPreviewMap: {}
                 }
                 return (
-                    <PostController
-                        isViewer
-                        authUser={this.props.authUser}
-                        viewerObject={viewerObject}
-                    />
+                    <div id="profile-margin">
+                        <PostController
+                            isViewer
+                            authUser={this.props.authUser}
+                            viewerObject={viewerObject}
+                        />
+                    </div>
+
                 )
             }
             else if (this.state.contentType === PROJECT) {

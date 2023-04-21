@@ -1,7 +1,10 @@
 #shortpostinitial {
     @include flex-display-column;
-    padding-left: $small-post-draft-padding;
-    padding-right: $small-post-draft-padding;
+}
+
+#shortpostinitial-contents {
+    margin-left: $small-post-draft-padding;
+    margin-right: $small-post-draft-padding;
 }
 
 #shortpostinitial-title {
@@ -30,7 +33,6 @@
 .shortpostinitial-nav-button-enabled:hover {
     @include default-button-hover;
 }
-
 
 #shortpostinitial-title {
     width: 50%;

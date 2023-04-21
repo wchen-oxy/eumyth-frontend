@@ -36,7 +36,7 @@ const MetaStage = (props) => {
                 </div>
 
             </div>
-            <div>
+            <div id='metastage-lower'>
                 <div id='metastage-desc'>
                     <h4>Post</h4>
                     <p>Add any additional information you&#39;d like
