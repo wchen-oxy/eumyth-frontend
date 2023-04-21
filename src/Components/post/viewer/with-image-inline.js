@@ -6,7 +6,7 @@ import Thread from './sub-components/thread';
 const WithImageInline = (props) => {
     if (props.windowWidth > 600) {
         return (
-            <div className='shortpostviewer-inline' onClick={props.onModalLaunch}>
+            <div className='shortpostviewer-inline'>
                 <div className='shortpostviewer-inline-hero'   >
                     <div className='shortpostviewer-inline-side'>
                         <Thread {...props.meta} />

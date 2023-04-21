@@ -124,10 +124,10 @@ class CustomImageSlider extends React.Component {
                     onArrowPress={this.props.onArrowPress}
                     toggleAnnotations={this.props.toggleAnnotations}
                 />
-                <div className='customimageslider-expand-container'>
+                {/* <div className='customimageslider-expand-container'>
                     {this.props.windowType === COLLAPSED &&
                         <button onClick={this.props.onModalLaunch}>Expand Post</button>}
-                </div>
+                </div> */}
             </>
         )
     }

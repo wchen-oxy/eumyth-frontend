@@ -115,6 +115,8 @@
     align-items: center;
 }
 
+.shortpostviewer-expand,
+.shortpostviewer-expand:hover,
 .shortpostviewer-showmeta-disabled,
 .shortpostviewer-showmeta-enabled,
 .shortpostviewer-showmeta-enabled:hover {
@@ -124,6 +126,7 @@
 .shortpostviewer-showmeta-disabled {
     @include default-button-disabled;
 }
-.shortpostviewer-showmeta-enabled:hover {
+.shortpostviewer-showmeta-enabled:hover,
+.shortpostviewer-expand:hover {
     @include default-button-hover;
 }

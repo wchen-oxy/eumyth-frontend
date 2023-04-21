@@ -10,7 +10,6 @@ import WithImageInline from './with-image-inline';
 const ShortPostInlineContent = (props) => {
     const date = props.meta.date ? returnFormattedDate(props.meta.date) : null;
     if (props.hasImages) {
-
         return (
             <WithImageInline
                 date={date}
@@ -46,13 +45,6 @@ const ShortPostInlineContent = (props) => {
                             {date && <h4>{date.month}, {date.day}, {date.year} </h4>}
                         </div>
                     </div>
-
-
-                    {/* <div className='shortpostviewer-inline-side'>
-                        <MetaInfo
-                            {...props.meta}
-                        />
-                    </div> */}
                     <div className='shortpostviewer-inline-hero'>
                         <ShortHeroText  {...props.caption} />
                     </div>

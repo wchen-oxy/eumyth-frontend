@@ -253,7 +253,11 @@ class ShortPostViewer extends React.Component {
                 <div className='shortpostviewer-bottom-info'>
                     <div className='shortpostviewer-bottom-bar '>
                         <p>{this.props.eventData.comment_count} Comments</p>
-                        {/* <button onClick={this.handleModalLaunch}>Expand Post</button> */}
+                        <button
+                            className='shortpostviewer-expand'
+                            onClick={this.handleModalLaunch}>
+                            Expand Post
+                        </button>
                         <button
                             className={!doesMetaExist ? 'shortpostviewer-showmeta-disabled' : 'shortpostviewer-showmeta-enabled'}
                             disabled={!doesMetaExist}

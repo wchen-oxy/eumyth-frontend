@@ -43,7 +43,7 @@ class Timeline extends React.Component {
     componentDidUpdate() {
         if (this.props.contentType === DYNAMIC) return;
         if (this.props.feedID !== this.state.feedID) {
-            this.setState({ feedID: this.props.feedID, nextOpenPostIndex: 0 },
+            this.setState({ feedID: this.props.feedID, nextOpenPostIndex: 0, numOfFeedItems: 0 },
                 () => {
                     if (this.props.contentType === POST) { this.props.setInitialPulled(false) };
                     if (this.state.nextOpenPostIndex < this.props.allPosts.length && this.props.allPosts.length > 0) {
@@ -252,6 +252,7 @@ class Timeline extends React.Component {
     }
 
     render() {
+        console.log(this.state.numOfFeedItems);
         const shouldLoadScroller = this.props.contentType === DYNAMIC
             || (this.props.allPosts && this.props.allPosts.length > 0);
         if (this.props.contentType !== DYNAMIC && !this.props.allPosts
