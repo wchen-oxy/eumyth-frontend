@@ -43,10 +43,12 @@ class Timeline extends React.Component {
     componentDidUpdate() {
         if (this.props.contentType === DYNAMIC) return;
         if (this.props.feedID !== this.state.feedID) {
+            console.log("Update");
             this.setState({ feedID: this.props.feedID, nextOpenPostIndex: 0, numOfFeedItems: 0 },
                 () => {
-                    if (this.props.contentType === POST) { this.props.setInitialPulled(false) };
-                    if (this.state.nextOpenPostIndex < this.props.allPosts.length && this.props.allPosts.length > 0) {
+                    this.props.setInitialPulled(false);
+                    if (this.state.nextOpenPostIndex < this.props.allPosts.length
+                        && this.props.allPosts.length > 0) {
                         this.debounceFetch();
                     }
                 })
@@ -54,6 +56,7 @@ class Timeline extends React.Component {
     }
 
     componentDidMount() {
+        console.log("new");
         this._isMounted = true;
         if (this.props.contentType === DYNAMIC) return;
 
@@ -74,6 +77,7 @@ class Timeline extends React.Component {
             this.state.numOfFeedItems + requestLength >= allPosts.length;
         const endOfContent = this.state.numOfFeedItems + requestLength >= numOfContent;
         const nextOpenPostIndex = this.state.nextOpenPostIndex + slicedObjectIDs.length;
+        console.log("end of content", this.state.numOfFeedItems + requestLength, numOfContent);
         if (endOfContent) this.props.shouldPull(false);
         return {
             slicedObjectIDs,
@@ -107,15 +111,16 @@ class Timeline extends React.Component {
                 this.props.requestLength,
                 this.props.numOfContent
             );
-            const shouldSearchUncached =
-                this.props.contentType === POST && metaInfo.hasCachedContentOverflowed;
-            // console.log(metaInfo.hasCachedContentOverflowed,
-            //     shouldSearchUncached && this.props.initialPulled);
-            if (shouldSearchUncached && this.props.initialPulled) {
+            // const shouldSearchUncached =
+            //     this.props.contentType === POST && 
+            console.log(metaInfo.hasCachedContentOverflowed,
+                this.props.initialPulled);
+            const type = this.props.contentType === PROJECT_EVENT ? POST : this.props.contentType;
+            if (metaInfo.hasCachedContentOverflowed && this.props.initialPulled) {
                 return this.callUncachedPosts(
                     this.props.pursuit,
                     this.props.allPosts,
-                    this.props.contentType,
+                    type,
                     this.props.profileID,
                     this.props.requestLength
                 )
@@ -123,13 +128,10 @@ class Timeline extends React.Component {
                     .catch(error => console.log(error))
             }
             else {
-                this.setState({
-                    nextOpenPostIndex: metaInfo.nextOpenPostIndex,
-                }, //openpostindex notaccurate
-                    () => {
-                        if (this.props.contentType === POST) this.props.setInitialPulled(true);
-                        this.callCachedPosts(metaInfo.slicedObjectIDs);
-                    });
+                console.log("called");
+                console.log(this.props.hasMore)
+                this.props.setInitialPulled(true); //why is this here ?      if (this.props.contentType === POST)
+                this.callCachedPosts(metaInfo.slicedObjectIDs);
             }
         }
     }
@@ -168,6 +170,7 @@ class Timeline extends React.Component {
 
 
     handleCachedResults(result, slicedObjectIDs) {
+        console.log(result.posts);
         let data = null;
         const objectIDs = this.props.contentType === DYNAMIC ? null : slicedObjectIDs;
         if (result.length === 0) data = result;
@@ -189,19 +192,23 @@ class Timeline extends React.Component {
                     throw new Error();
             }
         }
-        return this.setState({ numOfFeedItems: data.length + this.state.numOfFeedItems },
+        return this.setState({
+            numOfFeedItems: data.length + this.state.numOfFeedItems,
+            nextOpenPostIndex: data.length + this.state.nextOpenPostIndex
+        },
             this.props.createTimelineRow(data, CACHED, objectIDs)
         )
     }
 
     handleUncachedPosts(results) {
         const posts = results.data.posts;
-        console.log(posts.length);
+
         return this.setState({
+            hasMore: posts.length !== 0, 
             numOfFeedItems: posts.length + this.state.numOfFeedItems,
             nextOpenPostIndex: posts.length + this.state.nextOpenPostIndex
         },
-            this.props.createTimelineRow(posts, UNCACHED)
+            () => this.props.createTimelineRow(posts, UNCACHED)
         );
 
         //slice selection of post and then put them up
@@ -252,7 +259,6 @@ class Timeline extends React.Component {
     }
 
     render() {
-        console.log(this.state.numOfFeedItems);
         const shouldLoadScroller = this.props.contentType === DYNAMIC
             || (this.props.allPosts && this.props.allPosts.length > 0);
         if (this.props.contentType !== DYNAMIC && !this.props.allPosts

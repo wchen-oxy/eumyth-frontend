@@ -234,7 +234,7 @@ class ShortPostViewer extends React.Component {
                         visitorUsername={this.props.username}
                         visitorProfilePreviewID={this.props.userPreviewID}
                         postID={this.props.eventData._id}
-                        selectedIndex={this.props.selectedIndex}
+                        selectedIndex={this.props.postIndex}
                         onCommentDataInjection={this.handleCommentDataInjection}
                         onPromptAnnotation={this.handlePromptAnnotation}
                         passAnnotationData={this.passAnnotationData}

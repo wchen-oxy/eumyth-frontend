@@ -92,10 +92,13 @@ class ProfileController extends React.Component {
 
     componentDidUpdate() {
         if (this.props.feedID !== this.state.feedID) {
+            console.log("diffe");
+
             this.setState({
                 feedID: this.props.feedID,
                 feedData: [],
                 hasMore: true,
+                initialPulled: false,
             })
         }
     }

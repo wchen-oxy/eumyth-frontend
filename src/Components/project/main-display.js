@@ -29,7 +29,6 @@ const MainDisplay = (props) => {
                 onPublish={props.onPublish}
 
                 returnModalStructure={props.returnModalStructure}
-
                 modalState={props.modalState}
                 openMasterModal={props.openMasterModal}
                 closeMasterModal={props.closeMasterModal}
@@ -64,14 +63,18 @@ const MainDisplay = (props) => {
                 <ProjectSelectHeader stage={props.projectSelectSubState} />}
             <Timeline
                 feedID={props.feedID}
+                profileID={props.userInfo.completeUserID}
+                pursuit={props.pursuit}
+
                 requestLength={REGULAR_CONTENT_REQUEST_LENGTH}
+                initialPulled={props.initialPulled}
                 nextOpenPostIndex={props.nextOpenPostIndex}
                 contentType={props.contentType}
                 editProjectState={props.editProjectState}
                 onProjectEventSelect={props.onProjectEventSelect}
                 onProjectClick={props.onProjectClick}
                 allPosts={props.allPosts}
-                numOfContent={props.editProjectState ? props.numOfContent : props.allPosts.length}
+                numOfContent={props.numOfContent}
                 window={props.window}
                 onEventClick={props.onEventClick}
                 loadedFeed={props.loadedFeed}
@@ -80,6 +83,7 @@ const MainDisplay = (props) => {
                 shouldPull={props.shouldPull}
                 hasMore={props.hasMore}
                 createTimelineRow={props.createTimelineRow}
+                setInitialPulled={props.setInitialPulled}
             />
             <br />
             <br />

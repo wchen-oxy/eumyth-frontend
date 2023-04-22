@@ -42,7 +42,6 @@ const withAuthentication = Component => {
       }
       return AxiosHelper.returnIndexUser(authUser.displayName, true)
         .then(result => {
-          console.log(result);
           const combined = {
             email: authUser.email,
             emailVerified: authUser.emailVerified,

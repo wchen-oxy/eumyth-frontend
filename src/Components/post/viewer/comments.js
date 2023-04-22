@@ -104,6 +104,9 @@ class Comments extends React.Component {
                             this.props.onCommentDataInjection(
                                 this.props.selectedIndex,
                                 result.data.rootComments);
+                            this.setState({
+                                commentText: ''
+                            })
                         })
                 })
             .then(() => alert('Success!'))

@@ -140,10 +140,12 @@ class ProjectController extends React.Component {
             editProjectState: false,
             feedID: 0,
             selectedPursuitIndex: this.props.selectedPursuitIndex,
+            numOfContent: this.props.content.post_ids ?
+                this.props.content.post_ids.length : 0,
+            projectPreviewMap: {},
 
-            numOfContent: 0,
-            projectPreviewMap: {}
 
+            initialPulled: false,
         }
 
         this.handleBackClick = this.handleBackClick.bind(this);
@@ -156,6 +158,7 @@ class ProjectController extends React.Component {
         this.handleSortEnd = this.handleSortEnd.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.setModal = this.setModal.bind(this);
+        this.setInitialPulled = this.setInitialPulled.bind(this);
         this.clearModal = this.clearModal.bind(this);
         this.handleNewProjectSelect = this.handleNewProjectSelect.bind(this);
         this.shouldPull = this.shouldPull.bind(this);
@@ -182,8 +185,12 @@ class ProjectController extends React.Component {
         }
     }
 
+    setInitialPulled(initialPulled) {
+        this.setState({ initialPulled });
+    }
     handleCommentIDInjection(selectedEventIndex, rootCommentsArray) {
         const feedData = this.state.feedData;
+        console.log(selectedEventIndex);
         feedData[selectedEventIndex].comments = rootCommentsArray;
         feedData[selectedEventIndex].comment_count += 1;
         this.setState({ feedData });
@@ -198,14 +205,12 @@ class ProjectController extends React.Component {
     }
 
     createTimelineRow(inputArray, contentType, objectIDs) {
-        console.log(inputArray);
         const feedData = sortTimelineContent(
             this.state.feedData,
             inputArray,
             contentType,
             objectIDs
         );
-        console.log(feedData);
         this.setState({ feedData });
     }
 
@@ -230,7 +235,7 @@ class ProjectController extends React.Component {
                             ? PROJECT :
                             PROJECT_EVENT}
                         shouldMarkAsNew={shouldMarkNewPosts ? k < usedPostsLength : false}
-                        shouldShowPursuit={this.state.selectedPursuitIndex !== ALL}
+                        shouldShowPursuit={this.state.selectedPursuitIndex !== 0}
                         isSelected={this.state.feedIndex.get(event._id)}
                         editProjectState={this.state.editProjectState}
                         key={k}
@@ -337,6 +342,8 @@ class ProjectController extends React.Component {
                     else if (this.state.projectSelectSubState === 2) {
                         this.setState({
                             projectSelectSubState: 1,
+                            initialPulled: false,
+                            hasMore: true,
                             ...this.clearedFeed()
                         })
                     }
@@ -502,6 +509,7 @@ class ProjectController extends React.Component {
     }
 
     handleProjectClick(projectData) {
+        console.log(projectData);
         this.setState({
             selectedProject: projectData,
             priorProjectID: projectData.ancestors.length > 0
@@ -510,6 +518,7 @@ class ProjectController extends React.Component {
             barType: PROJECT_MICRO_VIEW_STATE,
             title: projectData.title,
             overview: projectData.overview,
+            numOfContent: projectData.post_ids.length,
             ...this.clearedFeed()
         }, () => {
             this.setNewURL(returnProjectURL(projectData._id));
@@ -525,6 +534,9 @@ class ProjectController extends React.Component {
             barType: PROJECT_SELECT_VIEW_STATE,
             editProjectState: true,
             newProjectState: true,
+            initialPulled: false,
+            hasMore: true,
+            numOfContent: this.props.authUser.pursuits[0].num_posts,
             ...this.clearedFeed()
         })
     }
@@ -572,10 +584,10 @@ class ProjectController extends React.Component {
     }
 
     render() {
-        console.log(this.state.barType);
         const contentType = this.state.editProjectState || this.props.isContentOnlyView || this.state.selectedProject
             ?
             PROJECT_EVENT : PROJECT;
+        console.log(this.state.hasMore);
         switch (this.state.window) {
             case (MAIN):
                 const sourceContent = this.props.isContentOnlyView ? this.props.content : this.state.selectedProject;
@@ -636,7 +648,9 @@ class ProjectController extends React.Component {
                             forkData={forkData}
                             feedID={this.state.feedID}
                             contentType={contentType}
+                            pursuit={this.props.pursuitNames[this.state.selectedPursuitIndex]}
 
+                            initialPulled={this.state.initialPulled}
                             numOfContent={this.state.numOfContent}
                             projectMetaData={this.state.selectedProject}
                             projectSelectSubState={this.state.projectSelectSubState}
@@ -663,6 +677,7 @@ class ProjectController extends React.Component {
                             onNewProjectSelect={this.handleNewProjectSelect}
                             shouldPull={this.shouldPull}
                             onSelectAll={this.onSelectAll}
+                            setInitialPulled={this.setInitialPulled}
 
                             returnModalStructure={this.props.returnModalStructure}
                             modalState={this.props.modalState}
