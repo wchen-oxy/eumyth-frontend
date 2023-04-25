@@ -96,22 +96,28 @@ class ExtraFeed extends React.Component {
     }
 
     checkValidLocation(results) {
+        console.log(results.status);
         if (results.status === 204) {
             //first time
             navigator
                 .geolocation
                 .getCurrentPosition(this.onSuccess, this.onError, geoLocationOptions);
         }
-        else {
+        else if (results.status === 200) {
             //usual time
             this.setCoordinates(results.data.coordinates);
+        }
+        else{
+            throw new Error("Unexpected Coordinates results")
         }
     }
 
     setCoordinates(crd) {
+        console.log(crd);
+        const coordinates = crd;
         this.setState({
-            lat: crd[1],
-            long: crd[0]
+            lat: coordinates[1],
+            long: coordinates[0]
         }, this.getContent);
     }
 

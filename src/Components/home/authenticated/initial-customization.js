@@ -15,8 +15,8 @@ import {
     TINY_CROPPED_IMAGE_FIELD,
     USERNAME_FIELD
 } from 'utils/constants/form-data';
-import { testOptions} from 'utils/constants/options';
- 
+import { testOptions } from 'utils/constants/options';
+
 
 const INITIAL_STATE = {
     firstName: '',
@@ -198,7 +198,7 @@ class InitialCustomizationPage extends React.Component {
                 )
                 .then(
                     (results) => {
-                        const upperCasePursuits = this.state.pursuits.map(item => item.toUpperCase());
+                        const upperCasePursuits = this.state.pursuits.map(item => { return { name: item.name.toUpperCase(), experience: item.experience.toUpperCase() } });
                         let formData = new FormData();
                         formData.append(USERNAME_FIELD, this.state.username);
                         formData.append(FIRST_NAME_FIELD, this.state.firstName);
@@ -309,7 +309,6 @@ class InitialCustomizationPage extends React.Component {
             this.state.pursuits.length !== 0 ? (
                 this.state.experienceSelects) :
                 null;
-
         return (
             <div id='initialcustomization'>
                 <form onSubmit={this.handleProfileSubmit}>

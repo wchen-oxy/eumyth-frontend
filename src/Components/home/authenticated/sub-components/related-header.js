@@ -5,8 +5,9 @@ import HeaderObject from './header-object';
 const RelatedProjectHeader = (props) => {
     const [hasRecent, setHasRecent] = useState(false);
     const [projectPreview, setProjectPreview] = useState(null);
-    const [similarProjects, setSimilarProjects] = useState(null);
+    const [similarProjects, setSimilarProjects] = useState([]);
     const [index, setIndex] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         if (props.recent) {
@@ -23,9 +24,13 @@ const RelatedProjectHeader = (props) => {
                         )
                         .then(results => {
                             setSimilarProjects(results.data);
+                            setIsLoading(false);
                         })
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    console.log(err);
+                    setIsLoading(false);
+                });
         }
 
     }, []);
@@ -44,7 +49,7 @@ const RelatedProjectHeader = (props) => {
                 <p>Create Your First Post To Start Seeing Suggestions!</p>
                 <div id='relatedheader-self-other'>
                     <div id='relatedheader-self'>
-                        <h2>Yours</h2>
+                        <h2>Your Latest Series</h2>
                         <div id='relatedheader-self-preview'>
                             <div className='relatedheader-blanks'>
 
@@ -52,7 +57,7 @@ const RelatedProjectHeader = (props) => {
                         </div>
                     </div>
                     <div id='relatedheader-other'>
-                        <h2>Theirs</h2>
+                        <h2>Their Latest Series</h2>
                         <div className='relatedheader-other-preview'>
                             <button
                                 className='relatedheader-other-preview-button'
@@ -81,13 +86,14 @@ const RelatedProjectHeader = (props) => {
     return (
         <div className='relatedheader'>
             <h3>Journey Spotlight </h3>
-            {similarProjects ?
+            {isLoading ?
+                <p className='relatedheader-subtext'>Loading</p> :
                 <p className='relatedheader-subtext'>Showing Work From Someone Who's Pursuing
                     Something Similar To Your Most Recent Work</p>
-                : <p className='relatedheader-subtext'>Loading</p>}
+            }
             <div id='relatedheader-self-other'>
                 <div id='relatedheader-self'>
-                    <h2>Yours</h2>
+                    <h2>Your Latest Series</h2>
                     <div id='relatedheader-self-preview'>
                         <div id='relatedheader-self-preview-object'>
                             {projectPreview && <h2>{projectPreview.title}</h2>}
@@ -96,7 +102,7 @@ const RelatedProjectHeader = (props) => {
                     </div>
                 </div>
                 <div id='relatedheader-other'>
-                    <h2>Theirs</h2>
+                    <h2>Their Latest Series</h2>
                     <div className='relatedheader-other-preview'>
                         <button
                             className='relatedheader-other-preview-button'
@@ -104,10 +110,15 @@ const RelatedProjectHeader = (props) => {
                             onClick={() => onClick(-1)}>
                             &lt;
                         </button>
-                        {similarProjects ?
+                        {similarProjects.length > 0 ?
                             <HeaderObject {...similarProjects[index]} />
                             :
-                            <p>None Found</p>}
+                            <div>
+                                <div id='relatedheader-none' >
+                                    <p>No Matches... For now</p>
+                                </div>
+                            </div>
+                        }
                         <button
                             className='relatedheader-other-preview-button'
                             disabled={similarProjects === null || index + 1 > similarProjects.length - 1}
@@ -115,11 +126,11 @@ const RelatedProjectHeader = (props) => {
                             &gt;
                         </button>
                     </div>
-                    {similarProjects && <p id='relatedheader-index' >{index + 1} of {similarProjects.length} </p>}
+                    {similarProjects.length > 0 && <p id='relatedheader-index' >{index + 1} of {similarProjects.length} </p>}
                 </div>
             </div>
 
-        </div>
+        </div >
     )
 
 

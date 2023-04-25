@@ -1,3 +1,13 @@
+#relatedheader-none {
+    height: 192px;
+    width: 512px;
+    background-color: $black-100;
+    margin: 0 12px;
+    @include flex-display-row;
+    justify-content: center;
+    align-items: center;
+}
+
 .relatedheader {
     margin: 96px 0 0 24px;
 
