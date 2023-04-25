@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { toTitleCase } from 'utils';
 const PursuitCategoryInput = (props) => {
     let pursuitSelects = [];
 
@@ -7,7 +7,7 @@ const PursuitCategoryInput = (props) => {
     for (let i = 1; i < props.pursuitNames.length; i++) {
         const pursuit = props.pursuitNames[i];
         pursuitSelects.push(
-            <option key={pursuit} value={pursuit}>{pursuit}</option>
+            <option key={pursuit} value={pursuit}>{toTitleCase(pursuit)}</option>
         );
     }
 

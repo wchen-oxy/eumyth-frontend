@@ -77,10 +77,10 @@ const ProjectDraftControls = (props) => {
                             setPursuit={props.setPursuit}
                         />
 
-                        <div className='projectdraftcontrols-inner'>
+                        {/* <div className='projectdraftcontrols-inner'>
                             <label>Make Series Title Private</label>
                             <input type="checkbox" onChange={() => props.setTitlePrivacy(!props.titlePrivacy)} />
-                        </div>
+                        </div> */}
                     </div>
 
                     :
