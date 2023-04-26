@@ -40,7 +40,8 @@ const EventHeroContent = (props) => {
                     <h4 className='eventhero-no-image-title'>
                         {post.title}
                     </h4> :
-                    <></>}
+                    <div className='eventhero-blank'>
+                    </div>}
                 <div className='eventhero-text'>
                     <EventDatePursuit
                         date={post.date}

@@ -1,8 +1,13 @@
 #projectheader-pursuit {
     @include flex-display-row;
     justify-content: center;
-    h5 {
-        margin: 0;
+    align-items: center;
+    
+    h4{
+        margin: 0 12px 0 0;
+    }
+    p {
+        margin:0;
     }
 }
 
@@ -20,6 +25,16 @@
     @include flex-display-column;
     align-items: center;
     justify-content: center;
+    margin-top: 4px;
+    h4{ 
+        color: $black-400;
+        font-size: 14px;
+    }
+    h4,
+    p {
+        margin: 0;
+    }
+    p{width: 384px}
 }
 
 #projectheader-user-meta {

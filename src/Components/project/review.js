@@ -125,6 +125,7 @@ const ProjectReview = (props) => {
 
     const updateProject = (formData, status) => {
         let promiseChain = Promise.resolve();
+        
         const draftUpdateMeta = {
             indexUserID: props.authUser.indexProfileID,
             projectID: props.projectMetaData._id,
@@ -163,7 +164,7 @@ const ProjectReview = (props) => {
                     AxiosHelper.updateCachedDraftTitle(
                         draftUpdateMeta.indexUserID,
                         draftUpdateMeta.projectID,
-                        draftUpdateMeta.title
+                        draftUpdateMeta.threadTitle
                     ))
         }
 

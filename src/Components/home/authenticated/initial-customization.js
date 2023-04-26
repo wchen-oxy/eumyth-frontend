@@ -380,6 +380,7 @@ class InitialCustomizationPage extends React.Component {
                         />
                         {pursuitDetails}
                         <button
+                            id='initialcustomization-submit'
                             disabled={isInvalid || this.state.isSubmitting}
                             type='submit'
                         >

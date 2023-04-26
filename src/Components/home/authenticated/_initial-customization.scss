@@ -26,6 +26,20 @@
     @include main-profile-photo-container;
 }
 
+#initialcustomization-submit {
+    @extend %button-style;
+    margin-top: 24px;
+}
+#initialcustomization-submit:hover {
+    @extend %button-style;
+    @include default-button-hover;
+}
+#initialcustomization-submit:disabled{
+    @extend %button-style;
+    color: $black-200;
+    background-color: $black-400;
+}
+
 .initialcustomization-select {
     @include flex-display-row;
 }
@@ -33,9 +47,4 @@
 .initialcustomization-content {
     @include flex-display-column;
     padding: 2vh;
-
-    button {
-        @extend %button-style;
-        margin-top: 24px;
-    }
 }
