@@ -1,3 +1,4 @@
+import PursuitCategoryInput from 'components/post/draft/sub-components/pursuit-category-input';
 import React, { useState } from 'react';
 import AxiosHelper from 'utils/axios';
 import withRouter from 'utils/withRouter';
@@ -5,6 +6,7 @@ import withRouter from 'utils/withRouter';
 const ForkWindow = (props) => {
     const [title, setTitle] = useState('Branch of ' + props.title);
     const [remix, setRemix] = useState('');
+    const [pursuit, setPursuit] = useState('');
     const forkProject = () => {
         return AxiosHelper.createFork(
             props.forkData.profileID,
@@ -15,18 +17,17 @@ const ForkWindow = (props) => {
             props.forkData.displayPhotoKey,
             title,
             remix,
-            props.forkData.cachedFeedID
+            props.forkData.cachedFeedID,
+            pursuit
         )
             .then((res) => {
                 props.closeModal();
-                console.log(res);
                 if (window.confirm("Done! Go To Newly Created Series?")) {
                     window.location.replace("/c/" + res.data.projectID.toString())
                 }
             })
             .catch(err => console.log(err));
     }
-
     return (
         <div className='small-post-window'>
             <div id="forkwindow-fields">
@@ -47,9 +48,16 @@ const ForkWindow = (props) => {
                     onChange={(e) => setRemix(e.target.value)}
                 />
             </div>
-            <div id='rightmanagebuttons-submit'>
-                <button onClick={forkProject}>Confirm</button>
-                <button onClick={props.closeModal}>Cancel</button>
+            <PursuitCategoryInput pursuitNames={props.pursuitNames} pursuit={pursuit} setPursuit={setPursuit} />
+            <div id='rightmanagebuttons-buttons'>
+                <button
+                    id={
+                        pursuit.length === 0 ?
+                            'rightmanagebuttons-submit-disabled' :
+                            'rightmanagebuttons-submit'
+                    }
+                    disabled={pursuit.length === 0} onClick={forkProject}>Confirm</button>
+                <button id='rightmanagebuttons-cancel' onClick={props.closeModal}>Cancel</button>
             </div>
         </div>)
 }

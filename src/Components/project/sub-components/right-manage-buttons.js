@@ -87,6 +87,7 @@ const RightManageButtons = (props) => {
             {isForkPageShowing &&
                 props.returnModalStructure(
                     <ForkWindow
+                        pursuitNames={props.pursuitNames}
                         toggleFork={toggleFork}
                         title={props.title}
                         forkData={props.forkData}

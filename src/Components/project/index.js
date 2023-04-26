@@ -646,6 +646,7 @@ class ProjectController extends React.Component {
                             feedID={this.state.feedID}
                             contentType={contentType}
                             pursuit={this.props.pursuitNames[this.state.selectedPursuitIndex]}
+                            pursuitNames={this.props.pursuitNames}
 
                             initialPulled={this.state.initialPulled}
                             numOfContent={this.state.numOfContent}

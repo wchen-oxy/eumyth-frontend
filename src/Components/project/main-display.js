@@ -14,6 +14,7 @@ const MainDisplay = (props) => {
         <div>
             <TopButtonBar
                 isOwner={isOwner}
+                pursuitNames={props.pursuitNames}
                 userInfo={props.userInfo}
                 projectID={props.projectMetaData?._id}
                 projectSelectSubState={props.projectSelectSubState}

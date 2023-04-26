@@ -1,14 +1,6 @@
-#rightmanagebuttons-submit {
+#rightmanagebuttons-buttons {
     @include flex-display-row;
     justify-content: center;
-    button,
-    button:hover {
-        @extend %button-style;
-        margin: 16px 4px;
-    }
-    button:hover {
-        @include default-button-hover;
-    }
 }
 
 #forkwindow-fields {
@@ -31,4 +23,22 @@
 
     @include flex-display-column;
     margin: 0;
+}
+
+#rightmanagebuttons-submit,
+#rightmanagebuttons-submit:hover,
+#rightmanagebuttons-submit-disabled,
+#rightmanagebuttons-cancel,
+#rightmanagebuttons-cancel:hover {
+    @extend %button-style;
+    margin: 16px 4px;
+}
+
+#rightmanagebuttons-submit:hover,
+#rightmanagebuttons-cancel:hover {
+    @include default-button-hover;
+}
+
+#rightmanagebuttons-submit-disabled {
+    @include default-button-disabled;
 }

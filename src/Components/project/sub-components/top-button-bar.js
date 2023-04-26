@@ -11,6 +11,7 @@ import {
 const TopButtonBar = (props) => {
     const ManageButtons =
         <RightManageButtons
+            pursuitNames={props.pursuitNames}
             userInfo={props.userInfo}
             title={props.title}
             projectID={props.projectID}
