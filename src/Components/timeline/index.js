@@ -43,7 +43,6 @@ class Timeline extends React.Component {
     componentDidUpdate() {
         if (this.props.contentType === DYNAMIC) return;
         if (this.props.feedID !== this.state.feedID) {
-            console.log("Update");
             this.setState({ feedID: this.props.feedID, nextOpenPostIndex: 0, numOfFeedItems: 0 },
                 () => {
                     this.props.setInitialPulled(false);
@@ -56,7 +55,6 @@ class Timeline extends React.Component {
     }
 
     componentDidMount() {
-        console.log("new");
         this._isMounted = true;
         if (this.props.contentType === DYNAMIC) return;
 
@@ -77,7 +75,6 @@ class Timeline extends React.Component {
             this.state.numOfFeedItems + requestLength >= allPosts.length;
         const endOfContent = this.state.numOfFeedItems + requestLength >= numOfContent;
         const nextOpenPostIndex = this.state.nextOpenPostIndex + slicedObjectIDs.length;
-        console.log("end of content", this.state.numOfFeedItems + requestLength, numOfContent);
         if (endOfContent) this.props.shouldPull(false);
         return {
             slicedObjectIDs,
@@ -128,8 +125,6 @@ class Timeline extends React.Component {
                     .catch(error => console.log(error))
             }
             else {
-                console.log("called");
-                console.log(this.props.hasMore)
                 this.props.setInitialPulled(true); //why is this here ?      if (this.props.contentType === POST)
                 this.callCachedPosts(metaInfo.slicedObjectIDs);
             }

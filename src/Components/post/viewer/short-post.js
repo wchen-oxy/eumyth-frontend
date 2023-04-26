@@ -137,7 +137,7 @@ class ShortPostViewer extends React.Component {
                 this.props.profileID,
                 this.props.indexProfileID,
                 this.props.eventData._id,
-                this.props.pursuit,
+                this.props.eventData.pursuit_category,
                 this.props.minDuration,
             )
             .then((result) => {

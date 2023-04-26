@@ -190,7 +190,6 @@ class ProjectController extends React.Component {
     }
     handleCommentIDInjection(selectedEventIndex, rootCommentsArray) {
         const feedData = this.state.feedData;
-        console.log(selectedEventIndex);
         feedData[selectedEventIndex].comments = rootCommentsArray;
         feedData[selectedEventIndex].comment_count += 1;
         this.setState({ feedData });
@@ -509,7 +508,6 @@ class ProjectController extends React.Component {
     }
 
     handleProjectClick(projectData) {
-        console.log(projectData);
         this.setState({
             selectedProject: projectData,
             priorProjectID: projectData.ancestors.length > 0
@@ -587,7 +585,6 @@ class ProjectController extends React.Component {
         const contentType = this.state.editProjectState || this.props.isContentOnlyView || this.state.selectedProject
             ?
             PROJECT_EVENT : PROJECT;
-        console.log(this.state.hasMore);
         switch (this.state.window) {
             case (MAIN):
                 const sourceContent = this.props.isContentOnlyView ? this.props.content : this.state.selectedProject;

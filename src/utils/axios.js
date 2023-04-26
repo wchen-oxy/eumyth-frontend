@@ -264,10 +264,10 @@ export default class AxiosHelper {
         })
     }
 
-    static getSharedParentProjectPreview(parentProjectPreviewID, status, excluded) {
+    static getSharedParentProjectPreview(parentProjectID, status, excluded) {
         return axios.get(urls.PROJECT_PREVIEW_SHARED_URL, {
             params: {
-                parentProjectPreviewID,
+                parentProjectID,
                 status,
                 excluded
             }

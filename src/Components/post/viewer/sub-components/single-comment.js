@@ -84,9 +84,6 @@ class SingleComment extends React.Component {
                 this.props.commentID,
                 voteValue,
             )
-            .then((result) => {
-                console.log(result);
-            })
             .catch((err) => {
                 console.log(err);
                 console.log('Something went wrong with the server.');
@@ -178,7 +175,6 @@ class SingleComment extends React.Component {
             />
         );
         this.setState({ replies });
-        console.log(this.state.replies);
     }
 
     render() {

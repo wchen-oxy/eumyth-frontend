@@ -4,7 +4,6 @@ import { returnProjectURL } from 'utils/url';
 import { returnFormattedDate } from 'utils/constants/ui-text';
 
 const SimilarProjectInfo = (props) => {
-    console.log(props);
     const date = returnFormattedDate(props.updatedAt);
     return (
         <div className='similarprojectinfo'>

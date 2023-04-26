@@ -96,7 +96,6 @@ class ExtraFeed extends React.Component {
     }
 
     checkValidLocation(results) {
-        console.log(results.status);
         if (results.status === 204) {
             //first time
             navigator

@@ -6,7 +6,10 @@ import { POST, PROJECT } from 'utils/constants/flags';
 const HeroContentDecider = (props) => {
     if (props.visibility.fail) {
         return (
-            <p>The user you're looking for does not exist.</p>)
+            <div id='herocontentdecider-fail'>
+                <p>The user you're looking for does not exist.</p>
+            </div>
+        );
     }
     else if (props.visibility.shouldHide) {
         return (

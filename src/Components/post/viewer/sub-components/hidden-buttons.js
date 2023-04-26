@@ -8,7 +8,7 @@ const HiddenButtons = (props) => {
         return (
             <div>
                 {
-                isButtonShowing &&
+                    isButtonShowing &&
                     <div id='hiddenbuttons-overlay' onClick={() => setButtonShow(!isButtonShowing)} />
                 }
                 <div id='hiddenbuttons'>
@@ -22,7 +22,10 @@ const HiddenButtons = (props) => {
                             </button>
                             <button
                                 id='hiddenbuttons-options-remove'
-                                onClick={props.onDeletePost}>
+                                onClick={() => {
+                                    if (window.confirm("Are You Sure You Want To Delete This?"))
+                                      {  props.onDeletePost()}
+                                }}>
                                 Remove
                             </button>
                         </div>

@@ -56,7 +56,6 @@ const ProjectVote = props => {
             overallVoteScoreModifier = 1;
         }
         if (combinedVote > 1) {
-            console.log(combinedVote)
             overallVoteScoreModifier = -1;
         }
 

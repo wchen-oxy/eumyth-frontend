@@ -56,7 +56,6 @@ class ShortPost extends React.Component {
             isCompressing: needsCompression
           },
             () => {
-              console.log(validFiles.length)
               if (needsCompression) {
                 this.createTinyFiles(validFiles)
               }
@@ -66,7 +65,6 @@ class ShortPost extends React.Component {
   }
 
   createTinyFiles(files) {
-    console.log(files);
     let promisedCompression = [];
     for (const file of files) {
       promisedCompression.push(imageCompression(file, { maxSizeMB: 1 })); //all

@@ -165,25 +165,43 @@ class ProfilePageAuthenticated extends React.Component {
 
     loadProfile(username, contentType) {
         let userData = null;
-        return AxiosHelper
-            .returnUser(username)
+        const failFields = {
+            contentType: "FAIL",
+            loading: false,
+            fail: true
+        };
+        const returnedUser = AxiosHelper
+            .returnUser(username);
+
+        return returnedUser
             .then((result) => {
                 userData = result.data;
-                return AxiosHelper
-                    .returnFollowerStatus(
-                        this.props.authUser.username,
-                        userData.user_relation_id)
-            })
-            .then((followerStatus) =>
-                this.setProfileData(
-                    userData,
-                    followerStatus,
-                    contentType
-                ))
-            .catch((err) => {
+                if (userData) {
+                    return AxiosHelper
+                        .returnFollowerStatus(
+                            this.props.authUser.username,
+                            userData.user_relation_id)
+                        .then((followerStatus) =>
+                            this.setProfileData(
+                                userData,
+                                followerStatus,
+                                contentType
+                            ))
+                        .catch((err) => {
+                            console.log(err);
+                            this.setState(failFields);
+                        });
+                }
+                else {
+                    this.setState(failFields);
+                }
+            }).catch((err) => {
                 console.log(err);
-                this.setState({ fail: true });
+                this.setState(failFields);
             });
+
+
+
     }
 
 
@@ -366,7 +384,7 @@ class ProfilePageAuthenticated extends React.Component {
     }
 
     render() {
-        if (this.state.loading) return null;
+        if (this.state.loading) return <h4>Loading...</h4>;
         let index = 0;
         const pursuitHolderArray = [];
         if (this.state.profileData.pursuits) {
@@ -382,6 +400,7 @@ class ProfilePageAuthenticated extends React.Component {
                 );
             }
         }
+
         if (this.state.isContentOnlyView) {
             if (this.state.contentType === POST) {
                 const formattedTextData = formatPostText(this.state.selectedContent);
@@ -444,8 +463,6 @@ class ProfilePageAuthenticated extends React.Component {
                 specificContent.feedData = selectedPursuit.posts.map((item) => item.content_id);
                 specificContent.numOfContent = selectedPursuit.num_posts;
                 specificContent.updateAllPosts = this.updateAllPosts;
-                console.log(selectedPursuit)
-
             }
 
             else if (this.state.contentType === PROJECT) {
@@ -460,56 +477,60 @@ class ProfilePageAuthenticated extends React.Component {
                         {/* <div id='profile-cover'>
                             <CoverPhoto coverPhotoKey={this.state.profileData.cover_photo_key} />
                         </div> */}
-                        <div id='profile-intro'>
-                            <div id='profile-upper'>
-                                <div id='profile-dp'>
-                                    <img
-                                        alt='user profile'
-                                        src={targetProfilePhoto}
-                                    />
+                        {!this.state.fail &&
 
-                                </div>
-                                <div id='profile-upper-right'>
-                                    <div id='profile-upper-user-info'>
-                                        <div id='profile-name'>
-                                            <h3>{targetUsername}</h3>
+                            <div id='profile-intro'>
+                                <div id='profile-upper'>
+                                    <div id='profile-dp'>
+                                        <img
+                                            alt='user profile'
+                                            src={targetProfilePhoto}
+                                        />
+
+                                    </div>
+                                    <div id='profile-upper-right'>
+                                        <div id='profile-upper-user-info'>
+                                            <div id='profile-name'>
+                                                <h3>{targetUsername}</h3>
+                                            </div>
+                                            <div id='profile-actions'>
+                                                <FollowButton
+                                                    isOwner={this.isOwner()}
+                                                    followerStatus={this.state.followerStatus}
+                                                    onFollowClick={this.handleFollowClick}
+                                                    onOptionsClick={this.handleOptionsClick}
+                                                />
+                                            </div>
                                         </div>
-                                        <div id='profile-actions'>
-                                            <FollowButton
-                                                isOwner={this.isOwner()}
-                                                followerStatus={this.state.followerStatus}
-                                                onFollowClick={this.handleFollowClick}
-                                                onOptionsClick={this.handleOptionsClick}
-                                            />
+                                        <div id='profile-biography'>
+                                            {this.state.profileData.bio && <p>{this.state.profileData.bio}</p>}
                                         </div>
                                     </div>
-                                    <div id='profile-biography'>
-                                        {this.state.profileData.bio && <p>{this.state.profileData.bio}</p>}
-                                    </div>
+
                                 </div>
-
+                                <div id='profile-pursuits'>
+                                    {pursuitHolderArray}
+                                </div>
                             </div>
-                            <div id='profile-pursuits'>
-                                {pursuitHolderArray}
-                            </div>
-                        </div>
+                        }
+                        {!this.state.fail &&
 
-                        <div id='profile-content-switch'>
-                            <button
-                                className={this.state.contentType === POST ? 'profile-content-selected' : 'profile-content-unselected'}
-                                disabled={this.state.contentType === POST ?
-                                    true : false}
-                                onClick={() => this.handleMediaTypeSwitch(POST)}>
-                                Posts
-                            </button>
-                            <button
-                                className={this.state.contentType === PROJECT ? 'profile-content-selected' : 'profile-content-unselected'}
-                                disabled={this.state.contentType === PROJECT ?
-                                    true : false}
-                                onClick={() => this.handleMediaTypeSwitch(PROJECT)}>
-                                Series
-                            </button>
-                        </div>
+                            <div id='profile-content-switch'>
+                                <button
+                                    className={this.state.contentType === POST ? 'profile-content-selected' : 'profile-content-unselected'}
+                                    disabled={this.state.contentType === POST ?
+                                        true : false}
+                                    onClick={() => this.handleMediaTypeSwitch(POST)}>
+                                    Posts
+                                </button>
+                                <button
+                                    className={this.state.contentType === PROJECT ? 'profile-content-selected' : 'profile-content-unselected'}
+                                    disabled={this.state.contentType === PROJECT ?
+                                        true : false}
+                                    onClick={() => this.handleMediaTypeSwitch(PROJECT)}>
+                                    Series
+                                </button>
+                            </div>}
                         {this.state.contentType &&
                             <HeroContentDecider
                                 {...specificContent}

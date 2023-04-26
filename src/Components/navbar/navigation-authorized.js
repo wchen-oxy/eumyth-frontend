@@ -62,7 +62,6 @@ class NavigationAuthorized extends React.Component {
     }
     setModal(postType) {
         if (postType === NEW_ENTRY_MODAL_STATE) {
-            console.log("hit");
             this.setState({ isPostModalShowing: true })
         }
         if (this.props.modalState

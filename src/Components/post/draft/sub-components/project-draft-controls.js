@@ -33,10 +33,7 @@ const ProjectDraftControls = (props) => {
         const index = e.target.value;
         setSelectedDraftIndex(index);
         props.setDraft(props.drafts[index]);
-        console.log(props.drafts[index]);
-
     }
-    console.log(props.toggleState);
     return (
         <div id='projectdraftcontrols'>
             <div className='projectdraftcontrols-header'>

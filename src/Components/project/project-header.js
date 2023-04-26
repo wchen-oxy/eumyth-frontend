@@ -55,17 +55,17 @@ const ProjectHeader = (props) => {
     return (
         <div>
             <div id="projectheader-pursuit">
-                <h4>{props.projectMetaData.pursuit}</h4> 
+                <h4>{props.projectMetaData.pursuit}</h4>
                 {props.projectMetaData.status && <h5 className='timelineproject-meta-status'><p>Ongoing</p></h5>}
             </div>
             <div id="projectheader-hero">
                 <h1>{props.titleValue}</h1>
                 {props.descriptionValue && <p>{props.descriptionValue}</p>}
-                
+
             </div>
             <div id="projectheader-fork">
                 {parentProjectID && <a href={'/c/' + parentProjectID.toString()}>See Predecessor Series</a>}
-                <h4>How This Series Differs</h4>
+                {props.projectMetaData.remix && <h4>How This Series Differs</h4>}
                 {props.projectMetaData.remix && <p>{props.projectMetaData.remix}</p>}
 
             </div>

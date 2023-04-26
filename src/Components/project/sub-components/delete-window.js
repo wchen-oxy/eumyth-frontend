@@ -11,7 +11,6 @@ const DeleteWindow = (props) => {
             props.userInfo.completeUserID,
             props.userInfo.userPreviewID
         )
-            .then((result) => console.log(result))
             .catch((err) => console.log(err));
     }
 

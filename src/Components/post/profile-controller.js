@@ -92,8 +92,6 @@ class ProfileController extends React.Component {
 
     componentDidUpdate() {
         if (this.props.feedID !== this.state.feedID) {
-            console.log("diffe");
-
             this.setState({
                 feedID: this.props.feedID,
                 feedData: [],
@@ -182,7 +180,6 @@ class ProfileController extends React.Component {
     }
 
     render() {
-        console.log(this.state.initialPulled,this.state.hasMore);
         const event = this.state.feedData[this.state.selectedEventIndex];
         const viewerObject = {
             largeViewMode: true,

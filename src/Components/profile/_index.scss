@@ -1,3 +1,13 @@
+#herocontentdecider-fail {
+    @include flex-display-row;
+    margin-top: 128px;
+    width: 100%;
+    justify-content: center;
+    p {
+        text-align: center;
+    }
+}
+
 #profile-margin {
     margin: 96px 48px 0 48px;
 }
