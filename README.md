@@ -1,7 +1,6 @@
 ## Third Space Frontend
 
 ## Context
----
 ### Summary
 Third Space is trying to make the world less lonely by making personal
 development more of a shared and relatable experience with others. To 
@@ -25,6 +24,6 @@ These collections become the primary means to discover one another or create an
 influence on their local communities (geographically near users).
 
 ## The Tech 
----
+
 This is primarily built in React.js, and styled with SCSS. The frontend also interacts
 with Firebase AUTH and Firebase Realtime Database for user authentication/authorization. 
